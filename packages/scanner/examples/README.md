@@ -1,8 +1,8 @@
-# Example — a scary sample report
+# Example — a sample report
 
-This is a real Almanac run against the deliberately-aging fixture repo at
+This is a real Almanac run against a deliberately old sample project at
 [`../test/fixtures/sample-sfdx-repo`](../test/fixtures/sample-sfdx-repo). It
-spans API versions **28.0 → 67.0** so you can see every tier the scanner emits
+spans API versions **28 → 67**, so you can see every tier the scanner produces
 without pointing it at your own org.
 
 ## What's here
@@ -14,7 +14,7 @@ without pointing it at your own org.
 | [`almanac-report.json`](almanac-report.json) | The machine-readable report (schema-validated; what `impact` and CI consume) |
 | [`almanac-impact.md`](almanac-impact.md) | Corpus-backed upgrade impact for the same report — what actually changes behavior, with citations and test actions |
 
-## The scary part
+## What it surfaces
 
 ```
 ⚠ 1 item — Already failing - retired Summer '25 (REST 410 / SOAP 500 / Bulk 400) (2025-06)

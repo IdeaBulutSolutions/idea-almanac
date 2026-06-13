@@ -3,7 +3,18 @@
 All notable changes to the `idea-almanac` package. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver.
 
-## 0.2.0 — unreleased
+## 0.2.1 — unreleased
+
+Documentation only — no code or behavior changes.
+
+- Rewrote the README files in plain, beginner-friendly language.
+- Fixed links in the published package README to absolute GitHub URLs so they
+  work on npmjs.com and after install (the old monorepo-relative links 404'd).
+- Made explicit that the corpus ships inside the package — no repo clone needed
+  to scan or run `impact`.
+- Switched the documentation's example language from Turkish to Spanish.
+
+## 0.2.0 — 2026-06
 
 - `almanac scan --mode <tier>` — run a whole pipeline in one command:
   `impact` (scan + upgrade-impact), `manager` (+ manager explanation + effort

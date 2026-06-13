@@ -6,19 +6,20 @@
 [![CI](https://github.com/IdeaBulutSolutions/idea-almanac/actions/workflows/ci.yml/badge.svg)](https://github.com/IdeaBulutSolutions/idea-almanac/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 
-Salesforce retires API versions on dates. Components pinned to old versions
-don't degrade gracefully — they fail with `410 GONE`. Almanac is two things in
-one repo: a **scanner** that inventories every API version in your sfdx repo or
-live org and puts a retirement date next to each one, and a **corpus** — a
-seasonal record of every Salesforce release since Winter '14 (v29 → v67, ~3,000
-change entries in our own words) — that tells you what actually changes
-behavior when you upgrade.
+Salesforce retires old API versions on a schedule. Anything still pinned to a
+retired version doesn't fail gently — it breaks with `410 GONE`. Almanac is two
+things in one repo:
 
-> 🔒 **Trust promise.** Repo scans make **zero network calls** — enforced by a
-> test in this repo ([`no-network.test.ts`](packages/scanner/test/no-network.test.ts)).
-> Org scans only call *your* org via *your* existing `sf` CLI session. Nothing
-> is uploaded anywhere. No telemetry, no update checks. Don't trust us — read
-> the source; it's small on purpose.
+- a **scanner** that lists every API version in your Salesforce project or live
+  org and puts a retirement date next to each one, and
+- a **corpus** — a plain-language record of every Salesforce release since
+  Winter '14 (v29 → v67, ~3,000 change entries written in our own words) — that
+  tells you what actually changes when you upgrade.
+
+> 🔒 **Privacy.** Scanning your project folder makes **zero network calls** —
+> enforced by a test ([`no-network.test.ts`](packages/scanner/test/no-network.test.ts)).
+> Scanning a live org only ever talks to *your* org, through *your* existing
+> `sf` CLI login. Nothing is uploaded anywhere. No telemetry, no tracking.
 
 ## Quickstart
 
@@ -28,10 +29,15 @@ npx idea-almanac scan       # 2. scan (writes almanac-report.json + .html)
 open almanac-report.html    # 3. read the dates
 ```
 
-No install, no config, no credentials. **See it before you run it:**
+No install, no config, no credentials, and **nothing else to download** — the
+corpus of Salesforce changes ships inside the npm package, so `scan` and
+`impact` work straight away. (You only need to clone this repo if you want to
+rebuild the corpus or run the MCP server.)
+
+**See it before you run it:**
 [`packages/scanner/examples/`](packages/scanner/examples/) holds a real scan of
-a deliberately-aging repo — a class already failing, another retiring in 2028,
-and the impact report of what breaks on upgrade.
+a deliberately old sample project — a class already failing, another retiring in
+2028, and the impact report of what changes on upgrade.
 
 ## What it reports
 
@@ -81,9 +87,9 @@ npx idea-almanac scan --fail-on retired   # exit 1 if anything is already broken
 writes a deterministic, citation-grounded `almanac-impact.md` — every change
 cites a corpus entry id. Want a readable narrative? Either paste the
 self-contained bundle (`--no-llm`) into your own assistant, or configure a
-model (`ALMANAC_LLM_PROVIDER=claude-cli|copilot|anthropic|cmd`) and Almanac
-applies a **groundedness gate**: cite an id that isn't in the corpus and the
-run fails.
+model (`ALMANAC_LLM_PROVIDER=claude-cli|copilot|cursor|anthropic|cmd`) and
+Almanac applies a **groundedness gate**: if the model cites an id that isn't in
+the corpus, the run fails — so it can't invent facts.
 
 Full CLI documentation: [`packages/scanner/README.md`](packages/scanner/README.md).
 

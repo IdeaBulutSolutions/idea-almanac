@@ -1,109 +1,107 @@
 # idea-almanac
 
-**Find the Salesforce API versions in your org that are about to stop working — before they do.**
+**Find the Salesforce API versions in your code or org that are about to stop working — before they break.**
 
-> 🔒 **Trust promise.** Repo scans make **zero network calls** (enforced by a test in this repo: [`test/no-network.test.ts`](test/no-network.test.ts)). Org scans only call *your* org via *your* existing `sf` CLI session. Nothing is ever uploaded anywhere. No telemetry, no update checks. Don't trust us — read the source; it's small on purpose.
+Salesforce retires old API versions on a schedule. When that happens, anything still pinned to a retired version can suddenly fail. Almanac scans your project (or a live org), finds everything that's on an old version, and tells you **what will stop working and when** — in plain dates.
 
-## Quickstart (3 steps, that's the whole point)
+It does this two ways:
+
+- **Repo scan** — points at your Salesforce project folder and reads the metadata files. It makes **zero network calls** (a test, [`no-network.test.ts`](https://github.com/IdeaBulutSolutions/idea-almanac/blob/main/packages/scanner/test/no-network.test.ts), enforces this). Nothing leaves your machine.
+- **Org scan** — points at a live org and reads it through your existing `sf` CLI login. The only server it ever talks to is your own org. No passwords, no uploads, no telemetry.
+
+## Quickstart (3 steps)
 
 ```bash
-cd your-sfdx-project        # 1. go to your repo
-npx idea-almanac scan       # 2. scan (writes almanac-report.json + .html)
-open almanac-report.html    # 3. read the dates
+cd your-sfdx-project        # 1. go to your Salesforce project folder
+npx idea-almanac scan       # 2. scan it (writes almanac-report.json + almanac-report.html)
+open almanac-report.html    # 3. open the report and read the dates
 ```
 
-CI gate:
+That's it. No install, no account, no config.
+
+**Want to see a report first?** The [`examples/` folder](https://github.com/IdeaBulutSolutions/idea-almanac/tree/main/packages/scanner/examples) has a real scan of a deliberately old sample project (API 28 → 67): one class already broken, another retiring in 2028, plus an [upgrade-impact report](https://github.com/IdeaBulutSolutions/idea-almanac/blob/main/packages/scanner/examples/almanac-impact.md) of what changes when you upgrade. No org needed.
+
+## Do I need to download anything else? No.
+
+Everything Almanac needs is **inside the npm package** — including its built-in database of Salesforce changes (the "corpus"). You do **not** need to clone the GitHub repo to scan, to run an upgrade-impact report, or to use the prompts. `npx idea-almanac …` just works.
+
+(You'd only clone the repo if you want to rebuild the corpus from Salesforce release notes yourself, or run the optional MCP server — neither is needed for normal use.)
+
+## Common recipes (copy & paste)
+
+`npx idea-almanac@latest` always runs the newest version. Prefer a permanent `almanac` command? Install it once (next section) and drop the `npx` prefix.
+
+### Install it permanently (optional)
 
 ```bash
-npx idea-almanac scan --fail-on retired      # exit 1 if anything is already broken
-```
-
-**See it first:** [`examples/`](examples/) has a real scan of a deliberately-aging
-repo (API 28.0 → 67.0) — a class already failing (REST `410 GONE`), another retiring in
-2028, and a [corpus-backed impact report](examples/almanac-impact.md) of what
-breaks on upgrade. No org required.
-
-## Cookbook — copy-paste recipes
-
-Every command below is self-contained. `npx idea-almanac@latest` always runs the
-newest published build; if you'd rather have a stable `almanac` command, install
-once (next recipe) and drop the `npx` prefix everywhere.
-
-### Install (optional — `npx` works without it)
-
-```bash
-npm install -g idea-almanac@latest      # `almanac` becomes available everywhere
+npm install -g idea-almanac@latest      # now you can just type `almanac`
 almanac --version
 ```
 
-> **Hitting `npm error code ENOVERSIONS / No versions available`?** You have an
-> npm **cooldown** set (`min-release-age`, added in npm 11.10.0) that hides
-> versions published in the last N days. Override it for this package only —
-> your global setting stays on for everything else:
+> **Seeing `npm error code ENOVERSIONS / No versions available`?** Your npm has a "cooldown" setting (`min-release-age`) that hides brand-new package versions. Turn it off for this one package only:
 >
 > ```bash
-> npm install -g idea-almanac@latest --min-release-age 0          # global install
-> npm_config_min_release_age=0 npx idea-almanac@latest scan       # one-off npx run
+> npm install -g idea-almanac@latest --min-release-age 0
+> npm_config_min_release_age=0 npx idea-almanac@latest scan
 > ```
 
-### Scan one repo
+### Scan one project
 
 ```bash
-cd path/to/sfdx-repo
-npx idea-almanac@latest scan            # writes almanac-report.json + .html in cwd
+cd path/to/sfdx-project
+npx idea-almanac@latest scan            # writes the report into the current folder
 open almanac-report.html
 ```
 
-### Everything in one command (`--mode <tier>`)
-
-One invocation can run a whole pipeline — repo or `--org`. The tiers are
-**cumulative**, so pick how far down the chain you want to go:
-
-| `--mode` | Runs | Adds outputs |
-|---|---|---|
-| `scan` (default) | the scan | `almanac-report.json` + `.html` |
-| `impact` | + upgrade-impact | `almanac-impact.md` + bundle/narrative |
-| `manager` | + manager explanation + effort estimate | `almanac-manager*` + `almanac-estimate*` |
-| `full` | + agent upgrade guide | `almanac-upgrade-guide*` |
-
-Each AI step uses your `ALMANAC_LLM_PROVIDER` if set (writes `*.md`), otherwise
-writes a self-contained `*-bundle.md` you paste into any assistant.
+### Scan a live org
 
 ```bash
-# technical: scan + upgrade-impact
-npx idea-almanac@latest scan path/to/sfdx-repo --mode impact
+sf org login web --alias prod           # log in once (if you haven't already)
+npx idea-almanac@latest scan --org prod
+```
 
-# business: scan + impact + manager explanation + effort estimate, in Turkish via Claude
+Not logged in? You get a short message telling you how — never a crash.
+
+### Do everything in one command (`--mode`)
+
+`--mode` runs a whole pipeline at once. The levels build on each other — pick how far you want to go:
+
+| `--mode` | What it does | Files it adds |
+|---|---|---|
+| `scan` (default) | the scan only | `almanac-report.json` + `.html` |
+| `impact` | + what actually changes on upgrade | `almanac-impact.md` |
+| `manager` | + a plain-English summary for your manager + an effort estimate | `almanac-manager*`, `almanac-estimate*` |
+| `full` | + a step-by-step upgrade guide for an AI coding agent | `almanac-upgrade-guide*` |
+
+The AI steps use whatever model you've set in `ALMANAC_LLM_PROVIDER`. If you haven't set one, Almanac instead writes a ready-to-paste `*-bundle.md` file you can drop into any AI chat yourself.
+
+```bash
+# technical: scan + what changes on upgrade
+npx idea-almanac@latest scan path/to/sfdx-project --mode impact
+
+# for your manager: scan + summary + effort estimate, written in Spanish by Claude
 ALMANAC_LLM_PROVIDER=claude-cli \
-  npx idea-almanac@latest scan path/to/sfdx-repo --mode manager --llm --lang Turkish
+  npx idea-almanac@latest scan path/to/sfdx-project --mode manager --llm --lang Spanish
 
-# everything, against a live org — adds the dependency-aware agent upgrade guide
+# everything, against a live org — adds the AI upgrade guide
 sf org login web --alias prod
 ALMANAC_LLM_PROVIDER=claude-cli \
   npx idea-almanac@latest scan --org prod --mode full --llm
 ```
 
-`--mode` honors all the impact flags (`--target`, `--corpus`, `--llm` /
-`--no-llm`, `--lang`, `--out`, `--bundle`) and still respects `--fail-on` for CI.
+A few good-to-knows:
 
-> Back-compat: `--mode full-impact` is kept as an alias of `--mode impact`.
+- On a big org, the AI review looks at the **top 50 most urgent components by default** (it asks you first, or you can set `--limit <n>` or `--limit all`). The scan report still lists *every* component — only the AI review is trimmed, to keep cost and time down.
+- Every AI-written file starts with a **disclaimer**: the numbers are AI-assisted, AI can be wrong, and you must **test in a non-production environment before deploying**. Testing and deployment are your responsibility.
+- `--mode full-impact` still works as an old name for `--mode impact`.
 
-On a large org, the AI review defaults to the **top 50 most urgent components**
-(it confirms interactively, or you pass `--limit <n>` / `--limit all`). The scan
-report itself always lists every component — only the AI review is scoped, to
-keep tokens and time reasonable. Every AI-assisted artifact carries a disclaimer:
-the figures are AI-assisted and corpus-grounded, **AI can make mistakes**, you
-must **test in a non-production environment before deploying**, and testing and
-deployment are your responsibility.
+### Scan several projects into one folder
 
-### Scan several repos into one results folder
-
-Default output filenames collide if you scan repo after repo, so pass explicit
-paths:
+The report files have default names, so they'd overwrite each other. Give each one its own path:
 
 ```bash
 mkdir -p ~/almanac-results
-REPOS=( ~/code/repo1 ~/code/repo2 ~/code/repo3 ~/code/repo4 ~/code/repo5 )
+REPOS=( ~/code/repo1 ~/code/repo2 ~/code/repo3 )
 for r in "${REPOS[@]}"; do
   name=$(basename "$r")
   npx idea-almanac@latest scan "$r" \
@@ -114,249 +112,159 @@ done
 open ~/almanac-results
 ```
 
-### Scan a live org
+### Use it as a CI check
 
 ```bash
-sf org login web --alias prod           # once, if not already authenticated
-npx idea-almanac@latest scan --org prod
+npx idea-almanac@latest scan --fail-on retired    # exits with an error if anything is already broken
 ```
 
-### CI gate (fail the build if anything is already broken)
+### A summary for your manager, in Spanish
+
+The `explain-to-my-manager` prompt turns a scan report into a one-page, plain-language summary. The easy way is `--mode manager --llm` above. To run the prompt by hand:
 
 ```bash
-npx idea-almanac@latest scan --fail-on retired; echo "exit=$?"
-```
-
-### Upgrade-impact narrative, generated by Claude, in Turkish
-
-```bash
-cd path/to/sfdx-repo
-npx idea-almanac@latest scan
-ALMANAC_LLM_PROVIDER=claude-cli npx idea-almanac@latest impact \
-  --report almanac-report.json --llm --lang Turkish
-```
-
-Writes `almanac-impact.md` (deterministic, corpus-cited) plus the model
-narrative. Needs the `claude` CLI installed and authenticated (`claude --version`).
-A **groundedness gate** fails the run if the model cites a corpus id that isn't
-in the loaded data — expected, not a bug.
-
-### "Explain this to my manager" page, in Turkish (manual route)
-
-The `explain-to-my-manager` prompt runs off the scan report directly — no
-`impact`, no corpus. Pair the shipped prompt with your report and hand both to
-Claude:
-
-```bash
-cd path/to/sfdx-repo
+cd path/to/sfdx-project
 npx idea-almanac@latest scan
 
 PROMPT="$(npm root -g)/idea-almanac/prompts/explain-to-my-manager.md"   # needs the global install
 
 claude -p "$(cat "$PROMPT")
 
-Language: Turkish. Write every sentence of prose in Turkish; keep all dates,
-counts, component names, and product names exactly as they appear.
+Language: Spanish. Write every sentence in Spanish; keep dates, counts, and
+component names exactly as they appear.
 
 --- almanac-report.json ---
-$(cat almanac-report.json)" > yonetici-ozeti.md
+$(cat almanac-report.json)" > resumen-para-gerente.md
 ```
 
-Produces a one-page, three-layer manager explanation (executive summary →
-non-technical dated risk list → technical detail) built strictly from your
-report's dates and counts.
+You get a one-page summary with three layers: a short executive summary, a non-technical dated risk list, and a more technical section — all built only from the real dates and counts in your report.
 
-### "How long to fix and release?" effort estimate (for the manager)
-
-Two costed scopes — full org to current vs. breaking changes first — broken down
-by severity, with fix + release timelines:
+### A "how long will this take?" effort estimate
 
 ```bash
-cd path/to/sfdx-repo
+cd path/to/sfdx-project
 npx idea-almanac@latest scan
-npx idea-almanac@latest impact --report almanac-report.json --no-llm   # sharpens behavioral-review effort (optional)
+npx idea-almanac@latest impact --report almanac-report.json --no-llm   # optional, sharpens the estimate
 
 PROMPT="$(npm root -g)/idea-almanac/prompts/effort-estimate.md"
 
 claude -p "$(cat "$PROMPT")
 
-Team: 2 developers. Language: Turkish.
+Team: 2 developers. Language: Spanish.
 
 --- almanac-report.json ---
 $(cat almanac-report.json)
 
 --- almanac-impact.md ---
-$(cat almanac-impact.md)" > efor-tahmini.md
+$(cat almanac-impact.md)" > estimacion-de-esfuerzo.md
 ```
 
-Returns one page: an executive summary with both timelines ("breaking changes
-first: ~X–Y weeks; full org to current: ~W–Z weeks"), an editable assumptions
-block, and a severity table (P0 overdue → P3 hygiene) with effort ranges and a
-calendar-to-released for each. Tell it your `Team:` size to turn dev-days into a
-real timeline; drop the `--lang`/`Language:` line for English.
+It gives two options — fix everything vs. fix only the breaking changes first — each broken down by severity, with a timeline. Tell it your team size to turn effort into calendar weeks. Drop the `Language:` line for English.
 
-## Hand off to an AI agent (fewer tokens, grounded output)
+## Hand the results to an AI agent (cheaper and grounded)
 
-The point of Almanac isn't a report a human files away — it's a small,
-**agent-ready** payload that lets an AI coding agent (Claude Code, Cowork,
-Copilot) actually improve your org, cheaply and without hallucinating.
+Almanac isn't just a report to file away. Its output is a small, tidy package you can hand to an AI coding agent (Claude Code, Cursor, Copilot, Cowork) so it can help fix your org — using far fewer tokens, and without making things up.
 
-**Why it costs fewer tokens.** The naive way to ask an agent "what should I fix
-in this org?" is to paste your whole metadata tree plus the entire Salesforce
-release-notes history and hope it reasons over all of it — tens of thousands of
-tokens, much of it irrelevant, and no guarantee the answer is real. Almanac does
-the narrowing deterministically first:
+**Why fewer tokens.** Pasting your whole project plus all of Salesforce's release-note history into an AI is huge and mostly irrelevant. Almanac does the narrowing first, in plain code (free):
 
-- `scan` reduces a whole repo/org to a structured `almanac-report.json` — only
-  the components that carry version debt, each with its tier and date.
-- `impact` pairs that report with **just the corpus slices your span touches**
-  — not megabytes of YAML, only the entries between your versions and the
-  target. The bundle is sized to your findings, not the catalog.
+- `scan` boils a whole project/org down to a structured list of only the parts with version debt.
+- `impact` attaches **only the Salesforce changes between your versions and the target** — not the entire history.
 
-So the agent receives a compact, pre-filtered scaffold instead of your whole
-world. That's the token saving: the expensive narrowing already happened in
-deterministic code, for free.
+So the agent gets a small, focused brief instead of everything.
 
-**Why you can trust what it produces.** Every change in `almanac-impact.md`
-cites a real corpus entry id, and the **groundedness gate** fails the run if a
-model cites any id not in the loaded slices — so an agent acting on the output
-is working from verified Salesforce facts, not invented version numbers or dates.
+**Why you can trust it.** Every change in `almanac-impact.md` cites a real entry from the built-in corpus. A "groundedness gate" automatically fails the run if the AI cites an entry that isn't in the data — so it can't invent fake version numbers or dates.
 
-**The agent-ready artifacts:**
+**The files you can hand off:**
 
-| Artifact | Made for | Get it with |
+| File | What it's for | How to get it |
 |---|---|---|
-| `almanac-report.json` | any agent / script — the structured debt inventory | `scan` |
-| `almanac-impact.md` | deterministic, citation-backed "what changes + one test each" | `impact` |
-| `almanac-impact-bundle.md` | a self-contained prompt + report + grounded slices to paste into any assistant | `impact --no-llm` |
-| [`prompts/`](prompts/) library | drop-in prompts: upgrade review, manager summary, security audit | feed with the report |
-| [`upgrade-guide.md`](prompts/upgrade-guide.md) | drives an agent through the actual upgrade — reads report + impact + **the metadata source**, follows cross-references (Flow→LWC→Apex), emits a dependency-ordered, verifiable plan | `--mode full` |
-| [`assistant-handoff.md`](prompts/assistant-handoff.md) | orients an agent working **inside this repo** — map + run sequence + ground rules | read first |
-| [corpus MCP server](../corpus/mcp/server.ts) | let an agent query "what breaks between v48 and v67?" live | `npm run mcp` in `packages/corpus` |
+| `almanac-report.json` | the structured list of version debt | `scan` |
+| `almanac-impact.md` | what changes on upgrade, with citations and a test for each | `impact` |
+| `almanac-impact-bundle.md` | the prompt + report + data in one file, ready to paste into any AI | `impact --no-llm` |
+| [prompt library](prompts/) | ready-made prompts (upgrade review, manager summary, security audit) | feed with the report |
+| [`upgrade-guide.md`](prompts/upgrade-guide.md) | walks an agent through the actual upgrade — reads the report, the impact, **and your real metadata**, follows links between components (a Flow that calls an LWC that calls Apex), and writes an ordered, testable plan | `--mode full` |
+| [`assistant-handoff.md`](prompts/assistant-handoff.md) | a one-page orientation for an agent working inside the source repo | read first |
+| [corpus MCP server](https://github.com/IdeaBulutSolutions/idea-almanac/blob/main/packages/corpus/mcp/server.ts) | lets an agent ask the corpus "what breaks between v48 and v67?" live | `npm run mcp` in `packages/corpus` |
 
-**Typical agent handoff:**
+## What's in the report
 
-```bash
-npx idea-almanac@latest scan                                   # inventory the debt
-npx idea-almanac@latest impact --report almanac-report.json --no-llm
-# → hand almanac-impact-bundle.md to your agent:
-#   "Work through this upgrade-impact bundle. Propose the version bumps and the
-#    behavioral changes to test, in priority order, citing the corpus ids given."
-```
+Almanac checks every Apex class and trigger, Flow, LWC, Aura component, Visualforce page, `package.xml`, and your `sfdx-project.json` default. Each one gets an API version and a dated **tier**:
 
-The agent gets a grounded, minimal payload and returns a concrete plan — or, in
-a coding agent, the actual edits — at a fraction of the tokens a raw dump would
-burn.
-
-## What it reports
-
-Every Apex class/trigger, Flow, LWC, Aura component, Visualforce page, `package.xml`, and your `sfdx-project.json` default — each with its API version and a **dated tier**:
-
-| Tier | Meaning |
+| Tier | What it means |
 |---|---|
-| `retired` | API ≤ 30.0 — already failing since June 2025 (REST 410 / SOAP 500 / Bulk 400) |
-| `breaks-2027` | SOAP `login()` on API ≤ 64.0 — retires Summer '27 |
-| `breaks-2028` | API 31.0–40.0 — retires Summer '28 |
-| `stale` | More than a year behind the current version |
-| `current` | Fine |
+| `retired` | API 30 or older — already failing since June 2025 |
+| `breaks-2027` | uses SOAP `login()` on API 64 or older — stops working Summer 2027 |
+| `breaks-2028` | API 31–40 — stops working Summer 2028 |
+| `stale` | more than a year behind the current version — still works, but aging |
+| `current` | fine |
 
-Dates and tiers live in one data file ([`src/core/retirement-schedule.json`](src/core/retirement-schedule.json)) — override it with `--schedule`.
+These dates aren't hardcoded — they live in one file, [`retirement-schedule.json`](https://github.com/IdeaBulutSolutions/idea-almanac/blob/main/packages/scanner/src/core/retirement-schedule.json), and you can swap it with `--schedule`.
 
-The report also surfaces a **nearest non-breaking version** (`nonBreakingFloor`):
-the lowest API version that clears every *dated* retirement tier. Components
-below it are in a stops-working tier; moving them up to at least that version
-removes the dated breakage (they become `stale`, not `current`) — the quickest
-risk-reducing move. The HTML report shows it as a hint when any component is below it.
+The report also gives a **nearest non-breaking version** (`nonBreakingFloor`): the lowest API version that clears every *dated* tier. Anything below it is in a stops-working tier; bumping it up to at least that version removes the dated risk (it becomes `stale`, not fully `current`) — the quickest way to reduce risk. The HTML report shows this as a hint.
 
-**Debt score** (secondary to the dates): `round(100 × Σ weight(tier) / N)` over all findings, where weights are `retired 1.0, breaks-2027 0.9, breaks-2028 0.7, stale 0.15, current 0`. 0 = clean.
+**Debt score.** A single 0–100 number (0 = clean). It's a weighted average of how far behind things are — useful as a headline, but the *dates* are what really matter. The HTML report shows exactly how the score was calculated.
 
-## Usage
+## All the options
 
 ```
-almanac scan [path]              scan an sfdx repo (default: cwd)
-almanac scan --org <alias>       scan a live org via your existing sf CLI session
-                                 (omit <alias> for your default org)
-almanac scan --mode <tier>       run a pipeline in one command (repo or --org)
-  --json <file> --html <file> --md <file>
-  --mode scan|impact|manager|full   cumulative: impact adds upgrade-impact;
-                       manager adds manager explanation + effort estimate;
-                       full adds the agent upgrade guide. Honors --target/
-                       --corpus/--llm/--no-llm/--lang/--out/--bundle.
-  --fail-on retired|breaks-2027|breaks-2028|stale
-  --schedule <file>
-almanac --version                print version
+almanac scan [path]              scan a Salesforce project folder (default: current folder)
+almanac scan --org <alias>       scan a live org through your sf CLI login
+                                 (leave out <alias> to use your default org)
+almanac scan --mode <tier>       run a whole pipeline (scan | impact | manager | full)
+almanac impact --report <json>   show what changes on upgrade, from the corpus
+
+Scan options:
+  --json <file>     where to write the JSON report   (default: ./almanac-report.json)
+  --html <file>     where to write the HTML report   (default: ./almanac-report.html)
+  --md <file>       also write a Markdown report     (off by default)
+  --mode <tier>     scan | impact | manager | full (each builds on the last)
+  --fail-on <tier>  exit with an error if anything is in this tier (for CI)
+  --schedule <file> use your own retirement schedule instead of the built-in one
+
+Impact / AI options:
+  --report <json>   the almanac-report.json from a scan (required for `impact`)
+  --target <ver>    target API version (default: the current version)
+  --llm             use an AI model to write the narrative (needs ALMANAC_LLM_PROVIDER)
+  --no-llm          write a paste-ready bundle instead of calling a model
+  --lang <language> output language for the AI text (default: English), e.g. --lang Spanish
+  --limit <n|all>   how many components the AI reviews (default: top 50)
+  -y, --yes         skip the "this is a big review" prompt (for scripts/CI)
+
+  -v, --version     print the version
 ```
 
-Repo scans walk your sfdx tree respecting the root `.gitignore` **and**
-`.forceignore` (comments, `dir/`, leading-`/`, `*`/`?` globs; `!` negations are
-skipped). `node_modules`, `.sfdx`, `.git` are always skipped.
+Repo scans skip `node_modules`, `.sfdx`, and `.git`, and respect your `.gitignore` and `.forceignore`.
 
-### Org scans
+### About org scans
 
-`--org` inventories a live org's Apex classes, triggers, Visualforce
-pages/components, Aura bundles, LWC bundles, and Flows via the **Tooling API**,
-reusing the access token your `sf` CLI already holds — Almanac never asks for or
-stores credentials, and the only host it talks to is your own org.
+`--org` reads your org's Apex, Visualforce, Aura, LWC, and Flows through the Salesforce Tooling API, reusing the login your `sf` CLI already has. Almanac never asks for or stores credentials.
 
-```bash
-sf org login web --alias prod     # if you're not already authenticated
-almanac scan --org prod           # writes almanac-report.json + .html
+Org scans also list **integrations** — which outside systems call your org's API, and at which versions — read from free `ApiTotalUsage` event logs. SOAP `login()` usage is flagged separately because it retires in Summer 2027. If those logs aren't available, you just get a note; the scan never fails because of it.
+
+### Choosing an AI model
+
+For any `--llm` step, set one environment variable:
+
+```
+ALMANAC_LLM_PROVIDER = claude-cli | copilot | cursor | anthropic | cmd
 ```
 
-No session? You get a one-line message telling you to log in — never a stack trace.
+- `claude-cli` — the `claude` CLI (`claude -p`)
+- `copilot` — the GitHub Copilot CLI
+- `cursor` — the Cursor CLI (`cursor-agent -p`)
+- `anthropic` — the Anthropic API (needs `ANTHROPIC_API_KEY`)
+- `cmd` — any command you choose, via `ALMANAC_LLM_CMD`
 
-Org scans also report **integrations**: who is calling your org's API and at
-which versions, read from `ApiTotalUsage` event logs (no paid Event Monitoring
-required — 1-day retention free, 30 with it). SOAP `login()` usage is called out
-separately because it retires Summer '27. If those logs aren't readable, you get
-an "integration visibility unavailable" note — the scan never fails on it.
+Each AI call is capped by `ALMANAC_LLM_TIMEOUT_MS` (default 10 minutes) so a stuck CLI can never hang Almanac. No provider set? Almanac just writes the paste-ready bundle instead.
 
-## Upgrade impact (what actually changes behavior)
+The built-in corpus ships inside this package, so `impact` works with no setup. (Advanced: point at a different corpus with `--corpus <dir>` or `ALMANAC_CORPUS_DIR`.)
 
-A scan tells you *what version* things are on; `impact` tells you *what changes*
-when you cross to the target, by pairing the report with the [corpus](../corpus/):
-
-```bash
-almanac impact --report almanac-report.json        # writes almanac-impact.md
-```
-
-That `almanac-impact.md` is deterministic and grounded — every change cites a
-corpus entry id. On top of it you can get a ranked, readable narrative two ways:
-
-- **Your own assistant (default, zero trust required):** with no model
-  configured, `impact` also writes `almanac-impact-bundle.md` — a self-contained
-  prompt + report + grounded change list you paste into any assistant. Force it
-  with `--no-llm`.
-- **A configured model:** set `ALMANAC_LLM_PROVIDER` (`claude-cli` | `copilot` |
-  `cursor` | `anthropic` | `cmd`) and pass `--llm`; Almanac runs the narrative and
-  applies a **groundedness gate** — if the model cites any id not in the loaded
-  corpus slices, the run fails. No hallucinated citations ship. Each call is
-  bounded by `ALMANAC_LLM_TIMEOUT_MS` (default 10 min) so a hung CLI can't stall
-  the run.
-
-Corpus data ships **inside this package** (bundled at build), so
-`npx idea-almanac impact` works out of the box; override with `--corpus <dir>`
-or `ALMANAC_CORPUS_DIR`.
-
-`--lang <language>` makes the AI narrative/bundle come back in that language
-(entry ids, versions, and dates stay as-is) — e.g. `--lang Turkish`. The
-[`explain-to-my-manager`](prompts/explain-to-my-manager.md) and
-[`upgrade-impact-review`](prompts/upgrade-impact-review.md) prompts produce
-three layers: a short executive summary, a high-level summary for
-non-technical readers, and an in-depth section for the technical manager.
-
-Prefer MCP? The corpus also runs as a zero-dependency
-[MCP server](../corpus/mcp/server.ts) (`npm run mcp` in `packages/corpus`), so
-your assistant can query "what breaks between v48 and v67?" directly.
-
-## GitHub Action
-
-Scan on every PR and (optionally) fail the build or comment the report:
+## Run it on every pull request (GitHub Action)
 
 ```yaml
 # .github/workflows/almanac.yml
 on: [pull_request]
-permissions: { contents: read, pull-requests: write }  # write only if comment-pr
+permissions: { contents: read, pull-requests: write }   # write only if comment-pr is on
 jobs:
   almanac:
     runs-on: ubuntu-latest
@@ -364,27 +272,16 @@ jobs:
       - uses: actions/checkout@v4
       - uses: IdeaBulutSolutions/idea-almanac/packages/scanner/action@v1
         with:
-          path: force-app        # your sfdx source
-          fail-on: retired        # optional CI gate
-          comment-pr: true        # optional: post the report on the PR
+          path: force-app        # your Salesforce source folder
+          fail-on: retired        # optional: fail the build on already-broken items
+          comment-pr: true        # optional: post the report as a PR comment
 ```
 
-Inputs: `path`, `org` (alias, for org scans), `fail-on`, `comment-pr`, `command`.
-Outputs: `debt-score`, `retired-count`, `report-path`, `badge`.
+Inputs: `path`, `org`, `fail-on`, `comment-pr`, `command`. Outputs: `debt-score`, `retired-count`, `report-path`, `badge`. The Action also prints a shields.io badge snippet you can paste into your README.
 
-The Action also emits a **shields.io badge snippet** for your README (and the job
-summary), e.g.:
+## How Almanac fits together
 
-```markdown
-![Almanac API debt](https://img.shields.io/badge/API%20debt-1%20retired-red)
-```
-
-> A dynamic, always-current endpoint badge is planned; for now the badge is a
-> static snippet you paste after a scan.
-
-## Part of Almanac
-
-The scanner tells you **what** will break and **when**. The [Almanac corpus](../corpus/) tells you **what changes behavior** when you bump each version. The [prompt library](prompts/) turns a report (and the corpus) into a ranked test plan, a manager-friendly summary, or an adversarial security audit of the trust claims.
+The **scanner** (this package) tells you **what** will break and **when**. The [Almanac corpus](https://github.com/IdeaBulutSolutions/idea-almanac/tree/main/packages/corpus) — Salesforce's release-note changes, written in plain language — tells you **what changes** when you bump each version. The [prompt library](prompts/) turns a report plus the corpus into a test plan, a manager summary, or a security review.
 
 ---
 

@@ -72,9 +72,9 @@ describe('impact narrative', () => {
       reportJson: '{}',
       deterministicMd: '- (v60-rest-001)',
       target: 67,
-      language: 'Turkish',
+      language: 'Spanish',
     });
-    expect(bundle).toContain('**Output language: Turkish.**');
+    expect(bundle).toContain('**Output language: Spanish.**');
     expect(bundle).toContain('keep corpus entry ids, API versions, dates');
   });
 
