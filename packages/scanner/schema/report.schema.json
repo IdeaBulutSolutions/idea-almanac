@@ -3,7 +3,7 @@
   "$id": "https://github.com/IdeaBulutSolutions/idea-almanac/packages/scanner/schema/report.schema.json",
   "title": "Almanac scan report",
   "description": "Output of `almanac scan`. Frozen contract — schema changes require a version bump and a changelog entry. Tier names are data (retirement-schedule.json), so `tier` is a free string here; the invariant that every non-current item carries retirementDate+tierLabel is enforced by tests.",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -13,7 +13,9 @@
     "mode",
     "target",
     "schedule",
+    "nonBreakingFloor",
     "debtScore",
+    "debtScoreBreakdown",
     "headlines",
     "summary",
     "components",
@@ -51,7 +53,41 @@
         "source": { "type": "string", "description": "Path or identifier of the retirement-schedule file used." }
       }
     },
+    "nonBreakingFloor": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.0$",
+      "description": "Lowest API version that clears all dated (stops-working) tiers — the nearest non-breaking target."
+    },
     "debtScore": { "type": "number", "minimum": 0, "maximum": 100 },
+    "debtScoreBreakdown": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Why the debt score is what it is: formula, per-tier contributions, and a plain-language band.",
+      "required": ["formula", "totalItems", "weightedSum", "score", "band", "interpretation", "contributions"],
+      "properties": {
+        "formula": { "type": "string" },
+        "totalItems": { "type": "integer", "minimum": 0 },
+        "weightedSum": { "type": "number", "minimum": 0 },
+        "score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "band": { "enum": ["clean", "low", "moderate", "high", "severe"] },
+        "interpretation": { "type": "string" },
+        "contributions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["tier", "count", "weight", "contribution"],
+            "properties": {
+              "tier": { "type": "string" },
+              "label": { "type": "string" },
+              "count": { "type": "integer", "minimum": 0 },
+              "weight": { "type": "number" },
+              "contribution": { "type": "number" }
+            }
+          }
+        }
+      }
+    },
     "headlines": {
       "type": "array",
       "description": "Pre-computed, date-led. Every reporter and prompt shows these identical dates.",
@@ -87,6 +123,7 @@
         "required": ["id", "type", "apiVersion", "versionSource", "location", "tier"],
         "properties": {
           "id": { "type": "string" },
+          "name": { "type": "string", "description": "Metadata API/developer name (e.g. AccountTrigger)." },
           "type": {
             "enum": [
               "ApexClass",

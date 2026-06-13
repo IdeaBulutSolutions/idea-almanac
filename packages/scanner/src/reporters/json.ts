@@ -4,14 +4,16 @@
  * all outputs show identical dates.
  */
 import type { Inventory } from '../core/inventory.js';
-import { assignTier, type Schedule, type TierResult } from '../core/tiering.js';
-import { debtScore } from '../core/score.js';
+import { assignTier, nonBreakingFloor, type Schedule, type TierResult } from '../core/tiering.js';
+import { debtScore, debtScoreBreakdown, type DebtScoreBreakdown } from '../core/score.js';
 
-export const REPORT_SCHEMA_VERSION = '1.0.0';
+export const REPORT_SCHEMA_VERSION = '1.2.0';
 
 export interface ReportComponent {
   id: string;
   type: string;
+  /** Metadata API/developer name (e.g. "AccountTrigger"); friendlier than id/location. */
+  name?: string;
   apiVersion: string | null;
   versionSource: 'explicit' | 'inherited';
   location: string;
@@ -46,7 +48,10 @@ export interface Report {
   mode: 'repo' | 'org';
   target: { path?: string; org?: string };
   schedule: { currentApiVersion: string; source: string };
+  /** Lowest API version that clears all dated (stops-working) tiers — the nearest non-breaking target. */
+  nonBreakingFloor: string;
   debtScore: number;
+  debtScoreBreakdown: DebtScoreBreakdown;
   headlines: Headline[];
   summary: {
     totalComponents: number;
@@ -82,6 +87,7 @@ export function buildReport(
     return {
       id: item.id,
       type: item.type,
+      ...(item.name !== undefined && { name: item.name }),
       apiVersion: item.apiVersion,
       versionSource: item.versionSource,
       location: item.location,
@@ -151,7 +157,9 @@ export function buildReport(
     mode: opts.mode,
     target: opts.target,
     schedule: { currentApiVersion: schedule.currentApiVersion, source: opts.scheduleSource },
+    nonBreakingFloor: nonBreakingFloor(schedule),
     debtScore: debtScore(tiered),
+    debtScoreBreakdown: debtScoreBreakdown(tiered),
     headlines,
     summary: {
       totalComponents: components.length,

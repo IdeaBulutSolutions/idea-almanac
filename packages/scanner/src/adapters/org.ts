@@ -190,6 +190,7 @@ export async function scanOrg(
         items.push({
           id,
           type: src.type,
+          name,
           apiVersion,
           versionSource: 'explicit',
           location: rec.Id ?? id,

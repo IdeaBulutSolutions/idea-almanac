@@ -56,6 +56,68 @@ describe('almanac CLI', () => {
     expect(report.summary.byTier.doomed).toBeGreaterThan(0);
   });
 
+  it('--mode full-impact writes scan reports AND impact findings in one run', async () => {
+    const cwd = tmp();
+    const code = await run(['scan', fixture, '--mode', 'full-impact'], cwd);
+    expect(code).toBe(0);
+    // scan outputs
+    expect(existsSync(join(cwd, 'almanac-report.json'))).toBe(true);
+    expect(existsSync(join(cwd, 'almanac-report.html'))).toBe(true);
+    // impact outputs (no LLM provider in tests → deterministic md + bundle)
+    expect(existsSync(join(cwd, 'almanac-impact.md'))).toBe(true);
+    expect(existsSync(join(cwd, 'almanac-impact-bundle.md'))).toBe(true);
+  });
+
+  it('--mode full-impact still honors --fail-on (exit 1 on the retired fixture)', async () => {
+    const cwd = tmp();
+    expect(await run(['scan', fixture, '--mode', 'full-impact', '--fail-on', 'retired'], cwd)).toBe(1);
+  });
+
+  it('--mode manager writes the manager + effort-estimate bundles (and impact)', async () => {
+    const cwd = tmp();
+    const code = await run(['scan', fixture, '--mode', 'manager'], cwd);
+    expect(code).toBe(0);
+    expect(existsSync(join(cwd, 'almanac-impact.md'))).toBe(true);
+    expect(existsSync(join(cwd, 'almanac-manager-bundle.md'))).toBe(true);
+    expect(existsSync(join(cwd, 'almanac-estimate-bundle.md'))).toBe(true);
+    // estimate bundle embeds the impact findings
+    expect(readFileSync(join(cwd, 'almanac-estimate-bundle.md'), 'utf8')).toContain('Upgrade-impact findings');
+  });
+
+  it('--mode full also writes the agent upgrade-guide bundle', async () => {
+    const cwd = tmp();
+    const code = await run(['scan', fixture, '--mode', 'full'], cwd);
+    expect(code).toBe(0);
+    expect(existsSync(join(cwd, 'almanac-upgrade-guide-bundle.md'))).toBe(true);
+  });
+
+  it('unknown --mode is a one-line error (exit 2)', async () => {
+    expect(await run(['scan', fixture, '--mode', 'bogus'], tmp())).toBe(2);
+  });
+
+  it('--limit caps the review subset but leaves the scan report complete', async () => {
+    const cwd = tmp();
+    const code = await run(['scan', fixture, '--mode', 'impact', '--no-llm', '--limit', '3'], cwd);
+    expect(code).toBe(0);
+    // Scan report keeps every component…
+    const report = JSON.parse(readFileSync(join(cwd, 'almanac-report.json'), 'utf8'));
+    expect(report.components.length).toBe(10);
+    // …but the AI review bundle only carries the top-3 most urgent.
+    const bundle = readFileSync(join(cwd, 'almanac-impact-bundle.md'), 'utf8');
+    expect((bundle.match(/"id":/g) ?? []).length).toBe(3);
+  });
+
+  it('impact artifacts carry the AI / test-before-deploy disclaimer', async () => {
+    const cwd = tmp();
+    await run(['scan', fixture, '--mode', 'impact', '--no-llm'], cwd);
+    for (const f of ['almanac-impact.md', 'almanac-impact-bundle.md']) {
+      const text = readFileSync(join(cwd, f), 'utf8');
+      expect(text).toContain('Disclaimer');
+      expect(text).toMatch(/Idea Bulut Solutions is not liable/i);
+      expect(text).toMatch(/before deploying/i);
+    }
+  });
+
   it('--org is a clear not-yet error (exit 2), not a crash', async () => {
     expect(await run(['scan', '--org', 'myorg'], tmp())).toBe(2);
   });

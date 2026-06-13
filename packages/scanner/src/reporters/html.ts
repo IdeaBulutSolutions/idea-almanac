@@ -35,13 +35,14 @@ function worst(components: ReportComponent[]): ReportComponent {
   )[0]!;
 }
 
-function componentRows(components: ReportComponent[]): string {
+function componentRows(components: ReportComponent[], showDate: boolean): string {
   return components
     .map(
       (c) => `<tr>
       <td>${dot(c.severity)}${esc(c.tier)}</td>
-      <td>${c.retirementDate ? esc(fmtDate(c.retirementDate)) : '—'}</td>
+      ${showDate ? `<td>${c.retirementDate ? esc(fmtDate(c.retirementDate)) : ''}</td>` : ''}
       <td>${esc(c.type)}</td>
+      <td>${esc(c.name ?? '')}</td>
       <td class="loc">${esc(c.location)}${c.versionSource === 'inherited' ? ' <em>(inherited)</em>' : ''}</td>
     </tr>`,
     )
@@ -101,6 +102,9 @@ function byVersionSections(components: ReportComponent[]): string {
         .sort((a, b) => b[1] - a[1])
         .map(([t, n]) => `${esc(t)} ×${n}`)
         .join(' · ');
+      // Only show a Date column when at least one row in this group is dated —
+      // otherwise every cell is empty and the column is just noise.
+      const showDate = comps.some((c) => c.retirementDate !== undefined);
       return `<details${dated ? ' open' : ''}>
     <summary>${dot(w.severity)}<strong>API ${esc(version)}</strong>
       <span class="count">${comps.length} component${comps.length === 1 ? '' : 's'}</span>
@@ -108,14 +112,71 @@ function byVersionSections(components: ReportComponent[]): string {
       <span class="types">${typeSummary}</span>
     </summary>
     <table>
-      <thead><tr><th>Tier</th><th>Date</th><th>Type</th><th>Location</th></tr></thead>
+      <thead><tr><th>Tier</th>${showDate ? '<th>Date</th>' : ''}<th>Type</th><th>Name</th><th>Location</th></tr></thead>
       <tbody>
-${componentRows(comps)}
+${componentRows(comps, showDate)}
       </tbody>
     </table>
   </details>`;
     })
     .join('\n');
+}
+
+const BAND_COLOR: Record<string, string> = {
+  clean: '#16a34a',
+  low: '#15803d',
+  moderate: '#a16207',
+  high: '#b45309',
+  severe: '#b3261e',
+};
+
+/** Explain the debt score: what the number means, whether it's good/bad, and the math behind it. */
+function scoreExplanation(report: Report): string {
+  const b = report.debtScoreBreakdown;
+  if (!b) return '';
+  const color = BAND_COLOR[b.band] ?? '#52525b';
+  const rows = b.contributions
+    .map(
+      (c) => `<tr>
+      <td>${esc(c.label ?? c.tier)}</td>
+      <td>${c.count}</td>
+      <td>${c.weight}</td>
+      <td>${c.contribution}</td>
+    </tr>`,
+    )
+    .join('\n');
+  return `<details class="score-why" open>
+    <summary>Debt score <strong>${report.debtScore}</strong>
+      <span class="band" style="background:${color}">${esc(b.band)}</span>
+      <span class="count">— how this is calculated</span>
+    </summary>
+    <div class="score-body">
+      <p>${esc(b.interpretation)}</p>
+      <p class="meta">Score = <code>${esc(b.formula)}</code>. Weighted sum ${b.weightedSum} over ${b.totalItems} item${b.totalItems === 1 ? '' : 's'} → ${report.debtScore}.</p>
+      <table>
+        <thead><tr><th>Tier</th><th>Items</th><th>Weight</th><th>Contribution</th></tr></thead>
+        <tbody>${rows}
+        <tr class="total"><td>Total</td><td>${b.totalItems}</td><td></td><td>${b.weightedSum}</td></tr>
+        </tbody>
+      </table>
+      <p class="meta">Bands: 0 clean · 1–10 low · 11–30 moderate · 31–60 high · 61+ severe. The score is a weighted average of how far behind things are — <strong>secondary to the retirement dates above</strong>, which are the real signal.</p>
+    </div>
+  </details>`;
+}
+
+/** "Nearest non-breaking version" hint — the quickest move that clears the dated tiers. */
+function floorHint(report: Report): string {
+  const floor = report.nonBreakingFloor;
+  if (!floor) return '';
+  const floorNum = Number.parseFloat(floor);
+  const atRisk = report.components.filter(
+    (c) => c.retirementDate !== undefined && c.apiVersion !== null && Number.parseFloat(c.apiVersion) < floorNum,
+  );
+  if (atRisk.length === 0) return '';
+  return `<div class="floor-hint">💡 <strong>Nearest non-breaking version: API ${esc(floor)}.</strong>
+    ${atRisk.length} component${atRisk.length === 1 ? '' : 's'} sit below it in a dated retirement tier —
+    moving ${atRisk.length === 1 ? 'it' : 'them'} to at least API ${esc(floor)} clears the dated breakage.
+    (That lands ${atRisk.length === 1 ? 'it' : 'them'} in “stale”, not current API ${esc(report.schedule.currentApiVersion)} — but nothing stops working.)</div>`;
 }
 
 export function renderHtml(report: Report): string {
@@ -139,6 +200,8 @@ export function renderHtml(report: Report): string {
       .join('\n    ')}
   </div>`;
 
+  const scoreSection = scoreExplanation(report);
+
   const integrationSection =
     report.integrations.length === 0
       ? `<p class="muted">No integration findings${report.mode === 'repo' ? ' (repo mode does not inspect API usage logs)' : ''}.</p>`
@@ -149,7 +212,7 @@ export function renderHtml(report: Report): string {
       .map(
         (i) => `<tr>
         <td>${dot(i.severity)}${esc(i.tier)}</td>
-        <td>${i.retirementDate ? esc(fmtDate(i.retirementDate)) : '—'}</td>
+        <td>${i.retirementDate ? esc(fmtDate(i.retirementDate)) : ''}</td>
         <td>${esc(i.clientName)}</td>
         <td>${esc(i.apiFamily)}${i.type === 'soap-login' ? ' <strong>login()</strong>' : ''}</td>
         <td>${esc(i.apiVersion)}</td>
@@ -199,6 +262,12 @@ export function renderHtml(report: Report): string {
   summary .count { color: #555; font-size: 0.85rem; }
   summary .tier { color: #8a3b00; font-size: 0.85rem; font-weight: 600; }
   summary .types { color: #888; font-size: 0.78rem; margin-left: auto; }
+  .score-why { margin: -8px 0 28px; }
+  .score-why .band { color: #fff; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 999px; }
+  .score-body { padding: 4px 14px 14px; }
+  .score-body table { margin-top: 8px; }
+  .score-body tr.total td { font-weight: 700; border-top: 2px solid #ececea; }
+  .floor-hint { background: #eef2ff; border: 1px solid #c7d2fe; color: #1e293b; padding: 12px 16px; border-radius: 8px; margin: 0 0 20px; font-size: 0.92rem; line-height: 1.45; }
   footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #e5e5e3; color: #777; font-size: 0.85rem; }
   footer a { color: #4f46e5; }
 </style>
@@ -208,7 +277,9 @@ export function renderHtml(report: Report): string {
   <h1>Almanac — API version debt report</h1>
   <p class="meta">Mode: ${esc(report.mode)} · Target: ${esc(report.target.path ?? report.target.org ?? '')} · Current API version: ${esc(report.schedule.currentApiVersion)} · Generated: ${esc(report.generatedAt)}</p>
   ${banner}
+  ${floorHint(report)}
   ${tiles}
+  ${scoreSection}
   <h2>By metadata type</h2>
   ${byTypeOverview(report.components)}
   <h2>Components by API version <span class="muted" style="font-weight:400;font-size:0.8rem">(oldest first — dated groups expanded, click to toggle)</span></h2>

@@ -1,6 +1,6 @@
 {
   "name": "idea-almanac-corpus",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Almanac corpus — own-words change entries for every Salesforce API version, v29 (Winter '14) onward.",
   "license": "Apache-2.0",

@@ -122,7 +122,24 @@ export function scanRepo(rootPath: string): Inventory {
     items.push({ id: rel, type, apiVersion, versionSource: 'explicit', location: rel });
   }
 
+  // Derive the metadata API name from each item's path (location == rel here),
+  // so reporters can show "AccountTrigger" instead of an opaque path/id.
+  for (const it of items) it.name = componentName(it.location);
+
   return { items, integrations: [], warnings };
+}
+
+/**
+ * Metadata API/developer name from a repo path: the basename with the
+ * `-meta.xml` suffix and the metadata extension stripped, e.g.
+ * `.../classes/AncientHelper.cls-meta.xml` → `AncientHelper`,
+ * `.../lwc/orderList/orderList.js-meta.xml` → `orderList`.
+ */
+export function componentName(rel: string): string {
+  const base = rel.split('/').pop() ?? rel;
+  return base
+    .replace(/-meta\.xml$/, '')
+    .replace(/\.(cls|trigger|flow|js|cmp|app|evt|intf|page|component)$/, '');
 }
 
 /** Map a relative path to a component type, or null to skip. */

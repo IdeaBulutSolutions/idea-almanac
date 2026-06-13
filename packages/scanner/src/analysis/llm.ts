@@ -2,15 +2,18 @@
  * Minimal env-based LLM provider for the impact narrative, mirroring the
  * corpus stage-3 provider so users configure one thing for the whole project:
  *
- *   ALMANAC_LLM_PROVIDER = claude-cli (default) | copilot | anthropic | cmd
- *   ALMANAC_LLM_MODEL    = optional model override (passed through)
- *   ALMANAC_LLM_CMD      = for provider "cmd": a shell command reading the
- *                          prompt on stdin and writing the answer to stdout
- *   ANTHROPIC_API_KEY    = for provider "anthropic"
+ *   ALMANAC_LLM_PROVIDER   = claude-cli (default) | copilot | cursor | anthropic | cmd
+ *   ALMANAC_LLM_MODEL      = optional model override (passed through)
+ *   ALMANAC_LLM_CMD        = for provider "cmd": a shell command reading the
+ *                            prompt on stdin and writing the answer to stdout
+ *   ALMANAC_LLM_TIMEOUT_MS = max time for any one model call (default 600000 =
+ *                            10 min); guards against a CLI that hangs
+ *   ANTHROPIC_API_KEY      = for provider "anthropic"
  *
- * "copilot" shells out to the GitHub Copilot CLI in programmatic mode
- * (`copilot -p <prompt>`); install it and run `copilot` once to authenticate
- * before using this provider.
+ * "copilot" shells out to the GitHub Copilot CLI (`copilot -p <prompt>`);
+ * "cursor" shells out to the Cursor CLI in headless mode
+ * (`cursor-agent -p <prompt> --output-format text`). Install + authenticate the
+ * respective CLI once before use.
  *
  * No provider configured ⇒ the CLI falls back to `--no-llm` bundle output, so
  * nothing ever calls out without the user opting in. This module only runs when
@@ -18,6 +21,9 @@
  */
 import { spawnSync } from 'node:child_process';
 import type { RunModel } from './impact-narrative.js';
+
+/** Per-call timeout (ms). Some agent CLIs can hang in headless mode; never wait forever. */
+const TIMEOUT_MS = Number.parseInt(process.env.ALMANAC_LLM_TIMEOUT_MS ?? '', 10) || 600_000;
 
 export function configuredProvider(): string | null {
   if (process.env.ALMANAC_LLM_PROVIDER) return process.env.ALMANAC_LLM_PROVIDER;
@@ -30,8 +36,29 @@ export function isProviderConfigured(): boolean {
 }
 
 function runCli(cmd: string, args: string[], stdin: string): string {
-  const res = spawnSync(cmd, args, { input: stdin, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
-  if (res.error) throw res.error;
+  const res = spawnSync(cmd, args, {
+    input: stdin,
+    encoding: 'utf8',
+    maxBuffer: 64 * 1024 * 1024,
+    timeout: TIMEOUT_MS,
+  });
+  // A timeout (or any kill signal) surfaces as a clear message, never a hang.
+  if (res.error) {
+    const e = res.error as NodeJS.ErrnoException;
+    if (e.code === 'ETIMEDOUT') {
+      throw new Error(
+        `${cmd} timed out after ${TIMEOUT_MS}ms — set ALMANAC_LLM_TIMEOUT_MS to allow longer, ` +
+          `or try a smaller --limit.`,
+      );
+    }
+    throw res.error;
+  }
+  if (res.signal) {
+    throw new Error(
+      `${cmd} was killed (${res.signal}) — likely the ${TIMEOUT_MS}ms timeout; ` +
+        `raise ALMANAC_LLM_TIMEOUT_MS or use a smaller --limit.`,
+    );
+  }
   if (res.status !== 0) {
     throw new Error(`${cmd} exited ${res.status}: ${(res.stderr || '').toString().slice(0, 500)}`);
   }
@@ -53,6 +80,15 @@ export function defaultRunModel(): RunModel {
       // Copilot can only answer — it cannot touch files or run commands.
       return (prompt) =>
         runCli('copilot', ['-p', prompt, ...(model ? ['--model', model] : [])], '');
+    case 'cursor':
+      // Cursor CLI headless/print mode. Prompt as an argv argument; force text
+      // output. No --force, so the agent can only answer — it never edits files.
+      return (prompt) =>
+        runCli(
+          'cursor-agent',
+          ['-p', prompt, '--output-format', 'text', ...(model ? ['--model', model] : [])],
+          '',
+        );
     case 'cmd': {
       const cmd = process.env.ALMANAC_LLM_CMD;
       if (!cmd) throw new Error('provider "cmd" needs ALMANAC_LLM_CMD set');
@@ -88,7 +124,7 @@ export function defaultRunModel(): RunModel {
       };
     default:
       throw new Error(
-        `unknown ALMANAC_LLM_PROVIDER "${provider}" (have: claude-cli, copilot, anthropic, cmd)`,
+        `unknown ALMANAC_LLM_PROVIDER "${provider}" (have: claude-cli, copilot, cursor, anthropic, cmd)`,
       );
   }
 }

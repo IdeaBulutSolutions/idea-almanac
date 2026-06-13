@@ -110,8 +110,8 @@ export function assembleBundle(parts: BundleParts): string {
   ].join('\n');
 }
 
-/** A model invocation: prompt in, markdown out. Sync to match the corpus provider. */
-export type RunModel = (prompt: string) => string;
+/** A model invocation: prompt in, markdown out. May stream and resolve async. */
+export type RunModel = (prompt: string) => string | Promise<string>;
 
 export interface NarrativeResult {
   markdown: string;
@@ -123,12 +123,12 @@ export interface NarrativeResult {
  * Throws if the model cites ids absent from the slices — uncited claims never
  * ship.
  */
-export function generateNarrative(
+export async function generateNarrative(
   prompt: string,
   validIds: Set<string>,
   runModel: RunModel,
-): NarrativeResult {
-  const markdown = runModel(prompt);
+): Promise<NarrativeResult> {
+  const markdown = await runModel(prompt);
   const groundedness = checkGroundedness(markdown, validIds);
   if (!groundedness.ok) {
     throw new Error(

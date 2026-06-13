@@ -19,6 +19,8 @@ export type VersionSource = 'explicit' | 'inherited';
 export interface InventoryItem {
   id: string;
   type: ComponentType;
+  /** Metadata API/developer name, e.g. "AccountTrigger" or "Order_Fulfillment". */
+  name?: string;
   /** "55.0" — null only when undeterminable; a warning explains why. */
   apiVersion: string | null;
   versionSource: VersionSource;

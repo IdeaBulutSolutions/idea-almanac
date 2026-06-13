@@ -8,6 +8,9 @@ meant to be fed to an LLM along with the listed inputs.
 |---|---|---|
 | [`upgrade-impact-review.md`](upgrade-impact-review.md) | report JSON + corpus slices | ranked, citation-backed "what changes + one test each" review |
 | [`explain-to-my-manager.md`](explain-to-my-manager.md) | report JSON | one-page, business-language risk summary, dates first |
+| [`effort-estimate.md`](effort-estimate.md) | report JSON (+ optional impact md) | fix-and-release effort & timeline by severity — full-to-current vs. breaking-changes-first |
+| [`upgrade-guide.md`](upgrade-guide.md) | report JSON + impact md + the source tree | dependency-aware, ordered, verifiable upgrade procedure for an AI coding agent |
+| [`deprecation-horizon.md`](deprecation-horizon.md) | impact md (+ optional report JSON) | dated calendar of what still works but is deprecated/retiring — planning, read-only |
 | [`brutal-security-review.md`](brutal-security-review.md) | the scanner source tree | adversarial audit of the zero-network / no-telemetry trust claim |
 | [`assistant-handoff.md`](assistant-handoff.md) | this repo | run-mode orientation for an AI coding assistant |
 

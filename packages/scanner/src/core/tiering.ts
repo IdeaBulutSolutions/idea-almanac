@@ -81,6 +81,24 @@ export function assignTier(
   return { tier: 'unknown', weight: 0 };
 }
 
+/**
+ * The lowest API version a component can sit on without landing in a *dated*
+ * (stops-working) tier — i.e. the nearest non-breaking version. Computed from
+ * the schedule, not hardcoded: step versions upward and return the first whose
+ * assigned tier carries no retirement `date` (soapLogin = false, since that
+ * only applies to integrations). With the built-in schedule this is 41.0
+ * (≤30 = retired, 31–40 = breaks-2028, 41+ = stale/current). It clears the
+ * dated breakage; it does not make a component current.
+ */
+export function nonBreakingFloor(schedule: Schedule): string {
+  const current = Math.floor(Number.parseFloat(schedule.currentApiVersion));
+  for (let v = 1; v <= current; v++) {
+    const t = assignTier({ apiVersion: `${v}.0`, soapLogin: false }, schedule);
+    if (t.tier !== 'unknown' && t.date === undefined) return `${v}.0`;
+  }
+  return schedule.currentApiVersion;
+}
+
 // ---------------------------------------------------------------------------
 // Expression evaluator
 // ---------------------------------------------------------------------------

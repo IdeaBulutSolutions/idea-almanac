@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.2.0",
   "generatedAt": "2026-01-01T00:00:00.000Z",
   "scanner": {
     "name": "idea-almanac",
@@ -13,7 +13,45 @@
     "currentApiVersion": "67.0",
     "source": "built-in retirement-schedule.json"
   },
+  "nonBreakingFloor": "41.0",
   "debtScore": 27,
+  "debtScoreBreakdown": {
+    "formula": "round(100 × Σ tier_weight / total_items)",
+    "totalItems": 10,
+    "weightedSum": 2.75,
+    "score": 27,
+    "band": "moderate",
+    "interpretation": "A meaningful share of the org is behind. Plan remediation before the dated items come due.",
+    "contributions": [
+      {
+        "tier": "retired",
+        "label": "Already failing - retired Summer '25 (REST 410 / SOAP 500 / Bulk 400)",
+        "count": 1,
+        "weight": 1,
+        "contribution": 1
+      },
+      {
+        "tier": "breaks-2028",
+        "label": "Retires Summer '28 (deprecated Summer '27)",
+        "count": 1,
+        "weight": 0.7,
+        "contribution": 0.7
+      },
+      {
+        "tier": "stale",
+        "label": "Drifting (>1 year behind)",
+        "count": 7,
+        "weight": 0.15,
+        "contribution": 1.05
+      },
+      {
+        "tier": "current",
+        "count": 1,
+        "weight": 0,
+        "contribution": 0
+      }
+    ]
+  },
   "headlines": [
     {
       "date": "2025-06",
@@ -40,6 +78,7 @@
     {
       "id": "force-app/main/default/classes/AncientHelper.cls-meta.xml",
       "type": "ApexClass",
+      "name": "AncientHelper",
       "apiVersion": "28.0",
       "versionSource": "explicit",
       "location": "force-app/main/default/classes/AncientHelper.cls-meta.xml",
@@ -51,6 +90,7 @@
     {
       "id": "force-app/main/default/classes/LegacyService.cls-meta.xml",
       "type": "ApexClass",
+      "name": "LegacyService",
       "apiVersion": "35.0",
       "versionSource": "explicit",
       "location": "force-app/main/default/classes/LegacyService.cls-meta.xml",
@@ -62,6 +102,7 @@
     {
       "id": "force-app/main/default/aura/legacyPanel/legacyPanel.cmp-meta.xml",
       "type": "Aura",
+      "name": "legacyPanel",
       "apiVersion": "45.0",
       "versionSource": "explicit",
       "location": "force-app/main/default/aura/legacyPanel/legacyPanel.cmp-meta.xml",
@@ -72,6 +113,7 @@
     {
       "id": "manifest/package.xml",
       "type": "Manifest",
+      "name": "package.xml",
       "apiVersion": "45.0",
       "versionSource": "explicit",
       "location": "manifest/package.xml",
@@ -82,6 +124,7 @@
     {
       "id": "force-app/main/default/triggers/AccountTrigger.trigger-meta.xml",
       "type": "ApexTrigger",
+      "name": "AccountTrigger",
       "apiVersion": "52.0",
       "versionSource": "explicit",
       "location": "force-app/main/default/triggers/AccountTrigger.trigger-meta.xml",
@@ -92,6 +135,7 @@
     {
       "id": "force-app/main/default/lwc/orderList/orderList.js-meta.xml",
       "type": "LWC",
+      "name": "orderList",
       "apiVersion": "55.0",
       "versionSource": "inherited",
       "location": "force-app/main/default/lwc/orderList/orderList.js-meta.xml",
@@ -102,6 +146,7 @@
     {
       "id": "sfdx-project.json",
       "type": "ProjectDefault",
+      "name": "sfdx-project.json",
       "apiVersion": "55.0",
       "versionSource": "explicit",
       "location": "sfdx-project.json",
@@ -112,6 +157,7 @@
     {
       "id": "manifest/deploy/package.xml",
       "type": "Manifest",
+      "name": "package.xml",
       "apiVersion": "60.0",
       "versionSource": "explicit",
       "location": "manifest/deploy/package.xml",
@@ -122,6 +168,7 @@
     {
       "id": "force-app/main/default/flows/Order_Fulfillment.flow-meta.xml",
       "type": "Flow",
+      "name": "Order_Fulfillment",
       "apiVersion": "61.0",
       "versionSource": "explicit",
       "location": "force-app/main/default/flows/Order_Fulfillment.flow-meta.xml",
@@ -132,6 +179,7 @@
     {
       "id": "force-app/main/default/classes/ModernController.cls-meta.xml",
       "type": "ApexClass",
+      "name": "ModernController",
       "apiVersion": "67.0",
       "versionSource": "explicit",
       "location": "force-app/main/default/classes/ModernController.cls-meta.xml",

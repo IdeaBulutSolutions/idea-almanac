@@ -29,9 +29,15 @@ describe('LLM provider selection (env-based)', () => {
     expect(typeof defaultRunModel()).toBe('function');
   });
 
+  it('supports cursor (cursor-agent) as a first-class provider', () => {
+    process.env.ALMANAC_LLM_PROVIDER = 'cursor';
+    expect(configuredProvider()).toBe('cursor');
+    expect(typeof defaultRunModel()).toBe('function');
+  });
+
   it('unknown provider error lists every supported provider', () => {
     process.env.ALMANAC_LLM_PROVIDER = 'gemini-9000';
-    expect(() => defaultRunModel()).toThrow(/claude-cli, copilot, anthropic, cmd/);
+    expect(() => defaultRunModel()).toThrow(/claude-cli, copilot, cursor, anthropic, cmd/);
   });
 
   it('provider cmd without ALMANAC_LLM_CMD fails with a clear message', () => {

@@ -64,6 +64,11 @@ describe('report assembly + schema', () => {
     expect([...staleVersions].sort((a, b) => a - b)).toEqual(staleVersions);
   });
 
+  it('reports the nearest non-breaking version (floor) from the built-in schedule', () => {
+    // ≤30 retired, 31–40 breaks-2028, 41+ stale/current → 41.0 is the first non-dated tier.
+    expect(report.nonBreakingFloor).toBe('41.0');
+  });
+
   it('debt score matches the documented formula on the fixture', () => {
     // 1×retired(1.0) + 1×breaks-2028(0.7) + 7×stale(0.15) + 1×current(0) over 10 items
     // = 2.75/10 ≈ 27.5 — IEEE 754 puts the sum a hair under (2.7499…), so round() gives 27.

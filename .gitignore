@@ -20,7 +20,15 @@ almanac-report.json
 almanac-report.html
 almanac-report.md
 almanac-impact.md
+almanac-impact.llm.md
 almanac-impact-bundle.md
+# --mode manager/full outputs (model markdown and paste-ready bundles)
+almanac-manager.md
+almanac-manager-bundle.md
+almanac-estimate.md
+almanac-estimate-bundle.md
+almanac-upgrade-guide.md
+almanac-upgrade-guide-bundle.md
 # …except the committed sample report
 !packages/scanner/examples/almanac-report.json
 !packages/scanner/examples/almanac-report.html

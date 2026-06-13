@@ -1,6 +1,6 @@
 {
   "name": "almanac",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Almanac — a seasonal record of every Salesforce release, and the scanner that reads your org against it.",
   "license": "Apache-2.0",
@@ -34,6 +34,6 @@
     "yaml": "^2.9.0"
   },
   "dependencies": {
-    "idea-almanac": "^0.1.0"
+    "idea-almanac": "^0.2.0"
   }
 }

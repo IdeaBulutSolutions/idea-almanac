@@ -78,14 +78,20 @@ describe('impact narrative', () => {
     expect(bundle).toContain('keep corpus entry ids, API versions, dates');
   });
 
-  it('generateNarrative returns a gated narrative, throwing on hallucinated ids', () => {
+  it('generateNarrative returns a gated narrative, throwing on hallucinated ids', async () => {
     const valid = collectValidIds(corpusWith(['v60-rest-001', 'v65-soap-002']));
-    const good = generateNarrative('prompt', valid, () => 'See v60-rest-001 and v65-soap-002.');
+    const good = await generateNarrative('prompt', valid, () => 'See v60-rest-001 and v65-soap-002.');
     expect(good.groundedness.ok).toBe(true);
     expect(good.groundedness.citedIds.length).toBe(2);
 
-    expect(() => generateNarrative('prompt', valid, () => 'Also v99-fake-001.')).toThrow(
-      /groundedness gate failed/i,
+    await expect(
+      generateNarrative('prompt', valid, () => 'Also v99-fake-001.'),
+    ).rejects.toThrow(/groundedness gate failed/i);
+
+    // An async (streaming) model is awaited the same way.
+    const streamed = await generateNarrative('prompt', valid, () =>
+      Promise.resolve('See v60-rest-001.'),
     );
+    expect(streamed.groundedness.ok).toBe(true);
   });
 });

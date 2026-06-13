@@ -1,6 +1,6 @@
 {
   "name": "idea-almanac",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Almanac scanner — find Salesforce API version debt in a repo or org. Repo scans make zero network calls.",
   "license": "Apache-2.0",
   "type": "module",
