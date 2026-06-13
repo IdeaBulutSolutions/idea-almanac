@@ -1,0 +1,1646 @@
+apiVersion: "43.0"
+release: Summer '18
+reviewed: true
+entries:
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex gains a switch/case control statement, allowing developers to
+      replace lengthy if-else chains with cleaner conditional logic.
+    source:
+      document: v43-summer18.pdf
+      page: 10
+      heading: You Asked for It!
+    confidence: high
+    id: v43-apex-001
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOQL COUNT() queries now consume only one row toward governor limits
+      instead of counting each returned row, reducing limit pressure for
+      aggregate queries.
+    upgradeAction: Review any limit-handling logic that assumed COUNT() consumed
+      rows proportional to the count result; this may now allow simplification.
+    source:
+      document: v43-summer18.pdf
+      page: 10
+      heading: You Asked for It!
+    confidence: high
+    id: v43-soql-001
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-bulk
+    appliesWhen: org-wide regardless of component API version
+    summary: The Bulk API PK Chunking Header now supports CaseHistory, Event, and
+      EventRelation objects, enabling chunked queries against these additional
+      object types.
+    source:
+      document: v43-summer18.pdf
+      page: 12
+      heading: Release Note Changes
+    confidence: high
+    id: v43-bulk-001
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+      - LWC
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning Experience URLs switch from /one/one.app to /lightning
+      format. Custom Lightning components that parse URLs using window.location
+      or aura:locationChange may break if they expect the old path structure.
+      Query string parameters are also rewritten with a prefix.
+    detail: The URL rewrite changes /one/one.app?myparam1=xyz to
+      /lightning?0.myparam1=xyz. Old URLs continue to function via automatic
+      translation, but components with URL-parsing logic may behave
+      unexpectedly. Visualforce pages retain the old /one/one.app format when
+      accessed via /apex/pageName paths.
+    upgradeAction: Audit Lightning components that rely on window.location or
+      aura:locationChange for URL parsing logic. Update any hardcoded path
+      checks from /one/one.app to /lightning and adjust query parameter parsing
+      to handle the 0. prefix.
+    source:
+      document: v43-summer18.pdf
+      page: 75
+      heading: New URL Format for Lightning Experience and the Salesforce Mobile App
+    confidence: high
+    id: v43-aura-001
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The lightning:isUrlAddressable interface enables custom Aura components
+      to be opened directly in console workspace tabs and subtabs via
+      openTab()/openSubtab() navigation methods, replacing the older
+      force:navigateToComponent pattern with a URL-stable pageReference
+      approach.
+    source:
+      document: v43-summer18.pdf
+      page: 89
+      heading: Open Custom Lightning Components in Workspace Tabs and Subtabs
+    confidence: high
+    id: v43-aura-002
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Subscription Conversion field on Order and the Full-Term Net Unit
+      Price field on Order Product are now deprecated in Salesforce CPQ.
+      Integrations or code referencing these fields should prepare for their
+      eventual removal.
+    upgradeAction: Audit Apex code, API integrations, and reports that read or write
+      these deprecated fields. Plan to migrate to replacement fields once
+      Salesforce announces alternatives.
+    source:
+      document: v43-summer18.pdf
+      page: 179
+      heading: Quickly Navigate the Quote Line Editor
+    confidence: medium
+    id: v43-rest-001
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Three new Metadata API types—Bot, BotVersion, and MlDomain—allow
+      developers to deploy and version-control Einstein Bots configurations
+      programmatically.
+    source:
+      document: v43-summer18.pdf
+      page: 190
+      heading: Einstein Bots
+    confidence: high
+    id: v43-packaging-001
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The Apex QuickAction.QuickActionDefaultsHandler interface now works in
+      Lightning Experience for setting default email field values on cases, not
+      just Salesforce Classic.
+    detail: Existing Apex code using QuickActionDefaultsHandler to pre-populate case
+      email fields (recipients, templates, etc.) now functions in Lightning
+      Experience without modification.
+    source:
+      document: v43-summer18.pdf
+      page: 194
+      heading: Resolve Cases More Quickly with Flows and Case Teams in the Service
+        Console
+    confidence: high
+    id: v43-apex-002
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The QuickAction.QuickActionDefaultsHandler Apex interface now functions
+      in Lightning Experience, allowing developers to set default case email
+      field values with custom logic. Previously this interface only worked in
+      Salesforce Classic.
+    detail: Existing Apex classes implementing
+      QuickAction.QuickActionDefaultsHandler will work in Lightning Experience
+      without modification. However, the Lightning implementation does not
+      support email attachments, custom email fields, or Visualforce email
+      templates.
+    source:
+      document: v43-summer18.pdf
+      page: 200
+      heading: Set Default Email Field Values with Apex in Lightning Experience
+    confidence: high
+    id: v43-apex-003
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: A new lightningsnapin:minimizedUI interface and
+      lightningsnapin:minimizedAPI component allow developers to build custom
+      Aura components controlling the minimized state of Snap-ins Chat widgets.
+    source:
+      document: v43-summer18.pdf
+      page: 242
+      heading: Customize the Minimized Snap-In with Lightning Components
+    confidence: medium
+    id: v43-aura-003
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The lens representation in the Wave REST API now uses a datasets array
+      property for multi-dataset support, deprecating the singular dataset
+      property.
+    upgradeAction: Update integrations consuming /wave/lenses responses to read from
+      the datasets array instead of the deprecated dataset property.
+    source:
+      document: v43-summer18.pdf
+      page: 297
+      heading: Updates to the REST API
+    confidence: high
+    id: v43-rest-002
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Community ID tokens no longer include a trailing slash in the issuer
+      URL when the community lacks a root path prefix, aligning with OpenID
+      Connect Discovery requirements.
+    detail: Any integration validating ID tokens by comparing the issuer claim
+      against an expected value that included the trailing slash will fail
+      validation after this change.
+    upgradeAction: Review OAuth/OIDC integrations that consume community ID tokens
+      and verify issuer URL comparison logic tolerates the absence of a trailing
+      slash.
+    source:
+      document: v43-summer18.pdf
+      page: 344
+      heading: Trailing Slash Removed from an ID Token's Issuer URL
+    confidence: high
+    id: v43-auth-001
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Authentication provider endpoint URLs must now use HTTP or HTTPS
+      protocols; non-HTTP schemes like data://, feed://, or ftp:// are rejected.
+    upgradeAction: Audit any custom authentication provider configurations to ensure
+      all endpoint URLs begin with http:// or https://; update any using
+      alternative protocols.
+    source:
+      document: v43-summer18.pdf
+      page: 344
+      heading: Authentication Provider Endpoints Require HTTP or HTTPS
+    confidence: high
+    id: v43-auth-002
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version, enforced May 18, 2018
+    summary: The Files Connect integration for on-premises SharePoint servers is
+      being permanently removed. Organizations using this connector must
+      transition to SharePoint Online before the retirement date.
+    upgradeAction: Migrate any existing Files Connect configurations from SharePoint
+      On-Premises to SharePoint Online before May 18, 2018 to maintain external
+      file access functionality.
+    source:
+      document: v43-summer18.pdf
+      page: 381
+      heading: Files Connect for SharePoint On-Premises Is Being Retired
+    confidence: high
+    id: v43-other-001
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version, effective May 25, 2018
+    summary: The Files Sync feature is being removed from all orgs. Any integrations
+      or code relying on Files Sync APIs or sync functionality will stop working
+      after the retirement date.
+    upgradeAction: Identify any integrations or automation that depend on Files Sync
+      and migrate to alternative file synchronization approaches before May 25,
+      2018.
+    source:
+      document: v43-summer18.pdf
+      page: 381
+      heading: Files Sync Is Being Retired
+    confidence: medium
+    id: v43-rest-003
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new Apex method System.UserManagement.obfuscateUser() allows
+      permanently scrambling a user's personal data in standard User object
+      fields, replacing values with random strings. The operation is
+      irreversible.
+    detail: The method affects most standard User object fields but excludes user
+      ID, time zone, locale, and profile. It does not modify related objects
+      like Contact or ThirdPartyAccountLink. Requires enabling 'Scramble
+      Specific Users' Data' in User Management Settings before invocation.
+    source:
+      document: v43-summer18.pdf
+      page: 408
+      heading: Make Users' Personal Data Unusable by Salesforce at Their Request
+    confidence: high
+    id: v43-apex-004
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+      - Flow
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The interface for Lightning components usable as flow local actions was
+      renamed from flowruntime:availableForFlowLocalActions to
+      lightning:availableForFlowActions, and the callback-based control flow was
+      replaced with Promise-based resolution.
+    detail: "Components built during the pilot must be updated: change the interface
+      declaration and refactor any callback usage to return a Promise instead,
+      as the flow now resumes when the method completes or the Promise
+      resolves."
+    upgradeAction: Update any pilot-era local-action components to implement
+      lightning:availableForFlowActions and replace callback invocations with
+      Promise returns.
+    source:
+      document: v43-summer18.pdf
+      page: 411
+      heading: Perform Local Actions in Flows by Using Lightning Components (Generally
+        Available)
+    confidence: high
+    id: v43-aura-004
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: When passing $Flow.ActiveStages or $Flow.CurrentStage to Lightning
+      component attributes, the stage label is now returned instead of the fully
+      qualified stage name.
+    detail: Previously, passing flow stage system variables to Lightning components
+      yielded the fully qualified stage name. With GA of flow stages, these now
+      resolve to the human-readable label, which may break components that
+      parsed or compared the old format.
+    upgradeAction: Review any custom Lightning components that consume
+      $Flow.ActiveStages or $Flow.CurrentStage and ensure they handle stage
+      labels rather than fully qualified names.
+    source:
+      document: v43-summer18.pdf
+      page: 412
+      heading: Track Progress Through a Flow with Stages (Generally Available)
+    confidence: medium
+    id: v43-flow-001
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The FlowScreenField metadata type now accepts DateTime as a valid
+      dataType enumeration value, enabling deployment of flows with date/time
+      screen inputs.
+    source:
+      document: v43-summer18.pdf
+      page: 414
+      heading: Capture Date/Time Values in Flow Screens
+    confidence: high
+    id: v43-packaging-002
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Scheduled process actions and waiting flow interviews now batch only
+      when they share the same execution time, process/flow version ID, and
+      triggering user ID. Previously batches could mix different versions and
+      users, leading to unexpected governor limit failures or mixed DML errors.
+    detail: This tighter batching scope reduces cross-contamination where one user's
+      scheduled action could cause another user's unrelated scheduled action to
+      fail. Each homogeneous batch runs in its own transaction, making governor
+      limit consumption and Setup-vs-standard DML isolation more predictable.
+    upgradeAction: Review scheduled actions that previously failed intermittently
+      due to batching with unrelated processes. Failures should become more
+      consistent and traceable to specific flows. No code changes required, but
+      monitoring and error-handling logic may need adjustment.
+    source:
+      document: v43-summer18.pdf
+      page: 424
+      heading: More Granular Batching for Scheduled Actions and Flow Interviews Help
+        You Avoid Runtime Errors
+    confidence: high
+    id: v43-flow-002
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (Critical Update
+      requiring admin activation)
+    summary: When activated, this Critical Update makes Flow and Process Builder
+      execute bulkifiable queries together in batches rather than one-by-one,
+      reducing SOQL query consumption against governor limits.
+    detail: Prior to activation, flows and processes deferred queries for
+      bulkification but still executed each query individually. After
+      activation, multiple interviews reaching the same query operation within
+      one transaction have their queries combined into a single batch operation.
+      This affects Record Lookup, Fast Lookup, Record Update, Record Delete,
+      Subflow, and Apex elements that generate queries.
+    upgradeAction: Test all flows and processes in a sandbox after activating this
+      Critical Update. Watch for edge cases where query batching changes
+      expected behavior, particularly with objects that do not support bulk
+      operations (e.g., UserRecordAccess, IdeaComment).
+    source:
+      document: v43-summer18.pdf
+      page: 425
+      heading: Enable Flow and Process Queries to Execute in Batches (Critical Update)
+    confidence: high
+    id: v43-flow-003
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (Critical Update
+      activation required)
+    summary: When activated, a process failure during batch create/update operations
+      no longer rolls back the entire transaction. Instead, only records whose
+      processes failed are rolled back, while successful records are saved after
+      up to three retry attempts.
+    detail: This partial-save behavior applies specifically to Create a Record and
+      Update Records immediate actions in record-change processes. Other action
+      types (Email Alerts, Flows, Post to Chatter, Processes, Quick Actions,
+      Submit for Approval) and actions in platform-event processes, invocable
+      processes, or scheduled actions still follow all-or-nothing semantics.
+    upgradeAction: Before activating in production, test in sandbox to verify that
+      processes relying on all-or-nothing transaction semantics still behave
+      correctly. Code or integrations expecting entire batches to fail
+      atomically may need revision to handle partial success scenarios.
+    source:
+      document: v43-summer18.pdf
+      page: 426
+      heading: Enable Partial Save for Create and Update Operations in Processes
+        (Critical Update)
+    confidence: high
+    id: v43-flow-004
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Flow interviews running in Lightning runtime now terminate when the
+      user's session ends, matching the existing Classic runtime behavior. Any
+      actions queued but not yet committed (pending record operations, emails)
+      are lost if a session timeout occurs mid-interview.
+    detail: Transactions commit only when the interview finishes, reaches a Screen
+      element, or reaches a Wait element. If a user session expires before one
+      of those commit points, uncommitted work is discarded.
+    upgradeAction: Review flows with long user-facing segments between commit
+      points; consider adding intermediate Screen or Wait elements, and adjust
+      session timeout settings if users frequently lose progress.
+    source:
+      document: v43-summer18.pdf
+      page: 427
+      heading: Flow Interviews End When User Sessions End
+    confidence: high
+    id: v43-flow-005
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The Metadata API now supports retrieving custom setting list views,
+      meaning package retrieval operations will include these views that were
+      previously excluded.
+    source:
+      document: v43-summer18.pdf
+      page: 441
+      heading: Retrieve Custom Setting List Views Using the Metadata API
+    confidence: medium
+    id: v43-packaging-003
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: New Apex methods enable passwordless login flows for community users by
+      registering verification methods (email/phone) and authenticating via
+      one-time codes instead of passwords.
+    detail: "Four new methods added: UserManagement.registerVerificationMethod,
+      UserManagement.deregisterVerificationMethod,
+      UserManagement.formatPhoneNumber, and Site.passwordlessLogin. These let
+      developers build custom Visualforce login pages that authenticate
+      community users through verification codes sent to registered email or
+      phone."
+    source:
+      document: v43-summer18.pdf
+      page: 448
+      heading: Implement Passwordless Login and Verification Methods with Apex
+    confidence: high
+    id: v43-auth-003
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new Apex method System.UserManagement.formatPhoneNumber is available
+      to normalize user-entered phone numbers into the format Salesforce
+      requires for identity verification flows.
+    source:
+      document: v43-summer18.pdf
+      page: 449
+      heading: Give Users Flexibility When Entering Phone Numbers
+    confidence: high
+    id: v43-apex-005
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Connected apps using OpenID Connect can now configure ID token validity
+      period (1–720 minutes, default 2) and specify multiple audiences, giving
+      developers control over token lifetimes and intended consumers.
+    source:
+      document: v43-summer18.pdf
+      page: 452
+      heading: Set the Validity Period and Audiences for ID Tokens
+    confidence: medium
+    id: v43-auth-004
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: The OAuth 2.0 asset token flow now includes a 'sub' claim in the JWT
+      payload, providing the 18-character case-insensitive user ID. Existing
+      integrations parsing the JWT will encounter this new field.
+    source:
+      document: v43-summer18.pdf
+      page: 453
+      heading: Subject Claim Added to Asset Token for OAuth 2.0 Asset Token Flow
+    confidence: high
+    id: v43-auth-005
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: Shield Platform Encryption now supports a deterministic encryption
+      scheme that preserves exact-match, case-sensitive filtering in SOQL WHERE
+      clauses. Fields encrypted deterministically return only exact case matches
+      (e.g., 'Acme' won't match 'acme').
+    detail: When querying deterministically encrypted fields, SOQL comparisons
+      become strictly case-sensitive. Compound name/address fields cannot be
+      filtered directly; you must query component fields individually with AND.
+      This affects reports, dashboards, list views, external IDs, unique field
+      enforcement, and custom indexes.
+    source:
+      document: v43-summer18.pdf
+      page: 464
+      heading: Get Exact, Case-Sensitive Matching with Shield Filter-Preserving
+        Encryption (Generally Available)
+    confidence: medium
+    id: v43-soql-002
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: EventLogFile REST API queries can now retrieve logs in hourly
+      increments by setting the Interval field to 'Hourly', providing faster
+      access to event data for security monitoring and performance analysis
+      integrations.
+    detail: Integrations querying the EventLogFile object can specify
+      Interval='Hourly' to receive log files roughly every hour instead of
+      waiting for the 24-hour aggregation. Note that hourly files may have 3-6
+      hour latency, can contain duplicates during recovery scenarios, and may
+      have gaps during site switches or outages. Daily files remain the
+      authoritative complete data source.
+    source:
+      document: v43-summer18.pdf
+      page: 468
+      heading: Get Hourly Event Logs to Improve Activity Visibility (Generally
+        Available)
+    confidence: high
+    id: v43-rest-004
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The QUERY field has been permanently removed from the API event type
+      within EventLogFile. Code or integrations that parse this field from API
+      event logs will no longer receive data in it.
+    upgradeAction: Audit any integrations or analytics that consume the QUERY field
+      from API-type EventLogFile records and remove or replace those references.
+    source:
+      document: v43-summer18.pdf
+      page: 470
+      heading: Query Field Retired in API Event Type
+    confidence: high
+    id: v43-rest-005
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The force:navigateToComponent event is deprecated in favor of
+      lightning:navigation with pageReference and the lightning:isUrlAddressable
+      interface, which provides cleaner URLs and explicit control over navigable
+      components.
+    detail: Components using force:navigateToComponent should migrate to
+      lightning:navigation paired with lightning:isUrlAddressable. The new
+      approach generates human-readable URLs (/cmp/componentName) instead of
+      base-64 encoded routes and lets you control which attributes can be set
+      during navigation.
+    upgradeAction: Replace force:navigateToComponent usage with lightning:navigation
+      and ensure target components implement lightning:isUrlAddressable. Test
+      navigation flows in Lightning Experience and mobile app contexts.
+    source:
+      document: v43-summer18.pdf
+      page: 479
+      heading: New Lightning Navigation APIs for Lightning Components
+    confidence: high
+    id: v43-aura-005
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning container components now enforce that the component's
+      namespace must match the static resource's namespace, and raw iframe
+      elements are blocked unless they include a session-unique confirmation
+      token query parameter.
+    upgradeAction: Verify that all lightning:container components reference static
+      resources in the same namespace. Replace any raw iframe elements with
+      lightning:container using the $Resource global value provider.
+    source:
+      document: v43-summer18.pdf
+      page: 481
+      heading: Lightning Container Components Have New Security Enhancements
+    confidence: high
+    id: v43-aura-006
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Locker Service now permits eval() even with Strict CSP enabled, but it
+      always executes in global scope rather than local scope, so code relying
+      on local variable access within eval() must be refactored to use
+      Function() with explicit parameter passing.
+    detail: "Third-party libraries using dynamic code evaluation now work under
+      Locker Service. However, the eval() implementation differs from standard
+      JavaScript: direct invocation still runs in global scope, not local.
+      Developers must pass local variables explicitly via Function() constructor
+      if local scope access is needed."
+    upgradeAction: Audit any eval() calls in Lightning components that expect local
+      scope variable access; refactor to use Function() with parameters passed
+      as arguments.
+    source:
+      document: v43-summer18.pdf
+      page: 481
+      heading: Changes in Locker Service
+    confidence: high
+    id: v43-aura-007
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Server-side Apex controllers returning Blob types to Lightning
+      components now yield the string 'Blob(sizeOfBlobInBytes)' instead of
+      throwing a generic error. To obtain actual blob data on the client,
+      serialize the content as a JSON-friendly type such as String or Integer.
+    upgradeAction: Review Aura/LWC code that calls Apex methods returning Blob;
+      update client logic to handle the new placeholder string or refactor the
+      server method to return a serializable type.
+    source:
+      document: v43-summer18.pdf
+      page: 482
+      heading: Returning Blobs from the Server No Longer Causes Generic Errors
+    confidence: high
+    id: v43-aura-008
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: components compiled at API >= 43.0
+    summary: The lightning:container component now validates that its namespace
+      matches the static resource namespace and generates a confirmation token,
+      blocking use of raw iframe elements.
+    upgradeAction: Verify that lightning:container static resources are in the same
+      namespace as the component; test that existing container-based
+      integrations still load after upgrade.
+    source:
+      document: v43-summer18.pdf
+      page: 482
+      heading: New and Changed Lightning Components
+    confidence: medium
+    id: v43-aura-009
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: "Several Aura system events are deprecated: aura:doneRendering (use
+      render event instead), aura:doneWaiting and aura:waiting (use action
+      callback response status instead), and force:navigateToComponent (use
+      lightning:isUrlAddressable with lightning:navigation instead due to XSS
+      vulnerability from base64 encoding)."
+    detail: The force:navigateToComponent event poses a security risk because it
+      base64 encodes the component, making it susceptible to cross-site
+      scripting attacks. The recommended replacement pattern is to implement
+      lightning:isUrlAddressable on the target component and use
+      lightning:navigation with the standard__component page type, which
+      generates routes like /cmp/{componentName}?myAttr=attrValue.
+    upgradeAction: Audit Aura components for usage of aura:doneRendering,
+      aura:doneWaiting, aura:waiting, and force:navigateToComponent events.
+      Replace aura:doneRendering with render event handlers, replace
+      aura:doneWaiting/aura:waiting with action callback status checks, and
+      migrate force:navigateToComponent to lightning:isUrlAddressable plus
+      lightning:navigation.
+    source:
+      document: v43-summer18.pdf
+      page: 486
+      heading: New and Changed Lightning Events
+    confidence: high
+    id: v43-aura-010
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Aura components can now implement lightning:availableForFlowActions to
+      serve as local actions within flows, and lightning:isUrlAddressable to
+      enable direct URL navigation to components.
+    source:
+      document: v43-summer18.pdf
+      page: 487
+      heading: New and Changed Lightning Interfaces
+    confidence: medium
+    id: v43-aura-011
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Einstein Platform Services now supports a refresh token flow for
+      obtaining access tokens, allowing applications without direct private key
+      access (like mobile apps) to authenticate via a non-expiring JWT refresh
+      token.
+    source:
+      document: v43-summer18.pdf
+      page: 489
+      heading: Use a Refresh Token to Generate an Access Token
+    confidence: high
+    id: v43-auth-008
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Einstein Vision delete dataset endpoint now returns HTTP 200 with a
+      JSON body containing a deletion ID instead of HTTP 204 with no content.
+      Dataset deletion is now asynchronous and no longer cascades to associated
+      models.
+    detail: Code that checks for 204 to confirm deletion will break. The response
+      now includes a deletion ID that can be polled to track async deletion
+      progress. Models previously deleted automatically when their parent
+      dataset was removed must now be deleted explicitly.
+    upgradeAction: Update API client code to expect 200 instead of 204, parse the
+      new JSON response, and add explicit model deletion calls if your workflow
+      relied on cascade delete behavior.
+    source:
+      document: v43-summer18.pdf
+      page: 491
+      heading: Deleting an Image Dataset Returns a New Status Code and Response
+    confidence: high
+    id: v43-rest-006
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Einstein Vision API no longer cascades model deletions when you delete
+      a dataset. Models must now be explicitly removed via a dedicated DELETE
+      endpoint.
+    upgradeAction: Review any automation or cleanup scripts that relied on dataset
+      deletion to remove associated models; add explicit calls to DELETE
+      /v2/vision/models/{MODEL_ID} for each model you want removed.
+    source:
+      document: v43-summer18.pdf
+      page: 492
+      heading: Explicitly Delete an Image Model to Remove It
+    confidence: high
+    id: v43-rest-007
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Einstein Language delete-dataset endpoint now returns HTTP 200 with
+      a JSON body containing a deletion ID instead of HTTP 204 with no content.
+      Additionally, deleting a dataset no longer cascades to associated models;
+      models must be deleted separately.
+    upgradeAction: "Update integrations that call the delete-dataset API: change
+      status-code assertions from 204 to 200, parse the new JSON response to
+      track async deletion status, and add explicit model-deletion calls if your
+      workflow assumed cascade behavior."
+    source:
+      document: v43-summer18.pdf
+      page: 493
+      heading: Deleting a Text Dataset Returns a New Status Code and Response
+    confidence: high
+    id: v43-rest-008
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Deleting an Einstein Language dataset no longer cascades to its
+      associated models; you must now call the DELETE
+      /v2/language/models/<MODEL_ID> endpoint explicitly to remove each model.
+    upgradeAction: Update any automation or scripts that relied on dataset deletion
+      to clean up models; add explicit DELETE calls for each model before or
+      after deleting the dataset.
+    source:
+      document: v43-summer18.pdf
+      page: 494
+      heading: Explicitly Delete a Text Model to Remove It
+    confidence: high
+    id: v43-rest-009
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: The lightningStylesheets attribute on apex:page, which applies
+      Lightning Experience styling to Visualforce pages when viewed outside
+      Salesforce Classic, moves from beta to GA and is now fully supported.
+    source:
+      document: v43-summer18.pdf
+      page: 496
+      heading: Apply Lightning Experience Stylesheets to Visualforce Pages (Generally
+        Available)
+    confidence: high
+    id: v43-vf-001
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Visualforce pages using lightningStylesheets="true" now automatically
+      receive the slds-vf-scope CSS class on the body element. Pages that
+      disable applyBodyTag or applyHtmlTag must manually add this class to
+      preserve Lightning Experience styling.
+    upgradeAction: Review Visualforce pages where applyBodyTag="false" or
+      applyHtmlTag="false" is combined with lightningStylesheets="true"; add
+      class="slds-vf-scope" to your custom body tag to maintain proper styling.
+    source:
+      document: v43-summer18.pdf
+      page: 496
+      heading: Lightning Experience Stylesheets Are Updated
+    confidence: high
+    id: v43-vf-002
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: Visualforce pages at API >= 43.0 with lightningStylesheets="true"
+    summary: Visualforce pages using the lightningStylesheets attribute now inherit
+      the org's active Lightning Experience theme (standard or custom) rather
+      than only applying a fixed SLDS look.
+    upgradeAction: Review Visualforce pages with lightningStylesheets enabled to
+      ensure they render correctly with custom org themes, especially if you
+      rely on specific color schemes or branding.
+    source:
+      document: v43-summer18.pdf
+      page: 497
+      heading: Lightning Experience Stylesheets Support Custom Theming
+    confidence: high
+    id: v43-vf-003
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: A new JavaScript function UITheme.getUITheme() is available to detect
+      the current Salesforce UI theme in a single call, replacing multi-step
+      detection approaches.
+    source:
+      document: v43-summer18.pdf
+      page: 498
+      heading: Quickly Identify the Salesforce Theme That Users See in JavaScript
+    confidence: high
+    id: v43-vf-004
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex gains a switch statement construct that evaluates an expression
+      against multiple when clauses, supporting single values, multiple values,
+      and SObject type matching without fall-through behavior.
+    source:
+      document: v43-summer18.pdf
+      page: 500
+      heading: Simplify Your Code with the Apex Switch Statement
+    confidence: high
+    id: v43-apex-006
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: A new System.Test.clearApexPageMessages() method allows clearing
+      Visualforce page messages mid-test, enabling isolated assertions on
+      controller methods that add messages.
+    source:
+      document: v43-summer18.pdf
+      page: 501
+      heading: Clear Messages on Visualforce Pages While Testing
+    confidence: high
+    id: v43-apex-007
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Production orgs now recompile all Apex code during metadata deploys,
+      package installs, and upgrades rather than lazily recompiling on first
+      execution. This shifts compilation time into the deployment window.
+    detail: Sandboxes and scratch orgs have the feature disabled by default but can
+      opt in via Apex Settings. The change eliminates post-deployment
+      performance degradation caused by on-demand recompilation but may slightly
+      extend deployment duration.
+    upgradeAction: Expect longer deployment times in production and adjust CI
+      timeout thresholds if needed. Enable the feature in sandboxes used for
+      integration testing to mirror production behavior.
+    source:
+      document: v43-summer18.pdf
+      page: 502
+      heading: Compile on Deploy (Generally Available)
+    confidence: high
+    id: v43-apex-008
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex test runs can now skip code coverage calculation entirely,
+      enabling faster pass/fail feedback when coverage data is not needed.
+    source:
+      document: v43-summer18.pdf
+      page: 502
+      heading: Opt Out of Collecting Code Coverage Information During Test Runs
+    confidence: high
+    id: v43-apex-009
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: EventBus.TestBroker provides a deliver() method enabling Apex tests to
+      push platform event messages to a test event bus and verify subscriber
+      handling at each step.
+    source:
+      document: v43-summer18.pdf
+      page: 504
+      heading: New Apex Classes
+    confidence: high
+    id: v43-apex-010
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: The System.Test class gains getEventBus() for controlling platform
+      event delivery in tests, and clearApexPageMessages() for resetting
+      Visualforce page messages during test execution.
+    source:
+      document: v43-summer18.pdf
+      page: 505
+      heading: Changed Apex Classes
+    confidence: high
+    id: v43-apex-011
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: "Two new enums are available: Auth.VerificationMethod for identity
+      verification methods (EMAIL, SMS, TOTP, U2F, SALESFORCE_AUTHENTICATOR) and
+      System.TriggerOperation for programmatically determining trigger context
+      (BEFORE_INSERT, AFTER_UPDATE, etc.) without relying on Trigger.isInsert
+      booleans."
+    source:
+      document: v43-summer18.pdf
+      page: 506
+      heading: New Apex Enums
+    confidence: high
+    id: v43-apex-012
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: InstalledPackage gains an activateRSS field that controls whether
+      Remote Site Settings and Content Security Policy entries bundled in a
+      package remain active or are forcibly deactivated at install time.
+      Retrievals always return nil, so you must explicitly set the desired value
+      before deploying.
+    source:
+      document: v43-summer18.pdf
+      page: 515
+      heading: Metadata API
+    confidence: medium
+    id: v43-packaging-004
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The ApexExecutionOverlayAction object now allows specifying the target
+      class or trigger by name instead of ID. The ExecutableEntityId field is no
+      longer unconditionally required—you can provide ExecutableEntityName
+      instead, with ID taking precedence if both are supplied.
+    upgradeAction: If you have Tooling API integrations that create checkpoint
+      overlays, verify they still work correctly. Consider migrating from
+      ID-based to name-based lookups if that simplifies your tooling.
+    source:
+      document: v43-summer18.pdf
+      page: 518
+      heading: Tooling API New and Changed Objects
+    confidence: medium
+    id: v43-rest-010
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: ApexTestQueueItem gains a ShouldSkipCodeCoverage field, letting you opt
+      out of code coverage collection during test runs for faster execution when
+      coverage data is not needed.
+    source:
+      document: v43-summer18.pdf
+      page: 518
+      heading: Tooling API New and Changed Objects
+    confidence: high
+    id: v43-apex-013
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: The Tooling API runTestsAsynchronous call (both SOAP and REST) now
+      accepts a skipCodeCoverage parameter, allowing test runs to skip code
+      coverage collection for faster execution.
+    source:
+      document: v43-summer18.pdf
+      page: 521
+      heading: Tooling API Changed Calls and Resources
+    confidence: high
+    id: v43-apex-014
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: FlowStageRelation object now tracks stage information when a flow
+      interview pauses, creating records for each stage assigned to
+      $Flow.CurrentStage or $Flow.ActiveStages variables.
+    source:
+      document: v43-summer18.pdf
+      page: 523
+      heading: New Objects
+    confidence: medium
+    id: v43-flow-006
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: ApexTestQueueItem gains a ShouldSkipCodeCoverage field that lets test
+      runs opt out of code coverage collection, enabling faster test execution
+      when coverage metrics are not needed.
+    source:
+      document: v43-summer18.pdf
+      page: 524
+      heading: Changed Objects
+    confidence: medium
+    id: v43-apex-015
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: NavigationMenuItem now defaults Status to DRAFT in API v43+ (previously
+      LIVE in v42 and earlier), and queries without a Status filter now return
+      all items instead of only LIVE ones.
+    upgradeAction: Review code that creates NavigationMenuItem records without
+      explicitly setting Status, and update queries that assumed only LIVE items
+      would be returned.
+    source:
+      document: v43-summer18.pdf
+      page: 524
+      heading: Changed Objects
+    confidence: high
+    id: v43-rest-011
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOSL queries can now target list views, enabling developers to
+      programmatically search records scoped to specific list view filters.
+    source:
+      document: v43-summer18.pdf
+      page: 532
+      heading: SOSL
+    confidence: medium
+    id: v43-soql-003
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API requests at version >= 43.0
+    summary: The eventSchema REST endpoint now returns JSON format by default
+      instead of Apache Avro. Consumers parsing Avro responses must add
+      payloadFormat=COMPACT to preserve the previous behavior.
+    upgradeAction: If your integration parses the eventSchema response as Avro
+      binary, add ?payloadFormat=COMPACT to the request URI when calling API
+      43.0+.
+    source:
+      document: v43-summer18.pdf
+      page: 532
+      heading: New and Changed Resources
+    confidence: low
+    id: v43-rest-012
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: User Interface API gains new /ui-api/apps endpoints for retrieving app
+      metadata, navigation items, and user preferences programmatically.
+    source:
+      document: v43-summer18.pdf
+      page: 546
+      heading: Build UI for Apps
+    confidence: medium
+    id: v43-rest-013
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API requests made at version >= 43.0
+    summary: User Interface API now returns an error when a PATCH or POST request
+      body includes fields that are read-only, whereas earlier versions silently
+      ignored them.
+    upgradeAction: Audit integrations calling UI API record endpoints and remove any
+      read-only fields from request payloads before upgrading past v43.
+    source:
+      document: v43-summer18.pdf
+      page: 547
+      heading: Other User Interface API Changes
+    confidence: low
+    id: v43-rest-014
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-bulk
+    appliesWhen: org-wide regardless of component API version
+    summary: Bulk API now enforces batch size limits on query results when the job's
+      contentType is XML, potentially causing previously oversized batches to
+      fail.
+    upgradeAction: Review Bulk API query jobs using XML content type and ensure
+      batch sizes comply with documented limits; adjust chunking or pagination
+      logic if needed.
+    source:
+      document: v43-summer18.pdf
+      page: 548
+      heading: Bulk API
+    confidence: high
+    id: v43-bulk-002
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+      - VisualforceComponent
+      - VisualforcePage
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The lightning:quickActionAPI component provides Lightning-native
+      methods for interacting with quick actions, and Visualforce pages using
+      the Classic Publisher JavaScript API at version 43.0+ now work
+      automatically in Lightning Experience without code changes.
+    source:
+      document: v43-summer18.pdf
+      page: 548
+      heading: Publisher and Quick Action JavaScript APIs
+    confidence: high
+    id: v43-aura-012
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: The Lightning Console JavaScript API gains new methods for navigation
+      items, workspace tabs, utilities, Live Agent chat control, and
+      Omni-Channel agent work management, expanding programmatic console
+      customization options.
+    source:
+      document: v43-summer18.pdf
+      page: 549
+      heading: Salesforce Console API
+    confidence: medium
+    id: v43-other-002
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: "Debug log line formats changed: SYSTEM_CONSTRUCTOR_ENTRY events now
+      logged correctly (not as CONSTRUCTOR_ENTRY), typeRefs appended to
+      trigger/controller/class log entries, namespaces added to variable and
+      method events, and method signatures now include parentheses."
+    detail: "Tools parsing debug logs will break if they rely on old formats. Key
+      changes: CODE_UNIT_STARTED/FINISHED for triggers append __sfdc_trigger/
+      prefix typeRefs, VF_APEX_CALL events append controller typeRefs,
+      CONSTRUCTOR_ENTRY/EXIT append class typeRefs,
+      VARIABLE_SCOPE_BEGIN/VARIABLE_ASSIGNMENT include namespace prefixes for
+      static variables, METHOD_ENTRY/EXIT include namespaces and parentheses in
+      signatures, and WF_RULE_EVAL_VALUE shows true/false instead of 0/1."
+    upgradeAction: Update any custom debug log parsing tools or scripts to handle
+      the new log line formats, including appended typeRefs, namespace prefixes,
+      and parentheses in method signatures.
+    source:
+      document: v43-summer18.pdf
+      page: 552
+      heading: Parse Debug Logs More Effectively with Updated Log Lines
+    confidence: high
+    id: v43-other-003
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Flow interview startup errors now appear in a dedicated
+      FLOW_START_INTERVIEWS_ERROR debug log event rather than being bundled into
+      FLOW_START_INTERVIEWS_END.
+    upgradeAction: Update any log-parsing scripts or monitoring tools that look for
+      flow startup errors in FLOW_START_INTERVIEWS_END to also check
+      FLOW_START_INTERVIEWS_ERROR.
+    source:
+      document: v43-summer18.pdf
+      page: 553
+      heading: Store Larger Debug Logs with Changed Log Limits
+    confidence: high
+    id: v43-flow-007
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The force:package2 CLI commands for second-generation packaging are
+      being replaced by force:package commands and will be removed in Winter
+      '19.
+    upgradeAction: Migrate any CI/CD scripts or automation from force:package2:*
+      commands to the equivalent force:package:* commands before Winter '19.
+    source:
+      document: v43-summer18.pdf
+      page: 556
+      heading: Salesforce CLI
+    confidence: high
+    id: v43-packaging-005
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Scratch org definition files now support CascadeDelete,
+      ContactsToMultipleAccounts, and StateAndCountryPicklist in the features
+      array, enabling testing of these org-level behaviors in ephemeral
+      environments.
+    source:
+      document: v43-summer18.pdf
+      page: 558
+      heading: Scratch Orgs
+    confidence: medium
+    id: v43-packaging-006
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - Flow
+    behaviorArea: apex-testing
+    appliesWhen: Apex test classes compiled at API >= 43.0
+    summary: Platform event publications in Apex tests now trigger subscribed flows
+      and processes when the test class is at v43.0+, enabling automated
+      verification of event-driven automation. Tests at v42.0 and earlier do not
+      fire these subscribers.
+    upgradeAction: After upgrading test classes past 43.0, verify that any
+      platform-event-publishing tests account for side effects from subscribed
+      flows and processes that will now execute during test runs.
+    source:
+      document: v43-summer18.pdf
+      page: 560
+      heading: Test Process and Flow Event Subscribers in Apex
+    confidence: high
+    id: v43-apex-016
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex tests can now trigger platform event delivery on demand via
+      Test.getEventBus().deliver(), enabling verification of subscriber behavior
+      at multiple points within a single test rather than only at
+      Test.stopTest().
+    source:
+      document: v43-summer18.pdf
+      page: 560
+      heading: Deliver Test Events on Demand
+    confidence: high
+    id: v43-apex-017
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: EventBusSubscriber now exposes LastError and Retries fields in Apex
+      test contexts, allowing test code to query subscriber state and inspect
+      retry behavior for platform event triggers that throw RetryableException.
+    source:
+      document: v43-summer18.pdf
+      page: 560
+      heading: Access Subscriber Information in an Apex Test
+    confidence: high
+    id: v43-apex-018
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: CometD clients subscribing to Platform Events at API >= 43.0
+    summary: Platform Event DateTime fields delivered via CometD now include
+      milliseconds in their ISO 8601 serialization, changing from
+      'YYYY-MM-DDTHH:mm:ssZ' to 'YYYY-MM-DDTHH:mm:ss.sssZ'.
+    upgradeAction: Review any CometD subscriber code that parses DateTime fields
+      from Platform Events; ensure parsers handle the millisecond component that
+      now appears when using API 43.0+.
+    source:
+      document: v43-summer18.pdf
+      page: 561
+      heading: Get the Number of Milliseconds in Platform Event DateTime Fields
+    confidence: high
+    id: v43-rest-015
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Package uninstallation now validates that at least one active business
+      or person account record type remains, blocking uninstalls that would
+      remove all active account record types. Previously this check only ran
+      when directly removing a record type from the Record Type settings.
+    upgradeAction: Review package uninstall scripts and automation that depend on
+      removing packages containing account record types; ensure the org retains
+      at least one active record type for both business and person accounts.
+    source:
+      document: v43-summer18.pdf
+      page: 569
+      heading: Enhanced Validation Prevents Removing Active Records when Uninstalling
+        Packages
+    confidence: medium
+    id: v43-packaging-007
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: removed
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The locked packages pilot has been discontinued and Salesforce CLI no
+      longer provides the option to create locked packages.
+    upgradeAction: Remove any locked package creation workflows from your CI/CD
+      pipelines and migrate to unlocked or managed packages as appropriate.
+    source:
+      document: v43-summer18.pdf
+      page: 569
+      heading: Locked Packages Pilot Is Suspended
+    confidence: high
+    id: v43-packaging-008
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide after critical update activation (opt-in until
+      auto-activation date)
+    summary: When enabled, a process that fails no longer causes all other processes
+      in the same transaction to fail. Instead, only the records associated with
+      the failed process are rolled back while other records succeed.
+    upgradeAction: Review automation logic that may have relied on all-or-nothing
+      transaction behavior across multiple processes; ensure error handling
+      accounts for partial success scenarios.
+    source:
+      document: v43-summer18.pdf
+      page: 571
+      heading: Critical Updates
+    confidence: high
+    id: v43-flow-008
+  - apiVersion: "43.0"
+    release: Summer '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide after critical update activation (opt-in until
+      auto-activation date)
+    summary: Flow and process queries that can be bulkified are now executed in
+      batches rather than individually, helping orgs avoid SOQL governor limits
+      during high-volume transactions.
+    upgradeAction: Test flows handling large record sets to confirm they behave
+      correctly with batched queries; verify any logic sensitive to query
+      execution order still functions as expected.
+    source:
+      document: v43-summer18.pdf
+      page: 571
+      heading: Critical Updates
+    confidence: high
+    id: v43-flow-009

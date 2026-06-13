@@ -1,0 +1,2573 @@
+apiVersion: "60.0"
+release: Spring '24
+reviewed: true
+entries:
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+      - VisualforcePage
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version; temporary opt-out
+      available until September 3, 2024
+    summary: Chrome's storage partitioning takes effect for Salesforce domains in
+      Summer '24, breaking cross-origin localStorage and sessionStorage access
+      in third-party contexts. Custom components using these APIs across
+      different origins will stop sharing storage.
+    detail: Salesforce's deprecation trial extension ends September 3, 2024, after
+      which partitioning is mandatory regardless of org settings. A temporary
+      opt-out setting is available until that date to allow migration time.
+    upgradeAction: Audit LWC, Aura, and Visualforce code that reads or writes
+      localStorage/sessionStorage in third-party iframe contexts. Replace
+      cross-origin storage patterns with same-origin solutions or explicit
+      cross-origin communication mechanisms before September 2024.
+    source:
+      document: v60-spring24.pdf
+      page: 97
+      heading: Temporarily Opt Out of Google Chrome Storage Partitioning
+    confidence: medium
+    id: v60-lwc-001
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; applies to production
+      orgs created on or after April 8, 2024, and existing orgs not already
+      auto-enabled for MFA
+    summary: MFA becomes the default login requirement for production orgs, meaning
+      integrations or automated processes relying on direct UI login without MFA
+      will be blocked after a 30-day grace period.
+    detail: Salesforce enforces MFA by default on the direct login flow for affected
+      production orgs. Users must provide a second verification factor
+      (authenticator app, security key, or built-in authenticator) after
+      username/password. Sandbox orgs and trial orgs are excluded until
+      subscription conversion. Admins can temporarily disable MFA via the
+      Identity Verification page, but re-enablement is contractually required.
+    upgradeAction: Review any test automation, CI/CD pipelines, or tooling that
+      authenticates via direct UI login and ensure they use headless OAuth flows
+      or other non-UI authentication methods that are MFA-compatible. Confirm
+      all interactive users have registered a verification method.
+    source:
+      document: v60-spring24.pdf
+      page: 99
+      heading: MFA Is Turned On by Default Starting April 2024
+    confidence: high
+    id: v60-auth-001
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Operating Hours object's default sharing setting changes to
+      Private, requiring orgs to verify or manually configure sharing settings.
+      After configuration, specific IndustriesSettings Metadata API fields must
+      be set to true for authenticated and guest users respectively.
+    detail: Salesforce runs a release task to update Operating Hours sharing to
+      Public Read/Write for authenticated users, but manual verification is
+      needed. Guest users must create sharing rules manually. The
+      enableDepriveSoqlAccessOrgPref and enableDepriveSoqlAccessGuestUserOrgPref
+      fields in IndustriesSettings Metadata API will be deprecated in Summer
+      '24.
+    upgradeAction: Verify Operating Hours sharing settings are correctly configured
+      after the release task runs. For guest user integrations, create
+      appropriate sharing rules. Set the relevant IndustriesSettings Metadata
+      API fields to true, and plan to remove references to these fields before
+      Summer '24 when they are deprecated.
+    source:
+      document: v60-spring24.pdf
+      page: 104
+      heading: Other Changes to Salesforce Scheduler
+    confidence: medium
+    id: v60-rest-001
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+      - ApexClass
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Visualforce JavaScript Remoting now validates the @JsonAccess
+      annotation on Apex classes, blocking unauthorized cross-namespace
+      serialization and deserialization that previously succeeded silently.
+    upgradeAction: Audit Apex classes used with Visualforce Remoting across package
+      boundaries and add appropriate @JsonAccess annotations where
+      cross-namespace access is intended.
+    source:
+      document: v60-spring24.pdf
+      page: 113
+      heading: Release Updates
+    confidence: high
+    id: v60-vf-001
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: RestResponse.addHeader() now validates header names against RFC 7230
+      regardless of the Apex class API version, rejecting headers with invalid
+      characters that were previously accepted.
+    upgradeAction: Review any custom Apex REST services that set response headers
+      and ensure all header names comply with RFC 7230 token syntax (no spaces,
+      colons, or special characters in names).
+    source:
+      document: v60-spring24.pdf
+      page: 113
+      heading: Release Updates
+    confidence: high
+    id: v60-rest-002
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Visualforce JavaScript Remoting now validates the JsonAccess annotation
+      on Apex classes to prevent unauthorized cross-namespace serialization.
+      Classes lacking proper annotation may fail when called via remoting.
+    upgradeAction: Audit Apex classes invoked via Visualforce Remoting across
+      package namespaces and ensure they have the appropriate JsonAccess
+      annotation.
+    source:
+      document: v60-spring24.pdf
+      page: 110
+      heading: Visualize Hierarchies and Flatten Transformations with Preview in the
+        Recipe Editor
+    confidence: high
+    id: v60-vf-002
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: REST response headers set via RestResponse.addHeader() are now
+      validated against RFC 7230 regardless of the Apex class API version.
+      Invalid header names will cause failures.
+    upgradeAction: Review all Apex REST services that set custom response headers
+      and verify header names conform to RFC 7230 token syntax.
+    source:
+      document: v60-spring24.pdf
+      page: 110
+      heading: Visualize Hierarchies and Flatten Transformations with Preview in the
+        Recipe Editor
+    confidence: high
+    id: v60-rest-003
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The JsonAccess annotation is now validated by the Visualforce
+      JavaScript Remoting API, causing failures for Apex classes that attempt
+      cross-namespace serialization without proper annotation.
+    upgradeAction: Review Apex classes used with Visualforce Remoting that are
+      called across package namespaces and ensure they have the correct
+      JsonAccess annotation configured.
+    source:
+      document: v60-spring24.pdf
+      page: 112
+      heading: Experience Better Recipe Error Messaging and Reliability
+    confidence: high
+    id: v60-apex-001
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: REST response headers set via RestResponse.addHeader() in Apex are now
+      validated against RFC 7230 naming rules regardless of the class API
+      version, potentially rejecting previously accepted header names.
+    upgradeAction: Audit Apex REST services that set custom headers and verify all
+      header names comply with RFC 7230 token syntax (no whitespace, delimiters,
+      or control characters).
+    source:
+      document: v60-spring24.pdf
+      page: 112
+      heading: Experience Better Recipe Error Messaging and Reliability
+    confidence: high
+    id: v60-rest-004
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version; enforced in Spring '24
+    summary: Implicit child share records for opportunities are no longer persisted
+      in the database. Instead, the system evaluates access rights at query time
+      when users attempt to access child opportunity records through account
+      sharing.
+    upgradeAction: Test any code or integrations that rely on querying
+      OpportunityShare or examining implicit sharing records for opportunities.
+      Verify that reports and queries returning opportunity data through account
+      relationships still behave correctly.
+    source:
+      document: v60-spring24.pdf
+      page: 112
+      heading: Connect to Databricks (Generally Available)
+    confidence: high
+    id: v60-sharing-001
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; enforced in Spring '24
+    summary: REST response headers set via RestResponse.addHeader() are now
+      validated against RFC 7230 standards regardless of the Apex class API
+      version. Invalid header names will cause failures.
+    upgradeAction: Audit all Apex REST services that set custom response headers and
+      ensure header names comply with RFC 7230 (no special characters, proper
+      formatting). Fix any non-compliant header names before enforcement.
+    source:
+      document: v60-spring24.pdf
+      page: 112
+      heading: Connect to Databricks (Generally Available)
+    confidence: high
+    id: v60-rest-005
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version; scheduled for
+      enforcement in Summer '24
+    summary: Flows initiated by bots will use the bot's associated user profile and
+      permission sets to determine object and field-level access, rather than
+      inheriting broader system permissions.
+    upgradeAction: Review permission sets assigned to bot users and verify they have
+      adequate access for all flow operations. Test bot-initiated flows in
+      sandbox before Summer '24 enforcement.
+    source:
+      document: v60-spring24.pdf
+      page: 112
+      heading: Connect to Databricks (Generally Available)
+    confidence: high
+    id: v60-flow-001
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version; scheduled for
+      enforcement in Winter '25
+    summary: Autolaunched flows invoked from Apex classes declared with 'with
+      sharing' will enforce sharing rules when running in the default context,
+      rather than bypassing them.
+    upgradeAction: Identify Apex classes using 'with sharing' that launch flows
+      expecting system-mode data access. Either switch to 'without sharing'
+      where appropriate or ensure flows can operate within user sharing
+      constraints.
+    source:
+      document: v60-spring24.pdf
+      page: 112
+      heading: Connect to Databricks (Generally Available)
+    confidence: high
+    id: v60-flow-002
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; scheduled for
+      enforcement in Spring '25
+    summary: When an Apex invocable action called via REST API throws an exception,
+      the entire transaction will be rolled back to preserve data integrity,
+      rather than leaving partial changes committed.
+    upgradeAction: Review REST API integrations invoking Apex actions that may throw
+      exceptions. Ensure calling code handles failures appropriately and that
+      partial success scenarios are no longer expected.
+    source:
+      document: v60-spring24.pdf
+      page: 112
+      heading: Connect to Databricks (Generally Available)
+    confidence: high
+    id: v60-rest-006
+  - apiVersion: "60.0"
+    introducedIn: "59.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce no longer persists implicit child share records linking
+      accounts to their opportunity children. SOQL queries and Apex tests that
+      previously retrieved these share records now return empty results.
+    detail: This release update first appeared in Winter '24 (API 59.0) and enforces
+      in Spring '24. The platform now evaluates opportunity access dynamically
+      at runtime rather than storing share rows. Any code or tests that query
+      OpportunityShare expecting implicit child records will break.
+    upgradeAction: Search for SOQL queries against OpportunityShare or related share
+      objects that filter on implicit child shares. Update Apex tests asserting
+      on these records to reflect the new dynamic-evaluation model or remove
+      those assertions entirely.
+    source:
+      document: v60-spring24.pdf
+      page: 187
+      heading: Enable Faster Account Sharing Recalculation by Not Storing Opportunity
+        Implicit Child Shares (Release Update)
+    confidence: high
+    id: v60-sharing-002
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version; enforced on rolling
+      basis starting Spring '24, deferrable until Spring '25
+    summary: Salesforce replaces JDK locale formats with ICU locale formats
+      org-wide, altering how dates, times, currencies, numbers, addresses, and
+      names render across the platform. Code or integrations parsing or
+      generating formatted locale strings may produce different results.
+    detail: This Release Update was introduced in Winter '20 but enforcement begins
+      rolling out in Spring '24. Orgs created Winter '20 or later already have
+      ICU enabled. Admins can defer until Spring '25 via User Interface
+      settings. The en_CA locale requires separate activation.
+    upgradeAction: Audit Apex, Visualforce, LWC, and integrations that parse or
+      compare formatted date/time/currency/number strings. Test locale-sensitive
+      displays and any code relying on specific JDK format patterns before
+      enforcement.
+    source:
+      document: v60-spring24.pdf
+      page: 189
+      heading: Enable ICU Locale Formats (Release Update)
+    confidence: high
+    id: v60-other-001
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: External Services now generates Apex callback interfaces when OpenAPI
+      specs include callback operations, enabling asynchronous callouts that can
+      wait up to 24 hours for responses instead of the previous 2-minute
+      synchronous timeout.
+    source:
+      document: v60-spring24.pdf
+      page: 196
+      heading: Handle Callbacks Asynchronously in Apex
+    confidence: high
+    id: v60-apex-002
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Data Cloud metadata can now be packaged using second-generation managed
+      packaging (2GP). Partners can retrieve data kit metadata via CLI, use
+      scratch orgs, and manage versioned packages with dependencies.
+    detail: This extends 2GP support to Data Cloud-specific metadata types.
+      Developers must first add Data Cloud metadata to a data kit, then include
+      the data kit in a package. Available to Salesforce Partners only starting
+      April 2024.
+    source:
+      document: v60-spring24.pdf
+      page: 212
+      heading: Build Data Cloud Apps Using Second-Generation Managed Packaging
+    confidence: medium
+    id: v60-packaging-001
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The Ant Migration Tool is officially retired and no longer receives
+      updates or support, though it remains functional. Teams still using it for
+      metadata deployments should migrate to Salesforce CLI.
+    upgradeAction: Transition deployment pipelines from Ant Migration Tool to
+      Salesforce CLI before relying on any new metadata types or features that
+      the retired tool will not support.
+    source:
+      document: v60-spring24.pdf
+      page: 224
+      heading: Salesforce Ant Migration Tool End of Life
+    confidence: high
+    id: v60-packaging-002
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: LWC components compiled at API >= 60.0
+    summary: LWC now renders empty HTML comments instead of empty text nodes for
+      virtual DOM placeholders in slots, scoped slots, and lwc:if directives,
+      which can break tests or code that traverse DOM using childNodes or
+      nextSibling.
+    upgradeAction: Review and update test snapshots and any JavaScript that
+      navigates the DOM via childNodes, nextSibling, or similar APIs, since the
+      node types at placeholder positions have changed from text to comment
+      nodes.
+    source:
+      document: v60-spring24.pdf
+      page: 228
+      heading: Empty Comment Nodes Replace Empty Text Nodes
+    confidence: high
+    id: v60-lwc-002
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: LWC components compiled at API >= 60.0
+    summary: Light DOM slots now include extra empty text nodes, causing childNodes,
+      firstChild, and lastChild to return different results than before—code
+      indexing into childNodes may now hit whitespace instead of the expected
+      element.
+    upgradeAction: Replace uses of childNodes, firstChild, and lastChild with
+      children, firstElementChild, lastElementChild, lwc:ref, or querySelector
+      before upgrading components to API 60.0.
+    source:
+      document: v60-spring24.pdf
+      page: 228
+      heading: Light DOM Renders Additional Whitespace Characters
+    confidence: high
+    id: v60-lwc-003
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: LWC components compiled at API >= 60.0
+    summary: LWC decorators (@api, @track, @wire) are now restricted to classes
+      extending LightningElement; using them in plain classes throws a syntax
+      error at version 60.0+.
+    upgradeAction: Before upgrading components to API 60.0, search for @api, @track,
+      or @wire in non-LightningElement classes and refactor by either removing
+      the decorators or converting those classes to extend LightningElement.
+    source:
+      document: v60-spring24.pdf
+      page: 229
+      heading: Decorators Throw a Syntax Error in Non-LightningElement classes
+    confidence: high
+    id: v60-lwc-004
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: LWC components compiled at API >= 60.0
+    summary: LWC drops Babel transpilation for object rest/spread syntax in favor of
+      native JavaScript behavior, which can change observable side-effect counts
+      in getters due to a Babel bug that previously caused double invocation.
+    detail: Code that relied on the Babel-specific behavior where getters were
+      invoked twice during destructuring with rest/spread will now see the
+      getter called only once with native syntax. This affects any logic
+      depending on side-effect counts inside getters used in destructuring
+      patterns.
+    upgradeAction: Review any components using object destructuring with rest/spread
+      that have getters with side effects; verify that logic does not depend on
+      the getter being called multiple times during a single destructuring
+      operation.
+    source:
+      document: v60-spring24.pdf
+      page: 230
+      heading: Object Rest and Spread Transpilation Is Removed
+    confidence: high
+    id: v60-lwc-005
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version; requires Lightning
+      Web Security enabled
+    summary: LWC Workspace API reaches general availability, providing programmatic
+      control over console app tabs and subtabs. Lightning Web Security must be
+      enabled as Lightning Locker does not support this API.
+    detail: The lightning/platformWorkspaceApi module exposes methods (closeTab,
+      openTab, openSubtab, focusTab, refreshTab, etc.), wire adapters
+      (EnclosingTabId, IsConsoleNavigation), and Lightning message channels for
+      tab lifecycle events. This replaces or supplements Aura workspace APIs for
+      console apps migrating to LWC.
+    source:
+      document: v60-spring24.pdf
+      page: 230
+      heading: Control Workspace Tabs and Subtabs (Generally Available)
+    confidence: high
+    id: v60-lwc-006
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: "The lightning-record-picker component reaches GA with expanded
+      capability: the maximum retrievable records doubles from 50 to 100, and
+      new attributes plus improved error messaging are now available."
+    source:
+      document: v60-spring24.pdf
+      page: 231
+      heading: Search for Records with the Lightning Record Picker Component
+        (Generally Available)
+    confidence: medium
+    id: v60-lwc-007
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: components using shadowSupportMode = 'any'
+    summary: The shadowSupportMode = 'any' setting introduced in the earlier mixed
+      shadow mode preview is deprecated and replaced by shadowSupportMode =
+      'native' for opting components into native shadow DOM rendering.
+    upgradeAction: Replace any usage of shadowSupportMode = 'any' with
+      shadowSupportMode = 'native' in your LWC component classes.
+    source:
+      document: v60-spring24.pdf
+      page: 232
+      heading: Render Components in Native Shadow with Mixed Shadow Mode (Beta)
+    confidence: low
+    id: v60-lwc-008
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version (when LWS is enabled)
+    summary: Lightning Web Security introduces new distortions for Selection and
+      Document.execCommand APIs, while removing distortions for
+      Element.attributes and several HTMLIFrameElement properties. LWC code
+      using these browser APIs may behave differently under LWS.
+    detail: "New distortions apply to Selection methods (collapse, extend,
+      selectAllChildren, setBaseAndExtent, setPosition) and
+      Document.execCommand. Previously distorted APIs now run without
+      distortion: Element.attributes getter, and HTMLIFrameElement properties
+      allowPaymentRequest, csp, featurePolicy, and referrerPolicy."
+    upgradeAction: Review LWC code that manipulates text selections or uses
+      execCommand for potential behavioral changes. Code using
+      Element.attributes or the removed iframe distortions may now work
+      differently since those distortions were lifted.
+    source:
+      document: v60-spring24.pdf
+      page: 234
+      heading: API Distortion Changes in Lightning Web Security
+    confidence: high
+    id: v60-lwc-009
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning Web Security now silently converts any open shadow root to
+      closed mode instead of throwing an error, preventing JavaScript access to
+      shadow DOM internals.
+    detail: Components that previously failed with an error when attempting to
+      create open shadow roots will now succeed but operate with closed shadow
+      semantics. Code that relied on accessing shadow root internals via
+      JavaScript will silently lose that access.
+    upgradeAction: Review any LWC code that creates shadow roots with mode:'open' or
+      that attempts to traverse into another component's shadow DOM; these
+      patterns will no longer work as expected under LWS.
+    source:
+      document: v60-spring24.pdf
+      page: 235
+      heading: LWS Automatically Uses Closed Shadow Root Mode
+    confidence: high
+    id: v60-lwc-010
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: The lightning/logger module is now GA, enabling LWC developers to
+      publish custom instrumentation events to Event Monitoring's new Lightning
+      Logger Event log type.
+    detail: Import the log function from lightning/logger and call it with
+      structured data to send custom telemetry to EventLogFile. Since the beta,
+      browser console logging of these events is now supported. Requires Event
+      Monitoring (Shield or add-on) and the Lightning Logger Events setting
+      enabled.
+    source:
+      document: v60-spring24.pdf
+      page: 235
+      heading: Monitor Component Events with Custom Component Instrumentation API
+        (Generally Available)
+    confidence: high
+    id: v60-lwc-011
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: The lightning-input base component's internal DOM structure has been
+      modified as part of Salesforce's transition toward native shadow DOM
+      support. Tests or CSS selectors that depend on the component's internal
+      element hierarchy will break.
+    upgradeAction: Audit any tests or custom styles that query or target internal
+      elements of lightning-input. Migrate integration tests to UTAM page
+      objects, and refactor CSS to use only public component APIs and documented
+      styling hooks.
+    source:
+      document: v60-spring24.pdf
+      page: 236
+      heading: Be Aware of Base Component lightning-input Internal DOM Structure Changes
+    confidence: high
+    id: v60-lwc-012
+    introducedIn: "59.0"
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: 29 additional base Lightning components had their internal DOM
+      structure modified in preparation for native shadow DOM support. Tests
+      that query or assert against the internal element hierarchy of these
+      components will break.
+    upgradeAction: Audit integration and UI tests for direct DOM queries against the
+      listed components (lightning-alert, lightning-modal, lightning-toast,
+      lightning-input-rich-text, etc.). Migrate tests to use UTAM page objects
+      or Selenium shadow DOM utilities instead of relying on internal structure.
+    source:
+      document: v60-spring24.pdf
+      page: 237
+      heading: Be Aware of Base Lightning Component Internal DOM Structure Changes for
+        Future Native Shadow Support
+    confidence: high
+    id: v60-lwc-013
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version; rolling deployment
+      through June 2024
+    summary: Stacked modals from custom quick actions no longer trigger post-save
+      navigation to the newly created record. Instead, users return to the
+      originating record page after saving.
+    detail: This behavioral shift affects custom Aura and LWC components that rely
+      on force:createRecord within stacked modal contexts. Components that
+      expected automatic navigation to the new record must now explicitly manage
+      navigation using lightning:navigation (Aura) or lightning/navigation (LWC)
+      with the replace property.
+    upgradeAction: Audit custom quick actions using force:createRecord in stacked
+      modals. Implement explicit navigation via lightning:navigation or
+      lightning/navigation with replace=true if post-save redirection to the new
+      record is required.
+    source:
+      document: v60-spring24.pdf
+      page: 238
+      heading: Return to the Record Page with Record Create on Custom Quick Actions
+    confidence: high
+    id: v60-lwc-014
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: LWC developers can now import a DocumentScanner API that leverages the
+      device camera and OCR to scan documents, but only within Salesforce Mobile
+      and Field Service Mobile apps.
+    source:
+      document: v60-spring24.pdf
+      page: 240
+      heading: Scan Documents on a Mobile Device
+    confidence: medium
+    id: v60-lwc-015
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning web components can now access device NFC hardware through the
+      new NFCService API, enabling read, write, and erase operations on NFC tags
+      within Salesforce Mobile and Field Service Mobile apps.
+    source:
+      document: v60-spring24.pdf
+      page: 240
+      heading: Interact with NFC Tags on a Mobile Device
+    confidence: medium
+    id: v60-lwc-016
+  - apiVersion: "60.0"
+    introducedIn: "56.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Visualforce JavaScript Remoting now validates the @JsonAccess
+      annotation on Apex classes, blocking cross-namespace
+      serialization/deserialization that lacks explicit permission.
+    detail: This Release Update, originally available in Winter '23 (API 56.0),
+      reaches enforcement in Spring '24. Apex classes invoked via Visualforce
+      Remoting must have appropriate @JsonAccess settings if they serialize or
+      deserialize across package namespace boundaries.
+    upgradeAction: Audit Apex classes used by Visualforce Remoting for @JsonAccess
+      annotations. Add @JsonAccess(serializable='always'
+      deserializable='always') or narrower scopes where cross-namespace data
+      exchange is intentional; fix or remove unintended exposures.
+    source:
+      document: v60-spring24.pdf
+      page: 242
+      heading: Enable JsonAccess Annotation Validation for the Visualforce JavaScript
+        Remoting API (Release Update)
+    confidence: high
+    id: v60-vf-003
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex gains the ?? operator for concise null-fallback expressions; it
+      evaluates the left operand once and returns it if non-null, otherwise
+      returns the right operand. Usable inline with SOQL single-record
+      assignments to gracefully handle zero-row results.
+    source:
+      document: v60-spring24.pdf
+      page: 243
+      heading: Use the Null Coalescing Operator
+    confidence: high
+    id: v60-apex-003
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex gains a native UUID class for generating cryptographically secure
+      version 4 UUIDs, eliminating the need for custom implementations or
+      external callouts.
+    source:
+      document: v60-spring24.pdf
+      page: 245
+      heading: Get Support for Randomly Generated UUID v4
+    confidence: high
+    id: v60-apex-004
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: New Database.releaseSavepoint() method enables callouts after rolling
+      back DML by explicitly releasing savepoints. Previously, any callout after
+      creating a savepoint threw CalloutException even if uncommitted work was
+      rolled back.
+    detail: "Callouts now succeed after a savepoint as long as uncommitted DML was
+      rolled back and every savepoint was freed with
+      Database.releaseSavepoint(). A related org-wide tweak:
+      rollback/setSavepoint calls stop counting toward the DML row limit, though
+      each still counts as a DML statement."
+    source:
+      document: v60-spring24.pdf
+      page: 246
+      heading: Make Callouts After Rolling Back DML and Releasing Savepoints
+    confidence: high
+    id: v60-apex-005
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-testing
+    appliesWhen: Apex test classes compiled at API >= 60.0
+    summary: Test.startTest() and Test.stopTest() now automatically release all
+      active savepoints in tests running on API version 60.0+, logging a
+      SAVEPOINT_RESET event when this occurs.
+    upgradeAction: Review tests that create savepoints and rely on them persisting
+      across startTest/stopTest boundaries; they will now be cleared
+      automatically.
+    source:
+      document: v60-spring24.pdf
+      page: 246
+      heading: Make Callouts After Rolling Back DML and Releasing Savepoints
+    confidence: high
+    id: v60-apex-006
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce now validates REST response header names against RFC 7230
+      when using RestResponse.addHeader(). Headers with non-compliant characters
+      (like forward slashes) throw InvalidHeaderException at runtime.
+    detail: This release update was first available in Spring '23 and became
+      mandatory in Spring '24. The validation applies to all Apex code
+      regardless of API version once enforced in the org.
+    upgradeAction: Run all Apex tests and invoke REST endpoints to catch
+      InvalidHeaderException. Review any RestResponse.addHeader() calls for
+      header names containing characters disallowed by RFC 7230.
+    source:
+      document: v60-spring24.pdf
+      page: 249
+      heading: Enforce RFC 7230 Validation for Apex RestResponse Headers (Release
+        Update)
+    confidence: high
+    id: v60-apex-007
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Type.forName() now consistently returns null when given an invalid
+      namespace or when incorrectly using an outer class name as the namespace
+      parameter, whereas previously the results were unpredictable.
+    upgradeAction: Review code that calls Type.forName() with dynamic namespace
+      values; ensure callers handle null returns gracefully since previously
+      tolerated invalid inputs now fail predictably.
+    source:
+      document: v60-spring24.pdf
+      page: 250
+      heading: Changed Behavior with Type.forName Method
+    confidence: high
+    id: v60-apex-008
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: Apex classes and triggers compiled at API >= 60.0
+    summary: The async DML methods (Database.insertImmediate(),
+      Database.insertAsync(), etc.) now enforce strict type checking and throw a
+      TypeException if you pass standard or custom sObjects instead of
+      external/big objects. Additionally, these operations no longer count
+      against DML statement and row limits.
+    upgradeAction: Before upgrading past 60.0, search for usages of
+      Database.insertImmediate/insertAsync and verify only external or big
+      objects are passed; add try-catch for TypeException if mixed-object
+      scenarios existed, and review any limit-monitoring code that tracked these
+      operations.
+    source:
+      document: v60-spring24.pdf
+      page: 250
+      heading: Improved Validation and Limit Accounting with DML on External Objects
+    confidence: high
+    id: v60-apex-009
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: Apex classes and triggers compiled at API >= 60.0
+    summary: The default quiddity value for events without an assigned quiddity
+      changes from Synchronous Uncategorized (R) to undefined (UD) in v60+ Apex
+      code.
+    upgradeAction: Review any Apex logic that inspects Request.getQuiddity() and
+      expects the R value as a fallback; update conditionals to handle UD
+      instead.
+    source:
+      document: v60-spring24.pdf
+      page: 250
+      heading: Provide Data to Einstein with Invocable Actions
+    confidence: high
+    id: v60-apex-010
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; new orgs provisioned
+      from Spring '24 onward no longer receive the legacy profile
+    summary: The legacy Salesforce API Only Systems Integration profile is
+      discontinued for new orgs due to overly broad custom-object CRUD grants; a
+      replacement Minimum Access - API Only Integrations profile ships with
+      tighter defaults.
+    detail: Existing orgs retain the old profile, but new orgs won't have it.
+      Integrations relying on the legacy profile's implicit custom-object access
+      will fail if migrated to a fresh org or switched to the new profile
+      without compensating permission sets.
+    upgradeAction: Audit integrations using the legacy profile; document which
+      custom-object permissions they actually need and assign those via
+      permission sets before swapping to the new Minimum Access - API Only
+      Integrations profile.
+    source:
+      document: v60-spring24.pdf
+      page: 251
+      heading: Secure API Access with the New Least-Privilege User Profile
+    confidence: high
+    id: v60-rest-007
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: API calls that deserialize XML into Apex classes now require explicit
+      @JsonAccess annotation permission. Without it, requests fail with a 400
+      XML_PARSER_ERROR response.
+    detail: Previously, any Apex class could be instantiated via XML deserialization
+      through API calls without restriction. This security fix closes that
+      loophole by requiring the @JsonAccess annotation to explicitly permit XML
+      deserialization access, particularly affecting managed package classes.
+    upgradeAction: Audit managed packages that expose Apex classes via API XML
+      deserialization and add appropriate @JsonAccess annotations to classes
+      that must remain accessible. Test API integrations that pass XML payloads
+      to ensure they still function.
+    source:
+      document: v60-spring24.pdf
+      page: 252
+      heading: Control API Access to XML Deserialization of Apex Classes
+    confidence: high
+    id: v60-rest-008
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; enforced Summer '25
+    summary: API versions 21.0 through 30.0 across REST, SOAP, Bulk, Metadata,
+      Tooling, and Connect APIs will stop accepting requests in Summer '25. Any
+      integration still targeting these versions will fail with an
+      endpoint-deactivated error.
+    detail: Originally scheduled for Summer '23, the retirement was postponed to
+      Summer '25. Affected APIs include Bulk API, SOAP API, and all REST-based
+      APIs under /services/data/vXX.X/ such as Connect REST, Metadata, Tooling,
+      Reports and Dashboards, and Lightning Platform REST. Use the API Total
+      Usage event to identify calls still using deprecated versions.
+    upgradeAction: Audit all integrations and connected apps for API version usage
+      below v31.0. Update endpoint URLs and test against a current API version
+      (v60.0+) before Summer '25 enforcement.
+    source:
+      document: v60-spring24.pdf
+      page: 252
+      heading: Salesforce Platform API Versions 21.0 Through 30.0 Retirement (Release
+        Update)
+    confidence: high
+    id: v60-rest-009
+    introducedIn: "56.0"
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-bulk
+    appliesWhen: org-wide regardless of component API version
+    summary: The Get Job Info Query endpoint now returns an isPkChunkingSupported
+      boolean, letting you programmatically check PK chunking eligibility
+      instead of consulting documentation.
+    source:
+      document: v60-spring24.pdf
+      page: 253
+      heading: Bulk API 2.0
+    confidence: high
+    id: v60-bulk-001
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: A new scopeProfiles setting in sfdx-project.json lets you limit profile
+      settings inclusion to only the package directory being versioned,
+      preventing unintended profile metadata from other directories from leaking
+      into your package.
+    source:
+      document: v60-spring24.pdf
+      page: 254
+      heading: Control Which Profile Settings Are Packaged
+    confidence: high
+    id: v60-packaging-003
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Package publishers can now request removal of protected and public
+      custom metadata type records from 2GP packages. Protected records get
+      deleted in subscriber orgs; visible records become deprecated and count
+      against subscriber limits until manually deleted.
+    detail: This capability requires Salesforce approval via a Partner Community
+      support case. Subscribers should be notified when records are deprecated
+      so they can delete them to reclaim allocation space.
+    source:
+      document: v60-spring24.pdf
+      page: 254
+      heading: Remove Custom Metadata Type Records from a Second-Generation Managed
+        Package
+    confidence: high
+    id: v60-packaging-004
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce Functions will stop working on January 31, 2025.
+      Organizations using Functions to invoke custom code from Apex or Flows
+      must migrate to an alternative before that date.
+    detail: Functions allowed developers to run Node.js or Java workloads invoked
+      from Apex via the functions.Function class and related APIs. After
+      retirement, these invocations will fail. Migration guidance is available
+      on the Heroku Dev Center.
+    upgradeAction: Identify all Apex code invoking Salesforce Functions, then
+      migrate those workloads to Heroku, external services, or refactored Apex
+      before January 31, 2025.
+    source:
+      document: v60-spring24.pdf
+      page: 259
+      heading: Salesforce Functions Is Being Retired
+    confidence: high
+    id: v60-apex-011
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: ISV partners can now instrument their managed package code with a new
+      Apex method (IsvPartners.AppAnalytics.logCustomInteraction) that logs
+      custom interaction events for App Analytics, enabling tracking of
+      subscriber feature usage and user journeys.
+    source:
+      document: v60-spring24.pdf
+      page: 260
+      heading: Log Custom Interactions in AppExchange App Analytics
+    confidence: medium
+    id: v60-apex-012
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version; effective April 30, 2024
+    summary: AppExchange lead Description field now delivers data as JSON instead of
+      plain text, changing the structure ISV partners must parse to extract
+      customer contact preferences and traffic source details.
+    detail: The allow_contact_other_products property is now a boolean within a JSON
+      object rather than a text string. Partners with automated lead-processing
+      logic that parsed the old text format will fail to extract contact
+      preference correctly.
+    upgradeAction: Update any Apex, Flow, or external integration code that reads
+      the Description field from AppExchange leads to parse JSON instead of a
+      text string; specifically handle allow_contact_other_products as a
+      boolean.
+    source:
+      document: v60-spring24.pdf
+      page: 262
+      heading: Associate AppExchange Leads with Marketing Campaigns, Promotions, and
+        Other Traffic Sources
+    confidence: high
+    id: v60-other-002
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Platform event trigger failures from uncaught exceptions (including
+      limit exceptions) now appear in EventLogFile under the
+      ApexUnexpectedException event type, enabling post-mortem debugging of
+      async trigger failures.
+    source:
+      document: v60-spring24.pdf
+      page: 265
+      heading: Find Uncaught Exceptions of Platform Event Triggers in Event Log Files
+    confidence: high
+    id: v60-apex-013
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; enforcement scheduled
+      for Winter '25
+    summary: Streaming API versions 23.0–36.0 will stop working in Winter '25. These
+      legacy versions lack Durable Streaming capabilities introduced in v37.0
+      and are no longer receiving fixes or enhancements.
+    upgradeAction: Audit all Streaming API clients (CometD subscriptions, PushTopic
+      consumers, Platform Event subscribers) and update connection URLs to use
+      API version 37.0 or higher before Winter '25 to avoid service disruption.
+    source:
+      document: v60-spring24.pdf
+      page: 265
+      heading: Streaming API Versions 23.0 Through 36.0 Are Being Retired
+    confidence: high
+    id: v60-rest-010
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: "Several base Lightning components have altered keyboard navigation and
+      accessibility behaviors: lightning-modal now focuses the header title
+      instead of the first interactive element, lightning-pill and
+      lightning-pill-container switched from arrow-key to Tab-only navigation
+      between focusable elements, and pill removal now only responds to
+      Enter/Spacebar (not Delete/Backspace)."
+    detail: These accessibility changes affect user interaction patterns. Modal
+      focus changes may break automated tests or user workflows that expected
+      focus on the first body element. Pill components no longer support
+      arrow-key navigation or Delete/Backspace for removal, which could impact
+      accessibility accommodations or keyboard-heavy interfaces.
+    upgradeAction: Review any automated UI tests or custom keyboard handlers that
+      depend on the previous focus placement in modals or arrow-key navigation
+      in pill components. Update test assertions and user documentation
+      accordingly.
+    source:
+      document: v60-spring24.pdf
+      page: 268
+      heading: New and Changed Lightning Web Components
+    confidence: medium
+    id: v60-lwc-017
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: "The NavigationMixin.Navigate replace property now affects post-save
+      navigation in quick actions: when false, users return to the originating
+      record page; when true, users navigate to the newly created record after
+      save."
+    detail: Previously the replace parameter behavior for quick action modals was
+      not clearly defined. Now setting replace to false (the default) returns
+      users to the page that launched the quick action after saving, while
+      replace=true redirects to the new record's page.
+    upgradeAction: Review LWC components using NavigationMixin.Navigate with quick
+      actions to ensure the replace parameter matches desired post-save
+      navigation behavior.
+    source:
+      document: v60-spring24.pdf
+      page: 270
+      heading: New and Changed Modules for Lightning Web Components
+    confidence: medium
+    id: v60-lwc-018
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: The lightning/platformWorkspaceApi module is now GA, enabling
+      programmatic control of workspace tabs and subtabs from custom LWC
+      components, but it requires Lightning Web Security—Lightning Locker is not
+      supported.
+    source:
+      document: v60-spring24.pdf
+      page: 270
+      heading: New and Changed Modules for Lightning Web Components
+    confidence: high
+    id: v60-lwc-019
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: "New Auth namespace classes enable programmatic OAuth 2.0 token
+      exchange: validate external IdP tokens (JWT, SAML, access/refresh tokens),
+      map token subjects to Salesforce users, parse and verify JWTs against
+      remote JWKS endpoints, and revoke opaque OAuth tokens via Apex."
+    source:
+      document: v60-spring24.pdf
+      page: 272
+      heading: Auth Namespace
+    confidence: high
+    id: v60-auth-002
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The Database.insertImmediate() and Database.insertAsync() methods now
+      perform additional validation when called on non-external objects,
+      potentially causing previously accepted calls to fail.
+    upgradeAction: Review any code using insertImmediate or insertAsync with
+      standard or custom objects; ensure the data being passed will satisfy the
+      new validation rules.
+    source:
+      document: v60-spring24.pdf
+      page: 273
+      heading: System Namespace
+    confidence: medium
+    id: v60-apex-014
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Type.forName() now returns null instead of throwing an exception when
+      an invalid namespace is provided, changing error-handling behavior for
+      code that relied on exceptions.
+    upgradeAction: Audit calls to Type.forName() that may pass invalid namespaces;
+      add null checks if your code previously relied on catching an exception
+      for this scenario.
+    source:
+      document: v60-spring24.pdf
+      page: 273
+      heading: System Namespace
+    confidence: high
+    id: v60-apex-015
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: New CommerceOrders namespace provides Apex classes for programmatically
+      placing orders with integrated pricing, configuration, and validation via
+      the Place Order API.
+    source:
+      document: v60-spring24.pdf
+      page: 274
+      heading: CommerceOrders Namespace
+    confidence: medium
+    id: v60-apex-016
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new CommerceTax namespace provides Apex classes, an interface, and
+      enums for integrating with external tax calculation engines, enabling
+      custom tax provider adapters.
+    source:
+      document: v60-spring24.pdf
+      page: 275
+      heading: CommerceTax Namespace
+    confidence: medium
+    id: v60-apex-017
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new FormulaEval namespace lets Apex code evaluate formula expressions
+      dynamically at runtime, enabling programmatic formula construction and
+      execution against SObject records.
+    detail: The namespace provides FormulaBuilder for constructing formulas with
+      specified return types, context objects, and global variables, plus
+      FormulaInstance for evaluation. This is a Developer Preview feature.
+    source:
+      document: v60-spring24.pdf
+      page: 277
+      heading: FormulaEval Namespace (Developer Preview)
+    confidence: medium
+    id: v60-apex-018
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API requests at version 60.0 and later
+    summary: The ProductCategoryId field on the ProductCategory object has been
+      removed starting in API version 60.0. Code referencing this field will
+      fail when targeting v60+.
+    upgradeAction: Update any integrations or code that references
+      ProductCategory.ProductCategoryId to use the new ParentCategoryId field
+      instead before upgrading to API version 60.0.
+    source:
+      document: v60-spring24.pdf
+      page: 284
+      heading: New and Changed Objects
+    confidence: high
+    id: v60-rest-011
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-bulk
+    appliesWhen: org-wide regardless of component API version
+    summary: Bulk API 2.0 Get Job Info now returns isPkChunkingSupported, letting
+      integrations programmatically check PK chunking availability instead of
+      consulting docs.
+    source:
+      document: v60-spring24.pdf
+      page: 291
+      heading: New and Changed Standard Platform Events
+    confidence: high
+    id: v60-bulk-002
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-bulk
+    appliesWhen: org-wide regardless of component API version
+    summary: Bulk API 2.0 now dynamically splits failed batches into smaller chunks
+      rather than using a fixed chunk size and marking them failed after
+      retries.
+    upgradeAction: Review any error-handling logic that relies on specific batch
+      failure patterns; jobs that previously failed may now succeed with smaller
+      auto-split batches.
+    source:
+      document: v60-spring24.pdf
+      page: 291
+      heading: New and Changed Standard Platform Events
+    confidence: high
+    id: v60-bulk-003
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-bulk
+    appliesWhen: org-wide regardless of component API version
+    summary: Bulk API 2.0 now exposes a boolean field isPkChunkingSupported in the
+      Get Job Info Query response, allowing programmatic detection of PK
+      chunking support per object instead of consulting documentation.
+    source:
+      document: v60-spring24.pdf
+      page: 253
+      heading: Bulk API 2.0
+    confidence: high
+    id: v60-bulk-004
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The scopeProfiles setting in sfdx-project.json now controls whether
+      profile settings from only the current package directory or all
+      directories are included when creating unlocked or 2GP package versions.
+    source:
+      document: v60-spring24.pdf
+      page: 253
+      heading: Bulk API 2.0
+    confidence: high
+    id: v60-packaging-005
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; integrations using
+      v63.0+ of the Connect REST API
+    summary: The Commerce product-import endpoint at
+      /commerce/management/webstores/{webstoreId}/product-import will be removed
+      in API version 63.0. Integrations must migrate to the replacement endpoint
+      before upgrading their API version.
+    upgradeAction: Replace calls to
+      /commerce/management/webstores/{webstoreId}/product-import with
+      /commerce/management/import/product/jobs before moving to API version
+      63.0.
+    source:
+      document: v60-spring24.pdf
+      page: 292
+      heading: New and Changed Connect REST API Resources
+    confidence: high
+    id: v60-rest-012
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: components deployed or retrieved at API >= 60.0
+    summary: The enableXssProtection field on SecuritySettings metadata type is
+      deprecated starting in API version 60.0; CSPTrustedSite should be used
+      instead for XSS protection configuration.
+    upgradeAction: Migrate any automation or deployment scripts that set
+      enableXssProtection to use CSPTrustedSite metadata type instead before
+      upgrading to API 60.0+.
+    source:
+      document: v60-spring24.pdf
+      page: 301
+      heading: Metadata API
+    confidence: high
+    id: v60-packaging-006
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: api-rest
+    appliesWhen: Apex classes compiled at API >= 60.0
+    summary: Apex REST API now returns JSON by default when the HTTP ACCEPT header
+      is missing or malformed, aligning with other Salesforce APIs. Previously,
+      classes at v59 and earlier would return an error in these cases.
+    upgradeAction: Review any Apex REST endpoints that rely on error responses for
+      missing/malformed ACCEPT headers, and verify clients sending requests
+      without proper headers can handle JSON responses.
+    source:
+      document: v60-spring24.pdf
+      page: 305
+      heading: REST API
+    confidence: high
+    id: v60-rest-013
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The User Interface API records endpoints now support a
+      handleOwnerChange parameter that returns a 204 status instead of an
+      incorrect 404 when the caller loses record access during creation or
+      update.
+    detail: Previously, POST to /ui-api/records and PATCH to
+      /ui-api/records/{recordId} would return a misleading 404 Not Found if the
+      context user lost access to the record mid-operation. Setting
+      handleOwnerChange=true now yields the semantically correct 204 No Content
+      response.
+    upgradeAction: Review any client code that interprets 404 responses from record
+      create/update operations; if you rely on that status to detect access
+      loss, switch to using handleOwnerChange=true and handle the 204 response
+      instead.
+    source:
+      document: v60-spring24.pdf
+      page: 307
+      heading: New and Changed User Interface API Resources
+    confidence: medium
+    id: v60-rest-014
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: sObjects added at API >= 60.0 queried via GraphQL
+    summary: Salesforce objects introduced in API v60.0 or later are exposed in
+      GraphQL with a _Record suffix appended to their type names (e.g., FeedItem
+      becomes FeedItem_Record), which may require client-side schema updates.
+    upgradeAction: Review GraphQL queries and schema introspection code that
+      reference newly added sObjects; update type names to include the _Record
+      suffix where applicable.
+    source:
+      document: v60-spring24.pdf
+      page: 309
+      heading: GraphQL API
+    confidence: high
+    id: v60-rest-015
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+      - AuraDefinitionBundle
+      - LWC
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: Legacy *.force.com site URL redirects will stop working in 2024,
+      breaking any hardcoded references to those domains in Aura, LWR, or
+      Visualforce sites.
+    upgradeAction: Audit Apex code, Visualforce pages, LWC/Aura components, custom
+      metadata, and knowledge articles for hardcoded *.force.com URLs and update
+      them to current domain formats before the 2024 cutoff.
+    source:
+      document: v60-spring24.pdf
+      page: 340
+      heading: Update References to Your Force.com Site URLs
+    confidence: medium
+    id: v60-other-003
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+      - VisualforcePage
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce will modify the system-defined trusted URLs governing
+      Content Security Policy for Experience Cloud sites in Winter '25,
+      potentially blocking resources that rely on the current CSP allowlist.
+    detail: This affects Aura, LWR, and Visualforce sites. Sites loading external
+      scripts, styles, or other resources may fail if those resources are not
+      explicitly added to custom trusted URLs before the enforcement date.
+    upgradeAction: Audit your Experience Cloud sites for external resource
+      dependencies (scripts, stylesheets, fonts, iframes) and add any required
+      domains to your org's trusted URLs before Winter '25.
+    source:
+      document: v60-spring24.pdf
+      page: 342
+      heading: Prepare for Upcoming CSP Changes
+    confidence: medium
+    id: v60-lwc-020
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce is discontinuing its managed OAuth app for Twitter/X
+      authentication. Organizations using Twitter SSO for Experience Cloud sites
+      must configure their own Twitter developer app credentials to maintain
+      login functionality.
+    upgradeAction: Before Spring '24 goes live, register your own app on the
+      Twitter/X developer portal and update your Twitter authentication provider
+      settings with the new consumer key and secret.
+    source:
+      document: v60-spring24.pdf
+      page: 342
+      heading: Built-In Salesforce-Managed App for the Twitter Authentication Provider
+        Is Being Retired
+    confidence: high
+    id: v60-auth-003
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: sharing-security
+    appliesWhen: org-wide for Salesforce orgs created on or after February 8, 2024
+      when digital experiences are enabled
+    summary: New orgs created from February 8, 2024 onward no longer automatically
+      expose records shared via Roles and Internal Subordinates to external
+      Experience Cloud users. Pre-existing orgs retain the legacy behavior where
+      such records are visible to portal users until manually remediated.
+    detail: This affects Aura, LWR, and Visualforce sites. Organizations created
+      before the cutoff date must run the Convert External User Access wizard to
+      achieve the same secure-by-default posture that new orgs receive
+      automatically.
+    upgradeAction: "For orgs created before February 8, 2024: run the Convert
+      External User Access wizard after enabling digital experiences to prevent
+      unintended record exposure to external users. For new orgs or sandbox
+      refreshes from new orgs, verify that sharing rules and test data account
+      for the stricter default."
+    source:
+      document: v60-spring24.pdf
+      page: 343
+      heading: Record Access Is Secure by Default after Enabling Digital Experiences
+    confidence: high
+    id: v60-sharing-003
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Field Service introduces the FSL.ScheduleJobsApi Apex class, enabling
+      programmatic configuration of Enhanced Optimization scheduled jobs
+      including territory group and scheduling policy assignments.
+    source:
+      document: v60-spring24.pdf
+      page: 348
+      heading: Configure Scheduled Jobs Easily with Enhanced Optimization APIs
+    confidence: medium
+    id: v60-apex-019
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: LWC developers can now access an NFC plug-in within the Field Service
+      mobile app on Android, enabling custom components to read and write NFC
+      tags for data capture workflows.
+    source:
+      document: v60-spring24.pdf
+      page: 360
+      heading: Simplify How to Interact with Data with Near Field Communication
+    confidence: medium
+    id: v60-lwc-021
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Odometer Status picklist field on the Vehicle object is deprecated
+      in favor of the new Odometer State field for storing odometer information.
+    upgradeAction: Update any integrations or Apex code referencing the
+      Vehicle.OdometerStatus field to use Vehicle.OdometerState instead before
+      the field is removed.
+    source:
+      document: v60-spring24.pdf
+      page: 371
+      heading: New and Updated Objects and Fields in Automotive Cloud
+    confidence: medium
+    id: v60-rest-016
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Decision table lookup Connect REST APIs now treat null as a distinct
+      filter value, returning only rows matching the explicit null rather than
+      combining null matches with other results.
+    upgradeAction: Review integrations calling Business Rules Engine decision table
+      lookup endpoints that pass null values; they will now return narrower
+      result sets instead of combined null-and-match results.
+    source:
+      document: v60-spring24.pdf
+      page: 480
+      heading: Include Null Values in Lookups to Streamline Results
+    confidence: medium
+    id: v60-rest-017
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version; requires Mobile
+      Publisher for Experience Cloud apps on Android/iOS version 12.0+
+    summary: A new BiometricsService API (Nimbus plugin) is now available for LWC
+      developers to integrate device-level biometric identity verification into
+      Mobile Publisher for Experience Cloud apps.
+    detail: This API enables custom LWC components to prompt users for fingerprint
+      or face recognition checks. The validation is device-local only and does
+      not authenticate against Salesforce services. Only functions within the
+      native mobile app context, not in web views.
+    source:
+      document: v60-spring24.pdf
+      page: 517
+      heading: Add Biometric ID Checks for Mobile Publisher for Experience Cloud App
+        Features
+    confidence: medium
+    id: v60-lwc-022
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Product Catalog Management introduces ProductSpecificationType and
+      ProductSpecificationRecType metadata types, expanding the Metadata API
+      surface for Revenue Lifecycle Management deployments.
+    source:
+      document: v60-spring24.pdf
+      page: 534
+      heading: New Metadata Types in Product Catalog Management
+    confidence: medium
+    id: v60-packaging-007
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new Apex namespace called CommerceOrders provides classes for
+      programmatic order placement with integrated pricing, configuration, and
+      validation capabilities.
+    detail: The namespace includes ConfigurationOptionsInput for configurator
+      settings, GraphRequest for sObject payload construction,
+      PlaceOrderExecutor as the API entry point, PlaceOrderResult for responses,
+      RecordResource and RecordWithReferenceRequest for order item field
+      assignment, plus ConfigurationInputEnum for configuration options.
+    source:
+      document: v60-spring24.pdf
+      page: 553
+      heading: CommerceOrders Namespace
+    confidence: medium
+    id: v60-apex-020
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new PlaceQuote Apex namespace provides classes, methods, and enums
+      for programmatically creating or updating quotes with pricing preferences
+      and configuration options via the Place Quote API.
+    source:
+      document: v60-spring24.pdf
+      page: 553
+      heading: PlaceQuote Namespace
+    confidence: medium
+    id: v60-apex-021
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; Microsoft blocks new
+      ApplicationImpersonation role assignments starting May 2024; existing
+      connections stop working in Spring '25 (February 2025)
+    summary: Service account OAuth 2.0 authentication using Exchange
+      ApplicationImpersonation for Einstein Activity Capture connections to
+      Microsoft 365 is being phased out. Microsoft will block new role
+      assignments in May 2024, and Salesforce retires existing connections in
+      Spring '25.
+    detail: Organizations using service account OAuth 2.0 to sync Einstein Activity
+      Capture with Microsoft Office 365 must migrate to org-level OAuth 2.0
+      authentication before February 2025. This requires resetting Einstein
+      Activity Capture and reconfiguring with the new auth method.
+    upgradeAction: Audit Einstein Activity Capture configurations for service
+      account OAuth 2.0 connections to Microsoft 365. Plan migration to
+      org-level OAuth 2.0 authentication before Spring '25 by resetting and
+      reconfiguring Einstein Activity Capture with the new auth method.
+    source:
+      document: v60-spring24.pdf
+      page: 575
+      heading: Service Account OAuth 2.0 Authentication to Microsoft Office 365 Is
+        Being Retired
+    confidence: high
+    id: v60-auth-004
+  - apiVersion: "60.0"
+    introducedIn: "47.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Flow
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version (Release Update
+      enforced Winter '25)
+    summary: When an order product modification triggers a recalculation on the
+      parent Order record, Salesforce now correctly fires custom logic (Apex
+      triggers, validation rules, workflows, flows) on that parent. Previously
+      this cascade was silently skipped.
+    detail: This Release Update originated in Winter '20 (API 47.0) and becomes
+      mandatory in Winter '25. Orgs relying on the old behavior—where parent
+      Order triggers did not fire during child OrderItem saves—may see new
+      validation failures or trigger executions after enforcement.
+    upgradeAction: Before Winter '25 enforcement, enable the update in a sandbox and
+      test all Apex triggers, validation rules, and flows on Order to ensure
+      they handle cascading updates from OrderItem changes without errors or
+      unexpected side effects.
+    source:
+      document: v60-spring24.pdf
+      page: 642
+      heading: Enable New Order Save Behavior (Release Update)
+    confidence: high
+    id: v60-apex-022
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: ISV partners can now remove workflow rules from both 1GP and 2GP
+      managed packages after completing flow migrations, enabling cleaner
+      package maintenance.
+    source:
+      document: v60-spring24.pdf
+      page: 660
+      heading: Delete Workflow Rules from Managed Packages
+    confidence: high
+    id: v60-packaging-008
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+      - ApexClass
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version; enforcement scheduled
+      for Winter '25
+    summary: "Four release updates affecting Flow runtime behavior are being
+      re-enforced after accidental reversion in some orgs: REST API flows
+      running in user context, Apex action access modifier enforcement, session
+      ID access disablement, and partial save for invocable actions."
+    detail: This is a re-launch notice for orgs where these updates were
+      unintentionally rolled back. The individual behaviors (user context for
+      REST-invoked flows, access modifier respect for legacy Apex actions,
+      blocked session ID access, partial save semantics) were previously
+      enforced but must now be re-verified in affected orgs.
+    upgradeAction: Check Setup > Release Updates to see if your org is affected. If
+      any of these four updates reappear as pending, re-test flows that invoke
+      Apex actions, access session IDs, or are called via REST API before the
+      Winter '25 enforcement date.
+    source:
+      document: v60-spring24.pdf
+      page: 662
+      heading: Salesforce Relaunches Four Previously Enforced Release Updates
+    confidence: medium
+    id: v60-flow-003
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+      - ApexClass
+      - Integration
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (enforced Summer '24)
+    summary: The EmailSimple invocable action will start honoring organization-wide
+      email address profile settings. Calls from Flow, Apex, or REST API that
+      lack proper email profile configuration will begin throwing errors.
+    detail: This release update was introduced in Summer '23 with original
+      enforcement planned for Spring '24, but enforcement was postponed to
+      Summer '24. Once enforced, any invocation of EmailSimple—whether via Flow,
+      Apex code, or REST API—must use an org-wide email address that has the
+      appropriate profile settings or the call will fail.
+    upgradeAction: Audit all usages of EmailSimple in Flows, Apex, and REST API
+      integrations. Verify that any org-wide email addresses used have the
+      correct profile settings configured. Test invocations before Summer '24
+      enforcement to catch misconfigurations.
+    source:
+      document: v60-spring24.pdf
+      page: 665
+      heading: Enable EmailSimple Invocable Action to Respect Organization-Wide
+        Profile Settings (Release Update)
+    confidence: high
+    id: v60-flow-004
+    introducedIn: "58.0"
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - Flow
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version (Release Update
+      enforced in Winter '25)
+    summary: Autolaunched flows invoked from Apex classes declared with 'with
+      sharing' now inherit those sharing rules instead of running in system
+      context without sharing. Queries may return fewer records and DML may fail
+      due to restricted access.
+    detail: Prior to this update, flows launched from Apex ignored the calling
+      class's sharing declaration and operated with full data visibility. After
+      enforcement, a flow running in default context respects the sharing rules
+      of the executing user when the invoking Apex uses 'with sharing'. This is
+      a Release Update scheduled for enforcement in Winter '25.
+    upgradeAction: Identify all autolaunched flows called from 'with sharing' Apex
+      classes. Test with users whose sharing rules are restrictive to confirm
+      queries return expected rows and DML succeeds. Consider switching affected
+      flows to run in system context explicitly if full data access is required.
+    source:
+      document: v60-spring24.pdf
+      page: 666
+      heading: Enforce Sharing Rules when Apex Launches a Flow (Release Update)
+    confidence: high
+    id: v60-sharing-004
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version; enforced in Winter '25
+    summary: Flow execution now requires explicit profile or permission set grants.
+      Previously some flows could be executed by any user without permission
+      checks; after enforcement, only users with the Run Flows permission or
+      specific flow access can execute flows.
+    detail: This release update also deprecates the FlowSites org permission.
+      Organizations relying on implicit flow access for guest users or
+      authenticated users without explicit permissions will see flow invocations
+      fail after Winter '25 enforcement.
+    upgradeAction: Audit which users and integrations invoke flows and ensure they
+      have Run Flows permission or flow-specific profile access before Winter
+      '25. Test guest user and community flows especially.
+    source:
+      document: v60-spring24.pdf
+      page: 666
+      heading: Restrict User Access to Run Flows (Release Update)
+    confidence: high
+    id: v60-flow-005
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version (enforced Spring '25)
+    summary: REST API calls to Apex invocable actions now roll back all DML when the
+      action throws an exception, preventing partial data commits that
+      previously occurred.
+    detail: This release update ensures transactional integrity by reverting any
+      database changes if an Apex-defined invocable action ends in an exception
+      during REST API execution. Originally scheduled for Winter '24,
+      enforcement was postponed to Spring '25. Actions with non-void outputs
+      must also have matching input/output sizes and ordering.
+    upgradeAction: Audit all Apex invocable actions called via REST API to confirm
+      they handle errors gracefully without throwing unhandled exceptions.
+      Verify that non-void actions return outputs matching input array size and
+      order. Test integrations to ensure callers handle the rollback behavior
+      correctly.
+    source:
+      document: v60-spring24.pdf
+      page: 667
+      heading: Enforce Rollbacks for Apex Action Exceptions in REST API (Release Update)
+    confidence: high
+    id: v60-rest-018
+    introducedIn: "57.0"
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+      - Integration
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (Release Update
+      enforced Winter '25)
+    summary: Flows invoked through the REST API now execute in user context rather
+      than system context, meaning the authenticated user's profile and
+      permission sets govern object and field-level access during flow
+      execution.
+    detail: Previously, REST API-invoked flows ran with full system-mode privileges.
+      After enforcement, the flow respects the calling user's permissions, which
+      can cause DML failures or record access errors if the user lacks required
+      access. This update was originally enforced in Spring '22 but was
+      inadvertently rolled back for some orgs and is being re-enforced.
+    upgradeAction: Audit all flows called via REST API to ensure the expected
+      running users have sufficient object and field permissions. Test
+      REST-triggered flows with representative low-privilege users before the
+      Winter '25 enforcement date.
+    source:
+      document: v60-spring24.pdf
+      page: 668
+      heading: Run Flows in User Context via REST API (Release Update)
+    confidence: high
+    id: v60-flow-006
+    introducedIn: "54.0"
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (enforced Summer '25)
+    summary: Process Builder processes with multiple criteria and record updates now
+      correctly evaluate fields that started as null, fixing a bug where the
+      original null value was not properly checked against criteria.
+    detail: This release update, originally available in Summer '19, affects
+      processes using the 'execute actions only when specified changes are made'
+      option or the ISCHANGED() function. After enforcement, these processes may
+      behave differently if they relied on the previous buggy evaluation of
+      initially-null fields.
+    upgradeAction: Review processes that use ISCHANGED() or conditional execution on
+      field changes. Test with records where the triggering field starts as null
+      to verify expected behavior before the Summer '25 enforcement date.
+    source:
+      document: v60-spring24.pdf
+      page: 668
+      heading: Evaluate Criteria Based on Original Record Values in Process Builder
+        (Release Update)
+    confidence: high
+    id: v60-flow-007
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+      - ApexClass
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (Release Update
+      enforced in Winter '25)
+    summary: Flows will fail at runtime if they invoke legacy Apex actions (classes
+      implementing Process.Plugin) marked as public rather than global. This
+      enforcement ensures managed package access modifiers are respected.
+    detail: Enforced once in Spring '21, the update got silently undone for a subset
+      of orgs and is being re-enforced (Winter '25). When active, a flow calling
+      a managed package's public (non-global) legacy Apex action errors out;
+      global actions exposing public describe/invoke stay callable across
+      namespaces. @InvocableMethod-based actions aren't affected.
+    upgradeAction: Audit flows for legacy Apex action elements that call
+      Process.Plugin implementations from managed packages. Test all flow paths
+      in sandbox before Winter '25 enforcement. If a public legacy action is
+      business-critical, contact the package provider to request the class be
+      changed to global.
+    source:
+      document: v60-spring24.pdf
+      page: 669
+      heading: Make Flows Respect Access Modifiers for Legacy Apex Actions (Release
+        Update)
+    confidence: high
+    id: v60-flow-008
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (enforced Winter '25)
+    summary: The $Api.Session_ID global variable no longer resolves at runtime in
+      flow interviews. Flows that previously displayed or used the browser
+      session ID will receive a null or empty value after enforcement.
+    upgradeAction: Audit all flows for references to $Api.Session_ID and remove or
+      replace them before Winter '25 enforcement. If session-based integrations
+      exist, migrate to OAuth or named credentials.
+    source:
+      document: v60-spring24.pdf
+      page: 669
+      heading: Disable Access to Session IDs in Flows (Release Update)
+    confidence: high
+    id: v60-flow-009
+    introducedIn: "56.0"
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; scheduled enforcement
+      in Winter '25
+    summary: "Bulk REST API calls to invocable actions now use partial-save
+      semantics: a single failure no longer rolls back the entire transaction.
+      Instead, Salesforce retries successful actions up to three times and only
+      rolls back the specific actions that fail."
+    detail: This release update was originally enforced in Spring '20 but was
+      inadvertently reverted for some orgs. The re-enforcement changes how
+      external REST API integrations invoking multiple actions in one request
+      handle failures. Note that certain action types (including Invocable Apex,
+      External Services, and several Order Management actions) do not support
+      partial save. External callouts may execute multiple times due to retries
+      and cannot be rolled back, potentially causing duplicate side effects and
+      increased limit consumption.
+    upgradeAction: Audit REST API integrations that invoke actions in bulk to ensure
+      they handle partial success responses correctly. Verify external callout
+      idempotency since retries may cause repeated executions. Monitor limit
+      usage as retry behavior can increase transaction duration.
+    source:
+      document: v60-spring24.pdf
+      page: 670
+      heading: Enable Partial Save for Invocable Actions (Release Update)
+    confidence: high
+    id: v60-rest-019
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: orchestrations compiled at API >= 60.0
+    summary: Background steps and MuleSoft steps in Flow Orchestration now execute
+      as Automated Process User by default instead of the prior context. Steps
+      may fail if this user lacks required permissions, record access, or
+      external credentials.
+    upgradeAction: Review orchestrations using background or MuleSoft steps to
+      verify Automated Process User has necessary permissions, or explicitly
+      configure 'Run As' to specify an appropriate user context.
+    source:
+      document: v60-spring24.pdf
+      page: 671
+      heading: Control the User Context of a Background or MuleSoft Step
+    confidence: high
+    id: v60-flow-010
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; enforced Summer '24
+    summary: Salesforce is retiring the legacy single-configuration SAML SSO
+      framework, requiring migration to the multiple-configuration framework.
+      Orgs that don't migrate will lose SSO functionality when enforcement
+      begins.
+    detail: The new framework mandates that SAML responses include the audience
+      attribute, changes the Salesforce Login URL, and alters how unparseable
+      SAML responses are logged. Any integration relying on the old single-IdP
+      SAML setup must be reconfigured before enforcement.
+    upgradeAction: Migrate your SAML configuration via Setup > Release Updates
+      before Summer '24 enforcement. Ensure your IdP sends the audience
+      attribute, update any hardcoded login URLs, and test thoroughly in a
+      sandbox.
+    source:
+      document: v60-spring24.pdf
+      page: 679
+      heading: Migrate to a Multiple-Configuration SAML Framework (Release Update)
+    confidence: high
+    id: v60-auth-005
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: A new OAuth 2.0 token exchange flow allows swapping third-party
+      identity provider tokens for Salesforce access tokens, requiring a custom
+      Apex token exchange handler defined via Metadata API.
+    detail: This flow enables enterprise integrations where external IdP tokens need
+      conversion to Salesforce tokens. Developers must implement an Apex handler
+      class to validate incoming tokens and map external subjects to Salesforce
+      users.
+    source:
+      document: v60-spring24.pdf
+      page: 680
+      heading: Improve Compatibility with Third-Party Services with the Token Exchange
+        Flow
+    confidence: high
+    id: v60-auth-006
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Headless identity APIs (registration, passwordless login, forgot
+      password) now require email templates to be explicitly allowlisted via the
+      new NetworkEmailTmplAllowlist metadata type; non-allowlisted templates in
+      the emailtemplate parameter are rejected.
+    upgradeAction: Before using custom email templates with Headless Identity APIs,
+      deploy NetworkEmailTmplAllowlist metadata entries for each template you
+      reference in the emailtemplate parameter, or API calls will fail.
+    source:
+      document: v60-spring24.pdf
+      page: 680
+      heading: Expand Branding Options and Improve Security for Headless Identity Flows
+    confidence: high
+    id: v60-auth-007
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce stops hosting the managed Twitter/X OAuth app, so any
+      authentication provider using the implicit consumer key/secret will fail.
+      You must register your own app on the X developer platform and supply
+      explicit credentials.
+    upgradeAction: Before Spring '24 deploys, create a Twitter/X developer app, then
+      update the Auth Provider metadata with your own consumer key and secret;
+      test SSO flows end-to-end.
+    source:
+      document: v60-spring24.pdf
+      page: 681
+      heading: Salesforce-Managed App for the Twitter Authentication Provider is Being
+        Retired
+    confidence: high
+    id: v60-auth-008
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: A new endpoint at /services/oauth2/pkce/generator lets developers fetch
+      code_challenge and code_verifier values directly from Salesforce,
+      simplifying PKCE implementation in OAuth authorization code flows.
+    source:
+      document: v60-spring24.pdf
+      page: 682
+      heading: Generate Parameters for the Proof Key for Code Exchange (PKCE) Extension
+    confidence: high
+    id: v60-auth-009
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Connected apps and external client apps can now enable refresh token
+      rotation, which issues a new refresh token on each OAuth 2.0 token refresh
+      and invalidates the previous one. Reuse of a rotated-out token triggers
+      revocation of the current token chain.
+    upgradeAction: If enabling this feature, ensure your OAuth client persists the
+      new refresh token returned with each access token refresh; failure to do
+      so will lock out the session.
+    source:
+      document: v60-spring24.pdf
+      page: 682
+      heading: Rotate Refresh Tokens
+    confidence: high
+    id: v60-auth-010
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: SCIM Users endpoints now return created and lastModified timestamps in
+      24-hour UTC format instead of 12-hour format, aligning with REST API
+      conventions for the User object.
+    upgradeAction: Review any integrations parsing the created or lastModified
+      fields from /services/scim/v2/Users responses and update date parsing
+      logic to handle 24-hour format (e.g., 14:30:15Z instead of 02:30:15Z).
+    source:
+      document: v60-spring24.pdf
+      page: 682
+      heading: Responses from the SCIM Users Endpoints Use 24-Hour Format for Created
+        and Last Modified Dates
+    confidence: high
+    id: v60-rest-020
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: New Connect REST API endpoints allow programmatic retrieval of OAuth
+      consumer credentials (client ID and secret) for external client apps,
+      enabling CI/CD pipelines to fetch secrets at runtime rather than storing
+      them in metadata or source control.
+    source:
+      document: v60-spring24.pdf
+      page: 683
+      heading: Get OAuth 2.0 Credentials for Consumers Associated with an External
+        Client App
+    confidence: medium
+    id: v60-auth-011
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: External client apps now support OAuth 2.0 client credentials flow
+      configuration via new metadata fields, enabling server-to-server
+      authentication without user context.
+    detail: "Setup path: enable External Client Apps, grant the
+      consumer-secrets-in-metadata permission, then trade the app's consumer key
+      and secret for tokens via the client-credentials grant. Packageable apps
+      have to be built from a Dev Hub org."
+    source:
+      document: v60-spring24.pdf
+      page: 683
+      heading: Configure an OAuth 2.0 Client Credentials Flow for an External Client App
+    confidence: high
+    id: v60-auth-012
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: External client apps now support OAuth 2.0 device flow via a new
+      isDeviceFlowEnabled metadata field, enabling input-constrained devices to
+      authenticate without a browser on the device itself.
+    source:
+      document: v60-spring24.pdf
+      page: 684
+      heading: Configure an OAuth 2.0 Device Flow for External Client Apps
+    confidence: medium
+    id: v60-auth-013
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: External client apps now support JWT bearer flow authentication via a
+      new certificate field in global OAuth settings, enabling headless CI/CD
+      integrations that previously required connected apps.
+    source:
+      document: v60-spring24.pdf
+      page: 684
+      heading: Configure an OAuth 2.0 JWT Bearer Flow for External Client Apps
+    confidence: medium
+    id: v60-auth-014
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: A new ExtlClntAppConfigurablePolicies metadata type lets developers
+      programmatically enable or disable external client apps and their OAuth
+      plugins via metadata deployments.
+    source:
+      document: v60-spring24.pdf
+      page: 685
+      heading: Disable or Enable an External Client App Plugin
+    confidence: medium
+    id: v60-auth-015
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: The final phase of MFA auto-enablement activates for all remaining orgs
+      in Spring '24, requiring users to authenticate with a second factor for
+      all direct UI logins. Integrations using UI-based authentication flows may
+      be affected if they rely on username/password-only login.
+    upgradeAction: Verify that any automated processes or integrations that
+      authenticate via the UI have MFA-compatible authentication configured
+      (e.g., OAuth flows, connected apps, or API-only users excluded from MFA).
+      Test login flows with MFA enabled before the release rolls out.
+    source:
+      document: v60-spring24.pdf
+      page: 685
+      heading: MFA Auto-Enablement Concludes for All Remaining Orgs (Release Update)
+    confidence: medium
+    id: v60-auth-016
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: When an API integration user exceeds 3,600 logins per hour and triggers
+      rate limiting, Salesforce now stops recording individual Login History
+      entries until the rate drops. Integrations relying on Login History for
+      audit or monitoring may see gaps during rate-limited periods.
+    upgradeAction: Review any integration or monitoring code that queries
+      LoginHistory to detect authentication patterns; account for missing
+      entries when rate limiting is active.
+    source:
+      document: v60-spring24.pdf
+      page: 688
+      heading: Login History Entries Are Reduced When Login Rate Limiting Is Active
+    confidence: medium
+    id: v60-auth-017
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: External credentials now support a Basic authentication protocol,
+      letting named credentials authenticate via username/password while using
+      the enhanced credential schema. This can be configured through UI or
+      programmatically via Metadata, Tooling, and Apex ConnectApi APIs.
+    source:
+      document: v60-spring24.pdf
+      page: 690
+      heading: Use the Basic Authentication Protocol with Named Credentials
+    confidence: high
+    id: v60-auth-018
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: External credential metadata can now be included in 2GP managed and
+      unlocked packages alongside named credentials, enabling full
+      named-credential packaging workflows that were previously incomplete.
+    upgradeAction: Teams packaging named credentials can now add external
+      credentials to their sfdx-project.json and distribute the full
+      configuration; review existing workarounds for manual external credential
+      setup.
+    source:
+      document: v60-spring24.pdf
+      page: 690
+      heading: Distribute Named Credentials with Second-Generation Managed and
+        Unlocked Packages
+    confidence: high
+    id: v60-packaging-009
+  - apiVersion: "60.0"
+    release: Spring '24
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Android push notifications for mobile connected apps now require
+      Firebase Admin SDK private key and project ID instead of the previous
+      configuration method, due to changes in Google's push notification
+      handling.
+    upgradeAction: Retrieve the Admin SDK private key and project ID from your
+      Google Firebase Console and update your mobile connected app settings in
+      App Manager before push notifications stop working.
+    source:
+      document: v60-spring24.pdf
+      page: 708
+      heading: Enter New Firebase Information for Android Push Notifications
+    confidence: medium
+    id: v60-auth-019

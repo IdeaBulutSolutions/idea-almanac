@@ -1,0 +1,1993 @@
+apiVersion: "57.0"
+release: Spring '23
+reviewed: true
+entries:
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; phased rollout
+      starting Spring '23 via Release Update
+    summary: Salesforce begins automatically enabling MFA for direct
+      username/password logins across all orgs in phases throughout 2023, with
+      eventual permanent enforcement planned.
+    detail: This is delivered via the MFA Auto-Enablement Release Update. SSO logins
+      are not auto-enabled by Salesforce but MFA is still contractually required
+      for SSO access. Orgs should proactively enable MFA to control their
+      rollout timing.
+    upgradeAction: Enable MFA before auto-enablement reaches your org to avoid login
+      disruptions. Verify all users have registered MFA methods and test login
+      flows with MFA active.
+    source:
+      document: v57-spring23.pdf
+      page: 79
+      heading: "Be Ready for MFA: Auto-Enablement Starts with Spring '23"
+    confidence: high
+    id: v57-auth-001
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version; controlled by Session
+      Settings toggle
+    summary: Lightning Web Security replaces Lightning Locker as the security
+      architecture for LWC (GA) and Aura (beta). New orgs and scratch orgs have
+      LWS enabled by default, affecting how component JavaScript executes and
+      interacts across namespace boundaries.
+    detail: LWS changes the sandboxing model for component JavaScript. Production
+      orgs that already had LWS enabled for LWC in Winter '23 and contain custom
+      Aura components are temporarily excluded from LWS for Aura in Spring '23.
+      However, enabling the setting fresh in Spring '23 activates LWS for both
+      LWC and Aura simultaneously.
+    upgradeAction: Before enabling LWS or deploying to a new org, test all custom
+      LWC and Aura components in a sandbox with LWS enabled. Compare behavior
+      against an identical sandbox with Lightning Locker to identify any
+      JavaScript that relies on Locker-specific behavior.
+    source:
+      document: v57-spring23.pdf
+      page: 186
+      heading: Use Lightning Web Security for Lightning Web Components (GA) and Aura
+        Components (Beta)
+    confidence: high
+    id: v57-lwc-001
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version — orgs without custom
+      Lightning components now have LWS enabled by default; orgs that later add
+      components will have those protected by LWS
+    summary: Orgs lacking custom LWC or Aura components now default to Lightning Web
+      Security instead of Lightning Locker. When you subsequently deploy or
+      install Lightning components, they run under LWS rules rather than Locker.
+    detail: This is part of the phased LWS rollout begun in Spring '22. Existing
+      orgs with components remain on Locker for now, but empty orgs and scratch
+      orgs are now LWS-first. A session setting lets you revert to Locker if
+      needed.
+    upgradeAction: Before deploying new LWC or Aura components (or installing
+      packages containing them) into an org that had none, test in a sandbox
+      with LWS enabled to catch Locker-to-LWS incompatibilities such as
+      cross-namespace DOM access or restricted API usage.
+    source:
+      document: v57-spring23.pdf
+      page: 188
+      heading: Lightning Web Security Enablement for Orgs with No Custom Components
+    confidence: high
+    id: v57-lwc-002
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: LWC introduces the lwc:ref directive and this.refs API as an
+      alternative to querySelector() for accessing DOM elements within a
+      component's template scope.
+    source:
+      document: v57-spring23.pdf
+      page: 191
+      heading: Query DOM Elements with Refs
+    confidence: high
+    id: v57-lwc-003
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Framework optimizations for static element handling can inject extra
+      whitespace into class and style attribute values in the rendered DOM,
+      potentially breaking exact-match attribute selectors.
+    upgradeAction: Audit and update any DOM queries using exact class attribute
+      matching (e.g., `[class="..."]`) to use whitespace-tolerant selectors like
+      `.className` or `classList.contains()`.
+    source:
+      document: v57-spring23.pdf
+      page: 191
+      heading: Improved Render Time for Lightning Web Components
+    confidence: high
+    id: v57-lwc-004
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version (Beta in Lightning
+      Experience/Mobile; GA for Experience Cloud)
+    summary: Lightning web components can now opt into light DOM rendering via a
+      static renderMode property, attaching markup to the host element instead
+      of a shadow tree. This enables standard DOM traversal APIs and global
+      styling but removes shadow encapsulation protections.
+    detail: Set static renderMode = 'light' in the component class and add
+      lwc:render-mode='light' on the template tag. Light and shadow DOM
+      components can be nested, but base Lightning components remain
+      shadow-only. Use *.scoped.css files to prevent style bleed. Not
+      recommended for sensitive data due to DOM scraping exposure.
+    source:
+      document: v57-spring23.pdf
+      page: 192
+      heading: Enable Third-Party Integrations with Light DOM (Beta)
+    confidence: medium
+    id: v57-lwc-005
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Light DOM LWC components embedded in Aura containers (outside
+      Experience Cloud, CMS content editor, and Sales Enablement) now require
+      scoped styles; unscoped styles no longer work in these contexts.
+    upgradeAction: Audit light DOM LWCs used within Aura apps and convert any
+      unscoped CSS to scoped styles before this enforcement takes effect.
+    source:
+      document: v57-spring23.pdf
+      page: 194
+      heading: Use Scoped Styles Only on Light DOM Components in Aura-Based Containers
+    confidence: medium
+    id: v57-lwc-006
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: The if:true and if:false template directives are deprecated in favor of
+      lwc:if, lwc:elseif, and lwc:else. Salesforce intends to remove the legacy
+      directives in a future release.
+    detail: The new conditional directives improve performance by invoking property
+      getters only once per directive instance, whereas the legacy approach
+      caused multiple getter invocations when chaining conditions. Complex
+      expressions are not supported inline; use JavaScript getters instead.
+    upgradeAction: Replace all if:true and if:false usages with lwc:if and lwc:else
+      to avoid breakage when the legacy directives are eventually removed.
+    source:
+      document: v57-spring23.pdf
+      page: 194
+      heading: Use the Improved Conditional Directives
+    confidence: high
+    id: v57-lwc-007
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: CSS pseudo-element selectors with leading whitespace (like `,
+      ::before`) now scope correctly in synthetic shadow DOM, preventing styles
+      from leaking to descendant elements the component doesn't own.
+    detail: Previously, a space before ::before or ::after in universal selectors
+      caused the compiled CSS to incorrectly apply styles to all descendants in
+      synthetic shadow environments. The fix removes the unintended descendant
+      combinator, so styles now apply only to the component's own
+      pseudo-elements.
+    upgradeAction: Review LWC stylesheets using universal selectors with
+      pseudo-elements; components that relied on the old leaky behavior may lose
+      styling on nested child components after this fix.
+    source:
+      document: v57-spring23.pdf
+      page: 197
+      heading: Scoping in CSS Pseudo-Elements Is Fixed
+    confidence: high
+    id: v57-lwc-008
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: The lwcRuntimeFlags global object can no longer be used to toggle LWC
+      feature flags at runtime. Any code that relied on setting properties like
+      ENABLE_MIXED_SHADOW_MODE on this object will silently have no effect.
+    upgradeAction: Search your codebase for references to lwcRuntimeFlags or
+      window.lwcRuntimeFlags and remove them, as they no longer influence
+      component behavior. If you were using mixed shadow mode or other developer
+      previews via this mechanism, find the official supported alternative or
+      remove the dependency.
+    source:
+      document: v57-spring23.pdf
+      page: 197
+      heading: Disable lwcRuntimeFlags to Improve Lightning Page Security
+    confidence: high
+    id: v57-lwc-009
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version (enforced Summer '23)
+    summary: Lightning apps now receive unique CSRF tokens scoped to each app rather
+      than sharing tokens across apps, and invalid or expired token handling is
+      stricter.
+    detail: This Release Update changes how CSRF tokens are generated and validated
+      for Lightning Experience, Lightning Out, and Salesforce mobile apps. Each
+      Lightning app gets its own token, preventing token reuse across app
+      boundaries. Apps that relied on tokens being interchangeable or that have
+      lenient error handling for token failures may see authentication errors
+      after enforcement.
+    upgradeAction: Test Lightning Out integrations and any custom Lightning apps in
+      sandbox with the update enabled. Verify that session handling and token
+      refresh logic works correctly when tokens expire or become invalid.
+    source:
+      document: v57-spring23.pdf
+      page: 199
+      heading: Security Enhancements for CSRF Tokens for Lightning Apps (Release Update)
+    confidence: high
+    id: v57-lwc-010
+  - apiVersion: "57.0"
+    introducedIn: "56.0"
+    release: Spring '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce now auto-escapes the label attribute on <apex:inputField>
+      tags to block XSS attacks. Pages that manually escaped these labels will
+      render incorrectly due to double-escaping.
+    detail: This Release Update was introduced in Winter '23 (v56.0) and enforced in
+      Spring '23. After enforcement, any <apex:inputField> elements whose label
+      attributes were already escaped in code will display garbled output
+      because the platform applies a second round of escaping.
+    upgradeAction: Before enforcement, search Visualforce pages for
+      <apex:inputField> tags with manually escaped label values and remove the
+      redundant escaping to prevent rendering issues.
+    source:
+      document: v57-spring23.pdf
+      page: 201
+      heading: Escape the Label Attribute of <apex:inputField> Elements to Prevent
+        Cross-Site Scripting in Visualforce Pages (Release Update)
+    confidence: high
+    id: v57-vf-001
+  - apiVersion: "57.0"
+    introducedIn: "56.0"
+    release: Spring '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version (enforced Winter '24)
+    summary: Visualforce JavaScript Remoting now validates the @JsonAccess
+      annotation on Apex classes, blocking cross-namespace
+      serialization/deserialization that lacks explicit permission.
+    detail: This release update, introduced in Winter '23, enforces that Apex
+      classes used with Visualforce Remoting must have appropriate @JsonAccess
+      annotations to permit serialization across package namespaces. Without the
+      annotation, remote calls that previously succeeded will fail.
+    upgradeAction: Audit Apex classes invoked via Visualforce Remoting for
+      @JsonAccess annotations; add @JsonAccess(serializable='always'
+      deserializable='always') where cross-namespace access is required. Test
+      remoting calls before enforcement.
+    source:
+      document: v57-spring23.pdf
+      page: 201
+      heading: Enable JsonAccess Annotation Validation for the Visualforce JavaScript
+        Remoting API (Release Update)
+    confidence: high
+    id: v57-vf-002
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: removed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version; automatic escaping
+      via shouldAlwaysEscapeExpressionLanguage stops in Summer '23
+    summary: Salesforce canceled the release update that automatically escaped
+      expression language in script and style contexts. Pages using
+      shouldAlwaysEscapeExpressionLanguage=True will lose that automatic
+      escaping after Summer '23, requiring manual escaping to maintain XSS
+      protection.
+    detail: "If you enabled this attribute or modified code anticipating this
+      update, you must revert those changes: restore any manual escaping you
+      removed, delete the shouldAlwaysEscapeExpressionLanguage attribute, and
+      revert code changes made in anticipation of automatic escaping."
+    upgradeAction: Audit Visualforce pages and components for
+      shouldAlwaysEscapeExpressionLanguage usage. Remove the attribute and
+      restore manual JSENCODE/HTMLENCODE calls in script and style blocks to
+      maintain XSS protection.
+    source:
+      document: v57-spring23.pdf
+      page: 202
+      heading: Escape Expression Language Evaluations in <script> and <style> Contexts
+        in Visualforce Pages and Components (Release Update)
+    confidence: high
+    id: v57-vf-003
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version
+    summary: User-mode database operations reach GA, providing an explicit way to
+      enforce FLS, object permissions, and sharing rules on SOQL/SOSL queries
+      and DML. Three new bind-variable methods join the existing set.
+    detail: The accessLevel parameter on Database and Search methods lets you opt
+      individual operations into user mode via WITH USER_MODE in SOQL or 'as
+      user' DML syntax. GA adds queryWithBinds, getQueryLocatorWithBinds, and
+      countQueryWithBinds. Existing code is unaffected unless you explicitly
+      call these APIs.
+    source:
+      document: v57-spring23.pdf
+      page: 205
+      heading: Secure Apex Code with User Mode Database Operations (Generally Available)
+    confidence: high
+    id: v57-sharing-001
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The ApexTypeImplementor standard object exits beta and becomes
+      generally available, allowing developers to discover Apex classes that
+      implement a given interface via SOQL queries.
+    detail: "ApexTypeImplementor respects access modifiers based on query context:
+      managed packages see all global implementors org-wide plus public
+      implementors within their own package. The object also honors @Deprecated
+      annotations and package version dependencies. Note that results may
+      include invalid classes (ApexClass.IsValid = false), so consumers should
+      verify validity before instantiation."
+    source:
+      document: v57-spring23.pdf
+      page: 205
+      heading: Find Which Apex Classes Implement an Interface (Generally Available)
+    confidence: high
+    id: v57-apex-001
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex gains an optional DataWeave integration (beta) that lets
+      developers create .dwl scripts as metadata and invoke them from Apex code
+      for data format transformations, subject to standard heap and CPU limits.
+    detail: A new DataWeaveScriptResource inner class is auto-generated for each
+      .dwl script, extending DataWeave.Script. Scripts run server-side under
+      existing governor limits. Beta feature with namespace-scoped packaging
+      support only.
+    source:
+      document: v57-spring23.pdf
+      page: 207
+      heading: Use DataWeave in Apex to Enable Data Transformation to Different
+        Formats (Beta)
+    confidence: medium
+    id: v57-apex-002
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new System.enqueueJob overload accepts a delay parameter (0–10
+      minutes) letting developers schedule queueable jobs with a minimum wait
+      time before execution, bypassing org-wide enqueue delay settings.
+    detail: The delay parameter is ignored during Apex testing. Setting delay to 0
+      executes the job as quickly as possible, which can rapidly consume daily
+      async Apex limits if used with chained jobs without a throttling
+      mechanism.
+    source:
+      document: v57-spring23.pdf
+      page: 208
+      heading: Use the System.enqueueJob Method to Specify a Delay in Scheduling
+        Queueable Jobs
+    confidence: high
+    id: v57-apex-003
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Admins can now configure an org-wide default delay (1–600 seconds) for
+      queueable jobs enqueued without an explicit delay parameter, which may
+      cause existing jobs to run slower than before if this setting is enabled.
+    detail: When the new Apex Settings option is configured, any call to
+      System.enqueueJob(queueable) that omits the delay parameter will inherit
+      the org-wide default delay instead of executing with standard timing. Code
+      that explicitly passes a delay parameter is unaffected.
+    upgradeAction: If your org enables this setting, review queueable job chains and
+      time-sensitive integrations that assume immediate execution. Test that
+      downstream processes tolerate the added latency.
+    source:
+      document: v57-spring23.pdf
+      page: 208
+      heading: Specify an Org-Wide Default Delay in Scheduling Queueable Jobs
+    confidence: high
+    id: v57-apex-004
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: Three new Database methods (queryWithBinds, getQueryLocatorWithBinds,
+      countQueryWithBinds) allow passing bind variables via a Map parameter
+      instead of requiring in-scope Apex variables, enabling fully dynamic SOQL
+      construction without string concatenation security risks.
+    source:
+      document: v57-spring23.pdf
+      page: 208
+      heading: Dynamically Pass Bind Variables to a SOQL Query
+    confidence: high
+    id: v57-soql-001
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Schema.DescribeFieldResult now exposes getSObjectType(), letting
+      developers retrieve the parent SObject type directly from a field describe
+      without tracking it separately.
+    source:
+      document: v57-spring23.pdf
+      page: 209
+      heading: Discover the Source SObject of a DescribeFieldResult Instance
+    confidence: high
+    id: v57-apex-005
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex REST response header names set via RestResponse.addHeader() are
+      validated against RFC 7230 rules once this release update is enforced,
+      throwing InvalidHeaderException at runtime if header names contain
+      disallowed characters like forward slashes.
+    detail: This is a release update available in Spring '23 and enforced org-wide
+      in Spring '24. The validation applies regardless of the Apex class's API
+      version. Orgs migrating to Hyperforce must enable this update beforehand.
+    upgradeAction: Run Apex tests and check for InvalidHeaderException failures.
+      Audit any custom REST services using addHeader() for non-compliant header
+      names containing characters forbidden by RFC 7230. Coordinate with package
+      providers to confirm compatibility before activation.
+    source:
+      document: v57-spring23.pdf
+      page: 210
+      heading: Enforce RFC 7230 Validation for Apex RestResponse Headers (Release
+        Update)
+    confidence: high
+    id: v57-apex-006
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version, when
+      RestrictCommunityExecAnon preference is enabled
+    summary: A new org preference prevents Experience Cloud, portal, and community
+      users from running anonymous Apex, even if they hold Author Apex or other
+      elevated permissions. Enabled by default in new orgs; existing orgs must
+      opt in.
+    detail: The RestrictCommunityExecAnon setting in Apex Settings (or via
+      ApexSettings in Metadata API) blocks execute-anonymous calls for any
+      non-core (external) user identity. This closes a potential
+      privilege-escalation vector where external users with broad permissions
+      could run arbitrary code.
+    upgradeAction: If your integration tests or automation run anonymous Apex as a
+      community/portal user, they will fail once this preference is enabled.
+      Verify whether any legitimate use cases depend on external-user anonymous
+      execution before flipping the setting.
+    source:
+      document: v57-spring23.pdf
+      page: 210
+      heading: Restrict Anonymous Apex Access to Core Users
+    confidence: high
+    id: v57-sharing-002
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - Flow
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex static variables set by platform event–triggered flows now reset
+      between groups of flow interviews executing for different users within the
+      same transaction, preventing values from persisting across the full
+      transaction scope.
+    detail: Previously static variable values could carry over across the entire
+      transaction even when multiple users' flow interviews ran. After January
+      5, 2023, Salesforce clears these values between user-context switches
+      within the transaction.
+    upgradeAction: Audit Apex invoked by platform event–triggered flows for static
+      variables used as cross-interview accumulators or flags; refactor to use
+      platform cache or custom objects if transaction-wide persistence is
+      required.
+    source:
+      document: v57-spring23.pdf
+      page: 211
+      heading: Static Variables Are Reset Within a Transaction Between Groups of
+        Platform Event–Triggered Flow Interviews
+    confidence: high
+    id: v57-apex-007
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: managed package classes calling toString() on objects with
+      non-global member variables
+    summary: When invoking toString() on Apex objects, member variables not visible
+      in the caller's namespace (non-global properties in managed packages) are
+      now excluded from the output string.
+    detail: This affects debugging and logging scenarios where subscribers call
+      toString() on managed package types. The output will no longer reveal
+      internal implementation details that the package author marked as
+      non-global.
+    upgradeAction: If your code parses or relies on toString() output from managed
+      package objects, verify that the expected fields are still present after
+      this change.
+    source:
+      document: v57-spring23.pdf
+      page: 211
+      heading: Suppress Non-Global Properties with toString()
+    confidence: low
+    id: v57-apex-008
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: GlobalValueSet metadata created at API >= 57.0
+    summary: Global value sets created via API 57.0+ automatically receive a __gvs
+      suffix on their developer name, requiring all Metadata API and Tooling API
+      CRUD calls to include this suffix in the fullName/FullName field.
+    upgradeAction: Update any scripts or integrations that create, read, update, or
+      delete GlobalValueSet records to append __gvs to the developer name when
+      targeting API 57.0 or later.
+    source:
+      document: v57-spring23.pdf
+      page: 212
+      heading: Choose Any Name for a Global Value Set
+    confidence: high
+    id: v57-rest-001
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The InstalledPackage metadata type now supports a securityType field
+      that controls whether all user profiles or only admins can access a
+      managed package when installing via Metadata API.
+    upgradeAction: Review CI/CD pipelines deploying managed packages via Metadata
+      API; if you want to restrict package access to admins only, add the
+      securityType field to your InstalledPackage definitions.
+    source:
+      document: v57-spring23.pdf
+      page: 215
+      heading: Limit User Profile Access for Packages Installed via Metadata API
+    confidence: high
+    id: v57-packaging-001
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Enhanced domains deployment in Spring '23 breaks packages containing
+      hard-coded Salesforce-hosted URLs (content files, Visualforce pages, etc.)
+      unless those URLs are converted to relative paths or dynamically generated
+      hostnames.
+    upgradeAction: Audit managed and unlocked packages for hard-coded Salesforce
+      domain URLs; replace them with relative paths or dynamic hostname
+      generation before enhanced domains rollout.
+    source:
+      document: v57-spring23.pdf
+      page: 216
+      heading: Get Your Packages Ready for Enhanced Domains
+    confidence: high
+    id: v57-packaging-002
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The num_reads metric in AppExchange App Analytics package usage
+      summaries no longer counts SOQL and SOSL queries — it now reflects only
+      actual record reads, resulting in lower reported values.
+    upgradeAction: If your analytics dashboards or alerting thresholds rely on
+      num_reads values, recalibrate expectations since the metric now excludes
+      query counts and will report lower numbers.
+    source:
+      document: v57-spring23.pdf
+      page: 227
+      heading: Retrieve Clean Read Counts with AppExchange App Analytics Package Usage
+        Summaries
+    confidence: medium
+    id: v57-rest-002
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Publishing FlowOrchestrationEvent and ProcessExceptionEvent via the
+      create() call no longer counts against the hourly platform event
+      publishing allocation, reducing the risk of hitting limits when
+      integrating with Flow Orchestration or exception handling workflows.
+    source:
+      document: v57-spring23.pdf
+      page: 228
+      heading: Publish Standard Events Without Using Allocations
+    confidence: high
+    id: v57-rest-003
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: "Several lightning/uiRecordApi functions and wire adapters are now
+      deprecated: getRecordNotifyChange (replaced by
+      notifyRecordUpdateAvailable), getRecordUi (replaced by base form
+      components or getRecord/getRecords), getRecordInput (replaced by manual
+      record object construction), and refresh (replaced by refreshApex or
+      notifyRecordUpdateAvailable)."
+    detail: The deprecated APIs remain functional but developers should migrate to
+      the recommended replacements. notifyRecordUpdateAvailable supersedes
+      getRecordNotifyChange for notifying Lightning Data Service of external
+      record changes. For record UI layouts, use lightning-record-form
+      components or the getRecord wire adapter with explicit fields.
+    upgradeAction: Audit LWC code for usage of getRecordNotifyChange, getRecordUi,
+      getRecordInput, and refresh from lightning/uiRecordApi. Replace with the
+      recommended alternatives before these functions are potentially removed in
+      a future release.
+    source:
+      document: v57-spring23.pdf
+      page: 231
+      heading: New and Changed Modules for Lightning Web Components
+    confidence: high
+    id: v57-lwc-011
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: DescribeFieldResult now exposes getSObjectType(), letting developers
+      programmatically determine which SObject a field belongs to without
+      maintaining separate mappings.
+    source:
+      document: v57-spring23.pdf
+      page: 234
+      heading: Schema Namespace
+    confidence: high
+    id: v57-apex-009
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: Apex classes and triggers compiled at API >= 57.0
+    summary: The recalculateFormulas() method on SObject is no longer supported
+      starting with v57.0; developers must migrate to the
+      Formula.recalculateFormulas() method instead.
+    upgradeAction: Before upgrading past 57.0, search for any
+      SObject.recalculateFormulas() calls and replace them with
+      System.Formula.recalculateFormulas().
+    source:
+      document: v57-spring23.pdf
+      page: 234
+      heading: System Namespace
+    confidence: high
+    id: v57-apex-010
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: New Database methods queryWithBinds(), getQueryLocatorWithBinds(), and
+      countQueryWithBinds() allow passing bind variables via a Map, eliminating
+      the requirement that variables be in scope when executing dynamic SOQL.
+    source:
+      document: v57-spring23.pdf
+      page: 234
+      heading: System Namespace
+    confidence: high
+    id: v57-soql-002
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The GeoCountry object's Name field is now createable, updateable, and
+      nillable, allowing API integrations to set or clear this field where
+      previously it was read-only.
+    upgradeAction: Review integrations that interact with GeoCountry records to
+      ensure they handle the newly mutable Name field appropriately, especially
+      if code assumed this field was immutable.
+    source:
+      document: v57-spring23.pdf
+      page: 241
+      heading: New and Changed Objects
+    confidence: medium
+    id: v57-rest-004
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The TaxTreatment object's ProductCode field now supports idLookup,
+      enabling its use as an external ID in upsert operations.
+    upgradeAction: If you have upsert logic for TaxTreatment records, you can now
+      use ProductCode as an external identifier; verify existing integrations
+      won't conflict with this new capability.
+    source:
+      document: v57-spring23.pdf
+      page: 241
+      heading: New and Changed Objects
+    confidence: medium
+    id: v57-rest-005
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: integrations using API version >= 57.0
+    summary: "Three Revenue Cloud platform events are removed:
+      AssetCancelErrorDtlEvent, AssetAmendErrorDtlEvent, and
+      AssetRenewErrorDtlEvent, along with their corresponding fields on the
+      parent initiated-event types. Subscribers must migrate to
+      RevenueTransactionErrorLog."
+    upgradeAction: Before upgrading API version past 57.0, replace subscriptions to
+      these three error-detail events with queries or triggers on
+      RevenueTransactionErrorLog.
+    source:
+      document: v57-spring23.pdf
+      page: 247
+      heading: New and Changed Standard Platform Events
+    confidence: high
+    id: v57-rest-006
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The logGoalAchieved enum on BotInvocation's invocationActionType field
+      is deprecated starting in API 57.0; use the new conversationGoals and
+      conversationStepGoalMappings fields instead for bot dialog goals.
+    upgradeAction: Migrate bot configurations using logGoalAchieved to the new
+      goal-tracking fields (conversationGoals, conversationStepGoalMappings)
+      before the deprecated enum is removed.
+    source:
+      document: v57-spring23.pdf
+      page: 261
+      heading: Metadata API
+    confidence: high
+    id: v57-packaging-003
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: AuthProvider metadata now always exports consumerSecret as a
+      placeholder value for all change sets and packages, including those
+      created before November 2022, regardless of sendSecretInApis setting;
+      imported values are treated as plaintext.
+    upgradeAction: After deploying auth providers, manually re-enter consumer
+      secrets in the target org since encrypted values no longer transfer.
+    source:
+      document: v57-spring23.pdf
+      page: 261
+      heading: Metadata API
+    confidence: high
+    id: v57-auth-002
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The /limits endpoint no longer breaks down usage by connected app for
+      DailyBulkApiBatches, DailyGenericStreamingApiEvents, and
+      DailyStreamingApiEvents; it now returns only aggregate Max and Remaining
+      values.
+    upgradeAction: If your monitoring or capacity-planning code parses
+      per-connected-app breakdowns from /limits, update it to handle the
+      simplified aggregate-only response structure.
+    source:
+      document: v57-spring23.pdf
+      page: 266
+      heading: New, Changed, and Deprecated Calls
+    confidence: high
+    id: v57-rest-007
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: REST APIs using Conditional Request Headers now return HTTP 428
+      (Precondition Required) when a request lacks required conditional headers,
+      instead of a different error or proceeding unconditionally.
+    upgradeAction: Update error-handling logic in REST integrations to recognize and
+      handle the new 428 status code for requests that omit required If-Match or
+      If-None-Match headers.
+    source:
+      document: v57-spring23.pdf
+      page: 266
+      heading: New, Changed, and Deprecated Calls
+    confidence: high
+    id: v57-rest-008
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version; retirement effective
+      Summer '23
+    summary: Salesforce is eliminating Async SOQL in Summer '23, affecting any code
+      that uses this feature to query Big Objects, Field Audit Trail, or via
+      Connect REST API.
+    detail: Organizations currently relying on Async SOQL must migrate to
+      alternative approaches before the Summer '23 retirement date. Salesforce
+      recommends using Bulk API for large query result exports (especially Field
+      Audit Trail) or Batch Apex for automated processing against Big Objects
+      and event monitoring objects like ApiEvent, ReportEvent, and
+      ListViewEvent.
+    upgradeAction: Identify all Async SOQL usage in your org, then refactor to Bulk
+      API query jobs for CSV exports or Batch Apex for programmatic processing.
+      Test replacements thoroughly before Summer '23.
+    source:
+      document: v57-spring23.pdf
+      page: 267
+      heading: Async SOQL Retirement
+    confidence: high
+    id: v57-soql-003
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The Flow Tooling API object now exposes ApiVersion and TimeZoneSidKey
+      fields, letting developers programmatically query the API version that
+      governs a flow's execution behavior and the time zone context it runs in.
+    detail: ApiVersion was introduced in API 50.0 and TimeZoneSidKey in API 56.0,
+      but both are now documented in the Tooling API Reference. The ApiVersion
+      field is particularly relevant for developers debugging version-specific
+      flow runtime behavior.
+    source:
+      document: v57-spring23.pdf
+      page: 270
+      heading: Tooling API New and Changed Objects
+    confidence: medium
+    id: v57-flow-001
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The UI API content-documents endpoints now return a generic Record type
+      instead of Content Document and Content Version types, and only required
+      plus explicitly requested fields are returned rather than all object
+      fields.
+    detail: The contentDocument and contentVersion properties in the Content
+      Document Composite response body switched from specialized types to the
+      Record type. Additionally, the
+      /ui-api/records/content-documents/content-versions endpoints no longer
+      return every field defined on the object by default.
+    upgradeAction: Review LWC code consuming these UI API endpoints. Update any
+      logic that relied on the previous Content Document or Content Version
+      response shapes, and ensure you explicitly request any fields beyond the
+      required set.
+    source:
+      document: v57-spring23.pdf
+      page: 272
+      heading: User Interface API
+    confidence: high
+    id: v57-rest-009
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version (Release Update
+      enforced Summer '23)
+    summary: All Aura-based Experience Cloud sites are forcibly migrated from
+      analytics.js to gtag.js. Sites using custom analytics.js integrations or
+      UA-ID tracking IDs require manual updates to G-IDs to continue collecting
+      data after enforcement.
+    detail: This Release Update ships the gtag.js library to every Aura site
+      simultaneously and cannot be rolled back. Sites already on gtag.js are
+      unaffected, but any site relying on analytics.js-specific APIs or
+      callbacks will break. Developers must also replace UA-format tracking IDs
+      with GA4 G-IDs.
+    upgradeAction: Before Summer '23 enforcement, test Aura sites in sandbox to
+      verify custom analytics code works with gtag.js. Replace any UA-IDs with
+      G-IDs in site settings.
+    source:
+      document: v57-spring23.pdf
+      page: 301
+      heading: Migrate Aura Sites to Google Analytics 4 (Release Update)
+    confidence: high
+    id: v57-aura-001
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Two new Metadata API types—DigitalExperienceBundle and
+      DigitalExperienceConfig—are now GA for deploying enhanced LWR sites via
+      SFDX, replacing or complementing ExperienceBundle with a content-centric
+      structure and partial deployment support.
+    source:
+      document: v57-spring23.pdf
+      page: 302
+      heading: Level Up Your Site Deployments with New Metadata Types (Generally
+        Available)
+    confidence: medium
+    id: v57-packaging-004
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: New Headless Identity APIs enable OAuth
+      authorization-code-and-credentials flow plus headless forgot-password
+      flow, letting third-party apps handle login and password reset UI while
+      Salesforce performs authentication backend work.
+    source:
+      document: v57-spring23.pdf
+      page: 306
+      heading: Control Your Identity Experiences with Headless Login and Forgot
+        Password Flows
+    confidence: medium
+    id: v57-auth-003
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - AuraDefinitionBundle
+      - LWC
+      - VisualforcePage
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version (enforced Spring '23)
+    summary: Apex controllers querying NavigationLinkSet or NavigationMenuItem now
+      only return results from Experience Cloud sites where the running user has
+      membership. Previously, queries could return navigation data across sites
+      without membership checks.
+    detail: This Release Update was introduced in Winter '23 and enforced in Spring
+      '23. Connect API queries were already restricted; this enforcement closes
+      the gap for custom Apex-based navigation components in Aura, LWR, and
+      Visualforce Experience Cloud sites.
+    upgradeAction: Review custom components using Apex to retrieve navigation menus.
+      Ensure test coverage includes users who are members of only specific sites
+      and verify they no longer see cross-site navigation data. Update any logic
+      that assumed unrestricted query results.
+    source:
+      document: v57-spring23.pdf
+      page: 308
+      heading: Apply User Access Permissions to Navigation Menus Retrieved by Apex in
+        Experience Cloud Sites (Release Update)
+    confidence: high
+    id: v57-sharing-003
+  - apiVersion: "57.0"
+    introducedIn: "55.0"
+    release: Spring '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; enforced Spring '23
+    summary: Salesforce now URL-encodes several SAML SSO endpoints including
+      Identity Provider URLs, Assertion Consumer Service URLs, Single Logout
+      Endpoints, and relay state parameters. Third-party identity providers or
+      SAML-enabled apps that do not handle encoded URLs will break.
+    detail: This release update was introduced in Summer '22 (v55.0) and enforcement
+      began in Spring '23. The encoding affects both SP-initiated SSO flows and
+      all single logout configurations. Because SAML integrations span
+      Salesforce and external systems, the breakage occurs on the third-party
+      side if those systems expect unencoded URLs.
+    upgradeAction: Before enforcement, enable the release update in a sandbox and
+      test all SAML flows end-to-end with every connected identity provider and
+      SAML-enabled application. Verify that IdPs correctly parse encoded URLs in
+      login and logout requests.
+    source:
+      document: v57-spring23.pdf
+      page: 309
+      heading: Upgrade SAML Single Sign-On Framework (Release Update)
+    confidence: high
+    id: v57-auth-004
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - VisualforcePage
+      - AuraDefinitionBundle
+      - LWC
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version
+    summary: The Hide Personal Information setting is retired and replaced by
+      Enhanced Personal Information Management. Organizations that had the old
+      setting enabled without adopting the new one will have specific user
+      fields automatically concealed from external users.
+    detail: Fields like Alias, Username, FederationIdentifier, EmployeeNumber, and
+      others are hidden from external and guest users in Experience Cloud sites.
+      The new mechanism uses the PersonalInfo_EPIM field set on the User object
+      to control which fields are concealed.
+    upgradeAction: If your Aura, LWR, or Visualforce site code references user
+      fields that external users could see before, verify which fields are now
+      in the PersonalInfo_EPIM field set. Update any components that depend on
+      external user access to these fields.
+    source:
+      document: v57-spring23.pdf
+      page: 310
+      heading: Manage Access to Personally Identifiable Information
+    confidence: high
+    id: v57-sharing-004
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: The org setting that masked first/last name fields in SOAP API
+      responses for site users has been permanently removed. Organizations
+      relying on this setting must now use Enhanced Personal Information
+      Management to control field visibility.
+    upgradeAction: Verify whether your org had this setting enabled. If so,
+      configure Enhanced Personal Information Management and classify personal
+      information fields before the retirement takes effect to maintain field
+      masking behavior for external site users.
+    source:
+      document: v57-spring23.pdf
+      page: 311
+      heading: Hide First and Last Name Fields in the SOAP API Is Being Retired
+    confidence: high
+    id: v57-soap-001
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Field Service Mobile App now supports offline-capable LWC custom
+      components in GA, enabling developers to build offline quick actions and
+      custom UI that function without network connectivity.
+    source:
+      document: v57-spring23.pdf
+      page: 322
+      heading: Customize the Field Service Mobile App with Mobile Offline
+        Extensibility (Generally Available)
+    confidence: medium
+    id: v57-lwc-012
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The executionProcessApiName field on BatchProcessJobDefinition metadata
+      now supports TierProcessing loyalty program process API names, expanding
+      valid values for this field in deployments.
+    upgradeAction: If you deploy BatchProcessJobDefinition metadata with
+      executionProcessApiName, verify your CI/CD validation still passes and
+      that any field validation logic accounts for TierProcessing process names.
+    source:
+      document: v57-spring23.pdf
+      page: 415
+      heading: New and Changed Loyalty Management Metadata Types
+    confidence: low
+    id: v57-packaging-005
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The BusinessRulesEngine scratch org feature enables lookup tables and
+      expression sets in scratch orgs when declared in the scratch org
+      definition file.
+    source:
+      document: v57-spring23.pdf
+      page: 454
+      heading: Scratch Org Feature
+    confidence: medium
+    id: v57-packaging-006
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Named credential naming convention changed from type_assetId_version to
+      type_assetId, breaking existing Apex callouts and workflows that reference
+      the old format.
+    upgradeAction: Update all Apex code and workflow configurations referencing
+      named credentials to use the new shorter format without the version
+      suffix.
+    source:
+      document: v57-spring23.pdf
+      page: 474
+      heading: Update Previous Named Credentials
+    confidence: high
+    id: v57-auth-005
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: deprecated
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; enforcement in Winter
+      '24 (October 2023)
+    summary: Connected App custom attributes will no longer be usable to define
+      mobile app security policies after Winter '24. Organizations must migrate
+      these configurations to the Mobile Security Setup UI.
+    upgradeAction: Audit any Connected App configurations using custom attributes
+      for mobile security policies and recreate them in Setup > Mobile Security
+      before October 2023.
+    source:
+      document: v57-spring23.pdf
+      page: 489
+      heading: Plan for the Retirement of Setting Security Policies via Custom
+        Attributes
+    confidence: medium
+    id: v57-auth-006
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: A new AppReviewService JavaScript API is now available for LWC running
+      in Mobile Publisher apps, enabling developers to prompt users for App
+      Store/Play Store ratings via the Nimbus bridge to native OS features.
+    source:
+      document: v57-spring23.pdf
+      page: 496
+      heading: Request App Ratings and Reviews from Users
+    confidence: medium
+    id: v57-lwc-013
+  - apiVersion: "57.0"
+    introducedIn: "48.0"
+    release: Spring '23
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version; enforcement date June 2024
+    summary: The Salesforce for Outlook desktop integration will stop functioning in
+      June 2024, ending all sync operations for contacts, events, and tasks
+      between Outlook and Salesforce.
+    detail: After retirement, no data synchronization occurs and the Outlook side
+      panel becomes unavailable. Orgs relying on this integration must migrate
+      to the Outlook integration or Einstein Activity Capture before the cutoff.
+    upgradeAction: Inventory any workflows or user processes depending on Salesforce
+      for Outlook sync; migrate to the Outlook integration or Einstein Activity
+      Capture before June 2024.
+    source:
+      document: v57-spring23.pdf
+      page: 546
+      heading: Salesforce for Outlook Is Retiring in June 2024
+    confidence: high
+    id: v57-other-001
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: flows at API < 57.0 in orgs that enabled 'Make Paused Flow
+      Interviews Resume in the Same Context' release update
+    summary: Process Builder-launched flows may now resume in a different execution
+      context when the release update is enabled. Setting the flow to API 57.0+
+      restores the legacy behavior of resuming in system context without
+      sharing.
+    detail: Prior to this change, paused flows launched by Process Builder always
+      resumed in system context without sharing. With the release update active,
+      these flows instead respect the context defined in the flow version
+      properties. Upgrading the flow to API 57.0 or higher overrides this and
+      forces system-context-without-sharing resumption.
+    upgradeAction: Review any paused flows triggered by Process Builder in orgs with
+      this release update enabled. If system-mode resumption is required, set
+      the flow's API version to 57.0+. Otherwise verify that the flow's
+      configured run context is acceptable for resumed interviews.
+    source:
+      document: v57-spring23.pdf
+      page: 564
+      heading: Resume Behavior Changed for Flows Launched by Process Builder Processes
+    confidence: high
+    id: v57-flow-002
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Flow
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex static variables set during platform event–triggered flows now
+      reset between groups of flow interviews belonging to different users
+      within the same transaction, rather than persisting for the entire
+      transaction.
+    detail: When a transaction processes platform event messages from multiple
+      publishers, flow interviews are grouped by publisher and executed
+      sequentially. Static variable values no longer carry over between these
+      groups, preventing cross-user data leakage.
+    upgradeAction: Review Apex actions and triggers invoked by platform
+      event–triggered flows. If any static variables are used to accumulate
+      state (e.g., counters, caches) across the full transaction, refactor to
+      avoid relying on persistence when multiple users' events are batched
+      together.
+    source:
+      document: v57-spring23.pdf
+      page: 565
+      heading: Apex Static Variables Are Reset Within a Transaction Between Groups of
+        Platform Event–Triggered Flow Interviews
+    confidence: high
+    id: v57-apex-011
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: flows configured to run at API >= 57.0, only when 'Make Paused Flow
+      Interviews Resume in the Same Context' release update is enabled
+    summary: Autolaunched flows now verify user permission before resuming a paused
+      interview, and process-launched flows with Pause elements resume in system
+      context without sharing instead of honoring flow version properties.
+    detail: "This change has two parts: (1) if a user loses access to an
+      autolaunched flow after pausing, the interview no longer resumes for them;
+      (2) when Process Builder launches a flow containing Pause elements, the
+      resumed interview runs in system context without sharing, diverging from
+      the behavior where context was determined by flow version properties."
+    upgradeAction: "Review paused flow interview scenarios: ensure users who need to
+      resume autolaunched flows retain flow access, and audit process-launched
+      flows with Pause elements for any logic that assumed the resumed context
+      matched flow version properties."
+    source:
+      document: v57-spring23.pdf
+      page: 566
+      heading: Flow and Process Run-Time Changes in API Version 57.0
+    confidence: high
+    id: v57-flow-003
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: flows configured to run at API >= 57.0
+    summary: The 2,000 element execution limit per flow interview has been removed,
+      allowing flows to execute more elements at runtime while other governor
+      limits remain in effect.
+    source:
+      document: v57-spring23.pdf
+      page: 566
+      heading: Flow and Process Run-Time Changes in API Version 57.0
+    confidence: high
+    id: v57-flow-004
+  - apiVersion: "57.0"
+    introducedIn: "50.0"
+    release: Spring '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide once Release Update enforced (Winter '24); permission
+      checks require flow at API >= 57.0
+    summary: Paused autolaunched flows now resume in their original execution
+      context instead of escalating to system-context-without-sharing.
+      Additionally, flows at v57+ verify the user still has flow access before
+      resuming a paused interview.
+    detail: Before this update, any autolaunched flow with a time-based Pause
+      element would resume in system context without sharing, regardless of how
+      it started. This allowed unintended privilege escalation. The update
+      preserves the original context. Flows launched by Process Builder that
+      relied on this escalation must be upgraded to v57+ and configured
+      explicitly for system context if needed. The update also adds a runtime
+      permission check for v57+ flows—if the user lost access while paused, the
+      interview fails.
+    upgradeAction: "Audit autolaunched flows containing Pause elements: ensure
+      running users retain necessary object/field permissions and flow access
+      after resume. Flows needing system-level access should be explicitly set
+      to run in system context and upgraded to API 57.0+."
+    source:
+      document: v57-spring23.pdf
+      page: 571
+      heading: Make Paused Flow Interviews Resume in the Same Context (Release Update)
+    confidence: high
+    id: v57-flow-005
+  - apiVersion: "57.0"
+    introducedIn: "54.0"
+    release: Spring '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+      - Integration
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (Release Update
+      enforced Spring '23)
+    summary: Flows invoked through the REST API now execute using the authenticated
+      user's permissions rather than system context, meaning object and
+      field-level security is enforced based on that user's profile and
+      permission sets.
+    detail: This Release Update was first available in Spring '22 (API 54.0) and
+      becomes enforced in Spring '23. Any integration calling flows via REST
+      endpoints like POST /actions/custom/flow/{flowName} will see access
+      failures if the authenticated user lacks permissions the flow previously
+      bypassed under system context.
+    upgradeAction: Audit all REST-invoked flows for operations that depend on
+      system-level access. Ensure the API users or integration users have
+      appropriate object and field permissions, or redesign flows to handle
+      permission boundaries explicitly.
+    source:
+      document: v57-spring23.pdf
+      page: 572
+      heading: Run Flows in User Context via REST API (Release Update)
+    confidence: high
+    id: v57-flow-006
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (enforced Winter '24)
+    summary: Flow interviews can no longer resolve the $Api.Session_ID global
+      variable at runtime. Any flow screens referencing this variable will stop
+      returning the browser session ID, breaking flows that depended on it for
+      integrations or custom logic.
+    detail: This release update was originally available in Winter '23 with Summer
+      '23 enforcement, but Salesforce postponed enforcement to Winter '24. The
+      change eliminates a security bypass vector where users could extract
+      session IDs from flow screens.
+    upgradeAction: Audit all flows for references to $Api.Session_ID and remove or
+      replace them with alternative authentication patterns before the Winter
+      '24 enforcement date.
+    source:
+      document: v57-spring23.pdf
+      page: 573
+      heading: Disable Access to Session IDs in Flows (Release Update)
+    confidence: high
+    id: v57-flow-007
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version (enforced Winter '24)
+    summary: REST API calls to custom invocable actions built in Apex now roll back
+      all database changes when the action throws an exception, preventing
+      partial commits that previously left data in an inconsistent state.
+    upgradeAction: Review any REST-invoked custom invocable actions that catch or
+      rely on partial transaction commits after exceptions; test that callers
+      handle full rollback behavior correctly.
+    source:
+      document: v57-spring23.pdf
+      page: 573
+      heading: Enforce Rollbacks for Custom Invocable Action Exceptions in REST API
+        (Release Update)
+    confidence: high
+    id: v57-rest-010
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new DRGlobal.processStandardRuntime Apex method lets developers force
+      DataRaptor execution in standard runtime when the RollbackDRChanges
+      setting is enabled, filling a gap where no existing method supported this
+      scenario.
+    source:
+      document: v57-spring23.pdf
+      page: 583
+      heading: Call a DataRaptor from Apex to Run in Core
+    confidence: medium
+    id: v57-apex-012
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: OmniStudio now allows Apex code to force Integration Procedures into
+      standard runtime by passing useStandardRuntime=true in the options map,
+      working around the RollbackIPChanges setting that previously blocked this
+      path.
+    source:
+      document: v57-spring23.pdf
+      page: 584
+      heading: Call an Integration from Apex to Run in Core
+    confidence: medium
+    id: v57-apex-013
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: New Apex methods allow forcing DataRaptors and Integration Procedures
+      to execute in standard runtime when the RollbackDRChanges or
+      RollbackIPChanges configuration settings are enabled in managed packages.
+    detail: DRGlobal.processStandardRuntime() lets Apex call DataRaptors in standard
+      runtime even when RollbackDRChanges is true. For Integration Procedures,
+      passing useStandardRuntime=true in the options map to
+      IntegrationProcedureService.runIntegrationService() achieves the same
+      effect when RollbackIPChanges is true.
+    source:
+      document: v57-spring23.pdf
+      page: 582
+      heading: OmniScript Edit Block Confirm Title and Cancel Button Support Custom
+        Labels
+    confidence: medium
+    id: v57-apex-014
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version — enforced by DocuSign
+      starting October 20, 2022; OmniStudio packages 240.11+ and Spring '23 drop
+      legacy auth support
+    summary: OmniStudio's previous DocuSign authentication method is removed;
+      existing integrations stop working until you reconfigure them with OAuth
+      2.0 via Auth Providers and Named Credentials.
+    detail: DocuSign mandated OAuth 2.0 for all REST API integrations from October
+      2022. OmniStudio for Vlocity (custom object model) removed legacy auth
+      support in Winter '23 package 240.11 and later. You must create an Auth
+      Provider for DocuSign, set up OAuth 2.0 Named Credentials, authenticate,
+      and for send-on-behalf-of scenarios populate the new
+      DocuSignNamedCredentialSOBO field on User records.
+    upgradeAction: Before upgrading to package 240.11 or Spring '23, configure a
+      DocuSign Auth Provider and OAuth 2.0 Named Credentials, then update any
+      OmniScripts that invoke DocuSign. Test document-signing flows end-to-end
+      and verify SOBO scenarios if used.
+    source:
+      document: v57-spring23.pdf
+      page: 587
+      heading: OmniScript Supports DocuSign OAuth 2 Support
+    confidence: high
+    id: v57-auth-007
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+      - Integration
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version; enforcement in Winter '24
+    summary: Enhanced domains restructure all Salesforce-hosted URLs to embed the My
+      Domain name, affecting Experience Cloud sites, Salesforce Sites,
+      Visualforce pages, and API endpoints. Hardcoded URLs in custom code and
+      integrations will break when enforcement occurs.
+    detail: This release update changes hostname formats across the platform. Spring
+      '23 auto-deploys enhanced domains (postponable to Summer '23), with final
+      enforcement in Winter '24. Any custom code, API calls, or integrations
+      referencing old URL patterns must be updated. The change also resolves
+      third-party cookie blocking issues in browsers.
+    upgradeAction: Audit all hardcoded Salesforce URLs in Apex, Visualforce, LWC,
+      integrations, and external systems. Update allowlists and firewall rules
+      for new partitioned domain formats. Test in sandbox before enforcement.
+    source:
+      document: v57-spring23.pdf
+      page: 592
+      heading: Deploy Enhanced Domains (Release Update)
+    confidence: high
+    id: v57-other-002
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; Phase 1 orgs enforced
+      Spring '23, Phase 2 orgs enforced Summer '23
+    summary: Salesforce automatically enables the MFA requirement for direct UI
+      logins in production orgs via a phased Release Update, forcing all users
+      to authenticate with a second factor after entering credentials.
+    detail: This org-wide enforcement affects any integration or automation that
+      relies on UI-based login flows. API-only integrations using OAuth or JWT
+      bearer flows are not impacted, but any tooling that drives browser-based
+      logins (e.g., Selenium tests, RPA bots authenticating via UI) must
+      accommodate MFA prompts or use exempt service accounts.
+    upgradeAction: Audit any automated processes that authenticate via UI login.
+      Either migrate them to headless OAuth flows, configure service accounts
+      with MFA exemptions where permitted, or implement MFA handling in your
+      automation tooling.
+    source:
+      document: v57-spring23.pdf
+      page: 598
+      heading: "MFA Auto-Enablement: Find Out When and How Your Org Is Affected
+        (Release Update)"
+    confidence: high
+    id: v57-auth-008
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide when revocation status checking is enabled
+    summary: A new org setting allows administrators to validate certificate
+      revocation status (via OCSP or CRL) during certificate-based
+      authentication, blocking logins when certificates are revoked or cannot be
+      validated.
+    upgradeAction: Before enabling this setting, verify all uploaded user
+      authentication certificates include valid OCSP or CRL endpoints; otherwise
+      legitimate users may be locked out.
+    source:
+      document: v57-spring23.pdf
+      page: 599
+      heading: Check the Revocation Status of User Authentication Certificates
+    confidence: medium
+    id: v57-auth-009
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Authentication provider consumer secrets are now stripped and replaced
+      with placeholders during change set or package deployment, requiring
+      manual re-entry post-deployment. This applies to all packages including
+      those created before November 2022.
+    upgradeAction: Update deployment runbooks to include a post-deployment step for
+      manually inserting consumer secrets into any authentication providers.
+      Verify OAuth flows work after each deployment.
+    source:
+      document: v57-spring23.pdf
+      page: 599
+      heading: Insert Consumer Secrets in Authentication Providers Manually in All
+        Change Sets and Packages
+    confidence: high
+    id: v57-packaging-007
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: New Headless Identity APIs enable OAuth 2.0-based login and password
+      reset flows that let external apps delegate authentication to Salesforce
+      without redirecting users away from the app UI.
+    source:
+      document: v57-spring23.pdf
+      page: 601
+      heading: Take Charge of Your Identity Experiences with Headless Login and Forgot
+        Password Flows
+    confidence: high
+    id: v57-auth-011
+  - apiVersion: "57.0"
+    introducedIn: "56.0"
+    release: Spring '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: "Salesforce adds the X-Content-Type-Options: nosniff header to all
+      pages, which blocks browsers from loading external resources that lack
+      proper MIME type metadata. External content embedded in Visualforce pages
+      may stop rendering if the remote server doesn't declare correct content
+      types."
+    detail: This Release Update was introduced in Winter '23 (v56.0) and enforcement
+      was postponed from Spring '23 to Summer '23. When active, browsers refuse
+      to execute scripts or display resources whose server response lacks
+      matching Content-Type headers, breaking integrations that relied on
+      browser content-sniffing behavior.
+    upgradeAction: Before enforcement, enable the setting in Session Settings and
+      test all external hyperlinks and embedded content in custom Visualforce
+      pages. Ensure remote servers return correct MIME types for all resources.
+    source:
+      document: v57-spring23.pdf
+      page: 610
+      heading: Enable Content Sniffing Protection (Release Update)
+    confidence: high
+    id: v57-vf-004
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: External credentials using AWS Signature v4 can now authenticate via
+      AWS Roles Anywhere with certificates instead of storing IAM user keys,
+      configurable through UI, Metadata API, Tooling API, or Apex ConnectApi.
+    source:
+      document: v57-spring23.pdf
+      page: 611
+      heading: Use AWS Roles Anywhere with Named Credentials
+    confidence: medium
+    id: v57-auth-012
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: External credentials now support JWT Bearer Flow as an authentication
+      protocol option, enabling named credentials to use signed JWTs with custom
+      claims for server-to-server integrations.
+    source:
+      document: v57-spring23.pdf
+      page: 611
+      heading: Use OAuth JWT Bearer Flow with Named Credentials
+    confidence: high
+    id: v57-auth-013
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: When Apex controllers query NavigationLinkSet or NavigationMenuItem
+      objects in Experience Cloud sites, user access permissions are now
+      enforced. Previously only Connect API queries checked permissions.
+    upgradeAction: Review custom components using Apex to fetch navigation data and
+      ensure users have appropriate access to the menus being queried.
+    source:
+      document: v57-spring23.pdf
+      page: 677
+      heading: Release Updates
+    confidence: high
+    id: v57-apex-015
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: The label attribute of apex:inputField tags is now HTML-escaped to
+      block cross-site scripting attacks, which may alter how
+      dynamically-generated labels render.
+    upgradeAction: Test Visualforce pages that dynamically set apex:inputField
+      labels to verify they still display correctly after HTML escaping.
+    source:
+      document: v57-spring23.pdf
+      page: 677
+      heading: Release Updates
+    confidence: high
+    id: v57-vf-005
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Guest users in Experience Cloud sites lose the blanket Run Flows
+      permission and now require explicit per-flow access grants to execute any
+      flow.
+    upgradeAction: Before enforcement, audit flows accessible to guest users and
+      assign explicit flow permissions where guest access is intentional.
+    source:
+      document: v57-spring23.pdf
+      page: 677
+      heading: Release Updates
+    confidence: high
+    id: v57-flow-008
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce is upgrading its SAML framework, which may break existing
+      SSO integrations with third-party identity providers or SAML-enabled
+      applications.
+    upgradeAction: Test all SAML-based SSO integrations in a sandbox to identify any
+      breakages before the upgrade rolls out to production.
+    source:
+      document: v57-spring23.pdf
+      page: 677
+      heading: Release Updates
+    confidence: high
+    id: v57-auth-014
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: API versions 21.0 through 30.0 are retired in Summer '23. Calls using
+      these versions will fail after enforcement.
+    upgradeAction: Update all integrations and connected apps to use API version
+      31.0 or later before Summer '23.
+    source:
+      document: v57-spring23.pdf
+      page: 677
+      heading: Release Updates
+    confidence: high
+    id: v57-rest-011
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Each Lightning app now receives a unique CSRF token instead of sharing
+      one across apps, and handling of invalid or expired tokens is stricter.
+    upgradeAction: Test custom Lightning apps that make cross-app API calls or share
+      state to ensure CSRF token changes do not cause failures.
+    source:
+      document: v57-spring23.pdf
+      page: 677
+      heading: Release Updates
+    confidence: high
+    id: v57-lwc-014
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Visualforce JavaScript Remoting will validate the JsonAccess annotation
+      on Apex classes to prevent unauthorized cross-namespace serialization.
+    upgradeAction: Add appropriate JsonAccess annotations to Apex classes used with
+      Visualforce Remoting that serialize data across package namespaces.
+    source:
+      document: v57-spring23.pdf
+      page: 677
+      heading: Release Updates
+    confidence: high
+    id: v57-vf-006
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Custom invocable actions called via REST API now roll back all database
+      changes when an Apex exception occurs, preventing partial data commits.
+    upgradeAction: Review invocable actions that catch and suppress exceptions to
+      ensure rollback behavior aligns with your data integrity requirements.
+    source:
+      document: v57-spring23.pdf
+      page: 677
+      heading: Release Updates
+    confidence: high
+    id: v57-rest-012
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Flow screens can no longer resolve the $Api.Session_ID variable at
+      runtime, blocking access to browser session IDs that could bypass security
+      controls.
+    upgradeAction: Remove or replace any flow logic that relies on $Api.Session_ID
+      before the enforcement date.
+    source:
+      document: v57-spring23.pdf
+      page: 677
+      heading: Release Updates
+    confidence: high
+    id: v57-flow-010
+  - apiVersion: "57.0"
+    release: Spring '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex REST response headers set via RestResponse.addHeader() are now
+      validated against RFC 7230, rejecting malformed header names regardless of
+      API version.
+    upgradeAction: Audit Apex REST services for non-compliant header names and
+      correct them before enforcement.
+    source:
+      document: v57-spring23.pdf
+      page: 677
+      heading: Release Updates
+    confidence: high
+    id: v57-rest-013

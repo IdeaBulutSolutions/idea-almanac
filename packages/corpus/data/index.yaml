@@ -1,0 +1,46 @@
+# Corpus manifest. GENERATED — do not edit by hand.
+# Regenerate with: npm run manifest   (CI verifies freshness via --check)
+corpusVersion: "1.1.0"
+versions: 39
+reviewedVersions: 39
+totalEntries: 3016
+files:
+  - { apiVersion: "29.0", release: "Winter '14", entries: 54, reviewed: true }
+  - { apiVersion: "30.0", release: "Spring '14", entries: 55, reviewed: true }
+  - { apiVersion: "31.0", release: "Summer '14", entries: 55, reviewed: true }
+  - { apiVersion: "32.0", release: "Winter '15", entries: 61, reviewed: true }
+  - { apiVersion: "33.0", release: "Spring '15", entries: 72, reviewed: true }
+  - { apiVersion: "34.0", release: "Summer '15", entries: 63, reviewed: true }
+  - { apiVersion: "35.0", release: "Winter '16", entries: 69, reviewed: true }
+  - { apiVersion: "36.0", release: "Spring '16", entries: 68, reviewed: true }
+  - { apiVersion: "37.0", release: "Summer '16", entries: 69, reviewed: true }
+  - { apiVersion: "38.0", release: "Winter '17", entries: 53, reviewed: true }
+  - { apiVersion: "39.0", release: "Spring '17", entries: 54, reviewed: true }
+  - { apiVersion: "40.0", release: "Summer '17", entries: 84, reviewed: true }
+  - { apiVersion: "41.0", release: "Winter '18", entries: 85, reviewed: true }
+  - { apiVersion: "42.0", release: "Spring '18", entries: 56, reviewed: true }
+  - { apiVersion: "43.0", release: "Summer '18", entries: 80, reviewed: true }
+  - { apiVersion: "44.0", release: "Winter '19", entries: 54, reviewed: true }
+  - { apiVersion: "45.0", release: "Spring '19", entries: 74, reviewed: true }
+  - { apiVersion: "46.0", release: "Summer '19", entries: 73, reviewed: true }
+  - { apiVersion: "47.0", release: "Winter '20", entries: 77, reviewed: true }
+  - { apiVersion: "48.0", release: "Spring '20", entries: 96, reviewed: true }
+  - { apiVersion: "49.0", release: "Summer '20", entries: 86, reviewed: true }
+  - { apiVersion: "50.0", release: "Winter '21", entries: 90, reviewed: true }
+  - { apiVersion: "51.0", release: "Spring '21", entries: 72, reviewed: true }
+  - { apiVersion: "52.0", release: "Summer '21", entries: 69, reviewed: true }
+  - { apiVersion: "53.0", release: "Winter '22", entries: 70, reviewed: true }
+  - { apiVersion: "54.0", release: "Spring '22", entries: 52, reviewed: true }
+  - { apiVersion: "55.0", release: "Summer '22", entries: 72, reviewed: true }
+  - { apiVersion: "56.0", release: "Winter '23", entries: 86, reviewed: true }
+  - { apiVersion: "57.0", release: "Spring '23", entries: 88, reviewed: true }
+  - { apiVersion: "58.0", release: "Summer '23", entries: 87, reviewed: true }
+  - { apiVersion: "59.0", release: "Winter '24", entries: 81, reviewed: true }
+  - { apiVersion: "60.0", release: "Spring '24", entries: 116, reviewed: true }
+  - { apiVersion: "61.0", release: "Summer '24", entries: 99, reviewed: true }
+  - { apiVersion: "62.0", release: "Winter '25", entries: 81, reviewed: true }
+  - { apiVersion: "63.0", release: "Spring '25", entries: 106, reviewed: true }
+  - { apiVersion: "64.0", release: "Summer '25", entries: 88, reviewed: true }
+  - { apiVersion: "65.0", release: "Winter '26", entries: 97, reviewed: true }
+  - { apiVersion: "66.0", release: "Spring '26", entries: 116, reviewed: true }
+  - { apiVersion: "67.0", release: "Summer '26", entries: 108, reviewed: true }

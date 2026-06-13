@@ -1,0 +1,1725 @@
+apiVersion: "47.0"
+release: Winter '20
+reviewed: true
+entries:
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: Two new SOAP API objects, SalesAIScoreCycle and
+      SalesAIScoreModelFactors, are available for retrieving Einstein
+      Opportunity Scoring model information and score factors.
+    source:
+      document: v47-winter20.pdf
+      page: 133
+      heading: Salesforce Einstein
+    confidence: medium
+    id: v47-soap-001
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The ConnectApi.SmartDataDiscovery.predict Apex method is now available
+      for invoking Einstein Discovery predictions programmatically on Salesforce
+      objects.
+    source:
+      document: v47-winter20.pdf
+      page: 133
+      heading: Salesforce Einstein
+    confidence: high
+    id: v47-apex-001
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexTrigger
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Opportunity Contact Role becomes a fully customizable object, enabling
+      Apex triggers and validation rules to fire on contact role changes for the
+      first time.
+    detail: Previously Opportunity Contact Role was not extensible. It now supports
+      custom fields, page layouts, validation rules, and Apex triggers, allowing
+      developers to automate actions when contact roles are added, edited, or
+      removed on opportunities.
+    source:
+      document: v47-winter20.pdf
+      page: 153
+      heading: Contacts
+    confidence: high
+    id: v47-apex-002
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexTrigger
+      - ApexClass
+      - Flow
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide in Lightning Experience only; Salesforce Classic bypasses
+      validation rules and Apex triggers for account team operations
+    summary: Account Team Member objects now fire Apex triggers, validation rules,
+      and workflow rules when records are created, edited, or deleted in
+      Lightning Experience. Classic continues to bypass these automations.
+    detail: This enables programmatic control over account team membership changes,
+      but existing orgs adding triggers or validation rules must account for the
+      Lightning-only enforcement. Code that assumes no triggers fire on
+      AccountTeamMember will break if moved to Lightning.
+    upgradeAction: Review any new Apex triggers or validation rules on
+      AccountTeamMember to ensure they handle bulk operations from the multiline
+      editor. Test that Classic users are aware their edits bypass these
+      automations if consistency is required.
+    source:
+      document: v47-winter20.pdf
+      page: 155
+      heading: Accounts
+    confidence: high
+    id: v47-apex-003
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version (auto-activates in Spring '20)
+    summary: The AccountShare reason code for territory-based manual account
+      assignments changes from TerritoryManual to Territory2AssociationManual.
+      Any Apex or integration code querying or writing AccountShare records with
+      the old reason code will break.
+    upgradeAction: Search Apex classes and integrations for references to the
+      TerritoryManual reason code on AccountShare and replace with
+      Territory2AssociationManual before activation or the Spring '20
+      auto-activation.
+    source:
+      document: v47-winter20.pdf
+      page: 167
+      heading: Enable Manual Account Sharing in Enterprise Territory Management
+        (Previously Released Critical Update)
+    confidence: high
+    id: v47-sharing-001
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; retirement effective
+      Summer '20
+    summary: Customizable Forecasting will be fully retired in Summer '20,
+      eliminating API access to its data and functionality. Integrations
+      querying or manipulating Customizable Forecasting objects will fail after
+      retirement.
+    detail: Any code interacting with Customizable Forecasting objects or APIs must
+      be migrated to use Collaborative Forecasts instead. The underlying data
+      becomes inaccessible post-retirement.
+    upgradeAction: Identify all integrations and Apex code referencing Customizable
+      Forecasting objects. Migrate to Collaborative Forecasts APIs before Summer
+      '20 to avoid runtime failures.
+    source:
+      document: v47-winter20.pdf
+      page: 168
+      heading: Customizable Forecasting Is Being Retired
+    confidence: medium
+    id: v47-rest-001
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; enforcement in Summer '21
+    summary: The legacy Territory Management feature will be fully retired in Summer
+      '21, making its data and APIs inaccessible. Organizations using
+      territory-related API calls or integrations must migrate to Enterprise
+      Territory Management before that release.
+    upgradeAction: Identify any integrations or Apex code referencing original
+      Territory Management objects/APIs and refactor to use Enterprise Territory
+      Management equivalents before Summer '21.
+    source:
+      document: v47-winter20.pdf
+      page: 168
+      heading: Original Territory Management Is Being Retired
+    confidence: high
+    id: v47-rest-002
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: A new Metadata API type called Sharing Settings is available, exposing
+      the enableRemoveTMGroupMembership field to programmatically delete legacy
+      territory management sharing records during migration to Enterprise
+      Territory Management.
+    source:
+      document: v47-winter20.pdf
+      page: 169
+      heading: Reduce Disruption During the Migration to Enterprise Territory Management
+    confidence: medium
+    id: v47-rest-003
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: New Wave REST API endpoints allow retrieving version history, updating
+      descriptions, and reverting Einstein Analytics dashboards, lenses, and
+      dataflows to previous snapshots.
+    source:
+      document: v47-winter20.pdf
+      page: 299
+      heading: Back Up and Restore Your Analytics Dashboards, Lenses, and Dataflows
+        with Asset Version History
+    confidence: medium
+    id: v47-rest-004
+  - apiVersion: "47.0"
+    introducedIn: "46.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The ConnectApi.SmartDataDiscovery.predict method is now officially
+      documented, enabling Apex code to retrieve Einstein Discovery model
+      predictions on Salesforce objects.
+    detail: This method existed in API v46.0 but was undocumented. Winter '20
+      formally exposes it, so developers can now rely on it as a supported API
+      for invoking deployed Einstein Discovery models programmatically.
+    source:
+      document: v47-winter20.pdf
+      page: 317
+      heading: Get Einstein Predictions in Apex Code
+    confidence: high
+    id: v47-apex-004
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce CMS content can now be retrieved programmatically via
+      Chatter REST API or Apex for use in Salesforce Tabs + Visualforce
+      communities, and custom content types can be defined using
+      ManagedContentType in Metadata API.
+    source:
+      document: v47-winter20.pdf
+      page: 332
+      heading: Harness the Power of Salesforce CMS (Generally Available)
+    confidence: medium
+    id: v47-rest-005
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: Communities created before Winter '20 that upgrade to the new
+      template; new communities automatically use the new standard
+    summary: Communities now use Google's gtag.js standard for analytics instead of
+      the legacy approach. Custom Aura components must switch from firing
+      forceCommunity:analyticsInteraction to
+      forceCommunity:analyticsInteractionGtag to track events.
+    detail: The platform automatically adds googletagmanager.com to CSP Trusted
+      Sites. The legacy analyticsInteraction event still works but is deprecated
+      in favor of analyticsInteractionGtag.
+    upgradeAction: Update custom Aura components that fire
+      forceCommunity:analyticsInteraction to use
+      forceCommunity:analyticsInteractionGtag instead when migrating to the new
+      community template.
+    source:
+      document: v47-winter20.pdf
+      page: 344
+      heading: Improve Tracking with the New Google Analytics™ Standard
+    confidence: low
+    id: v47-aura-001
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: LWC design property default values for Boolean and Integer types now
+      correctly coerce to their declared types instead of being passed as
+      strings.
+    detail: Previously, defaults like `default="true"` or `default="314"` in
+      .js-meta.xml were delivered to the component as the strings "true" and
+      "314". Now they arrive as actual Boolean and Number values. Components
+      with workaround parsing logic may double-convert or break.
+    upgradeAction: Remove any custom string-to-Boolean or string-to-integer coercion
+      logic in LWC components that was working around the old string-delivery
+      behavior; verify component behavior after the fix.
+    source:
+      document: v47-winter20.pdf
+      page: 362
+      heading: Use Attributes in Lightning Web Components with Confidence
+    confidence: high
+    id: v47-lwc-001
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+      - Flow
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: LWC components can now be embedded in Flow screens by adding
+      lightning__FlowScreen to the component's targets and setting isExposed to
+      true, with access to the new lightning/flowSupport module for
+      flow-specific events.
+    source:
+      document: v47-winter20.pdf
+      page: 429
+      heading: Add Powerful and Performant Lightning Web Components to Your Flow Screens
+    confidence: high
+    id: v47-lwc-002
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+      - Integration
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (Critical Update
+      auto-activates April 9, 2020)
+    summary: "Bulk REST API calls to invocable actions now use partial-save
+      semantics: a single failed action no longer rolls back the entire
+      transaction. Instead, Salesforce retries successful actions up to three
+      times and only rolls back the individual failures."
+    detail: This Critical Update changes transaction behavior for external REST API
+      invocations of flows in bulk. Several action types are excluded from
+      partial save (Invocable Apex, External Services, various Order Management
+      actions, Skills-based Routing, and others). Be aware that external
+      callouts may execute multiple times due to retries, and the retry logic
+      can increase transaction duration, potentially causing earlier limit
+      exhaustion.
+    upgradeAction: Before auto-activation, test bulk invocable action calls in
+      sandbox. Review flows that make external callouts to ensure idempotency
+      since callouts may repeat. Monitor governor limit consumption as retry
+      behavior may cause limits to be reached sooner.
+    source:
+      document: v47-winter20.pdf
+      page: 440
+      heading: Enable Partial Save for Invocable Actions (Critical Update)
+    confidence: high
+    id: v47-flow-001
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+      - ApexClass
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (enforcement postponed
+      to Spring '21)
+    summary: When activated, Flows will check that the running user has access to
+      any Apex classes the Flow invokes, blocking execution if access is
+      missing. Originally slated for Winter '20 auto-activation, enforcement is
+      now delayed until Spring '21.
+    detail: "This critical update (introduced Summer '19) adds a security gate:
+      users must have explicit access to Apex classes called by a Flow.
+      Organizations relying on Flows that invoke Apex where users lack direct
+      class access will see failures once enforced."
+    upgradeAction: Audit Flows invoking Apex actions and verify all intended users
+      have the necessary Apex class access via profiles or permission sets
+      before Spring '21 enforcement.
+    source:
+      document: v47-winter20.pdf
+      page: 443
+      heading: Require User Access to Apex Classes Invoked by Flow (Critical Update,
+        Postponed)
+    confidence: high
+    id: v47-flow-002
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The SharingSettings Metadata API type now supports deleting legacy
+      territory sharing records after migrating to Enterprise Territory
+      Management.
+    source:
+      document: v47-winter20.pdf
+      page: 453
+      heading: Keep Sharing Records When Migrating to Enterprise Territory Management
+    confidence: medium
+    id: v47-rest-006
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; enforced January 3,
+      2020 (Spring '20)
+    summary: Users lacking the Customize Application permission lose API read access
+      to custom settings. Apex code running in system mode remains unaffected,
+      but direct API queries from integrations or user-context code will fail
+      without the permission.
+    detail: This critical update was originally scheduled for September 2019,
+      postponed, and now enforces in Spring '20. Organizations relying on API
+      integrations to read custom settings under non-admin users must grant
+      explicit read access via profiles or permission sets introduced in Winter
+      '20.
+    upgradeAction: Identify integrations or connected apps that query custom
+      settings via API under users without Customize Application. Either grant
+      those users the new direct-read permission on the relevant custom
+      settings, or refactor to retrieve settings through Apex running in system
+      mode.
+    source:
+      document: v47-winter20.pdf
+      page: 463
+      heading: Require Customize Application Permission for Direct Read Access to
+        Custom Settings (Critical Update, Postponed)
+    confidence: high
+    id: v47-rest-007
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version (enforced January 3,
+      2020 with Spring '20)
+    summary: API access to custom settings is revoked for users lacking the
+      Customize Application permission. After the critical update enforcement,
+      code or integrations reading custom settings outside system-mode Apex must
+      have explicit grants via profiles/permission sets.
+    detail: Apex running in system mode remains unaffected, but isAccessible() now
+      returns false for custom settings when the running user lacks explicit
+      access. Integrations and API calls made by users without Customize
+      Application will fail to retrieve custom setting data unless View All
+      Custom Settings or per-object Custom Setting Definitions permissions are
+      granted.
+    upgradeAction: Before enforcement, audit all API integrations and Apex code
+      calling isAccessible() on custom settings. Grant Custom Setting
+      Definitions or View All Custom Settings permissions to affected
+      profiles/permission sets, then test with restricted users.
+    source:
+      document: v47-winter20.pdf
+      page: 463
+      heading: Grant Access to Custom Settings After Restricting Org-Wide Access
+        (Critical Update)
+    confidence: high
+    id: v47-sharing-002
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Two new Apex methods let developers build custom Visualforce pages for
+      identity verification during user registration, replacing the default
+      Salesforce Verify page with branded alternatives.
+    detail: The initRegisterVerificationMethod method sends verification codes via
+      email or SMS, while verifyRegisterVerificationMethod validates the entered
+      code and updates user verification status. This extends to
+      self-registration and passwordless login flows.
+    source:
+      document: v47-winter20.pdf
+      page: 468
+      heading: Customize Identity Verification Methods
+    confidence: high
+    id: v47-auth-001
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version — opt-in setting per
+      authentication provider
+    summary: A new option lets admins strip encrypted consumer secrets from Metadata
+      API and SOAP API responses when retrieving or deploying authentication
+      provider configurations, which can break CI/CD pipelines that rely on
+      round-tripping those secrets.
+    detail: When enabled, change sets and metadata deploys of authentication
+      providers fail if a custom consumer key was used, because the key expects
+      a matching secret. Deployments must manually inject the secret during the
+      deploy step.
+    upgradeAction: If your deployment automation retrieves and redeploys
+      AuthProvider metadata, verify whether this setting is enabled; if so,
+      update your pipeline to inject the consumer secret externally rather than
+      relying on round-trip retrieval.
+    source:
+      document: v47-winter20.pdf
+      page: 472
+      heading: Exclude Consumer Secrets from API Responses
+    confidence: medium
+    id: v47-auth-002
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Custom authorization errors thrown by Apex registration handlers or
+      third-party identity providers no longer appear visibly on the Problem
+      Logging In page; they are now embedded only in the page URL as query
+      parameters.
+    upgradeAction: Update any support documentation or troubleshooting scripts that
+      rely on reading authorization error messages from the visible page
+      content; parse the URL query string instead.
+    source:
+      document: v47-winter20.pdf
+      page: 474
+      heading: Improved Security for Authorization Errors
+    confidence: high
+    id: v47-auth-003
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: The salesforceLoginUrl field in SamlSsoConfig metadata now includes an
+      sc parameter containing the SAML SSO config ID, aligning the Metadata API
+      format with the UI. Deploys work with or without this parameter for
+      backward compatibility.
+    source:
+      document: v47-winter20.pdf
+      page: 474
+      heading: Change to SamlSsoConfig MDAPI Type
+    confidence: high
+    id: v47-auth-004
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Two new Metadata API types (EncryptionKeySettings and
+      PlatformEncryptionSettings) let you configure Shield Platform Encryption
+      options programmatically instead of through Setup UI.
+    source:
+      document: v47-winter20.pdf
+      page: 477
+      heading: Turn On Platform Encryption Settings Programmatically Through Metadata
+        API
+    confidence: high
+    id: v47-packaging-001
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Real-Time Event Monitoring moves from beta to GA with altered streaming
+      architecture; existing beta subscribers must unsubscribe before the Winter
+      '20 upgrade and resubscribe afterward or streams will break.
+    detail: "The GA release changes minimum API versions for the streaming objects:
+      LoginEvent requires 36.0, LogoutEventStream requires 41.0, and all other
+      Real-Time Event Monitoring objects require 46.0. Code targeting earlier
+      versions must be updated."
+    upgradeAction: If subscribed to beta Real-Time Event Monitoring channels,
+      unsubscribe before the Winter '20 org upgrade, then resubscribe after
+      completion. Verify Streaming API subscriptions target the new minimum API
+      versions (36.0/41.0/46.0 depending on object).
+    source:
+      document: v47-winter20.pdf
+      page: 479
+      heading: Real-Time Event Monitoring Generally Available
+    confidence: high
+    id: v47-rest-008
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Enhanced Transaction Security introduces a new Apex interface
+      TxnSecurity.EventCondition for programmatically defining transaction
+      security policy conditions against standard and custom objects.
+    detail: The new framework supports ApiEvent, ListViewEvent, LoginEvent, and
+      ReportEvent triggers. Legacy transaction security policies are
+      incompatible and must be migrated, as legacy policy failures can disrupt
+      real-time event capture in the new framework.
+    source:
+      document: v47-winter20.pdf
+      page: 480
+      heading: Enhanced Transaction Security Generally Available
+    confidence: medium
+    id: v47-apex-005
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: deprecated
+    impact: retirement
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version; legacy policies
+      disabled in Summer '20
+    summary: The legacy transaction security framework using the
+      TxnSecurity.PolicyCondition Apex interface is being retired in Summer '20.
+      Policies implementing that interface will stop executing and cannot be
+      updated after retirement.
+    detail: Apex classes implementing TxnSecurity.PolicyCondition must be rewritten
+      to use the new TxnSecurity.EventCondition interface before Summer '20, or
+      security enforcement will cease.
+    upgradeAction: Identify Apex classes implementing TxnSecurity.PolicyCondition
+      and rewrite them using TxnSecurity.EventCondition or Condition Builder
+      before the Summer '20 enforcement date.
+    source:
+      document: v47-winter20.pdf
+      page: 481
+      heading: Migrate Legacy Transacation Security Policies (Critical Update)
+    confidence: high
+    id: v47-apex-006
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new TxnSecurity.AsyncCondition interface allows transaction security
+      policy Apex classes to declare they use asynchronous Apex, enabling async
+      patterns within the enhanced transaction security framework.
+    detail: The interface is marker-only (no methods) and is used alongside
+      TxnSecurity.EventCondition. Apex callouts remain unsupported in this
+      framework.
+    source:
+      document: v47-winter20.pdf
+      page: 482
+      heading: New TxnSecurity.AsyncCondition Apex Interface
+    confidence: high
+    id: v47-apex-007
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Managed and unlocked packages can now include all three types of
+      Transaction Security policies (EventCondition, PolicyCondition, and
+      Condition Builder) regardless of add-on subscriptions in the subscriber
+      org.
+    detail: ISVs building security-related packages gain the ability to bundle
+      Transaction Security policies without requiring subscribers to have Shield
+      or Event Monitoring add-ons installed, removing a previous packaging
+      restriction.
+    source:
+      document: v47-winter20.pdf
+      page: 483
+      heading: Packages Support All Policies
+    confidence: medium
+    id: v47-packaging-002
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Legacy transaction security policies using TxnSecurity.PolicyCondition
+      no longer fail when the execution user is inactive; the automated process
+      user now runs them instead.
+    detail: "Previously these policies would fail-close if their execution user was
+      inactive. The new behavior prevents unexpected policy failures but changes
+      how inactive-user scenarios are handled. Note: the legacy transaction
+      security framework is scheduled for retirement in Summer '20, so this
+      change is short-lived."
+    upgradeAction: Review any logic or monitoring that relied on policies failing
+      when the execution user was inactive. Plan migration to the enhanced
+      transaction security framework before Summer '20 retirement.
+    source:
+      document: v47-winter20.pdf
+      page: 483
+      heading: Policies Don't Fail for Inactive Users
+    confidence: high
+    id: v47-apex-008
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex governor limits in Lightning components are now enforced
+      individually per controller action rather than across all batched actions
+      in a single request, affecting how limit consumption is tracked and
+      reported in EventLogFile.
+    detail: Previously when multiple Lightning component actions were batched into
+      one request, Apex limits were shared across all actions. Now each action
+      has its own limit context, and the Apex Execution event type in
+      EventLogFile generates a separate record per action instead of per request
+      batch.
+    upgradeAction: Review any monitoring or analytics built on EventLogFile Apex
+      Execution events that assumed one event per batched request; adjust
+      queries and dashboards to account for per-action granularity.
+    source:
+      document: v47-winter20.pdf
+      page: 484
+      heading: Better Apex Execution Event Data
+    confidence: medium
+    id: v47-apex-009
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: A new EventSettings metadata type lets you configure Event Monitoring
+      and Streaming API settings via Metadata API, including the ability to
+      enable deletion of monitoring data.
+    source:
+      document: v47-winter20.pdf
+      page: 484
+      heading: New Platform Events Org Preferences Type
+    confidence: high
+    id: v47-packaging-003
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version, but Aura components
+      at API version 39.0 or earlier without Locker are most affected
+    summary: Standard DOM query methods like document.querySelector() and
+      document.body.querySelector() can no longer traverse into Lightning web
+      component shadow trees. Code relying on these global queries to access LWC
+      internal elements will now return null.
+    detail: Document.prototype and HTMLBodyElement.prototype methods were updated to
+      respect shadow DOM encapsulation. While Lightning Locker already enforced
+      this boundary for newer components, Aura components at v39.0 and earlier
+      with Locker disabled, automated tests, and third-party libraries that used
+      global DOM queries to manipulate LWC internals will break. The fix
+      requires querying via the component's shadowRoot property instead.
+    upgradeAction: Audit Aura components at API v39.0 or earlier, Selenium/Jest
+      tests, and third-party JavaScript libraries for calls to
+      document.querySelector(), document.getElementById(), or similar global DOM
+      methods that target LWC shadow tree elements. Refactor to use
+      element.shadowRoot.querySelector() or rely on the child component's public
+      API.
+    source:
+      document: v47-winter20.pdf
+      page: 493
+      heading: DOM API Changes
+    confidence: high
+    id: v47-lwc-003
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: deprecation
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: The Jest testing package for Lightning Web Components was renamed from
+      lwc-jest to sfdx-lwc-jest. The old package name continues to function
+      through Winter '20 but should be migrated.
+    upgradeAction: Update package.json to reference @salesforce/sfdx-lwc-jest
+      instead of the former package name, and update any import statements in
+      test files accordingly.
+    source:
+      document: v47-winter20.pdf
+      page: 495
+      heading: New Package Name for Testing with Jest
+    confidence: high
+    id: v47-lwc-004
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+      - ApexClass
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning components in 2GP or unlocked packages can no longer invoke
+      public @AuraEnabled Apex methods from classes in different packages within
+      the same namespace. The @NamespaceAccessible annotation cannot be used to
+      restore cross-package access for Lightning-called Apex; only global
+      methods remain callable across package boundaries.
+    detail: Prior to Winter '20, public Apex methods were accessible across packages
+      sharing the same namespace. Now access is restricted to the same package
+      only. Attempting to use @NamespaceAccessible on an Apex method called from
+      Lightning components results in an error. This restriction applies
+      specifically to second-generation managed and unlocked packaging scenarios
+      where multiple packages share a namespace.
+    upgradeAction: Audit 2GP and unlocked packages for Lightning components calling
+      public Apex methods in sibling packages. Either move the Apex class into
+      the same package as the component, or change the method access modifier to
+      global if cross-package invocation is required.
+    source:
+      document: v47-winter20.pdf
+      page: 500
+      heading: Lightning Components Can Access Public Apex Methods Only in the Same
+        Package
+    confidence: high
+    id: v47-lwc-005
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: deprecated
+    impact: retirement
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version; retirement scheduled
+      for Summer '21
+    summary: All Aura components in the ui namespace (ui:button, ui:inputText,
+      ui:menu, etc.) are being retired. After Summer '21, Salesforce will no
+      longer accept support cases for these components, though they may continue
+      to function.
+    detail: The retirement covers approximately 35 ui-namespace components and 3
+      events. Each has a recommended replacement in the lightning namespace,
+      available as either Aura components or LWC. Salesforce recommends
+      migrating to LWC equivalents where possible.
+    upgradeAction: "Audit all Aura bundles for ui: component references. Replace
+      each with the corresponding lightning: component before Summer '21.
+      Prioritize migration to LWC versions of replacements for long-term
+      maintainability."
+    source:
+      document: v47-winter20.pdf
+      page: 500
+      heading: Aura Components in the ui Namespace Are Being Retired
+    confidence: high
+    id: v47-aura-002
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Admins can now pin the org's Lightning Locker enforcement to an earlier
+      API version via Session Settings, allowing components that rely on older
+      Locker behavior to keep working while developers update them for newer
+      security enhancements.
+    detail: This setting decouples the Locker security version from each component's
+      individual API version, providing a transitional mechanism when managed
+      packages or custom code depend on legacy Locker behavior.
+    source:
+      document: v47-winter20.pdf
+      page: 503
+      heading: Select the API Version for Lightning Locker
+    confidence: medium
+    id: v47-lwc-006
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning web components and Aura components can now use the
+      standard__app page reference type with lightning-navigation to link users
+      directly to a specific app or page within an app.
+    source:
+      document: v47-winter20.pdf
+      page: 504
+      heading: Navigate Users Directly to an App
+    confidence: high
+    id: v47-lwc-007
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: sharing-security
+    appliesWhen: org-wide after critical update activation (auto-activation date
+      listed in Setup)
+    summary: Once activated, guest, portal, and community users can invoke
+      @AuraEnabled Apex methods only if their profile explicitly grants access
+      to the containing Apex class. Previously these users could call such
+      methods without profile-level class access.
+    upgradeAction: Before activation, audit all @AuraEnabled classes used by
+      Aura/LWC in communities, portals, and Sites. Ensure guest and portal user
+      profiles have explicit Apex class access for any classes they legitimately
+      need to invoke.
+    source:
+      document: v47-winter20.pdf
+      page: 505
+      heading: Restrict Access to @AuraEnabled Apex Methods for Guest and Portal Users
+        Based on User Profile (Critical Update)
+    confidence: high
+    id: v47-sharing-003
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: sharing-security
+    appliesWhen: org-wide after Critical Update activation (auto-activation date
+      listed in Setup)
+    summary: Once this critical update is active, users can only invoke @AuraEnabled
+      Apex methods if their profile explicitly grants access to the containing
+      Apex class. Previously, authenticated users could call these methods
+      regardless of profile-level class permissions.
+    upgradeAction: Before activation, audit all Apex classes with @AuraEnabled
+      methods and ensure every profile that needs access has the class enabled.
+      Test custom Aura and LWC components in a sandbox under profiles with
+      restricted class access.
+    source:
+      document: v47-winter20.pdf
+      page: 505
+      heading: Restrict Access to @AuraEnabled Apex Methods for Authenticated Users
+        Based on User Profile (Critical Update)
+    confidence: high
+    id: v47-sharing-004
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version (Critical Update with
+      scheduled auto-activation)
+    summary: Lightning components can no longer read Apex properties whose getters
+      are marked private or protected. Markup expressions like
+      {!v.apexObject.counter} fail if the backing Apex getter has a restricted
+      access modifier.
+    detail: This Critical Update aligns Lightning component behavior with standard
+      Apex visibility rules. Previously, Aura and LWC markup could bypass
+      private/protected getter restrictions; after activation, those expressions
+      return nothing or error. Affects both Aura {!v.attr.prop} bindings and LWC
+      property access on @AuraEnabled return types.
+    upgradeAction: Audit @AuraEnabled Apex classes for properties with private or
+      protected getters that are consumed in component markup. Change those
+      getters to public or add a separate public getter method before the
+      Critical Update auto-activates.
+    source:
+      document: v47-winter20.pdf
+      page: 506
+      heading: Enforce Access Modifiers on Apex Properties in Lightning Component
+        Markup (Critical Update)
+    confidence: high
+    id: v47-lwc-008
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version; affects orgs created
+      after Spring '18 or orgs that previously activated the retired 'without
+      sharing' critical update
+    summary: "@AuraEnabled Apex controllers that omit explicit sharing keywords now
+      default to 'with sharing' instead of 'without sharing', meaning sharing
+      rules are enforced and record visibility is restricted to what the running
+      user can access."
+    detail: This critical update reverses a previous critical update that defaulted
+      implicit-sharing @AuraEnabled controllers to 'without sharing'. After this
+      activation, any @AuraEnabled class lacking an explicit sharing declaration
+      will run with sharing-rule enforcement. Classes already specifying 'with
+      sharing' or 'without sharing' are unaffected.
+    upgradeAction: Audit all @AuraEnabled Apex classes for explicit sharing
+      declarations. Add 'without sharing' where system-wide record access is
+      intentional, or confirm 'with sharing' is acceptable. Test in a sandbox
+      before the auto-activation date.
+    source:
+      document: v47-winter20.pdf
+      page: 508
+      heading: Use with sharing for @AuraEnabled Apex Controllers with Implicit
+        Sharing (Critical Update)
+    confidence: high
+    id: v47-sharing-005
+  - apiVersion: "47.0"
+    introducedIn: "40.0"
+    release: Winter '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version (critical update enforcement)
+    summary: Once enabled, Aura components outside a managed package namespace can
+      no longer invoke Apex controller methods unless those methods are declared
+      with the global access modifier. Methods marked public become inaccessible
+      to external callers.
+    detail: This critical update originally shipped in Summer '17 (API 40.0) and
+      enforces proper access-modifier semantics for Apex controllers in managed
+      packages. Server actions calling non-global methods from outside the
+      package namespace will fail after activation. Non-namespaced unlocked
+      packages are exempt and behave like unmanaged packages.
+    upgradeAction: Audit any Aura components that invoke Apex methods from installed
+      managed packages. If those methods are not global, work with the package
+      vendor to expose a supported global API or refactor your integration.
+    source:
+      document: v47-winter20.pdf
+      page: 509
+      heading: Disable Access to Non-global Apex Controller Methods in Managed
+        Packages (Critical Update, Postponed)
+    confidence: high
+    id: v47-aura-003
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version (auto-activates Spring '20)
+    summary: Users with the API Only User permission will be blocked from accessing
+      Lightning Out, enforcing the same API-only restriction that already
+      applies elsewhere in Salesforce.
+    detail: This critical update was originally scheduled for Winter '20 but
+      postponed to Spring '20 auto-activation. Once active, Lightning Out joins
+      the list of surfaces that respect the API Only User permission, preventing
+      those users from rendering Aura components outside Salesforce via
+      Lightning Out.
+    upgradeAction: Identify any integrations using Lightning Out that authenticate
+      as API Only Users; those users will lose access when the update activates
+      and must be granted different permissions or switched to pure API-based
+      integrations.
+    source:
+      document: v47-winter20.pdf
+      page: 510
+      heading: API Only Users Can Access Only Salesforce APIs (Critical Update,
+        Postponed)
+    confidence: high
+    id: v47-auth-005
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Einstein Language Intent API responses now include an algorithm field
+      (defaulting to "intent") in the JSON returned by train, retrain, training
+      status, and model retrieval endpoints for text-intent datasets.
+    source:
+      document: v47-winter20.pdf
+      page: 516
+      heading: Intent API Response JSON Contains a New algorithm Field
+    confidence: high
+    id: v47-rest-009
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Einstein Language training endpoints now enforce a 3-million-word
+      ceiling on text datasets; exceeding this limit causes POST
+      /v2/language/train and /retrain to return an error.
+    upgradeAction: Audit any automated pipelines that populate text-intent or
+      text-sentiment datasets to ensure total word count stays under 3 million
+      before calling train or retrain.
+    source:
+      document: v47-winter20.pdf
+      page: 517
+      heading: Text Datasets Can Contain Up to 3 Million Words
+    confidence: medium
+    id: v47-rest-010
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: Legacy HTTP-only sandbox URLs for Salesforce Sites and Communities
+      (using the pre-Summer '13 format where subdomain precedes sandbox name)
+      stop working entirely in Winter '20.
+    detail: The old URL pattern <subdomain>.<sandboxName>.<instance>.force.com is
+      retired. Any integrations, API calls, or hardcoded references using this
+      format will fail. The supported format is
+      <sandboxName>-<subdomain>.<instance>.force.com with HTTPS.
+    upgradeAction: Audit integration code, configuration files, and external systems
+      for hardcoded sandbox Site/Community URLs matching the old HTTP-only
+      pattern and update them to the HTTPS format introduced in Summer '13.
+    source:
+      document: v47-winter20.pdf
+      page: 519
+      heading: Review Old Sites and Communities Sandbox Bookmarks
+    confidence: high
+    id: v47-other-001
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: "A new ApexSettings metadata type lets you configure Apex testing
+      behavior via deployment: aggregate-only code coverage, serial test
+      execution, suppressing debug logs in exception emails, and preventing
+      auto-number gaps during tests."
+    detail: The deprecated OrgPreferenceSettings.preferences field lost its
+      ApexApprovalLockUnlock value; use
+      ApexSettings.enableApexApprovalLockUnlock instead.
+    source:
+      document: v47-winter20.pdf
+      page: 522
+      heading: Expand Apex Testing with the ApexSettings Metadata Type
+    confidence: high
+    id: v47-packaging-004
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version (Critical Update
+      auto-activation postponed to Spring '20)
+    summary: A critical update modifies how Salesforce internally caches org schema
+      metadata for standard and custom objects/fields, fixing bugs where actual
+      behavior deviated from documented behavior and resolving intermittent
+      issues with version-specific object/field handling.
+    detail: Originally scheduled for Summer '19 auto-activation, this critical
+      update was postponed to Spring '20. While documented schema behavior
+      remains unchanged, the update corrects discrepancies between documented
+      and actual behavior, which may surface as changed runtime behavior for
+      code that inadvertently relied on the buggy state.
+    upgradeAction: Test Apex code that performs dynamic schema describes or relies
+      on specific object/field metadata behavior. Verify that any
+      schema-dependent logic still works correctly after the critical update
+      activates.
+    source:
+      document: v47-winter20.pdf
+      page: 523
+      heading: Enable Improved Caching of Org Schema (Critical Update, Postponed)
+    confidence: medium
+    id: v47-apex-010
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-bulk
+    appliesWhen: org-wide regardless of component API version
+    summary: Bulk API 2.0 gains native query job support, allowing asynchronous SOQL
+      queries without batch management, with simplified limits and standard
+      OAuth authentication instead of the X-SFDC-Session header.
+    source:
+      document: v47-winter20.pdf
+      page: 525
+      heading: Query in Bulk API 2.0
+    confidence: high
+    id: v47-bulk-001
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version
+    summary: Admins can now grant API read access to specific custom metadata types
+      via profiles and permission sets, even for users lacking Customize
+      Application permission, building on the Spring '19 ability to block all
+      API read access.
+    source:
+      document: v47-winter20.pdf
+      page: 526
+      heading: Control Who Gets Read Access to Custom Metadata Types
+    confidence: medium
+    id: v47-sharing-006
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Custom metadata types in second-generation packages can now use a new
+      PackageProtected visibility setting, restricting access to secrets like
+      API keys to only the Apex code within that specific package rather than
+      the entire namespace.
+    source:
+      document: v47-winter20.pdf
+      page: 527
+      heading: Protect Your Custom Metadata Types in Second-Generation Packages
+    confidence: high
+    id: v47-packaging-005
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version (enforced Spring '20)
+    summary: Users lacking the Customize Application permission lose direct read
+      access to unprotected custom metadata types in Visualforce and Lightning
+      components. Apex and system-mode contexts remain unaffected.
+    detail: This critical update revokes implicit read access to custom metadata
+      types for users without Customize Application. Admins must explicitly
+      grant access via profile or permission set, or disable the restriction in
+      Schema Settings. The change does not impact Apex code or system-mode
+      retrieval.
+    upgradeAction: Audit Visualforce pages and Lightning components that reference
+      custom metadata types directly. For affected users, grant explicit Custom
+      Metadata Type Access on their profile or permission set, or disable the
+      org-wide restriction if appropriate.
+    source:
+      document: v47-winter20.pdf
+      page: 527
+      heading: Require Customize Application Permission for Direct Read Access to
+        Custom Metadata Types (Critical Update)
+    confidence: high
+    id: v47-sharing-007
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Unlocked package versions can now optionally compute Apex code coverage
+      via the CalculateCodeCoverage field on Package2VersionCreateRequest or the
+      --codecoverage CLI flag, enabling teams to track test coverage even though
+      it is not enforced.
+    source:
+      document: v47-winter20.pdf
+      page: 529
+      heading: Compute Code Coverage for Unlocked Packages
+    confidence: high
+    id: v47-packaging-006
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: "Scratch org definition files must be updated: the feature ActionPlans
+      is renamed to IndustriesActionPlan, and org preferences are being replaced
+      with scratch org settings. Scratch org creation fails if the definition
+      uses the old feature name or deprecated features."
+    upgradeAction: Audit scratch org definition files for the old ActionPlans
+      feature name and replace with IndustriesActionPlan. Remove any deprecated
+      features from definition files. Migrate org preferences to the new scratch
+      org settings format before October 12, 2019.
+    source:
+      document: v47-winter20.pdf
+      page: 529
+      heading: Create Scratch Orgs with More Features
+    confidence: high
+    id: v47-packaging-007
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version — scratch org creation
+      fails after October 12, 2019
+    summary: The orgPreferences key in scratch org definition files is removed.
+      Scratch org creation fails if the definition still uses orgPreferences
+      instead of the settings format.
+    upgradeAction: Convert all orgPreferences entries in scratch-definition.json to
+      the equivalent settings structure before Winter '20 GA. The CLI warning
+      output shows the exact replacement syntax.
+    source:
+      document: v47-winter20.pdf
+      page: 530
+      heading: Make the Move to Scratch Org Settings
+    confidence: high
+    id: v47-packaging-008
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The channelMembers field was removed from the PlatformEventChannel
+      metadata type. Channel members must now be defined separately using the
+      new PlatformEventChannelMember type.
+    detail: Metadata API deployments and retrieves that reference channelMembers on
+      PlatformEventChannel will fail. Tooling API gains new PlatformEventChannel
+      and PlatformEventChannelMember objects for querying these components.
+    upgradeAction: Update any scripts, CI pipelines, or package.xml files that
+      deploy or retrieve PlatformEventChannel with channelMembers. Refactor to
+      use the standalone PlatformEventChannelMember metadata type instead.
+    source:
+      document: v47-winter20.pdf
+      page: 538
+      heading: Migrate Change Data Capture Channels and Members with Metadata API and
+        Tooling API
+    confidence: high
+    id: v47-packaging-009
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexTrigger
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Change Data Capture events now include a changedFields array in the
+      ChangeEventHeader, listing all field names modified during an update
+      operation. This simplifies detecting which fields changed, particularly in
+      Apex triggers where you previously had to compare old and new values
+      manually.
+    source:
+      document: v47-winter20.pdf
+      page: 538
+      heading: Determine Which Fields Changed with the New changedFields Header Field
+    confidence: high
+    id: v47-rest-011
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: "The REST API limits resource now exposes two new fields for monitoring
+      hourly platform event publishing usage: one for high-volume events and one
+      for standard-volume events."
+    source:
+      document: v47-winter20.pdf
+      page: 540
+      heading: Monitor Platform Event Publishing Usage in REST API
+    confidence: high
+    id: v47-rest-012
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: A new EventSettings metadata type allows programmatic configuration of
+      Streaming API options, dynamic generic event channels, Event Monitoring,
+      and Platform Events settings via Metadata API.
+    source:
+      document: v47-winter20.pdf
+      page: 541
+      heading: Configure Streaming API Settings with Metadata API
+    confidence: high
+    id: v47-packaging-010
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; effective October 12,
+      2019 for new subscribers
+    summary: The beta Streaming API channel /event/AsyncOperationEvent is disabled
+      for orgs that did not subscribe before October 12, 2019. Existing
+      subscribers from the brief September-October 2019 window retain access.
+    upgradeAction: If your integration relies on AsyncOperationEvent subscriptions,
+      verify your org subscribed during the grandfathered window; otherwise
+      migrate to an alternative event mechanism or polling approach.
+    source:
+      document: v47-winter20.pdf
+      page: 541
+      heading: Disabled /event/AsyncOperationEvent Channel (Beta)
+    confidence: high
+    id: v47-rest-013
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: "The lightning-datatable url type now opens links in the same browser
+      tab by default instead of a new tab, requiring explicit target: '_blank'
+      configuration to restore previous behavior."
+    detail: The default target for url-type columns changed from opening in a new
+      tab to opening in the current frame (_self). Additionally, tooltips no
+      longer auto-display the URL value; you must explicitly configure a tooltip
+      fieldName to show one.
+    upgradeAction: "Audit lightning-datatable instances using url-type columns. Add
+      typeAttributes.target: '_blank' where new-tab behavior is required, and
+      add explicit tooltip configuration if URL tooltips were expected."
+    source:
+      document: v47-winter20.pdf
+      page: 542
+      heading: Changed Lightning Web Components
+    confidence: high
+    id: v47-lwc-009
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: LWC gains the lightning/flowSupport module, enabling custom components
+      to participate in Flow screen navigation and attribute synchronization via
+      dedicated events like FlowNavigationNextEvent and
+      FlowAttributeChangeEvent.
+    source:
+      document: v47-winter20.pdf
+      page: 544
+      heading: New and Changed Modules for Lightning Web Components
+    confidence: high
+    id: v47-flow-003
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The lightning:datatable URL type now opens links in the same frame
+      (_self) by default instead of a new tab, and no longer shows a tooltip
+      unless explicitly configured.
+    detail: Previously URLs in datatable columns opened in new tabs and displayed
+      tooltips automatically. Now _self is the default target and tooltips
+      require explicit typeAttributes configuration with the fieldName.
+    upgradeAction: "Review lightning:datatable columns using the url type. Add
+      target: '_blank' to typeAttributes if you need links to open in new tabs,
+      and add tooltip configuration if you need URL tooltips displayed."
+    source:
+      document: v47-winter20.pdf
+      page: 545
+      heading: New and Changed Aura Components
+    confidence: high
+    id: v47-aura-004
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: New System.Formula class with recalculateFormulas method allows
+      in-memory recalculation of formula field values on sObjects without
+      requiring a database roundtrip, useful for testing and batch scenarios.
+    source:
+      document: v47-winter20.pdf
+      page: 548
+      heading: New Apex Classes
+    confidence: medium
+    id: v47-apex-011
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex gains IllegalArgumentException in the System namespace, enabling
+      methods to throw a typed exception when callers pass invalid arguments.
+    source:
+      document: v47-winter20.pdf
+      page: 550
+      heading: New Apex Exception
+    confidence: high
+    id: v47-apex-012
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOQL queries against KnowledgeArticleVersion without a
+      publication_status filter now return draft, archived, and published
+      articles, whereas previously only published articles were returned by
+      default.
+    upgradeAction: Review any SOQL queries on KnowledgeArticleVersion that omit the
+      publication_status filter and add explicit filtering if you only want
+      published articles.
+    source:
+      document: v47-winter20.pdf
+      page: 554
+      heading: New and Changed Objects
+    confidence: high
+    id: v47-soql-001
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The EffectivePageTime field in LightningUriEvent and
+      LightningUriEventStream now returns 0 instead of the actual value when it
+      exceeds 60 seconds, filtering out outlier measurements.
+    upgradeAction: Review any monitoring or analytics code that consumes
+      EffectivePageTime from Lightning URI events; values over 60 seconds will
+      now appear as 0 rather than the original duration.
+    source:
+      document: v47-winter20.pdf
+      page: 560
+      heading: New and Changed Standard Platform Events
+    confidence: high
+    id: v47-rest-014
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: "Several Real-Time Event Monitoring objects and fields were removed at
+      GA: AdminSetupEvent/AdminSetupEventStream objects entirely, plus the
+      Browser field from ApiEvent, ListViewData from ListViewEvent, Namespace
+      from UriEvent, RecordData from ApiEvent, and ReportData from ReportEvent.
+      Use the new Records field where applicable."
+    upgradeAction: "Update any integrations subscribing to these platform events:
+      replace references to removed fields (ListViewData, RecordData,
+      ReportData) with the new Records field, and remove any dependencies on
+      AdminSetupEvent or the Browser/Namespace fields."
+    source:
+      document: v47-winter20.pdf
+      page: 560
+      heading: New and Changed Standard Platform Events
+    confidence: high
+    id: v47-rest-015
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The REST API limits resource now returns hourly publishing quotas for
+      both high-volume and standard-volume platform events, plus daily Bulk API
+      2.0 query job limits.
+    source:
+      document: v47-winter20.pdf
+      page: 562
+      heading: REST API
+    confidence: high
+    id: v47-rest-016
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The uiType property in the User Interface API App response is
+      deprecated in favor of the new appType property, which distinguishes
+      Classic, Community, Connected, and Lightning app types.
+    upgradeAction: Update integrations that read App responses to use appType
+      instead of uiType before the deprecated property is removed.
+    source:
+      document: v47-winter20.pdf
+      page: 574
+      heading: User Interface API
+    confidence: high
+    id: v47-rest-017
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The RevisionNum field on SourceMember is deprecated in favor of
+      RevisionCounter, which maintains a continuous count even after pushing
+      source to a scratch org.
+    upgradeAction: Update any Tooling API queries or integrations that read
+      SourceMember.RevisionNum to use RevisionCounter instead.
+    source:
+      document: v47-winter20.pdf
+      page: 576
+      heading: Tooling API
+    confidence: high
+    id: v47-rest-018
+  - apiVersion: "47.0"
+    introducedIn: "45.0"
+    release: Winter '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: Tooling API requests at API version >= 45.0
+    summary: Querying User object fields via Tooling API in guest user mode no
+      longer works at API version 45.0 and later; you must switch to SOAP API
+      for this data.
+    detail: Guest user contexts can still query User fields, but only through SOAP
+      API. Tooling API retains User access for profiles with View Setup
+      permission.
+    upgradeAction: If your integration queries User fields via Tooling API in guest
+      user mode, migrate those calls to SOAP API before upgrading past 44.0.
+    source:
+      document: v47-winter20.pdf
+      page: 576
+      heading: Tooling API
+    confidence: high
+    id: v47-rest-019
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The NavigationLinkSet subtype on Network metadata is deprecated
+      starting in API 47.0 and replaced by the NavigationMenu type.
+    upgradeAction: Migrate any package.xml references or tooling scripts from
+      NavigationLinkSet to NavigationMenu before moving to API 47.0+.
+    source:
+      document: v47-winter20.pdf
+      page: 578
+      heading: Metadata API
+    confidence: high
+    id: v47-packaging-011
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: API requests at version 47.0 and later
+    summary: The channelMembers field on PlatformEventChannel is removed in API
+      47.0; you must now use the separate PlatformEventChannelMember metadata
+      type to manage Change Data Capture channel membership.
+    upgradeAction: Update deployment scripts and package.xml to retrieve/deploy
+      PlatformEventChannelMember as a standalone type instead of relying on the
+      channelMembers field within PlatformEventChannel.
+    source:
+      document: v47-winter20.pdf
+      page: 578
+      heading: Metadata API
+    confidence: high
+    id: v47-packaging-012
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: OrgPreferenceSettings metadata type is deprecated in API 47.0 and
+      scheduled for removal in API 48.0; dozens of new granular settings types
+      replace it.
+    detail: Salesforce split OrgPreferenceSettings into specialized metadata types
+      (ApexSettings, SecuritySettings, FlowSettings, etc.). Deployments using
+      OrgPreferenceSettings must migrate to the replacement types before API
+      48.0.
+    upgradeAction: Audit package.xml and retrieve/deploy scripts for
+      OrgPreferenceSettings usage; refactor to the corresponding new settings
+      types before upgrading to API 48.0.
+    source:
+      document: v47-winter20.pdf
+      page: 581
+      heading: Settings Exposed in Metadata API
+    confidence: high
+    id: v47-packaging-013
+  - apiVersion: "47.0"
+    release: Winter '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+      - LWC
+    behaviorArea: aura
+    appliesWhen: org-wide after critical update activation
+    summary: Lightning component markup can no longer reference Apex properties
+      whose getter is marked private; only properties with public or global
+      getters remain accessible in expressions.
+    upgradeAction: Review Aura/LWC components referencing Apex controller properties
+      and ensure referenced properties have public or global getter methods.
+    source:
+      document: v47-winter20.pdf
+      page: 597
+      heading: Critical and Security Updates
+    confidence: high
+    id: v47-aura-005

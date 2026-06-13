@@ -1,0 +1,26 @@
+{
+  "name": "idea-almanac-corpus",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Almanac corpus — own-words change entries for every Salesforce API version, v29 (Winter '14) onward.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "extract": "node --experimental-strip-types --no-warnings pipeline/src/extract.ts",
+    "filter": "node --experimental-strip-types --no-warnings pipeline/src/filter.ts",
+    "extract-entries": "node --experimental-strip-types --no-warnings pipeline/src/extract-entries.ts",
+    "validate": "node --experimental-strip-types --no-warnings pipeline/src/validate.ts",
+    "manifest": "node --experimental-strip-types --no-warnings pipeline/src/manifest.ts",
+    "mcp": "node --experimental-strip-types --no-warnings mcp/server.ts",
+    "golden": "node --experimental-strip-types --no-warnings golden-questions/run.ts"
+  },
+  "dependencies": {
+    "pdfjs-dist": "^6.0.227",
+    "yaml": "^2.9.0"
+  },
+  "devDependencies": {
+    "@napi-rs/canvas": "^1.0.0",
+    "ajv": "^8.20.0"
+  }
+}

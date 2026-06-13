@@ -1,0 +1,42 @@
+name: Almanac (dogfood)
+
+# Dogfoods the scanner's own GitHub Action against the deliberately-aging
+# sample fixture, on every push/PR. Proves the Action runs end-to-end, emits its
+# outputs/badge, and (on PRs) posts the report as a comment.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write # required for comment-pr
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build -w idea-almanac
+
+      - id: almanac
+        uses: ./packages/scanner/action
+        with:
+          path: packages/scanner/test/fixtures/sample-sfdx-repo
+          comment-pr: true
+          # Use the freshly-built local CLI rather than the (unpublished) npm package.
+          command: node packages/scanner/dist/cli.js
+          # fail-on intentionally empty: the fixture is scary on purpose; the
+          # dogfood proves the Action runs + comments — it must not block PRs.
+
+      - name: Echo Action outputs
+        run: |
+          echo "Debt score:    ${{ steps.almanac.outputs.debt-score }}"
+          echo "Retired count: ${{ steps.almanac.outputs.retired-count }}"
+          echo "Badge:         ${{ steps.almanac.outputs.badge }}"

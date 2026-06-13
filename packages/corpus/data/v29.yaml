@@ -1,0 +1,1073 @@
+apiVersion: "29.0"
+release: Winter '14
+reviewed: true
+entries:
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Chatter REST API File Information Batch resource now supports
+      DELETE requests for bulk file deletion, a capability previously missing
+      from documentation.
+    source:
+      document: v29-winter14.pdf
+      page: 10
+      heading: Change Log
+    confidence: medium
+    id: v29-rest-001
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: The forceSecureCustomWebAddress attribute on the
+      chatteranswers:allfeeds component is deprecated and should no longer be
+      used in new development.
+    upgradeAction: Remove usage of forceSecureCustomWebAddress attribute from any
+      chatteranswers:allfeeds components and migrate to the recommended secure
+      URL handling approach.
+    source:
+      document: v29-winter14.pdf
+      page: 32
+      heading: Visualforce
+    confidence: medium
+    id: v29-vf-001
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: "New SOAP API calls added for Salesforce1 support: describeAppMenu(),
+      describeCompactLayouts(), describeFlexiPages(), describeTheme(), and
+      describeGlobalTheme() retrieve navigation menu, layout, and theme
+      metadata."
+    source:
+      document: v29-winter14.pdf
+      page: 66
+      heading: Salesforce1 Platform Overview
+    confidence: medium
+    id: v29-soap-001
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: "New REST API resources introduced: AppMenu, FlexiPage, and Themes
+      resources for retrieving Salesforce1 navigation, flexible page, and theme
+      metadata. Custom publisher actions now automatically receive REST
+      endpoints at /sobjects/{Object}/quickActions/{ActionName}."
+    source:
+      document: v29-winter14.pdf
+      page: 66
+      heading: Salesforce1 Platform Overview
+    confidence: medium
+    id: v29-rest-003
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Communities now support SOAP and REST API calls through community
+      endpoint URLs (with existing API sessions), plus AJAX Toolkit and
+      Streaming API access from within a community context.
+    source:
+      document: v29-winter14.pdf
+      page: 110
+      heading: Improved Communities API Support
+    confidence: medium
+    id: v29-rest-004
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: The CleanStatus field on Account, Contact, and Lead objects now
+      supports the update() call and includes a new 'Skipped' picklist value
+      that developers can set via the API to exclude records from incremental
+      Data.com Clean sync jobs.
+    source:
+      document: v29-winter14.pdf
+      page: 141
+      heading: Data.com Clean Additional Enhancements
+    confidence: medium
+    id: v29-soap-002
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Four new JavaScript API events on Sfdc.canvas.publisher allow custom
+      Salesforce console components to programmatically select actions, populate
+      field values, invoke submit functions, and pass custom events to
+      Visualforce-based actions in Case Feed.
+    source:
+      document: v29-winter14.pdf
+      page: 150
+      heading: New Publisher JavaScript API Events Let Custom Salesforce Console
+        Components Interact with Case Feed
+    confidence: high
+    id: v29-vf-002
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: New Visualforce components for Chatter Answers (chatteranswers:aboutme,
+      guestsignin, feedfilter, feeds, searchask, datacategoryfilter) allow
+      developers to build custom zone layouts instead of using the monolithic
+      allfeeds component.
+    source:
+      document: v29-winter14.pdf
+      page: 157
+      heading: Customize Chatter Answers with Visualforce Components
+    confidence: medium
+    id: v29-vf-003
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Chatter Answers search functionality is now accessible programmatically
+      via Chatter in Apex and the Chatter REST API, allowing developers to
+      retrieve questions and articles with the same relevancy scoring (votes,
+      best answers) used in the UI.
+    source:
+      document: v29-winter14.pdf
+      page: 158
+      heading: Build the Chatter Answers Search into Your Applications
+    confidence: medium
+    id: v29-rest-005
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Metadata API now supports defining approval processes and workflow
+      rules on deployed Knowledge article types (_kav objects), enabling
+      automated approval actions, email alerts, field updates, and outbound
+      messages.
+    source:
+      document: v29-winter14.pdf
+      page: 173
+      heading: Metadata API Support for Article Approval Actions
+    confidence: medium
+    id: v29-rest-006
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: integrations using Live Agent Deployment API or Pre-Chat API
+    summary: Live Agent Deployment and Pre-Chat APIs now follow Salesforce's
+      standard versioning scheme; the endpoint URL structure changed to include
+      version numbers, requiring updates to deployment code on web pages.
+    upgradeAction: Update deployment code on all web pages to reference the new
+      versioned URL format (e.g., /js/29.0/deployment.js) to access v29.0
+      methods and parameters.
+    source:
+      document: v29-winter14.pdf
+      page: 184
+      heading: Live Agent API Versions
+    confidence: low
+    id: v29-rest-007
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Live Agent Pre-Chat API reaches general availability, providing
+      programmatic access to customer details captured in pre-chat forms via
+      the findOrCreate methods.
+    source:
+      document: v29-winter14.pdf
+      page: 185
+      heading: "Live Agent Pre-Chat API: Generally Available"
+    confidence: high
+    id: v29-rest-008
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Live Agent REST API reaches general availability, providing
+      programmatic control over chat sessions without requiring Visualforce.
+      Developers can now build custom chat windows in mobile and web apps using
+      REST endpoints for session management, message exchange, and visitor state
+      tracking.
+    source:
+      document: v29-winter14.pdf
+      page: 185
+      heading: "Live Agent REST API: Generally Available"
+    confidence: high
+    id: v29-rest-009
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: The Report object's Format field now supports filtering and sorting in
+      SOAP API SOQL queries, enabling programmatic discovery of reports by type
+      (Tabular, Summary, Matrix, or Joined).
+    source:
+      document: v29-winter14.pdf
+      page: 211
+      heading: Format of Report Object in the SOAP API
+    confidence: high
+    id: v29-soql-001
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce as a SAML Identity Provider now signs each assertion
+      individually using the same certificate that signs the overall SAML
+      response, whereas previously assertions relied solely on the parent
+      response signature.
+    upgradeAction: Verify that your Service Provider's SAML validation logic can
+      handle individually signed assertions in addition to the response-level
+      signature; some SP implementations may need configuration updates to
+      accept or ignore the new assertion signature.
+    source:
+      document: v29-winter14.pdf
+      page: 230
+      heading: Entire SAML Assertion Now Signed
+    confidence: high
+    id: v29-auth-001
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce apps are now delivered as connected apps bundled into
+      managed packages that install automatically when any user triggers OAuth
+      approval or a refresh token flow for any app in the package.
+    detail: Two managed packages (Chatter-related and non-Chatter-related) replace
+      the previous Salesforce app mechanism. Installation is triggered
+      asynchronously on first OAuth consent or token refresh by any org user for
+      any app in the package. This changes how administrators discover and
+      manage these apps since they appear as installed packages rather than
+      standalone apps.
+    upgradeAction: Review connected app policies and package installation settings;
+      confirm that automatic package installation aligns with your org's change
+      management process.
+    source:
+      document: v29-winter14.pdf
+      page: 230
+      heading: Automatic Installation of Salesforce Apps
+    confidence: medium
+    id: v29-auth-002
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: SAML service providers can no longer be created from the Identity
+      Provider page; they must now be configured as connected apps with SAML
+      enabled via Setup > Create > Apps.
+    upgradeAction: Update any documentation or automation that references the old
+      Identity Provider workflow for creating SAML service providers; switch to
+      the connected apps approach.
+    source:
+      document: v29-winter14.pdf
+      page: 230
+      heading: Creating Service Providers as SAML-Enabled Connected Apps
+    confidence: medium
+    id: v29-auth-003
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Admins can now assign security levels (Standard or High Assurance) to
+      authentication methods and enforce High Assurance requirements on
+      connected apps, blocking access or forcing step-up authentication for
+      sessions that don't meet the threshold.
+    detail: SAML assertions can pass a SessionLevel attribute (STANDARD or
+      HIGH_ASSURANCE) to set session security programmatically. Connected app
+      OAuth flows may now be blocked or require two-factor step-up if the org
+      policy demands High Assurance and the current session is Standard.
+    upgradeAction: "Review connected app integrations: if org admins enable High
+      Assurance policies, OAuth flows from Standard sessions will either fail or
+      redirect users to 2FA. Test automated integrations that rely on
+      username/password or delegated auth to ensure they can handle the block or
+      step-up redirect."
+    source:
+      document: v29-winter14.pdf
+      page: 232
+      heading: Session-Level Security
+    confidence: medium
+    id: v29-auth-004
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce now supports OpenID Connect as an authentication provider
+      type, enabling SSO integration with third-party identity providers like
+      Amazon, Google, and PayPal that implement the OpenID Connect server
+      protocol.
+    source:
+      document: v29-winter14.pdf
+      page: 236
+      heading: Using OpenID Connect Authentication Providers
+    confidence: high
+    id: v29-auth-005
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce now supports mutual TLS authentication on inbound API
+      connections, allowing clients to present certificates for two-way
+      verification. API clients can connect on port 8443 with client certificate
+      authentication, and a user permission enforces this secure channel.
+    detail: This enables server-to-server integrations where both parties verify
+      identity via certificates. Administrators upload client certificates
+      signed by Salesforce-trusted CAs, and the 'Enforce SSL/TLS Mutual
+      Authentication' permission forces API users onto port 8443.
+    source:
+      document: v29-winter14.pdf
+      page: 236
+      heading: Mutual Authentication
+    confidence: high
+    id: v29-auth-006
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+      - ApexClass
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: The relationship name for retrieving Notes and Attachments via SOQL or
+      Visualforce changed from NotesAndAttachments to CombinedAttachments. For
+      Case, the name changed from Attachments to CombinedAttachments.
+    upgradeAction: Update Visualforce pages and Apex code that reference the
+      NotesAndAttachments or Attachments relationship names to use
+      CombinedAttachments instead.
+    source:
+      document: v29-winter14.pdf
+      page: 256
+      heading: Changed Relationship Name for Notes and Attachments Related List
+    confidence: high
+    id: v29-vf-005
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: Force.com Sites sandbox URLs now use a hyphen instead of a period
+      between the sandbox name and subdomain, changing the format to
+      [sandboxName]-[subdomain].[instance].force.com.
+    detail: Existing deployments are updated automatically, but any hardcoded
+      sandbox Site URLs in external integrations, webhooks, or documentation
+      will need updating to use the new hyphen-separated format.
+    upgradeAction: Audit external systems, webhooks, and documentation for hardcoded
+      Force.com Sites sandbox URLs and update them to use the hyphen format
+      instead of period separators.
+    source:
+      document: v29-winter14.pdf
+      page: 262
+      heading: Hyphen Now Required in Sandbox Subdomain Name
+    confidence: high
+    id: v29-other-001
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: Visualforce pages compiled at API >= 29.0 with docType="html-5.0"
+    summary: A new <apex:input> component enables HTML5-native input types (date
+      pickers, range sliders, tel/email keyboards) that adapt to controller
+      property types, but requires the page docType be set to html-5.0.
+    source:
+      document: v29-winter14.pdf
+      page: 268
+      heading: New <apex:input> Component
+    confidence: high
+    id: v29-vf-006
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: Visualforce pages compiled at API >= 29.0 with docType set to html-5.0
+    summary: The type attribute becomes available on apex:input and apex:inputField
+      components, enabling HTML5 input types like date, email, tel, and number
+      for native browser behaviors and mobile-friendly interfaces.
+    source:
+      document: v29-winter14.pdf
+      page: 269
+      heading: type Attribute for <apex:input> and <apex:inputField>
+    confidence: high
+    id: v29-vf-007
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: Visualforce pages with docType set to html-5.0
+    summary: Visualforce input components gain a new list attribute that renders
+      HTML5 datalist elements, enabling browser-native autocomplete suggestions
+      for form fields.
+    source:
+      document: v29-winter14.pdf
+      page: 270
+      heading: HTML5 <datalist> Element for Input Components
+    confidence: low
+    id: v29-vf-008
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: Visualforce pages compiled at API >= 29.0
+    summary: The <apex:selectCheckboxes> and <apex:selectRadio> components now wrap
+      their output in <fieldset> tags and gain three new attributes
+      (borderVisible, legendInvisible, legendText) for accessibility legend
+      control. This changes the generated HTML structure.
+    detail: Pages at v29+ will see additional DOM elements (<fieldset>, optionally
+      <legend>) around checkbox and radio groups. Custom CSS targeting these
+      components may need adjustment due to the new wrapper elements.
+    upgradeAction: Review pages using <apex:selectCheckboxes> or <apex:selectRadio>
+      with custom styling. Test that layout remains correct after the <fieldset>
+      wrapper is added, and adjust CSS selectors if needed.
+    source:
+      document: v29-winter14.pdf
+      page: 271
+      heading: Accessibility Improvements to Visualforce Components
+    confidence: high
+    id: v29-vf-009
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: The apex:includeScript component gains a loadOnReady attribute that
+      defers JavaScript loading until after DOM construction, allowing
+      developers to optimize initial page render times.
+    source:
+      document: v29-winter14.pdf
+      page: 273
+      heading: Deferred Loading of JavaScript Resources via <apex:includeScript>
+    confidence: high
+    id: v29-vf-010
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: A new Visualforce component <apex:milestoneTracker> allows embedding
+      the entitlement milestone tracker directly in custom Case Feed pages,
+      requiring the entityId attribute to specify the case.
+    source:
+      document: v29-winter14.pdf
+      page: 276
+      heading: New <apex:milestoneTracker> Component
+    confidence: high
+    id: v29-vf-012
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: components compiled at API >= 29.0
+    summary: The forceSecureCustomWebAddress attribute on the
+      chatteranswers:allfeeds Visualforce component no longer has any effect
+      because secure custom web addresses are now the default behavior for
+      absolute URLs in Chatter Answers feeds.
+    upgradeAction: Remove any usage of the forceSecureCustomWebAddress attribute
+      from chatteranswers:allfeeds components as it is now a no-op.
+    source:
+      document: v29-winter14.pdf
+      page: 277
+      heading: chatteranswers:allfeeds forceSecureCustomWebAddress Attribute Deprecated
+    confidence: high
+    id: v29-vf-013
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: A bug fix now preserves the SOQL WHERE clause when calling save() on a
+      StandardSetController that was initialized with a queryLocator. Previously
+      the WHERE condition was silently dropped.
+    detail: Code that worked around this bug by manually re-applying filters after
+      save() may now apply those filters twice, potentially causing unexpected
+      behavior or performance issues.
+    upgradeAction: Review any StandardSetController code using queryLocator with
+      save() calls. Remove workarounds that manually re-applied WHERE
+      conditions, as the framework now preserves them correctly.
+    source:
+      document: v29-winter14.pdf
+      page: 277
+      heading: SOQL WHERE Clause No Longer Reset In a StandardSetController
+        Initialized with a queryLocator
+    confidence: high
+    id: v29-vf-014
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Canvas apps no longer require users to have the 'API Enabled'
+      permission to run. Previously blocked users can now execute installed
+      canvas apps without this permission being granted.
+    upgradeAction: Review security model if you relied on 'API Enabled' permission
+      to restrict canvas app access; implement alternative access controls if
+      needed.
+    source:
+      document: v29-winter14.pdf
+      page: 278
+      heading: API Enabled User Permission No Longer Required
+    confidence: high
+    id: v29-auth-007
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: "The per-transaction code statement limit is removed and replaced with
+      CPU time limits: 10 seconds for synchronous Apex and 60 seconds for
+      asynchronous Apex. Exceeding CPU time throws an unhandleable
+      LimitException."
+    detail: CPU time measurement includes all code executed within a transaction
+      including package code and workflow invocations. This change allows
+      transactions to execute more statements than before but introduces a new
+      failure mode for CPU-intensive operations.
+    upgradeAction: Review Apex code that previously ran near statement limits; it
+      may now succeed but could hit CPU limits instead. Monitor for
+      LimitException failures related to CPU time and optimize compute-heavy
+      logic.
+    source:
+      document: v29-winter14.pdf
+      page: 282
+      heading: Statement Limit Elimination
+    confidence: high
+    id: v29-apex-004
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: The CronJobDetail object is now queryable via SOQL, allowing Apex code
+      to retrieve the name and type of scheduled jobs by joining from
+      CronTrigger or querying CronJobDetail directly.
+    source:
+      document: v29-winter14.pdf
+      page: 282
+      heading: Scheduled Job Name and Type Available in Queries
+    confidence: high
+    id: v29-soql-002
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Scheduled Apex jobs created before Summer '13 are migrated to a new
+      scheduling infrastructure, causing the CronTrigger.PreviousFireTime field
+      to reset to null until the job runs again.
+    detail: This is a one-time migration side effect. Any code or monitoring that
+      reads PreviousFireTime immediately after the upgrade will see null instead
+      of the historical value. The field repopulates correctly after the next
+      scheduled execution.
+    upgradeAction: Review any integrations or monitoring scripts that depend on
+      CronTrigger.PreviousFireTime for scheduled jobs; add null-handling logic
+      or expect transient null values until jobs execute post-migration.
+    source:
+      document: v29-winter14.pdf
+      page: 283
+      heading: PreviousFireTime Reset for Upgraded Scheduled Apex Jobs
+    confidence: high
+    id: v29-apex-005
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex triggers can now be written for Topic and TopicAssignment objects,
+      enabling automation when topics are created, modified, or assigned to
+      records.
+    source:
+      document: v29-winter14.pdf
+      page: 283
+      heading: Triggers for Topic and TopicAssignment
+    confidence: high
+    id: v29-apex-006
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The Database class now offers merge() methods that return MergeResult
+      objects instead of throwing exceptions, plus getDeleted() and getUpdated()
+      utility methods for retrieving recently changed records programmatically.
+    source:
+      document: v29-winter14.pdf
+      page: 284
+      heading: Database Methods and Result Classes
+    confidence: high
+    id: v29-apex-007
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex gains the ability to introspect publisher actions via the new
+      QuickAction.describeQuickActions method and
+      QuickAction.DescribeQuickActionResult class, enabling programmatic
+      discovery of action metadata including layouts, icons, default values, and
+      Visualforce page associations.
+    source:
+      document: v29-winter14.pdf
+      page: 288
+      heading: New QuickAction Describe method and class
+    confidence: high
+    id: v29-apex-008
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforceComponent
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new Apex interface ChatterAnswers.AccountCreator allows custom
+      Account creation logic for Chatter Answers portal user registration,
+      specified via the registrationClassName attribute on the
+      chatteranswers:registration Visualforce component.
+    source:
+      document: v29-winter14.pdf
+      page: 292
+      heading: ChatterAnswers.AccountCreator Interface
+    confidence: medium
+    id: v29-apex-009
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: "The QuickAction class gains two static methods for programmatically
+      inspecting quick action metadata: one retrieves available quick actions
+      for a given parent object type, the other returns detailed metadata for
+      specified quick actions by name."
+    source:
+      document: v29-winter14.pdf
+      page: 293
+      heading: New QuickAction Methods
+    confidence: high
+    id: v29-apex-010
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The Messaging.reserveMassEmailCapacity and
+      Messaging.reserveSingleEmailCapacity methods now throw
+      System.HandledException instead of LimitException when the org's daily
+      email quota would be exceeded.
+    upgradeAction: Update any catch blocks that specifically handle LimitException
+      from these methods to catch HandledException instead, or use a generic
+      Exception catch.
+    source:
+      document: v29-winter14.pdf
+      page: 310
+      heading: Updated Errors for Email Messaging Methods
+    confidence: high
+    id: v29-apex-011
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: DML operations on User records now return different StatusCode values
+      in their exceptions, which may break code that catches and inspects
+      specific status codes.
+    upgradeAction: Review exception-handling logic that checks StatusCode values
+      from User DML failures and update any hard-coded comparisons to match the
+      new codes.
+    source:
+      document: v29-winter14.pdf
+      page: 310
+      heading: Different Status Codes Returned by DML Exceptions for the User Object
+    confidence: medium
+    id: v29-apex-012
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: API requests using version 29.0 or later
+    summary: TopicAssignment queries now enforce a 1,100 record limit unless the
+      user has View All Data permission, which may break existing integrations
+      that retrieved larger result sets.
+    upgradeAction: Review integrations querying TopicAssignment to ensure they
+      either use View All Data permission or handle the 1,100 record limit
+      appropriately with pagination.
+    source:
+      document: v29-winter14.pdf
+      page: 314
+      heading: New and Changed Chatter Objects
+    confidence: low
+    id: v29-soap-003
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API calls at version 29.0 and later when saving User records; some
+      changes also affect version 28.0 and earlier
+    summary: Concurrent User record saves now return different ExceptionCode and
+      StatusCode values. Code that catches INVALID_ID_FIELD should expect
+      INVALID_CROSS_REFERENCE_KEY, and INVALID_FIELD_FOR_INSERT_UPDATE becomes
+      INSUFFICIENT_ACCESS_ON_CROSS_REFERENCE_ENTITY at v29+.
+    detail: The platform improved concurrency handling for User object saves, which
+      altered the error codes returned for certain failure conditions.
+      Additionally, v28 and earlier clients see INVALID_FIELD_FOR_INSERT_UPDATE
+      where they previously received
+      INSUFFICIENT_ACCESS_ON_CROSS_REFERENCE_ENTITY.
+    upgradeAction: Review error-handling logic that relies on specific User-save
+      exception codes. Update catch blocks and status-code comparisons to match
+      the new values before upgrading API versions.
+    source:
+      document: v29-winter14.pdf
+      page: 315
+      heading: User Object Save Behavior and Error Changes
+    confidence: high
+    id: v29-rest-010
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: "REST API gains several new resources: Get Deleted and Get Updated
+      endpoints for tracking record changes within time ranges, QueryAll for
+      including soft-deleted records in SOQL results, and a Sforce-Limit-Info
+      response header exposing current API usage against org limits."
+    source:
+      document: v29-winter14.pdf
+      page: 316
+      heading: REST API
+    confidence: high
+    id: v29-rest-011
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: SOAP API responses now include a LimitInfoHeader that reports the
+      organization's current API call consumption and limits, enabling
+      integrations to monitor usage programmatically.
+    source:
+      document: v29-winter14.pdf
+      page: 319
+      heading: SOAP API
+    confidence: high
+    id: v29-soap-004
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Streaming API subscriptions now support filtering via MVEL expressions
+      with logical AND/OR operators appended to the subscription URL, reducing
+      unnecessary event delivery to clients.
+    detail: Subscribers can append filter expressions like
+      ?Company=='Acme'&&City=='Timbuktu' to PushTopic channel URLs. The filtered
+      fields must appear in the PushTopic's SOQL SELECT clause. Only
+      18-character IDs are supported in filter criteria.
+    source:
+      document: v29-winter14.pdf
+      page: 322
+      heading: Filtered Subscriptions
+    confidence: high
+    id: v29-rest-012
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: clients connecting via cometd/29.0 Streaming API endpoint
+    summary: Streaming API now emits notifications for record deletions and
+      undeletions via new PushTopic boolean fields (NotifyForOperationDelete,
+      NotifyForOperationUndelete), enabling real-time sync of soft-delete
+      events.
+    detail: To receive these events, PushTopics must set the new boolean flags and
+      clients must connect to the v29.0+ cometd endpoint. Existing PushTopics
+      are unaffected unless reconfigured.
+    source:
+      document: v29-winter14.pdf
+      page: 322
+      heading: Support for Delete and Undelete Events
+    confidence: low
+    id: v29-rest-013
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: integrations targeting Chatter REST API version >= 29.0
+    summary: The Feed Body response body's text property can now return null in API
+      v29.0+, requiring developers to switch to Feed Item Preamble Message
+      Body's text property for reliable rendering.
+    upgradeAction: Update code that renders feed item text to use the Feed Item
+      Preamble Message Body text property instead of Feed Body text property, as
+      the latter may be null in v29.0+.
+    source:
+      document: v29-winter14.pdf
+      page: 330
+      heading: New and Changed Response Bodies
+    confidence: high
+    id: v29-rest-014
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: integrations targeting Chatter REST API version >= 29.0
+    summary: "The Message Segment: Mention response body replaces the user property
+      with a record property that can contain either a Group or User Summary,
+      reflecting the new ability to mention groups."
+    upgradeAction: Update integrations parsing mention segments to use the record
+      property instead of user property, and handle both Group and User Summary
+      types when processing mentions.
+    source:
+      document: v29-winter14.pdf
+      page: 330
+      heading: New and Changed Response Bodies
+    confidence: high
+    id: v29-rest-015
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: The Metadata API deployment workflow changed from polling AsyncResult
+      to using checkDeployStatus() with a new DeployResult object that provides
+      detailed real-time status, error messages, and test progress.
+    detail: "Many fields moved from AsyncResult to DeployResult. The new workflow
+      is: (1) call deploy() to get AsyncResult with an id, (2) call
+      checkDeployStatus(id) to get DeployResult with granular progress tracking
+      including component counts, test counts, and detailed error information."
+    upgradeAction: Update deployment scripts that poll AsyncResult fields to use
+      checkDeployStatus() and read status from DeployResult instead.
+    source:
+      document: v29-winter14.pdf
+      page: 336
+      heading: Metadata API
+    confidence: high
+    id: v29-soap-005
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: API calls at version 29.0 and later
+    summary: PermissionSet retrieval now returns only enabled user permissions
+      instead of all permissions (enabled and disabled) as in earlier versions.
+    upgradeAction: If your tooling relies on retrieving disabled permission entries
+      to track what is explicitly turned off, adjust your logic since v29+ only
+      returns enabled permissions.
+    source:
+      document: v29-winter14.pdf
+      page: 336
+      heading: Metadata API
+    confidence: high
+    id: v29-packaging-001
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: A new REST-based Analytics API is introduced, enabling programmatic
+      access to Salesforce report metadata and results at both summary and
+      detail levels.
+    source:
+      document: v29-winter14.pdf
+      page: 346
+      heading: Analytics API
+    confidence: high
+    id: v29-rest-016
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Compact layouts can now be included in managed and unmanaged packages,
+      enabling ISVs to distribute mobile-optimized record layouts alongside
+      their apps.
+    source:
+      document: v29-winter14.pdf
+      page: 358
+      heading: Compact Layouts Available in Packages
+    confidence: high
+    id: v29-packaging-002
+  - apiVersion: "29.0"
+    release: Winter '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Flexible Pages, the metadata type backing Salesforce1 mobile home
+      pages, can now be included in both managed and unmanaged packages for
+      distribution.
+    source:
+      document: v29-winter14.pdf
+      page: 358
+      heading: Flexible Pages Available in Packages
+    confidence: high
+    id: v29-packaging-003

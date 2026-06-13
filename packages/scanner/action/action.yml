@@ -1,0 +1,113 @@
+name: 'Almanac API debt scan'
+description: 'Scan a Salesforce repo (or org) for dated API version debt, surface a badge, and optionally comment on the PR.'
+author: 'Idea Bulut Solutions'
+branding:
+  icon: 'calendar'
+  color: 'orange'
+
+inputs:
+  path:
+    description: 'Path to the sfdx project to scan (ignored when "org" is set).'
+    required: false
+    default: '.'
+  org:
+    description: 'sf org alias/username to scan instead of a repo. Requires a prior `sf` auth step.'
+    required: false
+    default: ''
+  fail-on:
+    description: 'Fail the job if any finding lands in this tier: retired | breaks-2027 | breaks-2028 | stale. Empty = never fail.'
+    required: false
+    default: ''
+  comment-pr:
+    description: 'Post the Markdown report as a comment on the PR (true/false).'
+    required: false
+    default: 'false'
+  command:
+    description: 'How to invoke the CLI. Defaults to the published npm package; override for local/dogfood runs.'
+    required: false
+    default: 'npx --yes idea-almanac@latest'
+
+outputs:
+  debt-score:
+    description: 'Overall debt score (0 = clean).'
+    value: ${{ steps.scan.outputs.debt-score }}
+  retired-count:
+    description: 'Number of findings already in the retired tier.'
+    value: ${{ steps.scan.outputs.retired-count }}
+  report-path:
+    description: 'Absolute path to the JSON report.'
+    value: ${{ steps.scan.outputs.report-path }}
+  badge:
+    description: 'A shields.io static-badge Markdown snippet for your README.'
+    value: ${{ steps.scan.outputs.badge }}
+
+runs:
+  using: composite
+  steps:
+    - id: scan
+      shell: bash
+      env:
+        ALMANAC_CMD: ${{ inputs.command }}
+        ALMANAC_PATH: ${{ inputs.path }}
+        ALMANAC_ORG: ${{ inputs.org }}
+        ACTION_DIR: ${{ github.action_path }}
+      run: |
+        set -euo pipefail
+        report_dir="${RUNNER_TEMP:-/tmp}"
+        json="$report_dir/almanac-report.json"
+        md="$report_dir/almanac-report.md"
+        html="$report_dir/almanac-report.html"
+
+        args=(scan)
+        if [ -n "$ALMANAC_ORG" ]; then
+          args+=(--org "$ALMANAC_ORG")
+        else
+          args+=("$ALMANAC_PATH")
+        fi
+        args+=(--json "$json" --html "$html" --md "$md")
+
+        echo "Running: $ALMANAC_CMD ${args[*]}"
+        # Run WITHOUT --fail-on so a report + comment are always produced; the
+        # gate is enforced in a later step (after the PR comment posts).
+        $ALMANAC_CMD "${args[@]}"
+
+        node "$ACTION_DIR/summarize.mjs" "$json" "$md"
+
+    - name: Comment on PR
+      if: ${{ inputs.comment-pr == 'true' && github.event_name == 'pull_request' }}
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+      run: |
+        set -euo pipefail
+        md="${RUNNER_TEMP:-/tmp}/almanac-report.md"
+        # Upsert a single comment (find a prior Almanac comment, edit it; else create).
+        body="$(cat "$md")"$'\n\n'"<!-- almanac-api-debt -->"
+        existing="$(gh pr view "$PR_NUMBER" --json comments \
+          --jq '.comments[] | select(.body | contains("<!-- almanac-api-debt -->")) | .url' | tail -n1 || true)"
+        if [ -n "$existing" ]; then
+          gh pr comment "$PR_NUMBER" --edit-last --body "$body" || gh pr comment "$PR_NUMBER" --body "$body"
+        else
+          gh pr comment "$PR_NUMBER" --body "$body"
+        fi
+
+    - name: Enforce fail-on gate
+      if: ${{ inputs.fail-on != '' }}
+      shell: bash
+      env:
+        FAIL_ON: ${{ inputs.fail-on }}
+        JSON: ${{ runner.temp }}/almanac-report.json
+      run: |
+        set -euo pipefail
+        node -e '
+          const fs=require("fs");
+          const r=JSON.parse(fs.readFileSync(process.env.JSON,"utf8"));
+          const tier=process.env.FAIL_ON;
+          const n=(r.summary&&r.summary.byTier&&r.summary.byTier[tier])||0;
+          if(n>0){
+            console.error(`::error::Almanac --fail-on ${tier}: ${n} finding(s) in tier "${tier}"`);
+            process.exit(1);
+          }
+          console.log(`fail-on ${tier}: 0 findings — gate passed`);
+        '

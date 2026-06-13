@@ -1,0 +1,52 @@
+# Hand-written sample entries — exercise the schema, not real corpus data.
+apiVersion: "55.0"
+release: "Summer '22"
+reviewed: false
+entries:
+  - id: v55-apex-001
+    apiVersion: "55.0"
+    # Republished/keep-with-note convention (schema 1.1.0): originated in 54.0.
+    introducedIn: "54.0"
+    release: "Summer '22"
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes: [ApexClass, ApexTrigger]
+    behaviorArea: apex-runtime
+    appliesWhen: "Classes and triggers compiled at API >= 55.0"
+    summary: "Sample breaking entry: a runtime check that previously failed silently now throws an exception for components on v55 and above."
+    detail: "Fixture-only text used to exercise the schema; not a real release note."
+    upgradeAction: "Run unit tests covering the affected code path and handle the new exception before bumping past 55.0."
+    source:
+      document: v55-summer22.pdf
+      page: 412
+      heading: "Sample heading for a breaking change"
+    confidence: high
+  - id: v55-soql-002
+    apiVersion: "55.0"
+    release: "Summer '22"
+    changeType: new
+    impact: additive
+    affectedMetadataTypes: [Any]
+    behaviorArea: soql-sosl
+    appliesWhen: "Org-wide regardless of component version"
+    summary: "Sample additive entry: a new optional SOQL clause becomes available; existing queries are unaffected."
+    source:
+      document: v55-summer22.pdf
+      page: 98
+      heading: "Sample heading for an additive feature"
+    confidence: medium
+  - id: v55-auth-003
+    apiVersion: "55.0"
+    release: "Summer '22"
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes: [Integration]
+    behaviorArea: authentication
+    appliesWhen: "Org-wide regardless of component version"
+    summary: "Sample deprecation entry: an older authentication flow is marked for future retirement; it keeps working for now."
+    upgradeAction: "Inventory clients using the deprecated flow and plan migration to the supported alternative."
+    source:
+      document: v55-summer22.pdf
+      page: 233
+      heading: "Sample heading for a deprecation"
+    confidence: low

@@ -1,0 +1,1954 @@
+apiVersion: "56.0"
+release: Winter '23
+reviewed: true
+entries:
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; auto-enablement in
+      Spring '23, enforcement in September 2023
+    summary: Salesforce will automatically enable MFA for direct logins in Spring
+      '23 and enforce it permanently by September 2023, affecting all
+      integrations and API clients that authenticate via direct user credentials
+      rather than OAuth flows.
+    detail: The MFA requirement became contractually effective February 1, 2022. For
+      direct Salesforce logins (not SSO), MFA auto-enablement begins rolling out
+      with Spring '23, and full enforcement follows in September 2023.
+      Integrations using username-password authentication flows will break
+      unless they support MFA or migrate to OAuth-based authentication.
+    upgradeAction: Audit all integrations authenticating via username/password.
+      Migrate to OAuth 2.0 flows (JWT bearer, client credentials, or web server
+      flow) before enforcement. For any remaining direct-login scenarios,
+      implement MFA verification support.
+    source:
+      document: v56-winter23.pdf
+      page: 83
+      heading: Be Ready for Multi-Factor Authentication Auto-Enablement
+    confidence: high
+    id: v56-auth-001
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide in newly created Salesforce orgs regardless of component
+      API version
+    summary: Fresh Salesforce orgs now ship with Lightning Web Security enabled by
+      default for LWC instead of Lightning Locker, changing the sandbox
+      isolation model that custom components run under.
+    detail: This affects LWC used in Aura-based Experience Cloud sites but does not
+      apply to LWR-based sites. Existing orgs retain their current setting. The
+      broader LWS rollout replacing Locker spans multiple releases.
+    upgradeAction: When provisioning new orgs or sandboxes, verify that existing LWC
+      code functions correctly under LWS isolation rules, particularly any
+      components relying on Locker-specific DOM or global access behaviors.
+    source:
+      document: v56-winter23.pdf
+      page: 84
+      heading: Secure Components by Default with Lightning Web Security in New Orgs
+    confidence: high
+    id: v56-lwc-001
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide after enabling high-volume prediction writeback
+      (irreversible); automatic for orgs created after Winter '23
+    summary: "Enabling high-volume prediction writeback permanently changes how
+      Einstein Discovery prediction history is accessed: retention drops from
+      unlimited to 30 days, SOQL queries no longer work for retrieving
+      predictions, and data must be fetched via the Einstein Discovery REST API
+      instead."
+    detail: Once enabled, this setting cannot be reverted. Integrations that query
+      prediction history via SOQL or that rely on the Einstein Accuracy
+      Analytics app will break. The only retrieval path becomes the Einstein
+      Discovery REST API with a 30-day lookback window.
+    upgradeAction: Before enabling, audit any SOQL queries or Analytics app usage
+      that reads prediction history. Migrate retrieval logic to the Einstein
+      Discovery REST API and implement archival if history beyond 30 days is
+      required.
+    source:
+      document: v56-winter23.pdf
+      page: 130
+      heading: Save Higher Volumes of Predictions More Quickly (Generally Available)
+    confidence: high
+    id: v56-rest-001
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version (enforcement scheduled
+      Spring '23)
+    summary: Enhanced Personal Information Management replaces the older Hide
+      Personal Information setting and blocks external users (portal, community,
+      guest) from viewing other users' PII fields. Scoping rules now filter
+      records only in SOQL, reports, and list views—no longer in searches,
+      lookups, activity timeline, or SOSL.
+    detail: This release update was originally slated for Winter '23 but enforcement
+      was delayed to Spring '23. Once enforced, guest users also lose access to
+      their own PII fields such as email. Admins can customize which standard
+      and custom User fields count as PII via field sets.
+    upgradeAction: Audit any Apex, integrations, or reports that query User fields
+      for external-facing contexts. Verify that portal/community functionality
+      does not depend on access to other users' personal data, and confirm guest
+      user flows still work without self-PII access.
+    source:
+      document: v56-winter23.pdf
+      page: 173
+      heading: Enable Stronger Protection for Your Users' Personal Information
+        (Release Update)
+    confidence: high
+    id: v56-sharing-001
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: Scoping rules no longer apply automatically to SOSL queries, search
+      results, lookups, or the activity timeline. They now only affect SOQL
+      (when explicitly invoked via USING SCOPE), reports, and list views.
+    detail: Previously scoping rules filtered results across multiple surfaces
+      including searches and SOSL. After this release, code relying on scoping
+      rules to implicitly narrow SOSL results will return unscoped data instead.
+    upgradeAction: Review any SOSL queries or search integrations that assumed
+      scoping rules would filter results. If scoped behavior is needed, switch
+      to SOQL with the USING SCOPE scopingRule clause or implement filtering in
+      application logic.
+    source:
+      document: v56-winter23.pdf
+      page: 176
+      heading: Scoping Rules Apply Only to SOQL, Reports, and List Views
+    confidence: high
+    id: v56-soql-001
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version (GA for Experience
+      Cloud; Beta elsewhere)
+    summary: LWC components can now opt into light DOM rendering via the static
+      renderMode property and lwc:render-mode directive, attaching markup to the
+      host element rather than a shadow tree for easier third-party tool
+      integration and global styling.
+    detail: Light DOM is GA for Experience Cloud but Beta for Lightning Experience
+      and mobile. Components using light DOM lose shadow encapsulation—styles
+      can bleed in/out unless scoped CSS is used, and DOM scraping becomes
+      possible. Base Lightning components remain shadow-only.
+    source:
+      document: v56-winter23.pdf
+      page: 188
+      heading: Enable Third-Party Integrations with Light DOM (Beta)
+    confidence: high
+    id: v56-lwc-002
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: LWC gains a native modal overlay API via the LightningModal base class
+      and associated helper components (lightning-modal-header,
+      lightning-modal-body, lightning-modal-footer), providing a standardized
+      way to create modal dialogs without third-party libraries or custom
+      implementations.
+    source:
+      document: v56-winter23.pdf
+      page: 189
+      heading: Create Overlays with the New Modal Component
+    confidence: high
+    id: v56-lwc-003
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: The LWC framework now emits console warnings for additional categories
+      of invalid HTML syntax that were previously ignored. These warnings are
+      expected to become hard errors in a future release, which would prevent
+      affected components from loading.
+    detail: Spring '22 introduced these warnings; Winter '23 documents them. Invalid
+      patterns include abandoned head children, unclosed child elements, end
+      tags without matching open tags, misplaced doctypes, and nested noscript
+      tags among others. Components with these issues can still deploy today but
+      will break when Salesforce converts warnings to errors.
+    upgradeAction: Audit LWC templates for the eleven listed HTML validity warnings
+      in browser console or VS Code with Salesforce Extension Pack. Fix all
+      flagged markup before the future release that enforces errors.
+    source:
+      document: v56-winter23.pdf
+      page: 189
+      heading: Fix Invalid HTML Syntax to Avoid Component Loading Errors
+    confidence: medium
+    id: v56-lwc-004
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: LWC components saved at API >= 57.0
+    summary: Non-global SLDS design tokens (those marked internal rather than Global
+      Access) are no longer valid in LWC CSS and trigger a validation error at
+      component save time.
+    detail: "Starting with API version 57.0, referencing design tokens that lack
+      Global Access designation (e.g., --lwc-heightInput) causes a compile-time
+      error: 'No TOKEN named tokenName found'. This enforcement applies when
+      saving components, not at runtime."
+    upgradeAction: Audit LWC stylesheets for non-GA token references before
+      upgrading component API versions past 56.0. Replace internal tokens with
+      their global equivalents or define custom Aura design tokens.
+    source:
+      document: v56-winter23.pdf
+      page: 192
+      heading: Remove Non-Global Design Tokens in CSS
+    confidence: high
+    id: v56-lwc-005
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: new Salesforce orgs created at Winter '23 or later; existing orgs
+      unaffected unless setting is manually enabled
+    summary: New orgs now run Lightning web components under Lightning Web Security
+      (LWS) instead of Lightning Locker by default, which may cause runtime
+      differences for LWCs that rely on Locker-specific behaviors or
+      workarounds.
+    detail: LWS replaces Lightning Locker as the security sandbox for LWCs in fresh
+      orgs and scratch orgs. Components that depended on Locker quirks or
+      unsupported DOM access patterns may break. The setting can be toggled off
+      via Session Settings or the lockerServiceNext scratch-org flag, but
+      Salesforce intends LWS to become the permanent architecture.
+    upgradeAction: Before deploying LWCs to a new org, test them in a sandbox with
+      LWS enabled. Look for DOM access violations, third-party library
+      incompatibilities, and cross-namespace communication issues.
+    source:
+      document: v56-winter23.pdf
+      page: 193
+      heading: Use Lightning Web Security by Default in New Salesforce Orgs
+    confidence: low
+    id: v56-lwc-006
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: LWC components running under Lightning Web Security in Lightning
+      Experience or LWR-based Experience Cloud sites
+    summary: Lightning Web Security adds new API distortions blocking Function
+      constructor, eval, and HTMLObjectElement.data setter, while removing
+      distortions that previously blocked iframe/object
+      contentDocument/contentWindow access and certain window property getters.
+    detail: New distortions restrict dynamic code execution patterns. Conversely,
+      iframe and object element cross-frame access via
+      contentDocument/contentWindow getters is now permitted, along with
+      MessageEvent.source and Window opener/parent getters. Components relying
+      on eval or Function constructor will break; components that worked around
+      iframe access restrictions may need review.
+    upgradeAction: Audit LWC code for eval() or new Function() usage which will now
+      fail. Review any workarounds for iframe content access since those APIs
+      are now available. Run ESLint with the updated LWS rules to detect
+      affected patterns.
+    source:
+      document: v56-winter23.pdf
+      page: 194
+      heading: API Distortion Changes in Lightning Web Security
+    confidence: low
+    id: v56-lwc-007
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: BarcodeScanner LWC plugin gains front-facing camera support and new
+      BarcodeScannerOptions parameters for UI customization, enabling
+      kiosk-style scanning applications.
+    source:
+      document: v56-winter23.pdf
+      page: 196
+      heading: Create Self-Service Kiosk Applications–A New Use Case for BarcodeScanner
+    confidence: medium
+    id: v56-lwc-008
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: LWC gains a CalendarService API for reading, creating, updating, and
+      deleting calendar events on mobile devices within Mobile Publisher for
+      Experience Cloud apps.
+    source:
+      document: v56-winter23.pdf
+      page: 196
+      heading: Managing a Device's Calendar Events Using Lightning Web Components
+    confidence: high
+    id: v56-lwc-009
+  - apiVersion: "56.0"
+    introducedIn: "55.0"
+    release: Winter '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+      - ApexClass
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Visualforce JavaScript Remoting now validates CSRF tokens more strictly
+      and checks that the apexType parameter in $RemoteAction calls matches the
+      actual Apex method signature, rejecting invalid or inaccessible Apex
+      types.
+    detail: "This release update enforces two validations: (1) CSRF tokens for the
+      $RemoteAction global are generated differently for better security against
+      guest-user attacks, and (2) any apexType parameter must correspond to a
+      valid Apex object the caller can access and that satisfies the method
+      signature. Code referencing internal-only or mismatched Apex types will
+      throw errors at runtime. First available Summer '22, enforced Winter '23."
+    upgradeAction: Search for all Visualforce.remoting.Manager.invokeAction and
+      $RemoteAction usages. In a sandbox, enable the release update test run and
+      manually exercise each remoting path. Fix any CSRF or apexType validation
+      errors before the Winter '23 enforcement date.
+    source:
+      document: v56-winter23.pdf
+      page: 198
+      heading: Enable Visualforce JavaScript Remoting Enforcement (Release Update)
+    confidence: high
+    id: v56-vf-001
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+      - ApexClass
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version (enforced Winter '24)
+    summary: Visualforce JavaScript Remoting now validates the @JsonAccess
+      annotation on Apex classes, blocking serialization and deserialization
+      across packaging namespaces when the annotation is missing or restrictive.
+    detail: This release update ensures that Apex classes used with Visualforce
+      Remoting respect JsonAccess annotation boundaries. Code that previously
+      succeeded in cross-namespace serialization will fail if the target class
+      lacks appropriate JsonAccess settings.
+    upgradeAction: Before Winter '24 enforcement, audit Apex classes invoked via
+      Visualforce Remoting across namespace boundaries and add or adjust
+      @JsonAccess annotations to permit the required
+      serialization/deserialization operations.
+    source:
+      document: v56-winter23.pdf
+      page: 199
+      heading: Enable JsonAccess Annotation Validation for the Visualforce JavaScript
+        Remoting API (Release Update)
+    confidence: high
+    id: v56-vf-002
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version (enforced Spring '23)
+    summary: The label attribute on <apex:inputField> components is now HTML-escaped
+      automatically to block XSS attacks, which may double-escape labels you
+      already escaped manually.
+    detail: This release update auto-escapes the label attribute for all existing
+      and new <apex:inputField> tags. Pages that previously performed their own
+      escaping will render incorrectly due to double-encoding.
+    upgradeAction: Before Spring '23 enforcement, search Visualforce pages for
+      manually escaped label values on <apex:inputField> and remove redundant
+      escaping to prevent garbled display.
+    source:
+      document: v56-winter23.pdf
+      page: 200
+      heading: Escape the Label Attribute of <apex:inputField> Elements to Prevent
+        Cross-Site Scripting in Visualforce Pages (Release Update)
+    confidence: high
+    id: v56-vf-003
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: New Database methods now accept an accessLevel parameter, letting
+      developers explicitly run getQueryLocator and async DML operations in user
+      mode rather than system mode. This expands the user-mode surface
+      introduced in Summer '22.
+    detail: Beta feature extending the Summer '22 user-mode capability to additional
+      Database class methods including getQueryLocator and the async/immediate
+      DML variants (deleteAsync, deleteImmediate, insertAsync, insertImmediate,
+      updateAsync, updateImmediate). Opting in enforces FLS, object permissions,
+      and sharing rules of the running user.
+    source:
+      document: v56-winter23.pdf
+      page: 202
+      heading: Secure Even More Apex Code with User Mode Database Operations (Beta)
+    confidence: medium
+    id: v56-apex-001
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: A new System.Assert class provides purpose-built assertion methods
+      (areEqual, isNull, isInstanceOfType, fail, etc.) that produce clearer
+      exception messages than the legacy
+      System.assert/assertEquals/assertNotEquals methods.
+    source:
+      document: v56-winter23.pdf
+      page: 203
+      heading: Write Clear and Intentional Apex Assertions
+    confidence: high
+    id: v56-apex-002
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: removed
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce lifted the governor limits on how many query cursors a user
+      can hold open simultaneously, including cursors from Batch Apex start,
+      execute, and finish methods. Code that previously hit cursor-limit
+      exceptions or worked around them no longer needs those safeguards.
+    source:
+      document: v56-winter23.pdf
+      page: 204
+      heading: Limits on Concurrently Open Query Cursors are Removed
+    confidence: high
+    id: v56-apex-003
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new org limit named DailyAsyncApexTests is now exposed via
+      OrgLimits.getAll(), OrgLimits.getMap(), and the REST /limits/ endpoint,
+      letting developers programmatically check how many async test classes can
+      still be queued within the rolling 24-hour window.
+    source:
+      document: v56-winter23.pdf
+      page: 204
+      heading: Get Org Limit for Daily Maximum Apex Test Classes
+    confidence: high
+    id: v56-apex-004
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The Invocable.Action Apex class is now GA, enabling developers to
+      programmatically invoke both standard and custom invocable actions
+      directly from Apex code rather than only from Flow or Process Builder.
+    detail: This bridges Apex and declarative automation by letting Apex call any
+      invocable action (standard like chatterPost, or custom @InvocableMethod
+      classes) using createStandardAction or createCustomAction, pass parameters
+      via setInvocationParameter, and inspect results through the Result
+      wrapper.
+    source:
+      document: v56-winter23.pdf
+      page: 205
+      heading: Call Invocable Actions from Apex (Generally Available)
+    confidence: high
+    id: v56-apex-005
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version (requires Salesforce
+      enablement; Beta)
+    summary: UI API's /ui-api/records endpoint now supports an optional
+      Idempotency-Key header for POST, PATCH, and DELETE requests, letting
+      clients safely retry operations without creating duplicate records or
+      repeating side effects.
+    detail: By including a UUID v4 Idempotency-Key header, subsequent identical
+      requests within 30 days return cached responses instead of re-executing.
+      This is a Beta feature requiring Salesforce enablement.
+    source:
+      document: v56-winter23.pdf
+      page: 206
+      heading: Prevent Record Duplication with Idempotent Record Writes for UI API
+        (Beta)
+    confidence: medium
+    id: v56-rest-002
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: "Query cursor limits are lifted: orgs can now hold more than 10
+      concurrent result sets per user, and cursors remain valid for 2 days
+      instead of expiring after 15 minutes of inactivity. Query locator string
+      prefixes changed from 01g to 0r8."
+    detail: Although shipped in API version 56.0, this enhancement applies
+      universally across all API versions. Code that parses or stores query
+      locator strings may need adjustment for the new 0r8 prefix format. Five
+      new extended error codes help diagnose cursor-related failures.
+    upgradeAction: Audit any code that validates, parses, or persists query locator
+      strings for assumptions about the 01g prefix. Update regex patterns or
+      prefix checks to accept 0r8 locators.
+    source:
+      document: v56-winter23.pdf
+      page: 207
+      heading: Enjoy Longer Access to More Query Results
+    confidence: high
+    id: v56-rest-003
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; enforced in Summer '23
+    summary: Salesforce is retiring API versions 21.0 through 30.0 across all
+      REST-based APIs (including Bulk, Connect, Metadata, Tooling, and Platform
+      REST) as well as SOAP API. After Summer '23, requests to these versions
+      will fail with an endpoint-deactivated error.
+    detail: This retirement was announced in October 2020 and the Release Update
+      card appeared in Summer '21. All integrations still using versions
+      21.0–30.0 must migrate to a supported version before Summer '23
+      enforcement. Use API Total Usage events to audit which requests target
+      deprecated versions.
+    upgradeAction: Audit all integrations using API Total Usage events. Update any
+      code, middleware, or third-party tools calling versions 21.0–30.0 to use
+      version 31.0 or higher before Summer '23.
+    source:
+      document: v56-winter23.pdf
+      page: 208
+      heading: Legacy API Versions 21.0 Through 30.0 Are Being Retired (Release Update)
+    confidence: high
+    id: v56-rest-004
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Enhanced domains and partitioned domains increase hostname variability
+      across Salesforce orgs, so packages with hard-coded Salesforce URLs (for
+      content, Visualforce, etc.) may break when installed in orgs with
+      different domain configurations.
+    detail: Affects unlocked and second-generation managed packages. Hard-coded
+      references to Salesforce-hosted domains must be replaced with relative
+      paths or dynamically generated hostnames to ensure portability across org
+      types and My Domain settings.
+    upgradeAction: Audit package code for hard-coded Salesforce URLs (content files,
+      Visualforce pages, etc.) and replace them with relative paths or dynamic
+      hostname generation before distributing to orgs that may have enhanced
+      domains enabled.
+    source:
+      document: v56-winter23.pdf
+      page: 210
+      heading: Update Your Packages for Enhanced Domains and Partitioned Domains
+    confidence: high
+    id: v56-packaging-001
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Change Data Capture now supports filter expressions in
+      PlatformEventChannelMember, allowing subscribers to receive only matching
+      change events rather than all record changes. Filters can reference record
+      fields and most ChangeEventHeader fields, and selected filter fields
+      become enriched fields automatically.
+    detail: Configure via Tooling API or Metadata API using PlatformEventChannel and
+      PlatformEventChannelMember.FilterExpression. Supports CometD and Pub/Sub
+      API subscribers but not Apex triggers. Field-level security is bypassed
+      during filter evaluation, though delivered events still respect subscriber
+      field access. Filter expressions can now be packaged and handle namespace
+      prefixes automatically.
+    source:
+      document: v56-winter23.pdf
+      page: 217
+      heading: Filter Your Stream of Change Events (Generally Available)
+    confidence: high
+    id: v56-rest-005
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Change Data Capture channels now allow each channel member its own
+      allocation of 10 enriched fields, even when the same entity appears in
+      multiple channel members across different channels. Previously, enriched
+      fields were counted per entity globally across all channels.
+    source:
+      document: v56-winter23.pdf
+      page: 218
+      heading: Add More Enriched Fields in a Channel for the Same Selected Entity
+    confidence: high
+    id: v56-rest-006
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Custom channels with filter expressions for platform events are now GA,
+      letting CometD subscribers receive only matching event messages via
+      PlatformEventChannel and PlatformEventChannelMember metadata types.
+    detail: Filters apply only to high-volume custom platform events and CometD
+      clients; Apex triggers, flows, and standard platform events remain
+      unsupported. GA enhancements include namespace handling, field rename
+      tolerance, packagability of filter expressions, and case-insensitive
+      matching.
+    source:
+      document: v56-winter23.pdf
+      page: 219
+      heading: Filter Your Stream of Platform Events with Custom Channels (Generally
+        Available)
+    confidence: medium
+    id: v56-rest-007
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: "EventRelayConfig moves from beta to GA with breaking changes: Tooling
+      API request body structure is altered, EventRelayFeedback drops
+      NumEventsDropped/NumEventsRelayed/Replay fields and adds
+      ErrorCode/LastRelayedEventTime fields."
+    detail: If you built integrations against the beta EventRelayConfig Tooling API,
+      the request body format has changed. EventRelayFeedback object loses three
+      fields and gains two new ones, requiring updates to any code parsing relay
+      feedback responses.
+    upgradeAction: Review any existing EventRelayConfig Tooling API calls and update
+      request payloads to match the new GA structure. Update code that reads
+      EventRelayFeedback to handle the removed and added fields.
+    source:
+      document: v56-winter23.pdf
+      page: 221
+      heading: Stream Salesforce Events to Amazon EventBridge in AWS (Generally
+        Available)
+    confidence: medium
+    id: v56-rest-008
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: The lightning-formatted-date-time, lightning-formatted-time, and
+      lightning-input components now interpret all ISO8601 time strings as UTC,
+      which may shift displayed times for values previously parsed with local
+      timezone assumptions.
+    upgradeAction: Review any code or data passing ISO8601 time strings to these
+      components; verify the displayed times still match expectations after the
+      UTC parsing change.
+    source:
+      document: v56-winter23.pdf
+      page: 224
+      heading: New and Changed Lightning Web Components
+    confidence: medium
+    id: v56-lwc-010
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version; support ends May 1, 2023
+    summary: "Several lightning/uiRecordApi wire adapters and functions are
+      deprecated: getRecordUi, getRecordInput, and refresh. Developers should
+      migrate to base record components or alternative methods like getRecord,
+      getRecords, refreshApex, or getRecordNotifyChange."
+    detail: The getRecordUi wire adapter should be replaced with
+      lightning-record-form, lightning-record-edit-form, or
+      lightning-record-view-form base components. For getRecordInput, manually
+      construct the record object with apiName and fields properties. The
+      refresh function should be replaced with refreshApex (for Apex data) or
+      getRecordNotifyChange (for non-Apex wire adapters). Additionally,
+      refreshApex itself is deprecated for non-Apex usage.
+    upgradeAction: Audit LWC components for usage of getRecordUi, getRecordInput,
+      and refresh from lightning/uiRecordApi. Migrate getRecordUi to base record
+      components or getRecord/getRecords. Replace refresh and non-Apex
+      refreshApex calls with getRecordNotifyChange before May 2023.
+    source:
+      document: v56-winter23.pdf
+      page: 225
+      heading: New and Changed Modules for Lightning Web Components
+    confidence: high
+    id: v56-lwc-011
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The lightning:formattedDateTime, lightning:formattedTime, and
+      lightning:input components now interpret all ISO8601 time strings as UTC
+      rather than local time, which may shift displayed times.
+    upgradeAction: Review any code passing ISO8601 time strings to these components
+      and verify the displayed times are correct after the change to UTC
+      parsing.
+    source:
+      document: v56-winter23.pdf
+      page: 228
+      heading: New and Changed Aura Components
+    confidence: medium
+    id: v56-aura-001
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: Apex classes compiled at API >= 56.0
+    summary: The two-argument AuthConfiguration constructor that accepts networkId
+      and startUrl parameters is deprecated starting with API version 56.0.
+    upgradeAction: Identify any code using the AuthConfiguration(networkId,
+      startUrl) constructor and migrate to an alternative constructor or
+      approach before upgrading past 56.0.
+    source:
+      document: v56-winter23.pdf
+      page: 230
+      heading: Auth Namespace
+    confidence: high
+    id: v56-auth-002
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex gains a DataWeave namespace enabling invocation of DataWeave
+      transformation scripts directly from Apex code via new Script and Result
+      classes.
+    detail: The DataWeave.Script class provides createScript() and execute() methods
+      to load and run DataWeave scripts, while DataWeave.Result offers
+      getValue() and getValueAsString() to retrieve transformation output. This
+      extends the Apex language with data transformation capabilities previously
+      unavailable natively.
+    source:
+      document: v56-winter23.pdf
+      page: 230
+      heading: DataWeave Namespace
+    confidence: high
+    id: v56-apex-006
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: components compiled at API >= 56.0 with Enhanced Scheduling and
+      Optimization (ESO) enabled
+    summary: FieldService namespace scheduling methods become synchronous instead of
+      asynchronous when ESO is enabled and the calling code is at API 56.0 or
+      later.
+    upgradeAction: Review code calling FieldService scheduling methods; synchronous
+      execution may change error handling patterns and timeout behavior compared
+      to the previous async model.
+    source:
+      document: v56-winter23.pdf
+      page: 230
+      heading: FieldService Namespace
+    confidence: medium
+    id: v56-apex-007
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: A new System.Assert class provides explicit assertion methods
+      (areEqual, areNotEqual, fail, isFalse, isTrue, isNull, isNotNull,
+      isInstanceOfType, isNotInstanceOfType) as a cleaner alternative to the
+      legacy System.assert() functions.
+    source:
+      document: v56-winter23.pdf
+      page: 231
+      heading: System Namespace
+    confidence: high
+    id: v56-apex-008
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: New Database class method overloads accept an accessLevel parameter
+      letting you explicitly choose user-mode or system-mode execution for DML
+      and query operations (beta). Affected methods include getQueryLocator,
+      deleteAsync, deleteImmediate, insertAsync, insertImmediate, updateAsync,
+      and updateImmediate.
+    source:
+      document: v56-winter23.pdf
+      page: 231
+      heading: System Namespace
+    confidence: medium
+    id: v56-apex-009
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API requests at version 56.0 and later
+    summary: The OptionsExternalHttps and OptionsHstsHeaders fields on the Domain
+      object are removed starting in API v56.0. Code querying or setting these
+      fields will fail; use the HttpsOption field with the ExternalHttps
+      picklist value instead.
+    upgradeAction: Update any integrations referencing OptionsExternalHttps or
+      OptionsHstsHeaders on Domain to use the HttpsOption field before calling
+      API v56.0+.
+    source:
+      document: v56-winter23.pdf
+      page: 239
+      heading: New and Changed Objects
+    confidence: high
+    id: v56-rest-009
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Records field on ApiEventStream for Bulk API queries now returns
+      null instead of actual record data to avoid bandwidth issues. Integrations
+      that parsed this field for Bulk API audit logging will receive empty
+      values.
+    upgradeAction: Review any monitoring or analytics code that reads the Records
+      field from ApiEventStream for Bulk API queries; it will now be null and
+      alternative approaches are needed to capture query results.
+    source:
+      document: v56-winter23.pdf
+      page: 239
+      heading: New and Changed Objects
+    confidence: high
+    id: v56-rest-010
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Connect REST APIs now enforce stricter permission and org-level access
+      checks on the context user, which may cause previously successful calls to
+      return different HTTP status codes or error messages.
+    upgradeAction: Review Connect API integrations for calls that may have succeeded
+      due to lax permission checks; verify the calling user has explicit
+      permissions and handle new error responses.
+    source:
+      document: v56-winter23.pdf
+      page: 249
+      heading: Improved Security for Connect APIs
+    confidence: medium
+    id: v56-rest-011
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Creating LWR Experience Cloud sites via Connect REST API no longer
+      permits unauthenticated access; the UNAUTHENTICATED value for
+      AuthenticationType in templateParams is removed from the Community Input
+      request body.
+    upgradeAction: Review any integrations that programmatically create LWR sites
+      with AuthenticationType set to UNAUTHENTICATED; update them to use a
+      supported authentication type before upgrading.
+    source:
+      document: v56-winter23.pdf
+      page: 255
+      heading: Changed Connect REST API Request Bodies
+    confidence: high
+    id: v56-rest-012
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: GraphQL API exits beta and becomes generally available, adding
+      semi-join (inq) and anti-join (ninq) filter operators that translate to
+      SOQL IN/NOT IN subqueries, plus objectInfo queries and polymorphic
+      relationship filtering.
+    source:
+      document: v56-winter23.pdf
+      page: 263
+      heading: GraphQL API (Generally Available)
+    confidence: high
+    id: v56-rest-013
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: NamedCredential metadata deployed at API >= 56.0
+    summary: Legacy NamedCredential fields (authProvider, certificate, endpoint,
+      password, protocol, OAuth tokens, JWT settings, AWS credentials, etc.) are
+      deprecated starting in API 56.0 and only function when namedCredentialType
+      is null or 'Legacy'.
+    detail: Salesforce introduced a new ExternalCredential metadata type and
+      namedCredentialParameters field to replace the monolithic legacy approach.
+      Existing integrations using the deprecated fields continue working only
+      under the Legacy type designation.
+    upgradeAction: Migrate callouts to the new ExternalCredential and
+      NamedCredentialParameter types before bumping metadata past 56.0; audit
+      any CI/CD scripts that deploy NamedCredential metadata.
+    source:
+      document: v56-winter23.pdf
+      page: 265
+      heading: Metadata API
+    confidence: high
+    id: v56-auth-003
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Four internal metadata types—ExternalClientApplication,
+      ExternalAppOauthConfig, ExternalAppIdTokenConfig, and
+      ExternalAppOauthConsumerScope—are deleted in API 56.0 and any
+      WSC-generated JAR referencing them must be regenerated.
+    upgradeAction: Re-download the Metadata WSDL and regenerate Java stubs if your
+      tooling references these removed types; update any deployment scripts that
+      attempted to use them.
+    source:
+      document: v56-winter23.pdf
+      page: 265
+      heading: Metadata API
+    confidence: high
+    id: v56-packaging-002
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The REST API /limits endpoint now returns a DailyAsyncApexTests object
+      showing the org's daily cap and remaining quota for asynchronous Apex test
+      runs.
+    source:
+      document: v56-winter23.pdf
+      page: 271
+      heading: New, Changed, and Deprecated Calls
+    confidence: high
+    id: v56-rest-014
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: Tooling API requests at API >= 56.0
+    summary: Legacy named credential fields (AuthTokenEndpointUrl, AwsAccessKey,
+      Protocol, Username, Password, OAuth/JWT fields, etc.) are deprecated on
+      the NamedCredential Tooling API object starting in v56. These fields
+      remain functional only when NamedCredentialType is null or Legacy.
+    detail: Salesforce introduced a new named credential architecture with the
+      ExternalCredential object and NamedCredentialType field. The old fields
+      for authentication configuration are deprecated in favor of this new
+      model. Existing credentials continue to work when typed as Legacy, but new
+      integrations should use SecuredEndpoint with ExternalCredential.
+    upgradeAction: Audit any tooling scripts or CI/CD that create or modify
+      NamedCredential objects via Tooling API. Plan migration to the new
+      ExternalCredential model before these fields are eventually removed.
+    source:
+      document: v56-winter23.pdf
+      page: 273
+      heading: Tooling API New and Changed Objects
+    confidence: high
+    id: v56-auth-004
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: User Interface API now supports idempotent record writes (beta),
+      allowing clients to prevent duplicate records and server operations by
+      including an idempotency key with requests.
+    source:
+      document: v56-winter23.pdf
+      page: 274
+      heading: User Interface API
+    confidence: medium
+    id: v56-rest-015
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Developers can now build custom CMS content editor sidebar extensions
+      using the new experience/cmsEditorApi Lightning module and load them into
+      Salesforce CMS workspaces.
+    source:
+      document: v56-winter23.pdf
+      page: 299
+      heading: View a List of Related Content Before You Unpublish in Enhanced CMS
+        Workspaces
+    confidence: medium
+    id: v56-lwc-012
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: A new wire adapter getContent in the experience/cmsDeliveryApi module
+      lets LWC components in enhanced LWR sites fetch published CMS content from
+      enhanced workspaces.
+    source:
+      document: v56-winter23.pdf
+      page: 302
+      heading: Create Custom Components to Retrieve Enhanced CMS Content
+    confidence: medium
+    id: v56-lwc-013
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: A new lightning/fileDownload module with generateUrl method is now
+      available for LWC components in LWR Experience Cloud sites, enabling
+      programmatic file download URLs for ContentDocument, ContentVersion,
+      Attachment, and Document records.
+    source:
+      document: v56-winter23.pdf
+      page: 307
+      heading: Offer Your Users Easy File Downloads from Custom Components
+    confidence: high
+    id: v56-lwc-014
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide in newly created Salesforce orgs; existing orgs unaffected
+      unless manually enabled
+    summary: Fresh Salesforce orgs now ship with Lightning Web Security enabled for
+      LWC by default, replacing Lightning Locker as the sandbox isolation
+      mechanism for custom Lightning web components in Aura sites.
+    detail: This is an org-creation default change, not a retroactive enforcement.
+      Existing orgs retain their current setting. In Aura sites, LWC gets LWS
+      protection while Aura components remain under Lightning Locker. Disabling
+      Locker at the site level turns off both isolation frameworks.
+    upgradeAction: When provisioning new scratch orgs or sandboxes, verify that
+      existing LWC code functions correctly under LWS rather than
+      Locker—particularly components relying on DOM manipulation patterns or
+      cross-namespace communication that Locker permitted but LWS restricts.
+    source:
+      document: v56-winter23.pdf
+      page: 308
+      heading: Secure Components by Default with Lightning Web Security in New Orgs
+    confidence: medium
+    id: v56-lwc-015
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - LWC
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version; requires LWR site on
+      Salesforce CDN
+    summary: Apex methods annotated with @AuraEnabled(cacheable=true scope='global')
+      can now be cached on the Salesforce CDN for guest users in LWR sites,
+      improving performance when invoked via @wire in LWC components.
+    detail: This GA release introduces a new scope='global' parameter for the
+      @AuraEnabled annotation. Methods must be called via @wire to qualify for
+      CDN caching. Managed package Apex caching is controlled separately via
+      site administration preferences.
+    source:
+      document: v56-winter23.pdf
+      page: 314
+      heading: Cache Apex Methods for Guest Users (Generally Available)
+    confidence: high
+    id: v56-apex-011
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Network.createRecordAsync Apex method now accepts a file attachment
+      parameter, and Connect REST API gains the ability to attach files during
+      micro-batched record creation for leads, cases, and custom objects.
+    source:
+      document: v56-winter23.pdf
+      page: 315
+      heading: Let Authenticated Users Attach Files to Records Submitted via
+        Micro-Batching
+    confidence: medium
+    id: v56-rest-016
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: The managed public distribution option for Android in Mobile Publisher
+      has been retired, removing the ability to distribute Experience Cloud
+      mobile apps via this method on Android.
+    upgradeAction: Organizations using managed public distribution for Android must
+      migrate to an alternative distribution method before or upon upgrading to
+      Winter '23.
+    source:
+      document: v56-winter23.pdf
+      page: 317
+      heading: Additional Mobile Publisher Enhancements for Experience Cloud
+    confidence: low
+    id: v56-other-001
+  - apiVersion: "56.0"
+    introducedIn: "53.0"
+    release: Winter '23
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version; enforced in Spring '23
+    summary: The Run Flows permission is being stripped from the Guest User profile
+      across all orgs. Sites relying on guest users executing flows via this
+      blanket permission will break unless you migrate to granular flow-level
+      permissions beforehand.
+    detail: This release update began in Summer '22 (API 55.0) for new orgs and
+      enforces org-wide in Spring '23. Affects Aura, LWR, and Visualforce
+      Experience Cloud sites.
+    upgradeAction: Audit which flows guest users invoke and assign explicit per-flow
+      permissions before the Spring '23 enforcement date. Test guest user
+      journeys in a sandbox to confirm access still works.
+    source:
+      document: v56-winter23.pdf
+      page: 319
+      heading: Require Granular Flow Permissions for Experience Cloud Guest Users
+        (Release Update)
+    confidence: high
+    id: v56-flow-001
+  - apiVersion: "56.0"
+    introducedIn: "55.0"
+    release: Winter '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; enforced Spring '23
+    summary: Salesforce now URL-encodes several SAML SSO endpoints including the
+      Identity Provider URL, Assertion Consumer Service URL, Single Logout
+      Endpoint, and relay state parameter, which may break integrations with
+      identity providers that do not handle encoded URLs correctly.
+    detail: This release update was first available in Summer '22 (API 55.0) and
+      becomes mandatory in Spring '23. Any custom or third-party SAML
+      integration—whether for employee identity, Customer Identity, or
+      Experience Cloud—must verify that the IdP and any SAML-enabled apps
+      correctly parse the newly encoded URLs.
+    upgradeAction: Test all SAML SSO flows (SP-initiated login, IdP-initiated login,
+      single logout) in a sandbox before Spring '23 enforcement. Confirm your
+      identity provider handles URL-encoded ACS and SLO endpoints. Update any
+      hardcoded URL comparisons in custom integration code.
+    source:
+      document: v56-winter23.pdf
+      page: 320
+      heading: Upgrade SAML Single Sign-On Framework (Release Update)
+    confidence: high
+    id: v56-auth-005
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - AuraDefinitionBundle
+      - LWC
+      - VisualforcePage
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version (enforced Spring '23)
+    summary: Apex queries against NavigationLinkSet and NavigationMenuItem now
+      enforce user membership in Experience Cloud sites, so custom components
+      retrieving navigation menus may return fewer results for users who lack
+      site membership.
+    detail: Previously, Apex controllers in custom components could query navigation
+      menu objects without checking whether the running user was a member of the
+      Experience Cloud site. After enforcement, only navigation items from sites
+      the user belongs to are returned. Connect API queries were already
+      restricted and remain unchanged.
+    upgradeAction: Test custom navigation components in sandbox with the release
+      update enabled. Verify that all user personas—especially portal users with
+      limited site memberships—see the expected menus. Adjust Apex logic if
+      components assumed unrestricted access.
+    source:
+      document: v56-winter23.pdf
+      page: 320
+      heading: Apply User Access Permissions to Navigation Menus Retrieved by Apex in
+        Experience Cloud Sites (Release Update)
+    confidence: high
+    id: v56-sharing-002
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version — applies to API
+      clients calling custom domains on Salesforce Edge Network
+    summary: API clients making requests to custom domains that serve Experience
+      Cloud sites via Salesforce Edge Network must now include the SNI extension
+      in TLS handshakes, otherwise the server cannot present the correct
+      certificate and the connection will fail.
+    upgradeAction: Verify that all HTTP clients, scripts, and integrations calling
+      your custom Experience Cloud domain URLs send the SNI extension during TLS
+      negotiation; update legacy clients or libraries that omit SNI.
+    source:
+      document: v56-winter23.pdf
+      page: 322
+      heading: Add Server Name Indication (SNI) for Requests to Custom Domains That
+        Serve Your Experience Cloud Site
+    confidence: high
+    id: v56-auth-006
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Duration field on EngagementInteraction is now read-only and
+      auto-calculated from start/end times; code that previously wrote to this
+      field will fail.
+    upgradeAction: Remove any DML operations that set the Duration field on
+      EngagementInteraction; instead set EndTime to let the platform compute
+      duration automatically.
+    source:
+      document: v56-winter23.pdf
+      page: 437
+      heading: Health Cloud Has New and Changed Objects
+    confidence: high
+    id: v56-rest-017
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Duration field on EngagementInteraction is now read-only and
+      auto-calculated from end time, so any integration that previously wrote to
+      this field will fail.
+    upgradeAction: Remove any code that sets the Duration field on
+      EngagementInteraction records; rely on the system-calculated value
+      instead.
+    source:
+      document: v56-winter23.pdf
+      page: 516
+      heading: New and Changed Objects
+    confidence: high
+    id: v56-rest-018
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The OcrTargetObject Tooling API object gains a TargetObjectRecordType
+      field, enabling extraction results to be mapped to record-type-specific
+      fields on target objects.
+    source:
+      document: v56-winter23.pdf
+      page: 531
+      heading: Changed Tooling API Object in Intelligent Form Reader
+    confidence: medium
+    id: v56-rest-019
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: The BarcodeScanner API gains a kiosk mode option that enables
+      front-facing camera scanning on stationary devices, useful for badge or
+      ticket verification scenarios in Mobile Publisher apps.
+    source:
+      document: v56-winter23.pdf
+      page: 553
+      heading: Kiosk Mode for Barcode Scanner
+    confidence: medium
+    id: v56-lwc-016
+  - apiVersion: "56.0"
+    introducedIn: "47.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Flow
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version (Release Update
+      enforced Summer '23)
+    summary: When an order product modification triggers a recalculation on the
+      parent order, Salesforce now properly executes custom logic (triggers,
+      flows, validation rules, workflow) on that parent order record. Previously
+      this cascading execution was skipped.
+    detail: This Release Update was introduced in Winter '20 (API 47.0) and becomes
+      mandatory in Summer '23. Organizations relying on the old behavior—where
+      parent-order custom logic did not fire during child product updates—must
+      audit their Order triggers, flows, and validation rules for unintended
+      side effects.
+    upgradeAction: Before enforcement, test order product updates that affect parent
+      order fields and verify that any Order triggers, validation rules, and
+      flows handle the newly-fired events correctly. Check for recursion guards
+      and ensure no duplicate processing occurs.
+    source:
+      document: v56-winter23.pdf
+      page: 575
+      heading: Enable New Order Save Behavior (Release Update)
+    confidence: high
+    id: v56-apex-012
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: LWC and Aura components can now programmatically launch the email
+      composer by creating a quick-action page reference and invoking it through
+      the navigation service, enabling custom send-email workflows outside of
+      standard UI entry points.
+    source:
+      document: v56-winter23.pdf
+      page: 592
+      heading: Access the Email Composer from Custom Components
+    confidence: high
+    id: v56-lwc-017
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version — orgs using Lightning
+      Sync with Exchange Online via service account connection method
+    summary: Microsoft discontinued basic authentication for Exchange Online in
+      October 2022, which breaks Lightning Sync integrations relying on the
+      service account connection method. Affected orgs must switch to OAuth 2.0
+      or migrate to Einstein Activity Capture.
+    upgradeAction: If using Lightning Sync with Exchange Online and service account
+      authentication, migrate to OAuth 2.0 connection method or switch to
+      Einstein Activity Capture before the retirement date to maintain contact
+      and event synchronization.
+    source:
+      document: v56-winter23.pdf
+      page: 617
+      heading: Review Microsoft Announcements on Basic Authentication Retirement for
+        Exchange Online
+    confidence: high
+    id: v56-auth-007
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version; retirement effective
+      June 2024
+    summary: Salesforce for Outlook will stop functioning entirely in June 2024,
+      ending all sync capabilities for contacts, events, and tasks between
+      Outlook and Salesforce.
+    upgradeAction: Migrate integrations to the Outlook integration or Einstein
+      Activity Capture before June 2024; audit any automation or workflows that
+      depend on Salesforce for Outlook sync behavior.
+    source:
+      document: v56-winter23.pdf
+      page: 618
+      heading: Salesforce for Outlook Is Retiring in June 2024
+    confidence: high
+    id: v56-other-002
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: OmniStudio FlexCards cannot be deployed to LWR Experience sites when
+      Standard OmniStudio Runtime is enabled; you must disable standard runtime
+      and use the generated LWC component instead.
+    upgradeAction: If using FlexCards on LWR sites, disable Standard OmniStudio
+      Runtime and embed the FlexCard via its generated LWC wrapper rather than
+      the standard runtime component.
+    source:
+      document: v56-winter23.pdf
+      page: 624
+      heading: Standard FlexCards Aren't Supported on LWR Sites
+    confidence: medium
+    id: v56-lwc-018
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: A new lightning-flow base component lets developers embed and launch
+      screen flows directly from LWC, enabling custom finish behavior and
+      styling without building equivalent logic in JavaScript.
+    source:
+      document: v56-winter23.pdf
+      page: 636
+      heading: Launch Screen Flows With Lightning Web Components
+    confidence: high
+    id: v56-lwc-019
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: flows configured to run at API >= 56.0
+    summary: When a screen flow finishes after a navigation request that originated
+      inside a subflow, the final response no longer includes output variables
+      from that subflow. Code or integrations consuming those outputs will
+      receive empty or missing values.
+    upgradeAction: Before upgrading flows past v55, audit any integrations or
+      calling flows that read subflow output variables from finished-interview
+      navigation responses and refactor to capture those values earlier or via
+      an alternative mechanism.
+    source:
+      document: v56-winter23.pdf
+      page: 642
+      heading: Flow Run-Time Changes in API Version 56.0
+    confidence: high
+    id: v56-flow-002
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce now blocks the creation of new Workflow Rules in production
+      orgs as part of the retirement path, though existing rules can still be
+      edited, activated, or deactivated. Developer orgs retain creation
+      capability for managed package development.
+    upgradeAction: Plan migration of existing Workflow Rules to Flow using the
+      Migrate to Flow tool before the eventual full retirement. Any new
+      automation requirements must be built in Flow rather than Workflow Rules.
+    source:
+      document: v56-winter23.pdf
+      page: 643
+      heading: Block New Workflow Rule Creation
+    confidence: high
+    id: v56-packaging-003
+  - apiVersion: "56.0"
+    introducedIn: "50.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (Release Update
+      enforcement postponed to Winter '24)
+    summary: Autolaunched flows with Pause elements will retain their original
+      execution context and user permissions when resuming after a time-based
+      event, instead of switching to system context without sharing. This
+      prevents unintended privilege escalation where paused flows could modify
+      records the running user lacks access to.
+    detail: This Release Update was introduced in Winter '21 with enforcement
+      originally scheduled for Winter '22, then postponed to Spring '23, and
+      again to Winter '24. It affects only autolaunched flows containing Pause
+      elements configured to resume at a specific time.
+    upgradeAction: Before enforcement, audit autolaunched flows with Pause elements
+      to ensure running users have sufficient permissions for all post-pause
+      operations. Either grant necessary permissions or reconfigure flows to
+      explicitly run in system context if elevated access is intentional.
+    source:
+      document: v56-winter23.pdf
+      page: 646
+      heading: Make Paused Flow Interviews Resume in the Same Context with the Same
+        User Access (Release Update)
+    confidence: high
+    id: v56-flow-003
+  - apiVersion: "56.0"
+    introducedIn: "54.0"
+    release: Winter '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+      - Integration
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (Release Update
+      enforced Spring '23)
+    summary: Flows invoked through REST API now execute under the authenticated
+      user's permissions rather than system context, meaning object and field
+      access is restricted to what that user's profile and permission sets
+      allow.
+    detail: This Release Update was first available in Spring '22 (API 54.0) and
+      enforcement began in Spring '23. Prior behavior granted flows called via
+      REST API full system-mode access to all records. After enforcement, the
+      running user's object permissions and field-level security apply,
+      potentially causing failures for integrations that relied on elevated
+      access.
+    upgradeAction: Audit all REST API integrations that invoke flows. Verify that
+      the authenticating user has adequate object and field permissions for
+      every record operation the flow performs. Add explicit permission sets or
+      switch to a service account with appropriate grants if needed.
+    source:
+      document: v56-winter23.pdf
+      page: 647
+      heading: Run Flows in User Context via REST API (Release Update)
+    confidence: high
+    id: v56-flow-004
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (enforced Summer '23)
+    summary: The $Api.Session_ID global variable no longer resolves at flow runtime.
+      Flows that previously displayed or used the browser session ID will
+      receive a null or empty value after enforcement.
+    upgradeAction: Audit all flows for references to $Api.Session_ID and remove or
+      replace them before the Summer '23 enforcement date. Any integrations or
+      logic relying on extracting session IDs from flows must be redesigned.
+    source:
+      document: v56-winter23.pdf
+      page: 648
+      heading: Disable Access to Session IDs in Flows (Release Update)
+    confidence: high
+    id: v56-flow-005
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+      - Integration
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version; enforced Winter '24
+    summary: Enhanced domains rewrite all org URLs—including Visualforce pages,
+      Experience Cloud sites, and Salesforce Sites—to include the
+      company-specific My Domain name. Hardcoded URLs in Apex, Visualforce, LWC,
+      API integrations, and external systems will break when enforcement
+      activates.
+    detail: This Release Update changes the hostname portion of URLs across the
+      platform. Any custom code, API call, or external integration that
+      references the old URL format (e.g., na1.salesforce.com or old site URLs)
+      must be updated. The update was first available in Summer '21,
+      auto-deploys in sandboxes Winter '23, all orgs Spring '23, and becomes
+      mandatory Winter '24 with no opt-out.
+    upgradeAction: Audit all hardcoded Salesforce URLs in Apex, Visualforce, LWC,
+      Flow, named credentials, remote site settings, CSP trusted sites, CORS
+      allowlists, and external systems. Replace them with dynamic references or
+      the new enhanced domain format before Winter '24 enforcement.
+    source:
+      document: v56-winter23.pdf
+      page: 654
+      heading: Deploy Enhanced Domains (Release Update)
+    confidence: high
+    id: v56-other-003
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Cookies set by Salesforce or Apex on a custom domain (e.g.,
+      example.com) are no longer shared with subdomains (e.g., www.example.com).
+      Code relying on cross-subdomain cookie visibility will break.
+    upgradeAction: Audit Apex and client-side code that reads or writes cookies on
+      custom domains and verify whether subdomains depend on those cookies.
+      Adjust cookie handling or consolidate domains as needed.
+    source:
+      document: v56-winter23.pdf
+      page: 659
+      heading: Test Your Custom Domain Subdomains
+    confidence: high
+    id: v56-auth-008
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Admins can now disable the OAuth 2.0 user-agent flow org-wide via a new
+      setting, which will break any connected apps (including Salesforce mobile
+      apps and managed packages) that rely on this flow.
+    detail: A new toggle in OAuth and OpenID Connect Settings lets orgs block the
+      implicit/user-agent grant. Because many mobile apps depend on this flow,
+      enabling the block without auditing integrations first will cause
+      authentication failures.
+    upgradeAction: Before enabling this block, inventory all connected apps using
+      the user-agent flow—especially Salesforce mobile apps and ISV packages—and
+      migrate them to web-server or device flows.
+    source:
+      document: v56-winter23.pdf
+      page: 665
+      heading: Block Connected Apps from Using the OAuth 2.0 User-Agent Flow
+    confidence: high
+    id: v56-auth-009
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce now supports the OAuth 2.0 client credentials grant,
+      enabling server-to-server integrations where a connected app exchanges its
+      consumer key and secret for an access token without user interaction.
+    detail: This flow is positioned as a more secure replacement for the
+      username-password OAuth flow. Useful for headless automation scenarios
+      like scheduled jobs or backend system integrations.
+    source:
+      document: v56-winter23.pdf
+      page: 666
+      heading: Set Up Server-to-Server Integrations with the OAuth 2.0 Client
+        Credentials Flow
+    confidence: high
+    id: v56-auth-010
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce is discouraging use of the OAuth 2.0 username-password flow
+      due to security concerns and recommends migrating integrations to client
+      credentials, JWT bearer, or web server flows instead.
+    upgradeAction: Inventory all integrations using the username-password OAuth flow
+      and plan migration to client credentials (for server-to-server), JWT
+      bearer, or web server flow before Salesforce enforces stricter
+      restrictions.
+    source:
+      document: v56-winter23.pdf
+      page: 666
+      heading: Use Alternate OAuth 2.0 Flows instead of the Username-Password Flow for
+        Special Scenarios
+    confidence: medium
+    id: v56-auth-011
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version (effective November 2022)
+    summary: Metadata API retrieve and deploy operations no longer return the
+      encrypted consumer secret field for authentication provider records,
+      breaking any tooling that parsed or stored these secrets from metadata
+      responses.
+    detail: SOAP API responses continue to include consumer secrets by default, but
+      an opt-in setting allows their exclusion there as well. Any CI/CD scripts
+      or migration tools that relied on extracting auth provider secrets via
+      Metadata API must now obtain secrets through other means.
+    upgradeAction: Audit deployment scripts and org comparison tools that read
+      AuthProvider metadata; ensure they do not depend on consumer secret values
+      being present. Use secure secret management instead of metadata retrieval
+      for credentials.
+    source:
+      document: v56-winter23.pdf
+      page: 666
+      heading: Metadata API Responses No Longer Include Authentication Provider
+        Consumer Secrets
+    confidence: high
+    id: v56-rest-020
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide when creating or updating connected app configurations
+    summary: "Connected apps no longer accept callback URLs with the http: scheme;
+      HTTPS is now mandatory. Existing HTTP callbacks continue working until you
+      modify the connected app settings."
+    detail: This enforcement applies at configuration time rather than runtime.
+      Localhost URLs are exempt and can still use HTTP for local development
+      purposes.
+    upgradeAction: Before editing any connected app, ensure all callback URLs use
+      HTTPS. Audit existing connected apps and migrate HTTP callbacks to HTTPS
+      proactively to avoid being blocked when future configuration changes are
+      needed.
+    source:
+      document: v56-winter23.pdf
+      page: 667
+      heading: Callback URLs Using the HTTP Protocol Are Blocked
+    confidence: high
+    id: v56-auth-013
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Named credentials gain a redesigned architecture separating external
+      credentials from endpoints, enabling credential reuse across multiple
+      callout targets and permission-set-based access control. Connect REST API
+      and Connect in Apex now support this new named credential type.
+    detail: The new schema introduces external credentials as a distinct layer,
+      supports OAuth and AWS SigV4 (but not JWT or Basic Auth in this release),
+      allows custom headers like API keys, and enables AWS IAM role assumption
+      via STS. Legacy named credentials remain functional.
+    source:
+      document: v56-winter23.pdf
+      page: 682
+      heading: Improve Integrations with Increased Extensibility and Security for
+        Named Credentials
+    confidence: medium
+    id: v56-auth-014
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; enforcement date
+      October 15, 2022
+    summary: The legacy Private Connect network infrastructure was retired in favor
+      of the Hyperforce-based network. Any AWS PrivateLink connections that were
+      not reprovisioned before the retirement date ceased functioning.
+    detail: Organizations using Private Connect for secure inbound or outbound
+      traffic via AWS PrivateLink needed to deprovision and recreate their
+      connections using the new Hyperforce infrastructure. This affected
+      integrations relying on PrivateLink for API calls or data movement between
+      Salesforce and AWS VPCs.
+    upgradeAction: Verify that all Private Connect AWS PrivateLink connections have
+      been reprovisioned on the Hyperforce network. If connections were not
+      migrated before October 15, 2022, recreate inbound and outbound
+      connections using current service names and VPC endpoint IDs from Setup.
+    source:
+      document: v56-winter23.pdf
+      page: 683
+      heading: Private Connect Legacy Network Is Now Retired
+    confidence: high
+    id: v56-auth-015
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new Apex method generateThreadingMessageId(caseId) lets developers
+      create RFC 2822-compliant message IDs for outbound case emails, enabling
+      header-based threading so inbound replies attach to the correct case.
+    source:
+      document: v56-winter23.pdf
+      page: 715
+      heading: Other Improvements to Email-to-Case
+    confidence: high
+    id: v56-apex-013
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: The Chatbot Analytics v2 dashboard is no longer available.
+      Organizations relying on it must install the Einstein Bots Value dashboard
+      managed package to access bot analytics and KPIs.
+    upgradeAction: If your org used the Chatbot Analytics v2 dashboard, download and
+      configure the Einstein Bots Value dashboard managed package before or
+      immediately after upgrading.
+    source:
+      document: v56-winter23.pdf
+      page: 724
+      heading: Analyze Bot Performance with New Standard Reports
+    confidence: high
+    id: v56-other-004
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforceComponent
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Visualforce JavaScript Remoting now enforces stricter validation on API
+      calls, which may reject previously accepted requests that did not comply
+      with security requirements.
+    upgradeAction: Test all Visualforce pages using JavaScript Remoting to ensure
+      remote method calls pass the new validation checks before enforcement.
+    source:
+      document: v56-winter23.pdf
+      page: 740
+      heading: Release Updates
+    confidence: high
+    id: v56-vf-004
+  - apiVersion: "56.0"
+    release: Winter '23
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: API versions 21.0 through 30.0 will stop working entirely in Summer
+      '23; any integrations still using these legacy versions must be upgraded
+      to a supported API version.
+    upgradeAction: Identify all integrations using API versions 21.0-30.0 and
+      migrate them to version 31.0 or higher before Summer '23 enforcement.
+    source:
+      document: v56-winter23.pdf
+      page: 740
+      heading: Release Updates
+    confidence: high
+    id: v56-rest-021

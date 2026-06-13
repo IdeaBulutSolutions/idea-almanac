@@ -1,0 +1,1453 @@
+apiVersion: "37.0"
+release: Summer '16
+reviewed: true
+entries:
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: CORS support is now available for Apex REST classes and Bulk API,
+      allowing browser-based JavaScript applications to make cross-origin
+      requests to these endpoints.
+    source:
+      document: v37-summer16.pdf
+      page: 9
+      heading: You Asked for It!
+    confidence: medium
+    id: v37-rest-001
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: DML operations such as insert, update, and delete cannot be performed
+      within Apex code executed by Transaction Security policies.
+    upgradeAction: Review any Transaction Security policy Apex implementations to
+      ensure they do not attempt DML operations; refactor to use Platform Events
+      or other mechanisms if persistence is needed.
+    source:
+      document: v37-summer16.pdf
+      page: 10
+      heading: Release Notes Changes
+    confidence: medium
+    id: v37-apex-001
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: The PageReference getContent() and getContentAsPDF() methods now behave
+      as callouts, meaning they count against callout limits and cannot be used
+      in contexts where callouts are prohibited. Auto-activation was postponed
+      to Winter '17.
+    upgradeAction: Audit Apex code using getContent() or getContentAsPDF() to ensure
+      callout limits are not exceeded and that these methods are not invoked in
+      non-callout contexts like triggers or synchronous transactions without
+      proper handling.
+    source:
+      document: v37-summer16.pdf
+      page: 10
+      heading: Release Notes Changes
+    confidence: high
+    id: v37-vf-001
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version
+    summary: When converting a lead and assigning the resulting
+      account/contact/opportunity to a different user, the new record is now
+      owned by that target user immediately rather than temporarily belonging to
+      the converting user first.
+    detail: Previously the converting user briefly owned the new record before
+      ownership transferred. Under private sharing models, Apex code running
+      during conversion could access the new record because the converting user
+      owned it. Now the record is never owned by the converter, so Apex
+      accessing the record during conversion will fail if the converting user
+      lacks sharing access to the target owner's records.
+    upgradeAction: Review Apex triggers and classes invoked during lead conversion
+      that access the newly created Account, Contact, or Opportunity. If your
+      org uses private sharing and code assumes the converting user owns these
+      records, add explicit sharing grants or run the logic as the target owner.
+    source:
+      document: v37-summer16.pdf
+      page: 131
+      heading: Change to Record Ownership Flow During Lead Conversion
+    confidence: high
+    id: v37-sharing-001
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version; queries require API >= 37.0
+    summary: The DashboardComponent sObject now exposes a CustomReportId field
+      queryable via SOQL, enabling programmatic discovery of which dashboard
+      components reference a given report.
+    source:
+      document: v37-summer16.pdf
+      page: 136
+      heading: Use SOQL to Identify Reports Used by Dashboard Components
+    confidence: medium
+    id: v37-soql-001
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Wave Analytics assets (apps, dashboards, lenses, datasets, dataflows)
+      can now be included in managed and unmanaged packages, enabling
+      distribution via AppExchange and deployment through change sets.
+    detail: Partners and ISVs can create managed Wave packages with support for
+      upgrade, delete, and deprecate operations. Change sets also honor Wave
+      metadata for org-to-org transfers. Note that dataflow-dataset dependencies
+      must be added manually (no automatic spidering), and image widgets require
+      manual document ID updates on the target org.
+    source:
+      document: v37-summer16.pdf
+      page: 139
+      heading: A Whole New Wave of Apps
+    confidence: high
+    id: v37-packaging-001
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Wave Analytics REST API gains new /wave/annotations endpoints for
+      programmatically creating and managing dashboard widget annotations via
+      GET, POST, and PATCH operations.
+    source:
+      document: v37-summer16.pdf
+      page: 169
+      heading: Add Annotations with the REST API
+    confidence: high
+    id: v37-rest-002
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The PUT method on Wave Analytics XMD endpoints has been removed,
+      affecting dataset version metadata updates for main, system, and user XMD
+      resources.
+    upgradeAction: Remove or refactor any integrations that use PUT requests against
+      /wave/datasets/{id}/versions/{versionId}/xmds/{main|system|user}
+      endpoints; identify alternative approaches for XMD modifications.
+    source:
+      document: v37-summer16.pdf
+      page: 170
+      heading: Review Change to XMD REST API
+    confidence: high
+    id: v37-rest-003
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning components can now be embedded within Visualforce page
+      sidebars in console apps, enabling hybrid UI development patterns.
+    source:
+      document: v37-summer16.pdf
+      page: 179
+      heading: Shazam! Lightning Sidebar Components Are Here
+    confidence: medium
+    id: v37-vf-002
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: The built-in Salesforce spell checker for rich text area fields in
+      Knowledge articles has been retired. Users must now rely on browser-based
+      spell checking instead.
+    upgradeAction: Inform content authors that the native spell checker is gone and
+      ensure browser spell-check is enabled for article editing workflows.
+    source:
+      document: v37-summer16.pdf
+      page: 186
+      heading: Encrypt Your Knowledge Articles
+    confidence: medium
+    id: v37-other-001
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version (Salesforce1
+      downloadable app version 10.0+)
+    summary: Salesforce1 downloadable apps v10.0+ isolate authentication between the
+      main app and in-app Safari browsers for external URLs, so Visualforce
+      pages or components navigating outside the one.app domain will prompt
+      users to re-authenticate.
+    upgradeAction: Test any Visualforce-based navigation to external URLs in
+      Salesforce1 mobile; users on iOS app v10.0+ will need to log in again when
+      the in-app browser opens non-Salesforce domains.
+    source:
+      document: v37-summer16.pdf
+      page: 235
+      heading: "Salesforce1: Downloadable Apps Don't Share Authentication With In-App
+        Browsers"
+    confidence: high
+    id: v37-auth-001
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide for Communities after Spring '17 auto-activation (February
+      2017); can be activated earlier via Critical Update
+    summary: LockerService security enforcement becomes mandatory for Lightning
+      components in Communities, blocking inline scripts in page head markup and
+      applying the same security restrictions as the general LockerService
+      critical update.
+    detail: This critical update is separate from the general LockerService rollout
+      and targets Communities specifically. Inline JavaScript in Community
+      Builder head markup will fail. The enforcement auto-activates in Spring
+      '17 but can be tested earlier. Communities using Salesforce Tabs +
+      Visualforce template are unaffected.
+    upgradeAction: Before Spring '17, enable the critical update in a sandbox,
+      verify all custom Lightning components in Communities work correctly, and
+      move any inline scripts in head markup to static resources or component
+      bundles.
+    source:
+      document: v37-summer16.pdf
+      page: 243
+      heading: Enhance Security with LockerService for Communities (Critical Update)
+    confidence: high
+    id: v37-lwc-001
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version (requires org setting
+      enabled by Salesforce)
+    summary: A new Apex method submitDigestJob(period) allows scheduled sending of
+      Chatter email digests via the Schedulable interface, replacing the
+      built-in digest schedule when the org-level API-only digests setting is
+      enabled.
+    detail: When API-only Chatter digests are enabled, the platform's automatic
+      digest scheduling is disabled entirely. Developers must implement
+      Schedulable with the new submitDigestJob method to trigger digest delivery
+      at custom intervals.
+    source:
+      document: v37-summer16.pdf
+      page: 297
+      heading: Control When Email Digests Are Sent with API-Only Chatter Digests
+    confidence: medium
+    id: v37-apex-002
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Data.com Social Profile Match API has been fully retired and no
+      longer returns social profile handles. Any integrations calling this API
+      will fail.
+    upgradeAction: Remove all calls to the Data.com Social Profile Match API from
+      your integrations; the endpoint no longer functions.
+    source:
+      document: v37-summer16.pdf
+      page: 311
+      heading: Retirement of Data.com Social Key
+    confidence: high
+    id: v37-rest-004
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (Critical Update
+      activation required)
+    summary: "Percent field handling in Flow sObject variables is corrected: values
+      passed between sObject percent fields no longer get unexpectedly
+      transformed, but formula references now divide by 100. Existing
+      workarounds that multiplied values to compensate for the old bug must be
+      removed."
+    detail: After activating this Critical Update, passing numeric or sObject
+      percent values into another sObject's percent field preserves the value
+      unchanged. However, referencing an sObject percent field inside a formula
+      now divides by 100 (so 100 becomes 1). Flows with manual multiply-by-100
+      workarounds will over-calculate once the update is active.
+    upgradeAction: Identify all Flows referencing percent fields in sObject
+      variables, activate the Critical Update in sandbox, remove any
+      multiply-by-100 workarounds added for the old bug, and verify
+      formula-based percent calculations produce correct results.
+    source:
+      document: v37-summer16.pdf
+      page: 329
+      heading: Trust Percent Values in Flow sObject Variables Again (Critical Update)
+    confidence: high
+    id: v37-flow-001
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: External objects now have an Allow Search toggle controlling SOSL and
+      global search inclusion. Existing external objects get search enabled by
+      default upon Summer '16 rollout, but new external objects default to
+      search disabled.
+    detail: "The behavioral shift affects SOSL queries: code searching external
+      objects may return different results depending on whether the admin has
+      enabled the new Allow Search flag. Both the external object and its parent
+      external data source must have search enabled for SOSL to include
+      records."
+    upgradeAction: Review SOSL queries and global searches that target external
+      objects. Verify the Allow Search setting matches your application's
+      expectations, especially for newly created external objects where search
+      is now off by default.
+    source:
+      document: v37-summer16.pdf
+      page: 334
+      heading: Control Whether an External Object Is Searchable
+    confidence: medium
+    id: v37-soql-002
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce Connect OData adapters now preserve hyphens in SOSL and
+      Salesforce search query strings sent to external systems, instead of
+      stripping all ASCII punctuation beforehand.
+    upgradeAction: If your external system logic assumes hyphens are stripped from
+      incoming search queries, update it to handle hyphenated strings or
+      searches may fail.
+    source:
+      document: v37-summer16.pdf
+      page: 335
+      heading: Have Your Hyphens and Search Them Too
+    confidence: high
+    id: v37-soql-003
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - Flow
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version (Critical Update
+      activation required)
+    summary: Programmatic approval submissions now validate that the submitter is in
+      the allowed submitters list, matching the behavior of manual submissions.
+      Code, flows, or processes that submit records for approval may route to a
+      different approval process or fail if the submitter lacks permission.
+    detail: Previously, when Apex, Process Builder, or flows submitted records for
+      approval, Salesforce only checked entry criteria and ignored whether the
+      submitterId was an allowed submitter. After activating this Critical
+      Update, the platform also verifies the submitter is permitted, which can
+      change which approval process is selected or cause submissions to fail.
+    upgradeAction: Audit all Apex classes, flows, and processes that call approval
+      submission methods. For each approval process they can invoke, ensure the
+      submitterId (or the running user if none is specified) is in the allowed
+      submitters list. Test thoroughly after activating the Critical Update.
+    source:
+      document: v37-summer16.pdf
+      page: 340
+      heading: Make Sure Records That Are Submitted Behind the Scenes Are Routed to
+        the Right Approval Process (Critical Update)
+    confidence: high
+    id: v37-apex-003
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Mobile SDK apps on iOS can now leverage advanced authentication methods
+      (Kerberos, NTLM, certificate-based) for custom My Domain URLs by
+      redirecting to the native browser during SSO flows.
+    detail: When enabled in My Domain settings, iOS users of Salesforce1 and Mobile
+      SDK apps are sent to Safari for authentication, enabling enterprise SSO
+      protocols that require native browser capabilities. For non-iOS platforms,
+      certificate-based auth requires MDM integration with Mobile SDK 3.1+.
+    source:
+      document: v37-summer16.pdf
+      page: 352
+      heading: Implement Advanced Authentication for iOS Users of Custom Domains
+    confidence: medium
+    id: v37-auth-002
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Session IDs returned during OAuth 1.0 token exchanges via the UI are
+      now short-lived and restricted to frontdoor.jsp usage only. Previously
+      these session IDs could be used for API calls and had their validity
+      extended.
+    upgradeAction: If your integration relies on OAuth 1.0 UI token exchanges to
+      obtain a session ID for API calls, switch to using the API access token
+      exchange endpoint instead to get a usable access token.
+    source:
+      document: v37-summer16.pdf
+      page: 353
+      heading: Improved Session Security for OAuth 1.0 Token Exchanges
+    confidence: high
+    id: v37-auth-003
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: OAuth 2.0 token responses now include an X_ReadOnlyMode parameter
+      indicating whether the org was in read-only mode when the token was
+      issued, affecting what operations that token can perform.
+    detail: During maintenance windows (splits, migrations, instance switches), orgs
+      enter read-only mode. Tokens acquired in this state only permit read
+      operations. Existing access tokens expire when read-only mode begins, and
+      any tokens obtained during the window expire when the org returns to
+      read-write mode. Integrations should check this parameter to handle
+      degraded-write scenarios gracefully.
+    upgradeAction: Review OAuth integrations to handle X_ReadOnlyMode=true
+      responses; ensure clients can degrade gracefully when write operations are
+      unavailable.
+    source:
+      document: v37-summer16.pdf
+      page: 353
+      heading: New X_ReadOnlyMode Parameter in OAuth 2.0 Responses
+    confidence: medium
+    id: v37-auth-004
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Two new read-only Tooling API objects (SecurityHealthCheck and
+      SecurityHealthCheckRisks) let you query your org's Health Check score,
+      security settings, and risk assessments via SOQL against the Tooling API.
+    source:
+      document: v37-summer16.pdf
+      page: 360
+      heading: Easily Retrieve Security and Risk Data with the Health Check API
+    confidence: high
+    id: v37-rest-005
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+      - ApexClass
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Exceptions thrown by Visualforce controllers now appear in debug logs,
+      whereas previously they were silently recorded as successes despite being
+      visible in the UI.
+    upgradeAction: Review debug log parsing scripts or monitoring that may now see
+      new exception entries where none appeared before.
+    source:
+      document: v37-summer16.pdf
+      page: 367
+      heading: View Visualforce Controller Exceptions in Debug Logs
+    confidence: high
+    id: v37-vf-003
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: The SOAP API now accepts the categories parameter (LogInfo type) in
+      DebuggingHeader, aligning it with the Metadata and Tooling APIs which
+      previously supported both categories and debugLevel while SOAP only had
+      debugLevel.
+    source:
+      document: v37-summer16.pdf
+      page: 367
+      heading: Use DebuggingHeader Consistently Across the APIs
+    confidence: high
+    id: v37-soap-001
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: The critical update enforcing callout behavior for
+      PageReference.getContent() and getContentAsPDF() methods has had its
+      auto-activation postponed from Summer '16 to Winter '17.
+    detail: Originally scheduled for mandatory enforcement in Summer '16,
+      organizations now have until Winter '17 before this critical update
+      auto-activates. Code relying on these methods not being treated as
+      callouts should be updated before then.
+    upgradeAction: Review and test any Apex code calling getContent() or
+      getContentAsPDF() to ensure it handles callout semantics (governor limits,
+      async context restrictions) before Winter '17 enforcement.
+    source:
+      document: v37-summer16.pdf
+      page: 369
+      heading: Visualforce for Lightning Experience is Generally Available
+    confidence: high
+    id: v37-vf-004
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: The title attribute on <apex:page> now functions in Lightning
+      Experience, setting browser tab text and bookmark names. Previously this
+      attribute was ignored in LEX.
+    upgradeAction: Review Visualforce pages for existing title attribute values or
+      <title> tags that may now surface unexpectedly in Lightning Experience
+      browser tabs.
+    source:
+      document: v37-summer16.pdf
+      page: 370
+      heading: Set the Page Title in Lightning Experience with the <apex:page> title
+        Attribute
+    confidence: high
+    id: v37-vf-005
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: The apex:map component gains a new scrollBasedZooming attribute that
+      lets developers disable scroll-wheel and touch-based zoom gestures,
+      helping prevent unintended map interactions on pages with embedded maps.
+    source:
+      document: v37-summer16.pdf
+      page: 370
+      heading: Control Scroll-Based Zooming in Visualforce Maps
+    confidence: high
+    id: v37-vf-006
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: SVG elements with xmlns namespace declarations no longer cause
+      rendering problems on Visualforce pages. Previously, including the
+      standard SVG namespace attribute would break page rendering.
+    upgradeAction: If you implemented workarounds to avoid SVG namespace
+      declarations, you can now use standard SVG markup with xmlns attributes.
+    source:
+      document: v37-summer16.pdf
+      page: 370
+      heading: Fix for Rendering Quirks When SVG Namespace Added to Page
+    confidence: high
+    id: v37-vf-007
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version (Critical Update enforcement)
+    summary: Once the Critical Update is enabled, Visualforce pages can no longer
+      declare custom docTypes via the <!DOCTYPE myDocType [...]> pattern. Only
+      the standard docType attribute on <apex:page> remains supported.
+    upgradeAction: Search your Visualforce pages for inline <!DOCTYPE declarations
+      with custom entity definitions. Remove or replace them before enabling
+      this Critical Update, then test in sandbox to confirm pages still render
+      correctly.
+    source:
+      document: v37-summer16.pdf
+      page: 370
+      heading: Disable Custom DocTypes in Visualforce Markup (Critical Update)
+    confidence: high
+    id: v37-vf-008
+  - apiVersion: "37.0"
+    introducedIn: "34.0"
+    release: Summer '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide once critical update is activated (auto-activation
+      postponed to Winter '17)
+    summary: The PageReference getContent() and getContentAsPDF() methods will be
+      treated as callouts once this critical update is enforced, meaning they
+      count against callout limits and cannot be invoked after DML in the same
+      transaction.
+    detail: Originally introduced in Summer '15 (API 34.0) as a critical update,
+      auto-activation was initially scheduled for Summer '16 but has been
+      postponed to Winter '17. Code invoking these methods after DML or
+      exceeding callout limits will fail once activated.
+    upgradeAction: Audit Apex code calling getContent() or getContentAsPDF() to
+      ensure no prior uncommitted DML exists in the transaction and that callout
+      limits are not exceeded. Refactor transaction boundaries if necessary
+      before enforcement.
+    source:
+      document: v37-summer16.pdf
+      page: 371
+      heading: “PageReference getContent() and getContentAsPDF() Methods Behave as
+        Callouts” Critical Update Postponed
+    confidence: high
+    id: v37-vf-009
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: A new testConnectorUtil class enables automated testing of connected
+      app user provisioning by letting you create connected app instances within
+      Apex tests.
+    source:
+      document: v37-summer16.pdf
+      page: 373
+      heading: Provision Your Connected Apps with Confidence
+    confidence: medium
+    id: v37-apex-004
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOQL queries on the PlatformAction object now accept a LIMIT clause in
+      Apex, whereas previously they were rejected. This is a bug fix enabling
+      previously blocked query patterns.
+    upgradeAction: If you have workarounds that avoided using LIMIT on
+      PlatformAction queries, you can now simplify your code to include LIMIT
+      directly.
+    source:
+      document: v37-summer16.pdf
+      page: 375
+      heading: Run SOQL Queries on PlatformAction with a LIMIT Clause
+    confidence: high
+    id: v37-soql-004
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Named credentials can now be used with Continuation-based asynchronous
+      callouts from Visualforce controllers, extending support beyond Queueable
+      Apex to long-running callouts.
+    source:
+      document: v37-summer16.pdf
+      page: 375
+      heading: Simplify Development of Asynchronous Callouts by Using Named Credentials
+    confidence: high
+    id: v37-apex-005
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The JSON.serialize method gains an option to omit null-valued fields
+      from the output, reducing payload size and simplifying downstream parsing.
+    source:
+      document: v37-summer16.pdf
+      page: 376
+      heading: Suppress Null Values When Serializing Apex Objects
+    confidence: medium
+    id: v37-apex-006
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex REST endpoints now support CORS, allowing browser-based JavaScript
+      from whitelisted origins to call custom REST services directly without a
+      proxy.
+    detail: Admins configure allowed origins in Setup under CORS settings. Browsers
+      making requests from whitelisted origins receive proper
+      Access-Control-Allow-Origin headers; non-whitelisted origins get HTTP 403.
+      OAuth tokens remain required for authenticated endpoints.
+    source:
+      document: v37-summer16.pdf
+      page: 376
+      heading: Use CORS to Access Apex REST Classes
+    confidence: high
+    id: v37-rest-006
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new SObject instance method getPopulatedFieldsAsMap() returns a
+      Map<String, Object> of only the fields that have been queried via SOQL or
+      explicitly set in memory, simplifying iteration over dynamic field sets.
+    source:
+      document: v37-summer16.pdf
+      page: 377
+      heading: Get a Map of Populated SObject Fields
+    confidence: high
+    id: v37-apex-007
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The TxnSecurity.Event data map gains ActionName and UserName for Entity
+      events but loses Browser, Platform, TimeStamp, URI, and UserAgent across
+      all event types, breaking code that reads those removed keys.
+    upgradeAction: Audit any Apex referencing TxnSecurity.Event.data for the removed
+      keys (Browser, Platform, TimeStamp, URI, UserAgent) and update logic to
+      handle their absence or source those values elsewhere.
+    source:
+      document: v37-summer16.pdf
+      page: 380
+      heading: Changed Apex Classes
+    confidence: high
+    id: v37-apex-008
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: The threshold for non-selective SOQL queries in triggers doubled from
+      100,000 to 200,000 rows, meaning triggers that previously failed with a
+      selectivity error on large objects may now succeed.
+    detail: Non-selective queries (those without filters on indexed fields that
+      reduce results below the system threshold) previously threw an error when
+      executed against objects with more than 100k records. This limit is now
+      200k. Existing code that failed may start working, but this also means
+      poorly optimized queries have more room to run before hitting limits.
+    upgradeAction: Review triggers that were previously failing on large objects to
+      ensure the underlying query design is still appropriate, as the relaxed
+      limit may mask performance issues.
+    source:
+      document: v37-summer16.pdf
+      page: 387
+      heading: Increased Non-Selective Query Limits
+    confidence: high
+    id: v37-soql-005
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide once critical update is activated (enforcement date TBD)
+    summary: Lightning access attribute violations that previously only logged
+      warnings now throw actual errors and prevent code execution when this
+      critical update is activated. Components referencing resources outside
+      their allowed access scope will fail rather than just warn.
+    detail: Enforcement applies to aura:application, aura:attribute, aura:component,
+      and aura:interface tags. The aura:event and aura:method tags are not yet
+      enforced but will be in a future release. Resources default to
+      access="public" (same-namespace only), so cross-namespace references
+      require explicit access="global".
+    upgradeAction: Enable debug mode and review browser console for access check
+      warnings before activating. Add appropriate access attributes to owned
+      resources or remove references to inaccessible resources. Test in sandbox
+      first.
+    source:
+      document: v37-summer16.pdf
+      page: 389
+      heading: Enforce Access Check Errors (Critical Update)
+    confidence: high
+    id: v37-aura-001
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide once the critical update is activated (auto-enabled Spring
+      '17 for all orgs)
+    summary: "LockerService enforces strict JavaScript isolation for Lightning
+      components: ES5 strict mode becomes mandatory, components can only access
+      their own DOM elements, global objects are replaced with secure wrappers,
+      and only published framework APIs remain accessible."
+    detail: When active, LockerService breaks components relying on non-strict JS,
+      cross-component DOM traversal, direct window/document access, or
+      undocumented framework internals. The instanceof operator also becomes
+      unreliable across secure boundaries. Components from managed packages are
+      temporarily exempt this release but will be enforced in future releases.
+    upgradeAction: Run Salesforce Lightning CLI to scan components for violations.
+      Replace instanceof with typeof or Array.isArray(). Eliminate
+      cross-component DOM access. Update third-party libraries to
+      strict-mode-compatible versions. Test with the critical update enabled
+      before Spring '17 auto-activation.
+    source:
+      document: v37-summer16.pdf
+      page: 390
+      heading: Enhance Security with LockerService (Critical Update)
+    confidence: high
+    id: v37-aura-002
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning components can now reference static resources via the
+      $Resource global value provider in both markup expressions and JavaScript
+      code using $A.get(), eliminating the need to construct resource URLs
+      manually.
+    source:
+      document: v37-summer16.pdf
+      page: 395
+      heading: Reference Static Resources with the $Resource Global Value Provider
+    confidence: high
+    id: v37-aura-003
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Design tokens for Lightning components reach GA, letting developers
+      define reusable CSS values in token bundles and compose them via the
+      extends attribute.
+    source:
+      document: v37-summer16.pdf
+      page: 395
+      heading: Lightning Design Tokens (Generally Available)
+    confidence: medium
+    id: v37-aura-004
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Abortable server actions are now aborted when their originating
+      component becomes invalid (cmp.isValid() == false), replacing the previous
+      behavior where an abortable action was aborted when another abortable
+      action was queued.
+    detail: The abort decision is now tied solely to component validity rather than
+      queue ordering. Additionally, any action whose component becomes invalid
+      before the server response returns will have its state set to ABORTED,
+      executing only ABORTED-state callback logic.
+    upgradeAction: Review code relying on the old queue-based abort behavior where
+      adding a new abortable action would cancel prior ones. Verify callback
+      handlers properly check for ABORTED state if cleanup logic is needed.
+    source:
+      document: v37-summer16.pdf
+      page: 395
+      heading: More Intuitive Behavior for Abortable Actions
+    confidence: high
+    id: v37-aura-005
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The force:showToast event gains new attributes enabling multiple
+      actions per toast and stacking behavior, but force:hideToast no longer
+      functions with the enhanced toast system.
+    detail: Apps using force:hideToast to programmatically dismiss toasts will find
+      that method ineffective with the new toast implementation. Toast stacking
+      is Lightning Experience only.
+    upgradeAction: Review any code invoking force:hideToast and implement
+      alternative dismissal patterns if needed. Test toast behavior in both
+      Lightning Experience and Salesforce1 mobile.
+    source:
+      document: v37-summer16.pdf
+      page: 396
+      heading: Improve App-Level Messaging with Powerful, Accessible Toasts
+    confidence: medium
+    id: v37-aura-006
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: components compiled at API >= 37.0
+    summary: The ui:inputDate and ui:inputDateTime components now expect their value
+      attribute as a String in ISO format (yyyy-mm-dd or UTC datetime) instead
+      of a Date object, which will break existing code passing Date types.
+    upgradeAction: Audit Aura components using ui:inputDate or ui:inputDateTime and
+      convert any Date object assignments to the value attribute into properly
+      formatted String values.
+    source:
+      document: v37-summer16.pdf
+      page: 398
+      heading: New and Changed Lightning Components
+    confidence: high
+    id: v37-aura-007
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The force:showToast event now requires the message attribute, so
+      existing code firing this event without explicitly setting message will
+      fail.
+    upgradeAction: Audit all force:showToast event fires and ensure the message
+      attribute is explicitly provided.
+    source:
+      document: v37-summer16.pdf
+      page: 399
+      heading: Changed Lightning Events
+    confidence: high
+    id: v37-aura-008
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: Two new objects (ApexTestResultLimits and ApexTestRunResult) are
+      available for programmatically querying Apex test execution metrics,
+      including governor limit consumption per test method and aggregate job
+      statistics.
+    source:
+      document: v37-summer16.pdf
+      page: 400
+      heading: New Objects
+    confidence: medium
+    id: v37-apex-009
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API requests using version 37.0 and later
+    summary: Five content-related fields (ContentData, ContentDescription,
+      ContentFileName, ContentSize, ContentType) were removed from all feed
+      objects. Content must now be associated via FeedAttachment, and previously
+      available content information should be retrieved from ContentVersion
+      instead.
+    upgradeAction: Audit integrations that read or write these content fields on
+      feed objects. Migrate to using FeedAttachment for associating content and
+      ContentVersion for retrieving content metadata.
+    source:
+      document: v37-summer16.pdf
+      page: 402
+      heading: Changed Objects
+    confidence: low
+    id: v37-rest-007
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API requests using version 37.0 and later
+    summary: AccountShare and OpportunityShare records with Team RowCause are no
+      longer compressed with other sharing records (ImplicitParent, Manual,
+      Owner). Team-based sharing now always creates a separate record instead of
+      being merged into a single record with highest access level.
+    upgradeAction: Review code that queries or processes
+      AccountShare/OpportunityShare records, as the number and structure of
+      returned records may differ when team-based sharing is involved.
+    source:
+      document: v37-summer16.pdf
+      page: 402
+      heading: Changed Objects
+    confidence: low
+    id: v37-rest-008
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOQL/SOSL queries can now use aliases with FORMAT(), toLabel(), and
+      convertCurrency() functions, making it easier to reference these computed
+      fields when processing query results in Apex.
+    source:
+      document: v37-summer16.pdf
+      page: 408
+      heading: Use Aliasing in More Statements
+    confidence: high
+    id: v37-soql-006
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOSL queries now support a FORMAT() function that returns number, date,
+      time, and currency fields with locale-appropriate formatting applied.
+    source:
+      document: v37-summer16.pdf
+      page: 408
+      heading: Apply Localized Formatting to Numerical Fields
+    confidence: high
+    id: v37-soql-007
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOSL queries can now request field label metadata in responses via the
+      WITH METADATA='LABELS' clause, returning display names alongside field
+      values.
+    source:
+      document: v37-summer16.pdf
+      page: 408
+      heading: Return Metadata in Responses
+    confidence: high
+    id: v37-soql-008
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: REST API now supports creating records via POST to
+      /sobjects/SObjectName/Id using Id as the external ID field with a null
+      value, providing an alternative creation pattern.
+    source:
+      document: v37-summer16.pdf
+      page: 410
+      heading: "Changed Resource: SObject Rows by External ID"
+    confidence: medium
+    id: v37-rest-009
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API requests made at version >= 37.0
+    summary: The Parameterized Search REST endpoint now wraps results in a
+      searchRecords property instead of returning an array directly, which will
+      break clients expecting the previous response structure.
+    upgradeAction: Update API client code to access search results via the new
+      searchRecords wrapper property before upgrading to API version 37.0.
+    source:
+      document: v37-summer16.pdf
+      page: 410
+      heading: "Changed Resource: Parameterized Search"
+    confidence: low
+    id: v37-rest-010
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The SObject Suggested Articles for Case REST resource replaces the
+      categoryid parameter with a new categories parameter that uses a JSON
+      object syntax for specifying data category group/name pairs.
+    upgradeAction: Update any integrations calling this endpoint to use the new
+      categories parameter with JSON syntax instead of categoryid. Ensure proper
+      URL encoding of the JSON value.
+    source:
+      document: v37-summer16.pdf
+      page: 412
+      heading: "Changed Resource: SObject Suggested Articles for Case"
+    confidence: high
+    id: v37-rest-011
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: DebuggingHeader now accepts a categories parameter (of type LogInfo) in
+      SOAP API, matching what was already available in Tooling and Metadata
+      APIs, plus three new logging levels (Profiling, Callout, Detail) added to
+      the debugLevel enum.
+    source:
+      document: v37-summer16.pdf
+      page: 413
+      heading: Changed Headers
+    confidence: high
+    id: v37-soap-002
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: "Chatter REST API request bodies gain new properties: markup segments
+      now support a Code value for markupType, enabling code-formatted content
+      in feed posts."
+    source:
+      document: v37-summer16.pdf
+      page: 416
+      heading: New and Changed Chatter REST API Request Bodies
+    confidence: low
+    id: v37-rest-012
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-bulk
+    appliesWhen: org-wide regardless of component API version
+    summary: Bulk API now accepts cross-origin requests from browser-based
+      JavaScript when the requesting origin is added to the org's CORS whitelist
+      in Setup.
+    source:
+      document: v37-summer16.pdf
+      page: 422
+      heading: Use CORS to Access Bulk API
+    confidence: high
+    id: v37-bulk-001
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: PushTopic streaming events now support durable replay, allowing
+      subscribers to retrieve events from the past 24 hours using replayId. The
+      unified endpoint at /cometd/37.0/ replaces the earlier
+      /cometd/replay/36.0/ endpoint.
+    detail: Each event now includes a replayId field. Subscribers can replay from a
+      specific ID, receive only new events (-1), or retrieve all events within
+      the 24-hour retention window (-2). The createdDate field format also
+      changed to use a Z suffix instead of +0000 for UTC.
+    source:
+      document: v37-summer16.pdf
+      page: 423
+      heading: Replay Events with Durable PushTopic Streaming (Generally Available)
+    confidence: medium
+    id: v37-rest-013
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: PushTopic subscriptions now support filter expressions appended to the
+      channel URI, enabling clients to receive only events matching specified
+      field conditions joined by the & operator (which acts as logical OR).
+    detail: Filters use the syntax /topic/ChannelName?fieldA=valueA&fieldB=valueB.
+      Fields used in filter conditions must be included in the PushTopic query.
+      Only 18-character IDs are supported in filter criteria.
+    source:
+      document: v37-summer16.pdf
+      page: 425
+      heading: Apply Filters to Your PushTopic Subscriptions
+    confidence: high
+    id: v37-rest-014
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: SOAP clients regenerating Tooling API WSDL for API >= 37.0
+    summary: Tooling API SOAP WSDL restructures sObjects and fault types into new
+      dedicated namespaces (sobject.tooling.soap.sforce.com and
+      fault.tooling.soap.sforce.com), requiring clients that regenerate the WSDL
+      to update namespace prefixes in their code.
+    detail: Prior to v37.0, sObjects and error-handling objects lived in the tns
+      namespace. Clients pinned to v36.0 or earlier continue working, but any
+      client regenerating the WSDL at v37.0+ must accommodate the new ens and
+      fns prefixes.
+    upgradeAction: After regenerating the Tooling API WSDL at v37.0+, update code
+      references to use the new namespace prefixes (ens for sObjects, fns for
+      faults) instead of the former tns definitions.
+    source:
+      document: v37-summer16.pdf
+      page: 426
+      heading: New Tooling API Namespaces
+    confidence: high
+    id: v37-soap-003
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: ApexTestResult objects are now fully writable via Tooling API, allowing
+      programmatic creation, update, and deletion of test result records along
+      with all their fields.
+    upgradeAction: Review any integrations that query or manipulate ApexTestResult
+      objects, as the expanded write capabilities may affect existing test
+      result management workflows or external tooling assumptions.
+    source:
+      document: v37-summer16.pdf
+      page: 426
+      heading: Tooling API New and Changed Objects
+    confidence: medium
+    id: v37-apex-010
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API requests targeting version >= 37.0
+    summary: The Tooling API REST endpoints /runTestsAsynchronous/ and
+      /runTestsSynchronous/ no longer support GET requests starting in v37.0;
+      only POST is allowed.
+    upgradeAction: Update any integrations or scripts that call these endpoints via
+      GET to use POST instead before upgrading API version past 36.0.
+    source:
+      document: v37-summer16.pdf
+      page: 429
+      heading: Tooling API Calls and Methods
+    confidence: low
+    id: v37-rest-015
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: API requests targeting version >= 37.0
+    summary: The SOAP runTestsAsynchronous() call now requires a testLevel parameter
+      in v37.0+, though the value may be null; this enables filtering test runs
+      by scope (specified tests, local tests, or all tests).
+    upgradeAction: Verify that any SOAP integrations calling runTestsAsynchronous
+      include the testLevel parameter when targeting v37.0 or later.
+    source:
+      document: v37-summer16.pdf
+      page: 429
+      heading: Tooling API Calls and Methods
+    confidence: low
+    id: v37-soap-004
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: components retrieved or deployed at API >= 37.0
+    summary: ProfileTabVisibility now consistently returns 'Hidden' via the API when
+      tab visibility is hidden, regardless of whether it was set through the UI
+      or API. Earlier versions only returned 'Hidden' if set programmatically.
+    upgradeAction: Review any deployment scripts or tools that parse
+      ProfileTabVisibility and expect blank values for UI-set hidden tabs; they
+      will now receive 'Hidden' explicitly.
+    source:
+      document: v37-summer16.pdf
+      page: 430
+      heading: "Metadata API: New and Changed Types"
+    confidence: high
+    id: v37-packaging-002
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Salesforce Console Integration Toolkit gains new methods and event
+      payloads for Omni-Channel presence status and workload tracking, enabling
+      programmatic detection of agent capacity changes and work item events.
+    source:
+      document: v37-summer16.pdf
+      page: 433
+      heading: Salesforce Console API (Integration Toolkit)
+    confidence: medium
+    id: v37-rest-016
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: The SignupRequest SOAP API object's Edition field no longer accepts
+      'Group Edition' and renames existing values; code that programmatically
+      provisions trial orgs must update hardcoded edition strings.
+    upgradeAction: Review any integrations calling SignupRequest that specify
+      Edition values. Remove references to Group Edition and update
+      'Enterprise'/'Professional' to 'Enterprise TSO'/'Professional TSO' if your
+      code relies on exact string matching.
+    source:
+      document: v37-summer16.pdf
+      page: 437
+      heading: Create Trial Orgs with New Edition Templates
+    confidence: high
+    id: v37-soap-005
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide after auto-activation (opt-in period available until
+      auto-activation date)
+    summary: LockerService introduces strict security isolation for Lightning
+      components, blocking access to non-public framework internals and
+      restricting components to supported APIs only.
+    detail: "Components relying on undocumented framework methods or cross-namespace
+      DOM access will break. Two separate critical updates exist: one for the
+      general org and another specifically for Communities."
+    upgradeAction: Test all custom Lightning components with LockerService enabled
+      before auto-activation. Refactor any code accessing unsupported APIs or
+      framework internals.
+    source:
+      document: v37-summer16.pdf
+      page: 447
+      heading: Critical Updates
+    confidence: high
+    id: v37-lwc-002
+  - apiVersion: "37.0"
+    release: Summer '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide after auto-activation (opt-in period available until
+      auto-activation date)
+    summary: Visualforce pages can no longer use custom docType declarations in
+      their markup once this critical update activates.
+    upgradeAction: Audit Visualforce pages for custom docType usage and remove or
+      replace them with standard docTypes before auto-activation.
+    source:
+      document: v37-summer16.pdf
+      page: 447
+      heading: Critical Updates
+    confidence: high
+    id: v37-vf-010

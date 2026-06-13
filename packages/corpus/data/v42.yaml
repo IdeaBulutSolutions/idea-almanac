@@ -1,0 +1,1151 @@
+apiVersion: "42.0"
+release: Spring '18
+reviewed: true
+entries:
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new debug logging level option prevents ENTERING_MANAGED_PKG entries
+      from appearing in logs, reducing log size when debugging code that calls
+      managed packages.
+    source:
+      document: v42-spring18.pdf
+      page: 9
+      heading: You Asked for It!
+    confidence: medium
+    id: v42-apex-001
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: Internet Explorer 11 support for Lightning Experience, Lightning
+      Console Apps, and Lightning Communities ends December 31, 2020 (with
+      Extended Support opt-in) or December 16, 2017 (without). Developers
+      embedding Lightning components in IE11-based WebViews or testing in IE11
+      must migrate to a supported browser.
+    upgradeAction: Ensure any automated testing, embedded WebViews, or internal
+      tools accessing Lightning Experience no longer rely on IE11. Update
+      browser requirements documentation and migrate to Edge, Chrome, Firefox,
+      or Safari.
+    source:
+      document: v42-spring18.pdf
+      page: 53
+      heading: Supported Browsers for Lightning Experience
+    confidence: high
+    id: v42-other-001
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: Visualforce pages and third-party web tabs using Console
+      Integration Toolkit version 42.0 or later in Lightning Experience
+    summary: Salesforce Classic Console Integration Toolkit methods now function in
+      Lightning Experience when using toolkit version 42.0+, enabling existing
+      Visualforce console customizations to work without rewrites.
+    detail: Third-party content using these methods must be added to CSP Trusted
+      Sites. This provides a migration path for orgs moving console apps from
+      Classic to Lightning.
+    source:
+      document: v42-spring18.pdf
+      page: 68
+      heading: Use Classic Console Integration Toolkit Methods in Lightning Experience
+    confidence: low
+    id: v42-vf-001
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version (auto-activates
+      October 5, 2018)
+    summary: Visualforce pages in Lightning Console apps will return Theme4u instead
+      of Theme4d for $User.UITheme and $User.UIThemeDisplayed, breaking code
+      that checks for Theme4d to detect Lightning Experience.
+    upgradeAction: Update any Visualforce code that checks UIThemeDisplayed ===
+      'Theme4d' to also accept 'Theme4u', or Lightning Console pages will fail
+      the Lightning Experience detection after activation.
+    source:
+      document: v42-spring18.pdf
+      page: 68
+      heading: Enable the Lightning Console UI Theme (Critical Update)
+    confidence: high
+    id: v42-vf-002
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Visualforce pages can now distinguish Lightning console navigation from
+      standard Lightning navigation by checking for the Theme4u value in
+      $User.UITheme and $User.UIThemeDisplayed global variables.
+    source:
+      document: v42-spring18.pdf
+      page: 69
+      heading: Detect the Lightning Console UI Theme in Visualforce Pages
+    confidence: high
+    id: v42-vf-003
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The api.metamind.io endpoint for Einstein Platform Services is being
+      deprecated in favor of api.einstein.ai. Code and tooling calling the old
+      endpoint must be updated to maintain access.
+    upgradeAction: Update all references to api.metamind.io in your codebase and
+      configuration to use https://api.einstein.ai instead.
+    source:
+      document: v42-spring18.pdf
+      page: 92
+      heading: Salesforce Einstein
+    confidence: high
+    id: v42-rest-001
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: JWT tokens returned by the Einstein Platform Services token endpoint
+      and web page are now longer than before, which may affect code that
+      validates or stores these tokens with length constraints.
+    upgradeAction: Review any code that stores, validates, or parses JWT tokens from
+      Einstein services to ensure it can handle longer token strings.
+    source:
+      document: v42-spring18.pdf
+      page: 92
+      heading: Salesforce Einstein
+    confidence: high
+    id: v42-auth-001
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce Classic Console Integration Toolkit methods can now be
+      invoked from Visualforce pages running in Lightning Experience, enabling
+      existing console integrations to work in the Lightning Service Console.
+    source:
+      document: v42-spring18.pdf
+      page: 206
+      heading: Service Console Enhancements
+    confidence: medium
+    id: v42-vf-004
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Snap-ins pre-chat can now be fully customized via custom Lightning
+      components implementing the lightningsnapin:prechatUI interface, with the
+      lightningsnapin:prechatAPI component providing methods for field
+      retrieval, validation, and chat initiation.
+    source:
+      document: v42-spring18.pdf
+      page: 215
+      heading: Customize Pre-Chat with Lightning Components
+    confidence: medium
+    id: v42-aura-001
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Social Customer Service Apex methods now locate parent cases by
+      matching on Persona instead of replyToId, and findParentCase internally
+      delegates to findParentCaseFromPersona.
+    upgradeAction: Review any custom Apex relying on Social Customer Service case
+      threading; test that case association still resolves correctly under the
+      persona-based lookup.
+    source:
+      document: v42-spring18.pdf
+      page: 223
+      heading: Use Social Persona Threading Updates in Apex
+    confidence: medium
+    id: v42-apex-002
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version; requires My Domain
+      enabled and Lightning flow runtime
+    summary: Screen Flows can now embed custom Lightning components that implement
+      the lightning:availableForFlowScreens interface, enabling fully customized
+      screen layouts, navigation, and dynamic behavior within flow screens.
+    detail: Components must implement lightning:availableForFlowScreens and include
+      a design resource to appear as screen field options. This capability works
+      only in Lightning flow runtime, not Classic flow runtime.
+    source:
+      document: v42-spring18.pdf
+      page: 372
+      heading: Build Richer Flow Screens with Lightning Components
+    confidence: high
+    id: v42-flow-001
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (Critical Update)
+    summary: Bulk-invoked autolaunched flow interviews now execute all interviews
+      instead of only the first one. Previously, when multiple interviews were
+      triggered in a single bulk operation, all but the initial interview were
+      silently dropped.
+    upgradeAction: Review any integration or trigger logic that bulk-invokes
+      autolaunched flows; ensure each interview's execution is expected and that
+      downstream effects (DML, callouts, emails) can handle the increased
+      volume.
+    source:
+      document: v42-spring18.pdf
+      page: 376
+      heading: Launch Flows as Subtabs in Lightning Console Apps (Pilot)
+    confidence: high
+    id: v42-flow-002
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The new Flow.Interview.createInterview() method allows Apex to start
+      any flow by passing its name as a string parameter, removing the need to
+      hardcode flow names in individual methods.
+    source:
+      document: v42-spring18.pdf
+      page: 379
+      heading: Start Flows Dynamically from Apex
+    confidence: high
+    id: v42-apex-003
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+      - Integration
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (Critical Update
+      activation required)
+    summary: Bulk-invoked autolaunched flow interviews now all execute instead of
+      only the first one running and the rest being silently dropped. This can
+      cause transactions to hit governor limits (e.g., duplicate update limit of
+      12) that were previously avoided.
+    detail: When flows are triggered in bulk via Process Builder actions or the REST
+      API Invocable Actions resource with multiple input maps, every interview
+      now runs within a single transaction. Implementations that assumed only
+      one interview executed per batch may now fail with limit exceptions and
+      full transaction rollbacks.
+    upgradeAction: Audit all processes with flow actions and REST integrations
+      calling autolaunched flows. Ensure flows do not perform duplicate updates
+      on the same record across interviews in a batch. Test in sandbox before
+      activating the critical update in production.
+    source:
+      document: v42-spring18.pdf
+      page: 379
+      heading: Execute All Autolaunched Flow Interviews When Invoked in Bulk (Critical
+        Update)
+    confidence: high
+    id: v42-flow-003
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Flows gain access to $Flow.InterviewGuid, a system variable exposing
+      the unique identifier of the running interview, enabling tracking of
+      paused interviews for GDPR-style data deletion scenarios.
+    source:
+      document: v42-spring18.pdf
+      page: 383
+      heading: Track More Information About Paused Flow Interviews
+    confidence: high
+    id: v42-flow-004
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Metadata API now supports retrieving and deploying CompactLayout
+      metadata for external objects, including the compactLayoutAssignment and
+      compactLayouts fields on CustomObject.
+    source:
+      document: v42-spring18.pdf
+      page: 390
+      heading: Retrieve and Deploy Compact Layouts for External Objects
+    confidence: high
+    id: v42-packaging-001
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Authentication provider endpoints now accept an expid request
+      parameter, enabling integrations to pass experience IDs for dynamic login
+      branding across OAuth authorize, IdP, self-registration, and
+      password-reset URLs.
+    source:
+      document: v42-spring18.pdf
+      page: 399
+      heading: Add a Dynamic Login Experience to Auth. Provider URLs
+    confidence: medium
+    id: v42-auth-002
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Auth. Provider URLs now accept an optional prompt parameter to force
+      reauthentication (login), reapproval (consent), or both during SSO flows,
+      giving integrations programmatic control over session handling.
+    source:
+      document: v42-spring18.pdf
+      page: 400
+      heading: Control When Users Are Prompted for Reauthentication and Reapproval
+        Using Auth. Provider URLs
+    confidence: high
+    id: v42-auth-003
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Developers can now build fully custom login flows using Visualforce
+      pages and Apex controllers, calling new
+      Auth.SessionManagement.finishLoginFlow() methods to complete
+      authentication and lift session restrictions.
+    source:
+      document: v42-spring18.pdf
+      page: 400
+      heading: Take Full Control of Your Login Process with Visualforce Page Login Flows
+    confidence: high
+    id: v42-auth-004
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: A new Auth.VerificationException class lets Apex code (including
+      triggers) initiate the Salesforce identity-verification flow by throwing
+      an exception, which was previously impossible from trigger context using
+      the URL-based approach.
+    detail: Throwing Auth.VerificationException prompts UI users to verify identity
+      and returns an API error to headless clients. This enables triggers to
+      enforce high-assurance sessions before sensitive DML without manual
+      redirect logic.
+    source:
+      document: v42-spring18.pdf
+      page: 402
+      heading: Require Two-Factor Authentication Using Apex Triggers
+    confidence: high
+    id: v42-auth-005
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version (requires My Domain
+      deployment)
+    summary: Social sign-on auth provider URLs now route through subdomain and
+      community-specific domains instead of login.salesforce.com, and the orgID
+      parameter has been removed. Existing integrations using the old callback
+      URLs must update their third-party app configurations to avoid redirect
+      URI mismatch errors.
+    upgradeAction: For existing auth provider configurations, enable 'Use subdomain
+      in callback URLs' and update the registered callback URLs in your
+      third-party identity provider (Facebook, Google, etc.) to match the new
+      subdomain-based format. Test social sign-on flows in sandbox before
+      production.
+    source:
+      document: v42-spring18.pdf
+      page: 403
+      heading: Improve Social Sign–On Performance with Optimized Auth. Provider URLs
+    confidence: medium
+    id: v42-auth-006
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version (requires enablement
+      by Salesforce Support)
+    summary: The ThirdPartyAccountLink standard object now supports insert and
+      delete operations via API, allowing programmatic management of external
+      authentication provider user links.
+    upgradeAction: If building integrations that provision SSO users, you can now
+      use the API to create or remove third-party account links instead of
+      relying on user-initiated flows.
+    source:
+      document: v42-spring18.pdf
+      page: 404
+      heading: Set Third-Party Account Links Via the API
+    confidence: high
+    id: v42-rest-002
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: sandboxes created from production orgs provisioned after Spring '18
+    summary: Sandboxes spawned from newly created production orgs now receive
+      lowercase My Domain hostnames, which can break SAML SSO if your identity
+      provider is configured with mixed-case URLs.
+    detail: Existing production orgs retain their original hostname casing when
+      sandboxes are created or refreshed, so only integrations against sandboxes
+      from post-Spring-'18 orgs are affected. Visualforce URLs always use
+      lowercase regardless of org age.
+    upgradeAction: For sandboxes from new orgs, verify that your IdP's assertion
+      consumer service URLs and entity IDs match the lowercase hostnames shown
+      in the Salesforce SAML settings.
+    source:
+      document: v42-spring18.pdf
+      page: 407
+      heading: Sandboxes Use Lowercase My Domain Hostnames
+    confidence: low
+    id: v42-auth-007
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: "Several fields were removed from EventLogFile event types: FILE_NAME
+      from Document Attachment Downloads, USERNAME from Knowledge Article View,
+      and USER_NAME from Logout. Integrations querying these fields will no
+      longer receive data."
+    upgradeAction: Update any code or integrations that read these retired fields.
+      For FILE_NAME, query the Document object using the ENTITY_ID from the log
+      instead.
+    source:
+      document: v42-spring18.pdf
+      page: 416
+      heading: Fields Retired in EventLogFile Event Types
+    confidence: high
+    id: v42-rest-003
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: A new Salesforce IoT REST API is available from v42.0, enabling
+      programmatic CRUD operations on orchestrations, contexts, activations, and
+      instances, plus retrieval of traffic and usage metrics.
+    source:
+      document: v42-spring18.pdf
+      page: 420
+      heading: Access and Manipulate IoT Components with the Salesforce IoT REST API
+    confidence: high
+    id: v42-rest-004
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Einstein Platform Services JWT tokens have increased in length, which
+      may break integrations with hardcoded buffer sizes or storage constraints
+      for token values.
+    upgradeAction: Review any code that stores or transmits Einstein API JWT tokens
+      to ensure it can handle longer string values without truncation.
+    source:
+      document: v42-spring18.pdf
+      page: 425
+      heading: JWT Token Is Now Longer
+    confidence: medium
+    id: v42-auth-008
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The api.metamind.io endpoint for Einstein Platform Services is being
+      deprecated and must be replaced with api.einstein.ai in all integrations.
+    upgradeAction: Update all code, scripts, and connected apps that call
+      api.metamind.io to use https://api.einstein.ai instead before the old
+      endpoint is retired.
+    source:
+      document: v42-spring18.pdf
+      page: 425
+      heading: Change API Endpoint to Maintain Access to Einstein Platform Services
+    confidence: high
+    id: v42-rest-005
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Einstein Vision gains a new Object Detection API with a /detect
+      endpoint that locates and returns bounding-box coordinates for multiple
+      objects within an image, extending beyond the existing classification
+      capabilities.
+    source:
+      document: v42-spring18.pdf
+      page: 426
+      heading: Locate Image Objects with Einstein Object Detection
+    confidence: medium
+    id: v42-rest-006
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Einstein Language API gains a new endpoint to retrieve per-epoch
+      training metrics (f1, accuracy, confusion matrix, training loss) for
+      sentiment and intent models, helping developers identify optimal epoch
+      counts and detect overfitting or underfitting.
+    source:
+      document: v42-spring18.pdf
+      page: 430
+      heading: Understand Your Language Model with Learning Curve Metrics
+    confidence: high
+    id: v42-rest-007
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version (auto-activation
+      scheduled after Winter '19)
+    summary: Lightning component controllers without explicit sharing keywords
+      previously defaulted to with sharing; this critical update changes them to
+      without sharing, matching standard Apex behavior but potentially exposing
+      records the user shouldn't access.
+    detail: Before this update, @AuraEnabled controllers that omitted with
+      sharing/without sharing implicitly ran as with sharing, unlike Visualforce
+      controllers. Enabling the update aligns Lightning controller behavior with
+      documented Apex semantics, meaning implicit-sharing controllers now run
+      without sharing and can return records outside the user's sharing rules.
+    upgradeAction: Audit all @AuraEnabled classes lacking explicit sharing keywords
+      and add with sharing or without sharing as appropriate before the
+      auto-activation date; test record visibility under restricted user
+      profiles.
+    source:
+      document: v42-spring18.pdf
+      page: 437
+      heading: Use without sharing for @AuraEnabled Apex Controllers with Implicit
+        Sharing (Critical Update)
+    confidence: high
+    id: v42-sharing-001
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version (enforced February 10, 2018)
+    summary: Salesforce REST API calls from within lightning:container iframes are
+      blocked for security reasons. Apps must switch to Apex remoting to
+      retrieve org data.
+    upgradeAction: Audit any lightning:container components that call REST APIs from
+      within the iframe; refactor them to use Apex @RemoteAction or server-side
+      controllers instead.
+    source:
+      document: v42-spring18.pdf
+      page: 438
+      heading: API Access for <lightning:container> Apps Is Revoked (Critical Update)
+    confidence: high
+    id: v42-aura-002
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: Aura components saved at API version >= 42.0
+    summary: Aura component attribute types are now validated at save time rather
+      than runtime. Components using unsupported types (such as Apex inner
+      classes) that previously worked at runtime will fail to save once
+      upgraded.
+    upgradeAction: Before bumping Aura components past v41.0, attempt to save each
+      component and fix any attribute type errors—especially usages of Apex
+      inner classes or other unsupported types that silently worked before.
+    source:
+      document: v42-spring18.pdf
+      page: 440
+      heading: Validation for Component Attribute Types
+    confidence: high
+    id: v42-aura-003
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The cmp.find() method now correctly locates components created at
+      runtime via $A.createComponent(), fixing a bug that previously prevented
+      this lookup from working.
+    upgradeAction: Review code that implemented workarounds for the broken
+      cmp.find() behavior with dynamic components; those workarounds may now be
+      unnecessary or could conflict with the corrected behavior.
+    source:
+      document: v42-spring18.pdf
+      page: 441
+      heading: Find Dynamically Created Components
+    confidence: high
+    id: v42-aura-004
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: Aura components compiled at API >= 42.0
+    summary: Inline <style> tags are now prohibited in Aura component markup and
+      dynamic component creation. All CSS must be placed in the component
+      bundle's dedicated style resource.
+    upgradeAction: Before upgrading components past v42.0, search for inline <style>
+      tags in .cmp/.app markup and move those styles to the bundle's .css file
+      using the THIS namespace selector.
+    source:
+      document: v42-spring18.pdf
+      page: 441
+      heading: <style> Tag Not Allowed in Components
+    confidence: high
+    id: v42-aura-005
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version; auto-activates
+      October 5, 2018
+    summary: Lightning Console apps will return Theme4u instead of Theme4d for
+      $User.UITheme and $User.UIThemeDisplayed. Visualforce code that checks
+      only for Theme4d to detect Lightning Experience will fail to recognize
+      console contexts.
+    upgradeAction: Update any Visualforce JavaScript or Apex logic that tests
+      UITheme/UIThemeDisplayed to accept both Theme4d and Theme4u as valid
+      Lightning Experience indicators.
+    source:
+      document: v42-spring18.pdf
+      page: 449
+      heading: Remove Instance Names from URLs for Visualforce, Community Builder,
+        Site.com Studio, and Content Files (Critical Update)
+    confidence: high
+    id: v42-vf-005
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: Visualforce pages at API version >= 42.0
+    summary: The <apex:slds> component now automatically applies the current
+      Lightning Experience theme or any custom org theme instead of a static
+      stylesheet, which can alter the appearance of SLDS-styled elements on the
+      page.
+    upgradeAction: Review Visualforce pages using <apex:slds> after upgrading to API
+      42.0+ to ensure the dynamic theme styling renders as expected, especially
+      if relying on specific color or branding assumptions.
+    source:
+      document: v42-spring18.pdf
+      page: 450
+      heading: <apex:slds> Supports Lightning Experience and Custom Styling
+    confidence: high
+    id: v42-vf-006
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Flow.Interview class gains createInterview() methods enabling Apex to
+      programmatically instantiate flow interviews, including support for
+      namespaced flows via a namespace parameter.
+    source:
+      document: v42-spring18.pdf
+      page: 454
+      heading: Changed Apex Classes
+    confidence: high
+    id: v42-flow-005
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: EmailServicesFunction picklist fields (AddressInactiveAction,
+      AttachmentOption, AuthenticationFailureAction, AuthorizationFailureAction,
+      FunctionInactiveAction, OverLimitAction) now return string values instead
+      of numeric values, which may break integrations parsing these fields as
+      integers.
+    upgradeAction: Review any code that reads or compares these picklist field
+      values and update to handle string representations instead of numeric
+      ones.
+    source:
+      document: v42-spring18.pdf
+      page: 465
+      heading: Changed Objects
+    confidence: medium
+    id: v42-soap-001
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: The FOR REFERENCE and FOR VIEW clauses in SOQL queries now track user
+      actions more comprehensively for time-based workflows, potentially
+      affecting audit trails and workflow triggers tied to record views or
+      references.
+    upgradeAction: Review any time-based workflows or processes that depend on FOR
+      REFERENCE or FOR VIEW tracking behavior to ensure the expanded tracking
+      aligns with expected behavior.
+    source:
+      document: v42-spring18.pdf
+      page: 467
+      heading: SOQL
+    confidence: low
+    id: v42-soql-001
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: REST API gains SObject Collections endpoints allowing batch
+      create/update/retrieve/delete of up to 200 records per call, reducing
+      round-trips for integrations that previously had to issue per-record
+      requests.
+    detail: POST/PATCH to /composite/sobjects handles up to 200 records with
+      optional allOrNone rollback; GET retrieves by IDs (URL-limited to ~800, or
+      POST for up to 2000); DELETE removes up to 200 across mixed types. Not yet
+      supported inside composite requests.
+    source:
+      document: v42-spring18.pdf
+      page: 467
+      heading: "New Resource: Fewer Round-Trips with SObject Collections"
+    confidence: high
+    id: v42-rest-008
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: SOAP API gains deleteByExample() for bulk-deleting big object rows by
+      index field matching, and match() for evaluating sObjects against Lead
+      matching rules.
+    source:
+      document: v42-spring18.pdf
+      page: 468
+      heading: New, Changed, and Deprecated Calls
+    confidence: medium
+    id: v42-soap-002
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Reports and Dashboards REST API gains folder management endpoints
+      (POST, GET, PATCH, DELETE) under /folders, enabling programmatic creation,
+      retrieval, renaming, and deletion of report/dashboard folders.
+    source:
+      document: v42-spring18.pdf
+      page: 479
+      heading: "New Methods: folders"
+    confidence: high
+    id: v42-rest-009
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Reports and Dashboards REST API bucket object property
+      'devloperName' (misspelled) is deprecated starting in v42.0; use the
+      corrected 'developerName' property instead.
+    upgradeAction: Update any integrations consuming report metadata to read from
+      'developerName' rather than the deprecated 'devloperName' property before
+      it is removed in a future version.
+    source:
+      document: v42-spring18.pdf
+      page: 479
+      heading: "Changed Resources: dashboardMetadata and reportTypeMetadata"
+    confidence: high
+    id: v42-rest-010
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: User Interface API now exposes the dependentFields property on objects
+      and controllingFields on fields, plus a batch resource for fetching all
+      picklist values by record type, enabling clients to programmatically
+      render dependent picklist hierarchies.
+    source:
+      document: v42-spring18.pdf
+      page: 481
+      heading: Build UI for Dependent Picklists
+    confidence: high
+    id: v42-rest-011
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: User Interface API introduces new REST endpoints for retrieving list
+      view record data and metadata, enabling developers to build custom UIs
+      that mirror Salesforce's native list view experience.
+    source:
+      document: v42-spring18.pdf
+      page: 482
+      heading: Build UI for List Views
+    confidence: high
+    id: v42-rest-012
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: User Interface API responses now include ETag headers, enabling clients
+      to implement conditional GET requests with If-None-Match and receive 304
+      Not Modified responses when cached data is current.
+    source:
+      document: v42-spring18.pdf
+      page: 487
+      heading: Improve App Performance with ETag Headers
+    confidence: high
+    id: v42-rest-013
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: metadata retrieved or deployed at API >= 42.0
+    summary: "The CustomApplication metadata type was restructured significantly:
+      fields were renamed (customShortcut→customShortcuts, tab→tabs,
+      workspaceMappings→workspaceConfig), moved into new subtypes
+      (ServiceCloudConsoleConfig, AppPreferences), and several subtypes were
+      deleted or replaced (DomainWhitelist, PagesToOpen,
+      CustomApplicationComponents→AppComponentList)."
+    detail: Deployments or retrieves targeting v42+ will see a different XML
+      structure for CustomApplication metadata. Existing CI/CD scripts,
+      package.xml references, or code parsing this metadata may break if they
+      expect the old field names or structure.
+    upgradeAction: Review any deployment scripts, metadata parsing code, or CI
+      pipelines that interact with CustomApplication metadata. Update field
+      references from old names (tab, customShortcut, workspaceMappings) to new
+      names, and adjust for the new subtype hierarchy.
+    source:
+      document: v42-spring18.pdf
+      page: 490
+      heading: Metadata API
+    confidence: high
+    id: v42-packaging-002
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: metadata retrieved or deployed at API >= 42.0
+    summary: Dashboard metadata type replaced the dashboardChartTheme and
+      dashboardColorPalette fields with chartTheme and colorPalette respectively
+      starting in v42. The old fields remain only for backward compatibility
+      with earlier API versions.
+    upgradeAction: When deploying Dashboard metadata at v42+, use chartTheme and
+      colorPalette instead of the deprecated dashboardChartTheme and
+      dashboardColorPalette fields.
+    source:
+      document: v42-spring18.pdf
+      page: 490
+      heading: Metadata API
+    confidence: high
+    id: v42-packaging-003
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Custom Big Objects now support row deletion via the new Apex
+      Database.deleteImmediate() method and SOAP deleteByExample() call,
+      requiring all index fields to be specified in order.
+    detail: Both methods accept an sObject template containing the full index field
+      values; partial indexes, non-indexed fields, and wildcards are
+      unsupported. The Apex approach queries matching rows then passes them to
+      deleteImmediate(), while the SOAP call deletes directly by example.
+    source:
+      document: v42-spring18.pdf
+      page: 496
+      heading: Let Users Delete Data in Custom Big Objects
+    confidence: high
+    id: v42-apex-004
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: New capabilities allow deleting field history (e.g., AccountHistory)
+      via Apex/SOAP delete() and field history archive (FieldHistoryArchive big
+      object) via Apex delete() or the new SOAP deleteByExample() call, gated by
+      new user permissions.
+    detail: Two org preferences and corresponding user permissions (Delete From
+      Field History, Delete From Field History Archive) control access. For big
+      object deletions, all indexed fields must be specified exactly—no partial
+      indexes or wildcards allowed.
+    source:
+      document: v42-spring18.pdf
+      page: 497
+      heading: Delete Field History and Field Audit Trail Data
+    confidence: high
+    id: v42-soap-003
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The Salesforce CLI now supports creating second-generation packages
+      without a namespace via the --nonamespace (-e) flag on
+      force:package2:create, enabling unlocked packages that do not require a
+      registered namespace.
+    source:
+      document: v42-spring18.pdf
+      page: 506
+      heading: New Packaging Options with the Salesforce CLI
+    confidence: medium
+    id: v42-packaging-004
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-bulk
+    appliesWhen: org-wide regardless of component API version
+    summary: The Salesforce CLI bulk upsert command now requires the external ID
+      parameter (-i | --externalid) whereas it was previously optional.
+    upgradeAction: Update any scripts or automation using force:data:bulk:upsert to
+      explicitly provide the --externalid parameter.
+    source:
+      document: v42-spring18.pdf
+      page: 509
+      heading: Salesforce CLI
+    confidence: medium
+    id: v42-bulk-001
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Global value sets in managed package upgrades now preserve
+      subscriber-org customizations (labels, API names, active/inactive status,
+      defaults) the same way standard value sets do, except that global value
+      set labels still update when the package includes new label values.
+    detail: Previously global value sets could overwrite subscriber customizations
+      during upgrades. Now individual value labels and API names remain
+      unchanged in subscriber orgs, new values are not auto-added, and
+      active/inactive plus default settings are preserved. Only the global value
+      set's own label name updates if the package includes a changed label.
+    upgradeAction: ISVs relying on package upgrades to push new picklist values or
+      reset subscriber customizations for global value sets must implement
+      alternative distribution mechanisms such as post-install scripts or manual
+      subscriber action.
+    source:
+      document: v42-spring18.pdf
+      page: 511
+      heading: Get the Same Behavior for Global Value Sets and Standard Value Sets in
+        Managed Package Upgrades
+    confidence: high
+    id: v42-packaging-005
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Streaming API clients now receive explicit 401 error notifications on
+      the /meta/connect or /meta/handshake channels when their OAuth token or
+      session becomes invalid, enabling programmatic detection and
+      reauthentication.
+    detail: Previously, clients with invalidated authentication may not have
+      received explicit notification. Now the platform sends a Bayeux message
+      with error '401::Authentication invalid' and advice 'reconnect=none',
+      allowing clients to handle reauthentication gracefully rather than
+      silently missing events.
+    upgradeAction: Update Streaming API client code to handle 401::Authentication
+      invalid errors on /meta/connect and 403::Handshake denied with nested 401
+      failures on /meta/handshake by implementing reauthentication logic.
+    source:
+      document: v42-spring18.pdf
+      page: 518
+      heading: Handle Invalid Connections in Streaming API
+    confidence: high
+    id: v42-rest-014
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: sharing-security
+    appliesWhen: org-wide after opt-in or auto-activation date
+    summary: Apex controllers annotated with @AuraEnabled that omit explicit sharing
+      keywords will run in without sharing mode once this update is active,
+      potentially granting broader data access than the previous implicit with
+      sharing behavior.
+    upgradeAction: Audit all @AuraEnabled controllers lacking explicit sharing
+      declarations and add 'with sharing' where record-level security should be
+      enforced.
+    source:
+      document: v42-spring18.pdf
+      page: 519
+      heading: Critical Updates
+    confidence: high
+    id: v42-sharing-002
+  - apiVersion: "42.0"
+    release: Spring '18
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide after opt-in or auto-activation date
+    summary: Autolaunched flows invoked in bulk contexts now execute every interview
+      instead of silently discarding all but the first, which may surface latent
+      errors or trigger limits in flows that previously ran only once per bulk
+      operation.
+    upgradeAction: Test autolaunched flows under bulk conditions to confirm they
+      handle multiple interviews correctly and remain within governor limits.
+    source:
+      document: v42-spring18.pdf
+      page: 519
+      heading: Critical Updates
+    confidence: high
+    id: v42-flow-006

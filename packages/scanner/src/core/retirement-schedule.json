@@ -1,0 +1,42 @@
+{
+  "description": "Dates and tiers live here, never in code. First matching rule wins, top to bottom. `weight` feeds the debt score; `currentApiVersion` is bumped 3x/year.",
+  "currentApiVersion": "67.0",
+  "rules": [
+    {
+      "tier": "retired",
+      "match": "apiVersion <= 30.0",
+      "date": "2025-06",
+      "label": "Already failing - retired Summer '25 (REST 410 / SOAP 500 / Bulk 400)",
+      "severity": "critical",
+      "weight": 1.0
+    },
+    {
+      "tier": "breaks-2027",
+      "match": "soapLogin && apiVersion <= 64.0",
+      "date": "2027-06",
+      "label": "SOAP login() retires Summer '27",
+      "severity": "critical",
+      "weight": 0.9
+    },
+    {
+      "tier": "breaks-2028",
+      "match": "apiVersion >= 31.0 && apiVersion <= 40.0",
+      "date": "2028-06",
+      "label": "Retires Summer '28 (deprecated Summer '27)",
+      "severity": "high",
+      "weight": 0.7
+    },
+    {
+      "tier": "stale",
+      "match": "apiVersion < currentApiVersion - 3",
+      "label": "Drifting (>1 year behind)",
+      "severity": "info",
+      "weight": 0.15
+    },
+    {
+      "tier": "current",
+      "match": "else",
+      "weight": 0
+    }
+  ]
+}

@@ -1,0 +1,2268 @@
+apiVersion: "48.0"
+release: Spring '20
+reviewed: true
+entries:
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: New Apex API capability enables programmatic creation of 301 redirects,
+      fulfilling an IdeaExchange request for redirect management via code.
+    source:
+      document: v48-spring20.pdf
+      page: 9
+      heading: You Asked for It!
+    confidence: low
+    id: v48-apex-001
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version; IE11 access ends
+      December 31, 2020 for those with Extended Support
+    summary: Internet Explorer 11 support for Lightning Experience is being retired.
+      Standard support ended December 16, 2017, and Extended Support ends
+      December 31, 2020.
+    detail: After the retirement date, developers and integrations relying on IE11
+      for Lightning Experience testing or automation will no longer have a
+      supported path. This does not affect Salesforce Classic access via IE11.
+    upgradeAction: Migrate any automated testing, embedded WebView integrations, or
+      user workflows away from IE11 before the December 31, 2020 deadline.
+    source:
+      document: v48-spring20.pdf
+      page: 66
+      heading: Supported Browsers for Lightning Experience
+    confidence: high
+    id: v48-other-001
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; enforced by Chrome
+      80+ browser behavior
+    summary: Chrome 80 changes cookie defaults to SameSite=Lax, breaking
+      cross-domain integrations that rely on cookies without explicit SameSite
+      attributes. Custom integrations using iframes or cross-domain
+      communication fail unless cookies are updated to SameSite=None; Secure.
+    detail: Salesforce updated its own cookies for Spring '20, but customer-owned
+      cookies in custom integrations must be explicitly configured. HTTP-only
+      access breaks entirely; HTTPS is mandatory. The Apex Cookie() constructor
+      gained a new SameSite parameter to support setting this attribute
+      programmatically.
+    upgradeAction: Audit custom integrations using cookies across domains
+      (especially iframe-based). Update cookie-setting code to explicitly
+      specify SameSite=None; Secure for cross-site cookies, or
+      SameSite=Lax/Strict for first-party-only cookies. Verify all endpoints use
+      HTTPS. Test in Chrome with SameSite flags enabled.
+    source:
+      document: v48-spring20.pdf
+      page: 80
+      heading: Prepare for Google Chrome's Changes in SameSite Cookie Behavior That
+        Can Break Salesforce Integrations
+    confidence: high
+    id: v48-auth-001
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: Einstein Discovery Classic is being replaced by the new Einstein
+      Discovery experience for all orgs, meaning any integrations or workflows
+      relying on the Classic version must migrate.
+    upgradeAction: Migrate any existing Einstein Discovery Classic implementations
+      to the new Einstein Discovery experience before this release.
+    source:
+      document: v48-spring20.pdf
+      page: 122
+      heading: Salesforce Einstein
+    confidence: high
+    id: v48-other-002
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version
+    summary: The AccountShare reason code for territory-based manual sharing changes
+      from TerritoryManual to Territory2AssociationManual. Any Apex or
+      integrations querying or inserting AccountShare records with the old
+      reason code will fail.
+    upgradeAction: Search all Apex classes, triggers, and integration code for
+      references to TerritoryManual in AccountShare operations and replace with
+      Territory2AssociationManual.
+    source:
+      document: v48-spring20.pdf
+      page: 148
+      heading: Enable Manual Account Sharing in Enterprise Territory Management
+        (Critical Update, Enforced)
+    confidence: high
+    id: v48-sharing-001
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version, effective Summer '20
+    summary: Customizable Forecasting will be fully removed in Summer '20. After
+      retirement, both the UI and any API or integration access to this feature
+      and its data will cease to function.
+    detail: Integrations querying or manipulating Customizable Forecasting objects
+      will break upon retirement. Salesforce recommends migrating to
+      Collaborative Forecasts before the Summer '20 deadline.
+    upgradeAction: Identify any Apex, API calls, or reports referencing Customizable
+      Forecasting objects. Migrate forecasting logic and data to Collaborative
+      Forecasts before Summer '20.
+    source:
+      document: v48-spring20.pdf
+      page: 148
+      heading: Customizable Forecasting Is Being Retired
+    confidence: medium
+    id: v48-rest-001
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version, effective Summer '21
+    summary: The legacy Territory Management feature will be fully removed in Summer
+      '21, eliminating access to its data and any API or integration points that
+      depend on it.
+    detail: Organizations using Original Territory Management must migrate to
+      Enterprise Territory Management before the retirement date. Any code or
+      integrations referencing the original territory management objects or APIs
+      will cease to function after retirement.
+    upgradeAction: Audit integrations and Apex code for references to original
+      territory management objects. Migrate to Enterprise Territory Management
+      and update any dependent code before Summer '21.
+    source:
+      document: v48-spring20.pdf
+      page: 149
+      heading: Original Territory Management Is Being Retired
+    confidence: medium
+    id: v48-rest-002
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version, effective Summer '21
+    summary: Original Territory Management is scheduled for removal in Summer '21.
+      After retirement, API access to territory objects and related data will
+      cease to function.
+    detail: Integrations querying or manipulating territory assignments, account
+      assignment rules, or territory hierarchies via the original territory
+      management APIs must migrate to Enterprise Territory Management before
+      Summer '21.
+    upgradeAction: Audit integrations and Apex code referencing original territory
+      management objects (Territory, AccountTerritoryAssignmentRule, etc.) and
+      migrate to Enterprise Territory Management APIs before Summer '21.
+    source:
+      document: v48-spring20.pdf
+      page: 149
+      heading: Permission Changes to Original Territory Management
+    confidence: high
+    id: v48-rest-003
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Visualforce Classic email templates sent to guest users in communities,
+      sites, or portals now enforce stricter security by default. Templates
+      lacking the new attribute fail to render for guest recipients.
+    upgradeAction: Add renderUsingSystemContextWithoutSharing="True" to every
+      Visualforce email template targeting guest users; test email delivery in
+      sandbox communities before Summer '20 enforcement.
+    source:
+      document: v48-spring20.pdf
+      page: 159
+      heading: Update Visualforce Email Templates for Guest Users
+    confidence: high
+    id: v48-vf-001
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version; effective December 2020
+    summary: The Salesforce for Outlook desktop add-in stops functioning in December
+      2020, ending contact/event/task sync and Side Panel connectivity to
+      Salesforce from the Outlook client.
+    upgradeAction: Migrate any integrations or automated workflows depending on
+      Salesforce for Outlook sync to the Outlook Integration or Einstein
+      Activity Capture before December 2020.
+    source:
+      document: v48-spring20.pdf
+      page: 179
+      heading: Salesforce for Outlook Is Being Retired in December 2020
+    confidence: high
+    id: v48-other-003
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce Billing now exposes a blng__RecognizeRevenue Apex class that
+      developers can invoke from triggers, processes, or REST calls to generate
+      revenue schedules against arbitrary objects, not just order products or
+      invoice-related records.
+    source:
+      document: v48-spring20.pdf
+      page: 188
+      heading: Recognize Revenue Anywhere
+    confidence: medium
+    id: v48-rest-004
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The blng__NegativeInvoiceToCreditNoteAction Apex class now accepts
+      batch invocations via REST API, triggers, and Process Builder, enabling
+      programmatic bulk conversion of negative invoice lines to credit notes.
+    source:
+      document: v48-spring20.pdf
+      page: 189
+      heading: Automate Conversion of Negative Invoice Lines
+    confidence: medium
+    id: v48-rest-005
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: LWC components in Lightning communities can now opt into relaxed
+      Content Security Policy by adding the lightningCommunity__RelaxedCSP
+      target, allowing them to function when Lightning Locker is disabled at the
+      community level.
+    source:
+      document: v48-spring20.pdf
+      page: 324
+      heading: Use Relaxed CSP in Lightning Components for Communities
+    confidence: high
+    id: v48-lwc-001
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version — new orgs lose these
+      permissions entirely; existing orgs have them disabled by default on new
+      guest profiles
+    summary: Salesforce removed several user permissions from guest user profiles,
+      including UseAnyApiClient, RecordVisibilityAPI, and PrivacyDataAccess. New
+      orgs cannot grant these permissions to guest users at all, while
+      pre-Spring '20 orgs retain them but have them off by default.
+    upgradeAction: Audit any integrations or code that assumed guest users could
+      invoke arbitrary API clients or access the RecordVisibility API. If your
+      guest-facing logic relied on these permissions, refactor to use
+      authenticated user contexts or alternative approaches.
+    source:
+      document: v48-spring20.pdf
+      page: 327
+      heading: Retiring Some User Permissions on the Guest User Profile
+    confidence: high
+    id: v48-sharing-002
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Visualforce email templates targeting guest users in communities no
+      longer render data by default due to restricted guest user data access.
+      Templates must explicitly opt into system context to function.
+    detail: This enforcement was announced in Spring '20 and took effect in Summer
+      '20. Affected templates require adding
+      renderUsingSystemContextWithoutSharing="True" to the emailTemplate tag,
+      and the editing user must have Author Apex permission.
+    upgradeAction: Identify all Visualforce email templates sent to guest users and
+      add the renderUsingSystemContextWithoutSharing="True" attribute to each
+      emailTemplate tag. Verify that template authors have the Author Apex
+      permission.
+    source:
+      document: v48-spring20.pdf
+      page: 329
+      heading: Ensure Guest User Access to Emails Created with Visualforce Email
+        Templates
+    confidence: high
+    id: v48-vf-002
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: new
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version, once enabled by
+      Salesforce Support
+    summary: A new API Access Control setting can restrict external
+      (community/portal) users so they may only call Salesforce APIs through
+      connected apps that are explicitly installed in the org, blocking direct
+      API access otherwise.
+    upgradeAction: If enabling this setting, ensure all integrations used by
+      external users go through an installed connected app; direct API calls
+      from those users will fail once the control is active.
+    source:
+      document: v48-spring20.pdf
+      page: 332
+      heading: Limit API Access to Installed Connected Apps
+    confidence: high
+    id: v48-auth-002
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Chatter REST API File Rendition endpoint stopped returning Adobe
+      Flash renditions starting Winter '21 (v50.0). Code requesting Flash
+      renditions must switch to requesting SVG via the File Preview resource
+      instead.
+    detail: This note appears in the Spring '20 document but describes a change that
+      took effect in Winter '21 (API 50.0). Any integration fetching
+      Flash-format file previews will fail silently or error; migrate to the SVG
+      rendition from the File Preview endpoint.
+    upgradeAction: Audit integrations calling the File Rendition resource for Flash
+      format parameters and switch them to use the File Preview resource with
+      SVG rendition type.
+    source:
+      document: v48-spring20.pdf
+      page: 338
+      heading: Switch Your File Rendition Resource with the Chatter REST API
+    confidence: medium
+    id: v48-rest-006
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: deprecated
+    impact: retirement
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce Mobile Web Browser Experience is being retired.
+      Organizations relying on the mobile web browser interface for Salesforce
+      access must transition users to the native mobile app or full desktop
+      site.
+    upgradeAction: Review any integrations or workflows that depend on the mobile
+      web browser experience and plan migration to the native Salesforce mobile
+      app or desktop site before retirement takes effect.
+    source:
+      document: v48-spring20.pdf
+      page: 340
+      heading: Everything That's New in the New Salesforce App
+    confidence: low
+    id: v48-other-004
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Visualforce mobile cards configured in page layouts no longer render in
+      the new Salesforce mobile app. Developers must migrate to Visualforce
+      Lightning components on Lightning pages instead.
+    upgradeAction: Identify any Visualforce mobile cards in page layouts and
+      recreate them as Visualforce components on Lightning pages, ensuring the
+      'Available for Lightning Experience, Lightning Communities, and the mobile
+      app' checkbox is enabled on each page.
+    source:
+      document: v48-spring20.pdf
+      page: 345
+      heading: Mobile Cards Are Not Available in the New Salesforce Mobile App
+    confidence: high
+    id: v48-vf-003
+  - apiVersion: "48.0"
+    introducedIn: "42.0"
+    release: Spring '20
+    changeType: removed
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The MobileSession standard object has been removed from the platform.
+      It was deprecated when Salesforce Classic Mobile retired in Winter '18 but
+      the object itself is now gone.
+    detail: Any SOQL queries, reports, or custom report types referencing
+      MobileSession will fail or return empty results. The object supported
+      session tracking for the retired Salesforce Classic Mobile app and has had
+      no functional purpose since API version 42.0.
+    upgradeAction: Search your codebase and reports for references to MobileSession.
+      Remove or replace any SOQL queries, report types, or integrations that
+      depend on this object before they start failing.
+    source:
+      document: v48-spring20.pdf
+      page: 355
+      heading: MobileSession Object Was Removed
+    confidence: high
+    id: v48-rest-007
+  - apiVersion: "48.0"
+    introducedIn: "42.0"
+    release: Spring '20
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The UserPermissionsMobileUser field on User has been deleted from the
+      API, causing SOQL queries, reports, or list views referencing it to fail
+      or return unexpected results.
+    detail: This field became non-functional when Salesforce Classic Mobile was
+      retired in Winter '18 (API 42.0). The field removal itself is noted in the
+      Spring '20 release notes but the underlying retirement occurred earlier.
+    upgradeAction: Search your codebase, reports, and list views for references to
+      UserPermissionsMobileUser and remove or replace them before they cause
+      runtime errors.
+    source:
+      document: v48-spring20.pdf
+      page: 355
+      heading: Apex Mobile User (Salesforce Internal Use Only) Field Was Removed
+    confidence: medium
+    id: v48-rest-008
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Financial Services Cloud introduces a new Mortgage Business REST API at
+      /connect/financialservices/mortgages that supports creating, updating, and
+      querying loan applications along with related borrower, asset, and
+      liability data via POST, PATCH, and GET requests.
+    source:
+      document: v48-spring20.pdf
+      page: 368
+      heading: Enhance Mortgage Lending with API Calls
+    confidence: medium
+    id: v48-rest-009
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The RenewalChannel field on the Claim object and the FnolChannel field
+      on the InsurancePolicy object are deprecated starting in API version 48.0
+      and scheduled for removal in API version 52.0 (Summer '21).
+    detail: Integrations querying or writing to these fields should migrate to
+      alternative approaches before the Summer '21 release when the fields will
+      be permanently removed.
+    upgradeAction: Audit SOQL queries, Apex code, and external integrations
+      referencing RenewalChannel on Claim or FnolChannel on InsurancePolicy.
+      Remove or replace these field references before upgrading to API version
+      52.0.
+    source:
+      document: v48-spring20.pdf
+      page: 375
+      heading: Financial Services Cloud Has New and Changed Objects
+    confidence: high
+    id: v48-rest-010
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; field removal
+      scheduled for API version 52.0 (Summer '21)
+    summary: The FnolChannel field on InsurancePolicy is deprecated and will be
+      removed in API version 52.0. Integrations using this field should migrate
+      before Summer '21.
+    upgradeAction: Identify any code or integrations reading or writing FnolChannel
+      on InsurancePolicy and replace with the recommended alternative before
+      upgrading to API 52.0.
+    source:
+      document: v48-spring20.pdf
+      page: 376
+      heading: REST API
+    confidence: medium
+    id: v48-rest-011
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The ActionPlanTmplItmAssessmentInd object has been removed from
+      Consumer Goods Cloud, breaking any integrations or queries referencing
+      this object.
+    upgradeAction: Search codebase for references to ActionPlanTmplItmAssessmentInd
+      in SOQL queries, Apex classes, and API integrations. Remove or replace
+      with alternative objects like the new StoreActionPlanTemplate or
+      AssessmentTaskIndDefinition junction objects.
+    source:
+      document: v48-spring20.pdf
+      page: 396
+      heading: Consumer Goods Cloud Has New and Changed Objects
+    confidence: high
+    id: v48-rest-012
+  - apiVersion: "48.0"
+    introducedIn: "47.0"
+    release: Spring '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Manufacturing Cloud gains new metadata types
+      (IndustriesManufacturingSettings, SalesAgreementSettings,
+      AccountForecastSettings) and new Flow invocable action types for sales
+      agreement and forecast operations.
+    detail: Three settings metadata types were introduced in API 47.0 for
+      configuring Manufacturing Cloud features. Additionally, the Flow
+      actionType field gains new enumerated values (refreshActualsCalculation,
+      recalculateForecast, massUpdateAccountForecast) available from API 47.0
+      onward.
+    source:
+      document: v48-spring20.pdf
+      page: 402
+      heading: Manufacturing Cloud Has New and Changed Metadata Types
+    confidence: medium
+    id: v48-packaging-001
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Record-triggered autolaunched flows can now execute before the record
+      is committed to the database, running in the same transaction without a
+      separate DML operation. These before-save flows execute immediately before
+      Apex before triggers in the order of execution.
+    detail: Before-save record-triggered flows modify field values on the triggering
+      record without issuing an additional DML statement, avoiding re-execution
+      of assignment rules, workflow rules, and other automation. This positions
+      them as a faster alternative to Process Builder record-change processes
+      and complements Apex before triggers. They cannot access post-save values
+      like Id or LastModifiedDate, nor can they create or update related
+      records.
+    source:
+      document: v48-spring20.pdf
+      page: 410
+      heading: Update New and Changed Records 10 Times Faster by Using Before-Save
+        Updates in Flows
+    confidence: high
+    id: v48-flow-001
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Invocable Apex methods and variables now support generic sObject and
+      List<sObject> data types, enabling developers to build polymorphic Flow
+      actions that operate across multiple object types without rewriting for
+      each one.
+    source:
+      document: v48-spring20.pdf
+      page: 415
+      heading: Build Invocable Actions That Work for Multiple Objects
+    confidence: high
+    id: v48-apex-002
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The @InvocableMethod annotation gains an optional 'category' parameter,
+      letting developers organize custom actions into named groups that Flow
+      Builder admins can filter by.
+    source:
+      document: v48-spring20.pdf
+      page: 421
+      heading: Make It Easy for Admins to Find Your Actions by Categorizing Them
+    confidence: high
+    id: v48-apex-003
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+      - ApexClass
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (critical update
+      auto-activates August 15, 2020)
+    summary: When enabled, flows that invoke legacy Apex actions (Process.Plugin
+      implementations) with public access modifiers will fail at runtime. Global
+      legacy Apex actions whose describe or invoke methods are public also
+      become inaccessible to flows in other namespaces.
+    detail: This critical update enforces proper access modifier semantics for
+      legacy Apex plug-ins referenced by flows. Previously, flows could call
+      public legacy Apex actions even though this was unsupported. After
+      activation, only global legacy Apex actions with global describe/invoke
+      methods remain callable across namespaces.
+    upgradeAction: Before the August 2020 auto-activation date, audit all flows that
+      use legacy Apex action elements. Test each path in a sandbox. If any flow
+      calls a public legacy Apex action from a managed package, coordinate with
+      the package developer to either make the action global or migrate to
+      InvocableMethod.
+    source:
+      document: v48-spring20.pdf
+      page: 425
+      heading: Make Flows Respect Access Modifiers for Legacy Apex Actions (Critical
+        Update)
+    confidence: high
+    id: v48-flow-002
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version; auto-activates July 21, 2021
+    summary: Process Builder now correctly evaluates original field values that
+      started as null when checking criteria across multiple evaluation passes,
+      which can alter whether process actions fire for processes using
+      ISCHANGED() or the 'only when specified changes are made' option.
+    upgradeAction: Review processes that use ISCHANGED() or conditional execution on
+      field changes; test that they still fire as expected when fields
+      transition from null to a value.
+    source:
+      document: v48-spring20.pdf
+      page: 425
+      heading: Evaluate Criteria Based on Original Record Values in Process Builder
+        (Previously Released Critical Update)
+    confidence: high
+    id: v48-flow-003
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version (enforced April 9, 2020)
+    summary: "Bulk REST API calls to invocable actions now use partial-save
+      semantics: a single failure no longer rolls back the entire transaction.
+      Instead, Salesforce retries successful actions up to three times and only
+      rolls back the specific actions that fail."
+    detail: This enforcement changes error-handling behavior for any external system
+      calling invocable actions via REST API in bulk. External callouts within
+      flows may execute multiple times due to retries, and transactions may run
+      longer, potentially hitting governor limits sooner. Certain action types
+      (Invocable Apex, External Services, and several Order Management actions)
+      do not support partial save and retain all-or-nothing behavior.
+    upgradeAction: Audit REST API integrations invoking actions in bulk to handle
+      partial success responses. Ensure external callouts are idempotent since
+      retries can cause repeated execution. Monitor transaction duration and
+      limit consumption after enforcement.
+    source:
+      document: v48-spring20.pdf
+      page: 426
+      heading: Enable Partial Save for Invocable Actions (Critical Update, Enforced)
+    confidence: high
+    id: v48-rest-013
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+      - ApexClass
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (critical update
+      auto-activation postponed to Spring '21)
+    summary: When activated, flows will enforce that the running user has explicit
+      access to any Apex classes the flow invokes, rather than allowing
+      invocation regardless of user permissions.
+    detail: Originally released in Summer '19 with Winter '20 auto-activation, this
+      critical update has been delayed to Spring '21. Once enforced, users
+      without proper Apex class access will see flow failures where they
+      previously succeeded.
+    upgradeAction: Audit flows that invoke Apex actions and ensure all intended
+      users have the necessary Apex class permissions via profiles or permission
+      sets before auto-activation.
+    source:
+      document: v48-spring20.pdf
+      page: 427
+      heading: Require User Access to Apex Classes Invoked by Flow (Critical Update,
+        Postponed)
+    confidence: high
+    id: v48-flow-004
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version — only affects orgs
+      that activated this critical update before February 5, 2020
+    summary: The critical update that changed how formula resources in flows and
+      processes render HTML output was withdrawn due to unintended side effects,
+      particularly when formula values were passed to actions like email
+      addresses.
+    detail: If you enabled this update and modified formulas to accommodate its HTML
+      rendering behavior, you should revert those changes since the original
+      pre-update behavior is now permanent.
+    upgradeAction: If you activated this critical update and adjusted HTML
+      formatting in flow formulas, restore the original HTML formatting you
+      removed.
+    source:
+      document: v48-spring20.pdf
+      page: 428
+      heading: Generate Valid HTML Output from Formulas in Processes and Flows
+        (Critical Update, Retired)
+    confidence: high
+    id: v48-flow-005
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Flows and processes using partial-save actions no longer roll back the
+      entire batch when one record fails; only the failing records are rolled
+      back while successful changes persist.
+    detail: Actions like Create Records, Update Records, and Subflows use partial
+      save semantics where Salesforce retries remaining actions up to three
+      times on failure. Actions like Email Alerts, Quick Actions, and Submit for
+      Approval still follow all-or-nothing behavior and roll back the entire
+      transaction on failure.
+    upgradeAction: Review flows and processes that relied on complete batch rollback
+      on partial failures; add explicit error handling if you need
+      all-or-nothing semantics for partial-save actions.
+    source:
+      document: v48-spring20.pdf
+      page: 428
+      heading: Save Successful Record Changes in a Batch from Failed Actions in
+        Processes and Flows
+    confidence: high
+    id: v48-flow-006
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The legacy Desktop Flow Designer tool is no longer available. Flows
+      originally created with it remain in the org but can no longer be edited
+      with that tool.
+    upgradeAction: Identify any flows built with Desktop Flow Designer, export each
+      version from the flow version detail page, delete the legacy flows, and
+      recreate them in Flow Builder.
+    source:
+      document: v48-spring20.pdf
+      page: 429
+      heading: Desktop Flow Designer Was Retired
+    confidence: high
+    id: v48-flow-007
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexTrigger
+      - Flow
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version (enforced March 1, 2020)
+    summary: Notification emails (task assignment, case owner change, user welcome,
+      etc.) are no longer suppressed when a process, workflow rule, or Apex
+      trigger subsequently updates the same record.
+    detail: Before this enforcement, if an operation that sends a notification email
+      also triggered automation that touched the same record, Salesforce would
+      suppress the email. With enforcement, emails always send. Orgs that added
+      workaround Email Alerts may now see duplicate notifications.
+    upgradeAction: Audit processes, workflow rules, and Apex triggers for
+      supplemental Email Alert workarounds that replicate built-in
+      notifications; remove them to prevent duplicate emails.
+    source:
+      document: v48-spring20.pdf
+      page: 431
+      heading: Stop Automated Field Updates from Suppressing Email Notifications
+        (Critical Update, Enforced)
+    confidence: high
+    id: v48-apex-004
+  - apiVersion: "48.0"
+    introducedIn: "45.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version; auto-enforced January
+      31, 2022 for existing orgs, enabled by default for orgs created Winter
+      '20+
+    summary: Salesforce replaces JDK8-based date/time locale formatting with
+      ICU-standard formats org-wide. This affects how dates and times render
+      across the platform and can break integrations or code that parses
+      formatted date strings.
+    detail: The ICU locale formats were first available via API version 45.0 and
+      became a critical update in Winter '20. Once activated (or auto-enforced),
+      all date/time formatting changes for every locale, which may break
+      string-parsing logic, reports, exports, or integrations expecting the
+      previous JDK8 formats.
+    upgradeAction: Before the enforcement date, query active user locales with the
+      provided SOQL, test UI and integration points that parse formatted dates,
+      verify installed packages support ICU formats, and coordinate with package
+      vendors.
+    source:
+      document: v48-spring20.pdf
+      page: 435
+      heading: Enable ICU Locale Formats (Previously Released Critical Update)
+    confidence: high
+    id: v48-other-005
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version
+    summary: Users lacking the Customize Application permission lose API read access
+      to unprotected custom settings. Apex running in system mode is unaffected,
+      but user-mode API calls and isAccessible checks now return false for
+      custom settings the user hasn't been explicitly granted.
+    detail: "This critical update enforces a secure-by-default model: any code or
+      integration calling custom settings outside system-mode context fails
+      unless the user has Customize Application, View All Custom Settings, or
+      per-object Custom Setting Definitions access via profile/permission set.
+      Apex isAccessible() reflects this new reality."
+    upgradeAction: Audit integrations and Apex running in user mode that read custom
+      settings. Grant Custom Setting Definitions or View All Custom Settings
+      permission to affected profiles, or wrap reads in System.runAs with
+      elevated privileges where appropriate.
+    source:
+      document: v48-spring20.pdf
+      page: 460
+      heading: Require Customize Application Permission for Direct Read Access to
+        Custom Settings (Critical Update, Enforced)
+    confidence: high
+    id: v48-sharing-003
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The Visibility field for custom settings is now restricted to developer
+      and scratch orgs only. Protected custom settings must be created in these
+      org types and deployed via managed packages to keep their data hidden from
+      subscriber orgs while remaining accessible to the package's Apex code.
+    upgradeAction: If you maintain managed packages with protected custom settings,
+      verify that those settings are created in developer or scratch orgs with
+      Visibility set to protected before packaging. Subscriber orgs cannot
+      access protected custom setting data directly.
+    source:
+      document: v48-spring20.pdf
+      page: 461
+      heading: Protect Custom Settings in Developer and Scratch Orgs
+    confidence: medium
+    id: v48-packaging-002
+  - apiVersion: "48.0"
+    introducedIn: "47.0"
+    release: Spring '20
+    changeType: new
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: sharing-security
+    appliesWhen: org-wide when 'Restrict access to custom settings' org permission
+      is enabled
+    summary: When the new org permission is enabled, Apex code running outside
+      System context loses implicit read access to custom settings unless the
+      running user's profile or permission set explicitly grants Custom Setting
+      Definitions access.
+    detail: This feature was introduced as a late addition to Winter '20 (v47.0) and
+      is documented here in Spring '20. Orgs enabling the restriction will break
+      any Apex or SOAP API integrations that read custom settings without
+      system-mode elevation, unless users are granted access via
+      profiles/permission sets or the View All Custom Settings permission.
+    upgradeAction: Before enabling 'Restrict access to custom settings', audit all
+      Apex classes and SOAP integrations that read custom settings outside
+      system context, and ensure affected users have the necessary Custom
+      Setting Definitions or View All Custom Settings permissions.
+    source:
+      document: v48-spring20.pdf
+      page: 461
+      heading: Control Who Gets Read Access to Custom Settings
+    confidence: high
+    id: v48-sharing-004
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: Accessing other users' UserPreference records via SOAP API now requires
+      View All Data or Manage Users permission; previously broader access may
+      have been possible.
+    upgradeAction: Review integrations that query UserPreference for users other
+      than the API user and ensure the integration user has View All Data or
+      Manage Users permission.
+    source:
+      document: v48-spring20.pdf
+      page: 464
+      heading: Changes to Managing User Preferences
+    confidence: medium
+    id: v48-soap-001
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Apple is now available as an external authentication provider, enabling
+      Sign in with Apple for org and community logins via OAuth-based SSO
+      configuration.
+    detail: Administrators can configure Apple as an auth provider through Setup UI
+      only; the Metadata API does not support creating Apple auth providers in
+      this release.
+    source:
+      document: v48-spring20.pdf
+      page: 466
+      heading: Let Users Log In to Salesforce with Their Apple ID
+    confidence: high
+    id: v48-auth-003
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: new
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide once enabled via Support and setting toggled; affects
+      external (community/portal) users only
+    summary: Orgs can now restrict external users' API access so they may only call
+      Salesforce APIs through connected apps explicitly installed in the org.
+      When enabled, external users without an approved connected app lose API
+      access entirely.
+    detail: This opt-in capability requires contacting Salesforce Support to enable
+      API Access Control, then toggling the external-user restriction in setup.
+      Integrations authenticating as community or portal users must use a
+      connected app that is installed on the Connected Apps OAuth Usage page, or
+      API calls will be blocked.
+    upgradeAction: Before enabling, inventory all integrations that authenticate as
+      external users and ensure each has an installed connected app. Test
+      external-user API flows in a sandbox with the restriction active.
+    source:
+      document: v48-spring20.pdf
+      page: 468
+      heading: Limit API Access for External Users
+    confidence: high
+    id: v48-auth-004
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: The OpenID Connect token introspection endpoint now accepts a
+      child_sessions parameter that reveals whether Visualforce, Lightning, or
+      content page sessions are active, inactive, or missing.
+    source:
+      document: v48-spring20.pdf
+      page: 469
+      heading: Discover the Session Status for Content, Visualforce, and Lightning Pages
+    confidence: high
+    id: v48-auth-005
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: The default Facebook authentication provider for Social Sign-On now
+      calls Facebook Graph API v5.0, which expires access tokens after 90 days
+      of inactivity and removes the link and locale fields from the response.
+    detail: Organizations using the global (Salesforce-managed) Facebook auth
+      provider receive this upgrade automatically. Custom auth providers remain
+      on whatever Facebook API version you configured.
+    upgradeAction: If your integration logic relies on the link or locale attributes
+      from Facebook tokens, update it before the Spring '20 rollout; also ensure
+      background jobs or scheduled logins occur within 90 days to avoid token
+      expiry.
+    source:
+      document: v48-spring20.pdf
+      page: 470
+      heading: Use an Updated API Version for Social Sign-On
+    confidence: high
+    id: v48-auth-006
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new IS_LONG_RUNNING_REQUEST field in the Apex Execution event type
+      within EventLogFile lets you directly identify requests counted against
+      concurrent long-running Apex limits, replacing manual checks for requests
+      exceeding 5 seconds.
+    source:
+      document: v48-spring20.pdf
+      page: 477
+      heading: Determine If an Apex Request Is Counted as a Long-Running Request in
+        the EventLogFile
+    confidence: medium
+    id: v48-apex-005
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version; enforcement in Summer '20
+    summary: The legacy transaction security policy framework is being retired in
+      Summer '20. Apex classes implementing TxnSecurity.PolicyCondition will
+      stop executing after the retirement date.
+    detail: Policies using the legacy TxnSecurity.PolicyCondition interface must be
+      migrated to the enhanced framework using TxnSecurity.EventCondition.
+      Legacy policies remain functional until Summer '20 but cannot be created
+      or updated after retirement.
+    upgradeAction: Identify Apex classes implementing TxnSecurity.PolicyCondition
+      and rewrite them using TxnSecurity.EventCondition before Summer '20. Test
+      migrated policies to ensure equivalent enforcement behavior.
+    source:
+      document: v48-spring20.pdf
+      page: 477
+      heading: Migrate Legacy Policies (Critical Update)
+    confidence: high
+    id: v48-apex-006
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Named credentials can now be accessed via the Salesforce API by any
+      user holding the View Setup and Configuration permission, whereas
+      previously different or more restrictive access rules may have applied.
+    upgradeAction: Review which users have View Setup and Configuration permission
+      and verify this broader API access to named credentials aligns with your
+      security posture.
+    source:
+      document: v48-spring20.pdf
+      page: 483
+      heading: Changes to Named Credentials
+    confidence: medium
+    id: v48-auth-007
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: All class fields in Lightning web components are now automatically
+      reactive without needing the @track decorator. The framework observes
+      value assignments to any field and triggers rerenders when template-bound
+      fields change.
+    detail: "Prior to Spring '20, fields required explicit @track decoration to be
+      reactive. Now @track is only needed for one specific case: observing
+      mutations to properties within objects or elements within arrays. Direct
+      property/element mutations on untracked object/array fields still do not
+      trigger rerenders."
+    upgradeAction: Review existing LWC code for unnecessary @track decorators on
+      primitive fields—they can be safely removed. Verify that any code relying
+      on object property or array element mutations still uses @track on those
+      specific fields.
+    source:
+      document: v48-spring20.pdf
+      page: 487
+      heading: The @track Decorator Is No Longer Required for Lightning Web Components
+    confidence: high
+    id: v48-lwc-002
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning Data Service wire adapters may now return data objects that
+      fail JavaScript strict equality checks even when the adapter configuration
+      is unchanged, breaking code that relies on === comparisons for change
+      detection.
+    upgradeAction: Audit LWC components that compare wire adapter outputs using ===
+      or rely on object identity for caching or memoization; switch to deep
+      equality checks or value-based comparisons instead.
+    source:
+      document: v48-spring20.pdf
+      page: 489
+      heading: Wire Adapters Not Guaranteed to Emit Objects with Strict Equality
+    confidence: high
+    id: v48-lwc-003
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: LWC CSS files can now reference custom Aura design tokens using the
+      var(--c-tokenName) syntax, enabling shared styling between Aura and LWC
+      components.
+    source:
+      document: v48-spring20.pdf
+      page: 489
+      heading: Style Lightning Web Components with Custom Aura Design Tokens
+    confidence: high
+    id: v48-lwc-004
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: LWC from managed packages in Lightning Communities with Lightning
+      Locker disabled
+    summary: When a Lightning Community has Lightning Locker disabled,
+      managed-package LWC components must declare the
+      lightningCommunity__RelaxedCSP capability in their configuration file or
+      they will not render at runtime or appear in the design-time palette.
+    upgradeAction: If your managed package contains LWC components intended for
+      communities that disable Locker, add the
+      <capabilities><capability>lightningCommunity__RelaxedCSP</capability></capabilities>
+      block to each component's .js-meta.xml file before distribution.
+    source:
+      document: v48-spring20.pdf
+      page: 494
+      heading: Use Components in Lightning Communities with Lightning Locker Disabled
+    confidence: low
+    id: v48-lwc-005
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: A new lightning/pageReferenceUtils module (LWC) and
+      lightning:pageReferenceUtils component (Aura) allow encoding default field
+      values into navigation links that prepopulate record create pages.
+    detail: This provides a supported alternative to force:createRecord for
+      launching record creation with prefilled data. The utilities encode/decode
+      field values for use with the pageReference.state.defaultFieldValues
+      attribute on standard__objectPage references.
+    source:
+      document: v48-spring20.pdf
+      page: 494
+      heading: Navigate Users to a Record's Create Page with Default Field Values
+    confidence: high
+    id: v48-lwc-006
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning Locker now strips executable script content from HTML
+      inserted via document.execCommand('insertHTML'), which may break
+      components relying on that method to inject scripts dynamically.
+    upgradeAction: Review any Lightning components using execCommand('insertHTML')
+      to inject script tags or event handlers; refactor to use standard DOM APIs
+      or sanitized content approaches.
+    source:
+      document: v48-spring20.pdf
+      page: 495
+      heading: Lightning Locker Sanitizes insertHTML Content
+    confidence: high
+    id: v48-lwc-007
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Jest snapshots for LWC tests now use stable placeholder values for
+      dynamic attributes like id, for, href, and ARIA references instead of
+      actual rendered values, which may cause existing snapshot tests to fail
+      until regenerated.
+    upgradeAction: After upgrading, run Jest tests with the --updateSnapshot flag to
+      regenerate snapshots with the new placeholder format, then review the
+      diffs to ensure no unintended changes.
+    source:
+      document: v48-spring20.pdf
+      page: 501
+      heading: Update Attribute Values for Snapshots Created by Jest Tests
+    confidence: high
+    id: v48-lwc-008
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: removed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: The experimental session setting that froze JavaScript prototypes to
+      prevent prototype pollution has been removed from Session Settings. Orgs
+      that had enabled this security hardening measure will no longer have
+      prototype freezing active.
+    detail: This setting was introduced in Winter '19 as an opt-in experimental
+      feature. Salesforce removed it due to production issues some customers
+      experienced. If your org relied on frozen prototypes to catch or prevent
+      prototype pollution vulnerabilities in custom Lightning components, that
+      protection is no longer available through this mechanism.
+    upgradeAction: If your org had enabled Freeze JavaScript Prototypes, review
+      custom Lightning components for prototype pollution vulnerabilities since
+      this protection layer is now gone. Consider implementing defensive coding
+      patterns in your JavaScript to guard against prototype manipulation.
+    source:
+      document: v48-spring20.pdf
+      page: 501
+      heading: Freeze JavaScript Prototypes Session Setting Removed
+    confidence: medium
+    id: v48-lwc-009
+  - apiVersion: "48.0"
+    introducedIn: "45.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Users with the API Only User permission are now blocked from accessing
+      Lightning Out entirely, restricting them to Salesforce APIs only. This
+      enforcement extends an existing restriction to cover Lightning Out
+      scenarios.
+    detail: This critical update originated in Spring '19 and is enforced org-wide
+      starting Spring '20 when orgs upgrade. Any Lightning Out implementations
+      that relied on API Only Users being able to interact with Lightning Out
+      components will fail after enforcement.
+    upgradeAction: Identify any integrations or automation that use Lightning Out
+      with API Only User accounts. Either remove the API Only User permission
+      from those accounts or redesign the integration to use pure API calls
+      instead of Lightning Out.
+    source:
+      document: v48-spring20.pdf
+      page: 503
+      heading: API Only Users Can Access Only Salesforce APIs (Critical Update,
+        Enforced)
+    confidence: high
+    id: v48-aura-001
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version (enforced at Winter
+      '21 upgrade starting August 9, 2020)
+    summary: Guest, portal, and community users can invoke @AuraEnabled Apex methods
+      only if their profile or a permission set explicitly grants access to the
+      containing Apex class. Previously implicit access is removed.
+    detail: This critical update was originally scheduled for Spring '20
+      auto-activation but postponed to Winter '21. Once enforced, any Aura
+      component, LWC, or flow calling an @AuraEnabled method from a
+      guest/portal/community context will fail unless profile or permission set
+      access is granted. For managed package controllers, access must be granted
+      via permission set rather than profile.
+    upgradeAction: Before Winter '21, audit all @AuraEnabled classes used by
+      communities, portals, or Salesforce Sites. Grant explicit Apex class
+      access on guest user profiles or via permission sets. Test all
+      guest-facing components in a sandbox with the critical update activated.
+    source:
+      document: v48-spring20.pdf
+      page: 504
+      heading: Restrict Access to @AuraEnabled Apex Methods for Guest and Portal Users
+        Based on User Profile (Critical Update, Postponed)
+    confidence: high
+    id: v48-sharing-005
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version; auto-enforced when
+      org upgrades to Spring '21 (starting November 29, 2020)
+    summary: "@AuraEnabled Apex controllers that omit explicit sharing keywords will
+      default to with sharing instead of without sharing, restricting record
+      access to what the running user can see via sharing rules."
+    detail: This critical update was postponed from Spring '20 to Spring '21. It
+      affects orgs created after Spring '18 or those that previously enabled the
+      retired 'Use without sharing' critical update. Orgs created before Spring
+      '18 already defaulted to with sharing and are unaffected unless they
+      enabled the retired update. Note that with sharing only enforces sharing
+      rules—CRUD and FLS must still be checked manually in code.
+    upgradeAction: Audit all @AuraEnabled classes lacking explicit with sharing or
+      without sharing keywords. Add the appropriate keyword based on intended
+      behavior before enforcement. Test in sandbox as a user with restricted
+      sharing to verify components still function correctly.
+    source:
+      document: v48-spring20.pdf
+      page: 505
+      heading: Use with sharing for @AuraEnabled Apex Controllers with Implicit
+        Sharing (Critical Update, Postponed)
+    confidence: high
+    id: v48-sharing-006
+  - apiVersion: "48.0"
+    introducedIn: "40.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version (enforced Summer '21,
+      starting April 4, 2021)
+    summary: Aura components outside a managed package namespace lose access to Apex
+      controller methods not marked as global. Only global methods remain
+      callable across namespace boundaries, enforcing the access controls
+      package authors intended.
+    detail: This critical update, originally released in Summer '17 (API 40.0),
+      enforces proper access modifiers on Apex controllers in managed packages.
+      Before enforcement, Aura components could invoke public methods across
+      namespace boundaries. After enforcement, server actions calling non-global
+      methods from outside the package namespace will fail. Non-namespaced
+      unlocked packages are exempt and behave like unmanaged packages.
+    upgradeAction: Audit Aura components that consume managed packages. Identify any
+      server action calls to Apex methods not marked global. Replace these with
+      supported global API methods provided by the package before Summer '21
+      enforcement.
+    source:
+      document: v48-spring20.pdf
+      page: 506
+      heading: Disable Access to Non-global Apex Controller Methods in Managed
+        Packages (Critical Update, Postponed)
+    confidence: high
+    id: v48-aura-002
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version (enforced at Winter
+      '21 org upgrade starting August 9, 2020)
+    summary: The Lightning framework will verify access permissions not just for
+      top-level components but also for every nested dependency, including
+      required permissions. Components that previously loaded despite restricted
+      dependencies will fail access checks after enforcement.
+    detail: Critical update postponed from Summer '20 to Winter '21. Before this
+      change, only the top-level component's access attribute was checked. After
+      enforcement, every component in the hierarchy—extensions, implementations,
+      and nested uses—must individually pass access validation. Packages
+      containing Lightning components should be upgraded to latest versions
+      before enforcement.
+    upgradeAction: Activate the critical update in a sandbox before August 9, 2020
+      to identify components relying on unchecked dependency access. Upgrade any
+      installed packages containing Lightning components to versions that
+      declare proper access levels.
+    source:
+      document: v48-spring20.pdf
+      page: 506
+      heading: Enable Dependency Access Checks In Lightning Components (Critical
+        Update, Postponed)
+    confidence: high
+    id: v48-lwc-010
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version; enforced when org
+      upgrades to Winter '21 (starting August 9, 2020)
+    summary: Authenticated users can only invoke @AuraEnabled Apex methods if their
+      profile or a permission set explicitly grants access to the Apex class.
+      Previously, authenticated users could call these methods without explicit
+      class-level permissions.
+    detail: This critical update was originally scheduled for Summer '20
+      auto-activation but was postponed to Winter '21. Once enforced, both Aura
+      components and LWC calling @AuraEnabled methods will fail unless the user
+      has profile or permission set access to the underlying Apex class. For
+      managed package controllers, subscribers must use permission sets rather
+      than profiles to grant access.
+    upgradeAction: Audit all @AuraEnabled Apex classes and ensure appropriate
+      profiles or permission sets grant access. Test components as various user
+      profiles before the enforcement date. For managed packages, create
+      permission sets that grant access to public Apex controllers.
+    source:
+      document: v48-spring20.pdf
+      page: 507
+      heading: Restrict Access to @AuraEnabled Apex Methods for Authenticated Users
+        Based on User Profile (Critical Update, Postponed)
+    confidence: high
+    id: v48-sharing-007
+  - apiVersion: "48.0"
+    introducedIn: "47.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version; enforcement begins
+      Summer '21 (April 4, 2021) when org instance upgrades
+    summary: Lightning components can no longer read Apex properties whose getters
+      are marked private or protected. Markup expressions referencing such
+      properties will fail once the critical update activates.
+    detail: This critical update (first available Winter '20, postponed from Summer
+      '20 to Summer '21) aligns component markup behavior with standard Apex
+      visibility rules. After enforcement, accessing an @AuraEnabled property
+      with a private getter via {!v.obj.prop} in Aura or equivalent LWC bindings
+      returns nothing or errors.
+    upgradeAction: Audit Apex classes used by Lightning components for properties
+      with private or protected getters. Change them to public getters before
+      enforcement date. Test in sandbox with critical update activated.
+    source:
+      document: v48-spring20.pdf
+      page: 508
+      heading: Enforce Access Modifiers on Apex Properties in Lightning Component
+        Markup (Critical Update, Postponed)
+    confidence: high
+    id: v48-lwc-011
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version (auto-activation date
+      set by Salesforce)
+    summary: 'When this critical update is active, passing objects containing
+      {"exprType": "FUNCTION"} as attribute values to $A.createComponent() or
+      $A.createComponents() will throw an error instead of being evaluated as
+      function expressions.'
+    detail: This security-focused change blocks dynamic creation of function
+      expressions in Aura components. Previously these could cause unpredictable
+      behavior; now they fail explicitly. The update was first available in
+      Summer '19 (API 46.0) and is scheduled for automatic enforcement.
+    introducedIn: "46.0"
+    upgradeAction: Search Aura code for $A.createComponent and $A.createComponents
+      calls that pass attribute objects with exprType keys. Replace dynamic
+      function expression patterns with supported alternatives before the
+      auto-activation date.
+    source:
+      document: v48-spring20.pdf
+      page: 509
+      heading: Prevent Creation of Function Expressions in Dynamically Created Aura
+        Components (Previously Released Critical Update)
+    confidence: high
+    id: v48-aura-003
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: sharing-security
+    appliesWhen: org-wide once the critical update is activated
+    summary: After activating this critical update, guest, portal, and community
+      users can only invoke @AuraEnabled Apex methods if their profile
+      explicitly grants access to the Apex class. Previously, these methods
+      could be called without profile-level class permissions.
+    upgradeAction: Review all @AuraEnabled classes exposed to guest/portal/community
+      users and ensure the relevant profiles have explicit Apex class access
+      before activating the critical update.
+    source:
+      document: v48-spring20.pdf
+      page: 510
+      heading: Restrict Access to @AuraEnabled Apex Methods for Guest and Portal Users
+        Based on User Profile (Security Alert)
+    confidence: high
+    id: v48-sharing-008
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version (once the critical
+      update is activated)
+    summary: When this critical update is enabled, @AuraEnabled Apex methods become
+      accessible only to users whose profile explicitly grants access to the
+      containing Apex class. Previously, authenticated users could invoke these
+      methods regardless of profile-level class permissions.
+    upgradeAction: Audit all @AuraEnabled classes to ensure every user profile that
+      needs access has explicit Apex class permissions granted. Test LWC and
+      Aura components as users with restricted profiles before activating the
+      update.
+    source:
+      document: v48-spring20.pdf
+      page: 511
+      heading: Restrict Access to @AuraEnabled Apex Methods for Authenticated Users
+        Based on User Profile (Security Alert)
+    confidence: high
+    id: v48-sharing-009
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide for models created after September 30, 2019
+    summary: Einstein Language API model metrics responses now include macroF1,
+      precision, and recall arrays, providing richer evaluation data for
+      text-intent and text-sentiment models.
+    source:
+      document: v48-spring20.pdf
+      page: 513
+      heading: Better Understand Your Model with New Elements in Language API Model
+        Metrics Response
+    confidence: high
+    id: v48-rest-014
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+      - VisualforcePage
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning Message Service API enters beta, enabling cross-DOM
+      communication between LWC, Aura components, and Visualforce pages without
+      requiring a shared parent component.
+    detail: This messaging channel allows decoupled communication across UI
+      technology boundaries, which is particularly useful when migrating from
+      Classic to Lightning Experience incrementally. Being beta, it may change
+      before GA.
+    source:
+      document: v48-spring20.pdf
+      page: 515
+      heading: Communicate Across Salesforce UI Technologies with the Lightning
+        Message Service API (Beta)
+    confidence: medium
+    id: v48-lwc-012
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: Apex controller classes compiled at API >= 48.0
+    summary: JavaScript remoting calls to @RemoteAction methods now validate that
+      string arguments declared as Id parameters conform to the 15/18-character
+      Salesforce ID format, throwing RemoteObjectException for malformed values.
+    upgradeAction: Review Visualforce pages using JavaScript remoting with Id-typed
+      parameters; ensure client-side code never passes arbitrary or
+      user-controlled strings without validation, and add error handling for the
+      new RemoteObjectException.
+    source:
+      document: v48-spring20.pdf
+      page: 515
+      heading: Prevent Security Vulnerabilities with Type Checking for Remote Methods
+        with ID Parameters
+    confidence: high
+    id: v48-vf-004
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: Retrieving Visualforce page access metrics via the SOAP API now
+      requires the Customize Application permission, which may cause existing
+      integrations to fail if the calling user lacks this privilege.
+    upgradeAction: Verify that service accounts or users calling the SOAP API to
+      retrieve Visualforce metrics have the Customize Application permission, or
+      update code to handle permission errors gracefully.
+    source:
+      document: v48-spring20.pdf
+      page: 516
+      heading: Permission Changes for Visualforce Access Metrics
+    confidence: high
+    id: v48-soap-002
+  - apiVersion: "48.0"
+    introducedIn: "45.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: soql-sosl
+    appliesWhen: Apex classes and triggers compiled at API >= 45.0
+    summary: "WITH SECURITY_ENFORCED is now GA but introduces new restrictions on
+      polymorphic lookup fields: traversing polymorphic relationships and using
+      TYPEOF with ELSE clauses are disallowed (except for Owner, CreatedBy, and
+      LastModifiedBy fields)."
+    detail: Queries using WITH SECURITY_ENFORCED cannot traverse polymorphic lookup
+      relationships (e.g., What.Name on Event) or use TYPEOF expressions
+      containing an ELSE clause. The standard audit fields Owner, CreatedBy, and
+      LastModifiedBy are exempt from this polymorphic restriction. The clause
+      should not be used in code at API versions earlier than 45.0.
+    upgradeAction: Review SOQL queries using WITH SECURITY_ENFORCED for polymorphic
+      relationship traversals or TYPEOF with ELSE clauses; refactor affected
+      queries to remove these patterns or handle security checking differently.
+    source:
+      document: v48-spring20.pdf
+      page: 517
+      heading: Enable Field- and Object-Level Permissions Checking Using WITH
+        SECURITY_ENFORCED in SOQL Queries (Generally Available)
+    confidence: high
+    id: v48-soql-001
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version
+    summary: The Security.stripInaccessible method graduates to GA, providing a
+      programmatic way to remove fields the current user cannot access from
+      query results or sObjects before DML, helping avoid FLS/object-level
+      security exceptions.
+    detail: This method lets developers sanitize sObjects from untrusted sources or
+      query results by stripping inaccessible fields rather than throwing
+      errors. For AppExchange security review submissions, WITH
+      SECURITY_ENFORCED must target API 48.0 or later—earlier beta/pilot
+      versions are disallowed.
+    source:
+      document: v48-spring20.pdf
+      page: 517
+      heading: Enforce Field- and Object-Level Security in Apex (Generally Available)
+    confidence: high
+    id: v48-sharing-010
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version (Critical Update
+      activation required)
+    summary: A critical update improves how Salesforce caches org schema internally,
+      fixing bugs where version-specific object and field describe results could
+      return stale or incorrect data, and eliminating rare cases where
+      undocumented object types appeared in Apex describe methods.
+    detail: The update corrects edge cases where schema caching did not properly
+      respect API version boundaries, causing describe calls to return field or
+      object metadata that didn't match the component's API version. It also
+      removes intermittent visibility of internal object types that should not
+      appear in describe results.
+    upgradeAction: After enabling this critical update, verify that any code relying
+      on Apex describe methods (Schema.getGlobalDescribe,
+      SObjectType.getDescribe, FieldSet.getFields, etc.) still returns expected
+      results, especially if you have version-sensitive logic or caching of
+      describe data in your own code.
+    source:
+      document: v48-spring20.pdf
+      page: 520
+      heading: Enable Improved Caching of Org Schema (Critical Update)
+    confidence: high
+    id: v48-apex-007
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Invocable methods and variables now accept generic sObject and
+      List<sObject> parameters, enabling more flexible Flow-Apex integrations
+      without requiring specific SObject type declarations.
+    detail: This capability was briefly present in Summer '19 but pulled before GA;
+      Spring '20 marks its actual availability. Developers can now build
+      reusable invocable actions that operate on any SObject type.
+    source:
+      document: v48-spring20.pdf
+      page: 520
+      heading: Use Generic sObject Data Types in Invocable Methods and Invocable
+        Variables
+    confidence: high
+    id: v48-apex-008
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Symbol tables generated for managed packages now omit non-global
+      implementation details, exposing only members explicitly marked global.
+      Internal references previously misidentified as external are also
+      corrected.
+    detail: Parameters are excluded from symbol tables since they do not inherit the
+      access modifier of their parent constructor or method. This affects
+      tooling that parses symbol tables to discover managed package internals.
+    upgradeAction: If your tooling or code analysis relies on symbol table content
+      from managed packages, verify it still functions correctly with the
+      reduced information set.
+    source:
+      document: v48-spring20.pdf
+      page: 524
+      heading: Improved Symbol Table Generation
+    confidence: medium
+    id: v48-packaging-003
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Paid orgs no longer face the previous hard ceiling of 1,000,000 API
+      requests per day; the daily limit is now determined solely by the org's
+      license entitlements without an upper cap.
+    source:
+      document: v48-spring20.pdf
+      page: 524
+      heading: No Maximum Daily Cap for API Calls
+    confidence: high
+    id: v48-rest-015
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version (enforced on sandbox
+      January 2, 2020; production enforcement follows release schedule)
+    summary: Users lacking the Customize Application permission can no longer
+      directly read unprotected custom metadata types through APIs, Visualforce
+      pages, or Lightning components. Apex and system-mode contexts remain
+      unaffected.
+    detail: This critical update enforces a secure-by-default posture.
+      Administrators must explicitly grant read access via profile or permission
+      set settings under 'Enabled Custom Metadata Type Access' for users who
+      need it. The Schema Settings toggle 'Restrict access to custom metadata
+      types' can disable the enforcement but is not recommended.
+    upgradeAction: Audit Visualforce pages and Lightning components that directly
+      reference custom metadata types. For users without Customize Application
+      who need access, configure explicit read permissions through profiles or
+      permission sets before enforcement.
+    source:
+      document: v48-spring20.pdf
+      page: 525
+      heading: Require Customize Application Permission for Direct Read Access to
+        Custom Metadata Types (Critical Update, Enforced)
+    confidence: high
+    id: v48-sharing-011
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Two scratch org features were renamed (AddHistoryFieldsPerEntity →
+      AdditionalFieldHistory, RetainFieldHistory → FieldAuditTrail) and several
+      were deprecated. Scratch org creation now fails if the definition file
+      references old or deprecated feature names.
+    upgradeAction: Update scratch org definition files to replace renamed features
+      and remove deprecated features (ChatterAnswersUser, CustomerSelfService,
+      DecisionStudio, EinsteinAssistant, ExternalAccountHierarchy, MobileUser,
+      OfflineUser, SiteDotCom, SiteForceContributor, SurveyCreatorUser) before
+      creating orgs against Spring '20 or later.
+    source:
+      document: v48-spring20.pdf
+      page: 528
+      heading: Create Scratch Orgs with More Features
+    confidence: high
+    id: v48-packaging-004
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide for Salesforce orgs created in Spring '20 or later
+    summary: New orgs created from Spring '20 onward have the external sharing model
+      enabled by default with all objects set to Private external access.
+      Managed packages that assume non-Private external access levels may
+      malfunction in these orgs.
+    upgradeAction: Review managed packages for dependencies on external org-wide
+      defaults being anything other than Private. Update packages to explicitly
+      configure or handle Private external access levels before deploying to
+      orgs created in Spring '20 or later.
+    source:
+      document: v48-spring20.pdf
+      page: 533
+      heading: Update Managed Packages for External Sharing Model Changes
+    confidence: high
+    id: v48-packaging-005
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Installing an unlocked package containing a flow now overwrites any
+      existing flow in the target org that shares the same API name, and
+      removing a flow from an unlocked package no longer deletes it from
+      subscriber orgs—manual deletion is required.
+    upgradeAction: Audit target orgs for existing flows with matching API names
+      before installing unlocked packages containing flows; establish a manual
+      cleanup process for flow removal since package updates will not
+      auto-delete them.
+    source:
+      document: v48-spring20.pdf
+      page: 534
+      heading: Update Flows in Unlocked Packages
+    confidence: high
+    id: v48-packaging-006
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: In orgs with Shield Platform Encryption, Change Data Capture events now
+      flow through even when event encryption is disabled, arriving in plaintext
+      on the event bus. Previously these events were blocked entirely until
+      encryption was configured.
+    upgradeAction: Review CDC subscribers in Shield-enabled orgs to confirm whether
+      receiving unencrypted events is acceptable; if not, configure an event bus
+      tenant secret and enable event encryption before upgrading.
+    source:
+      document: v48-spring20.pdf
+      page: 537
+      heading: Change Events Are No Longer Blocked When Encryption Is Not Enabled
+    confidence: high
+    id: v48-rest-016
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: REST API calls at API >= 48.0
+    summary: The Limits REST API resource now returns
+      MonthlyPlatformEventsUsageEntitlement instead of MonthlyPlatformEvents,
+      calculating CometD delivery usage from the contract start date rather than
+      the calendar month start.
+    upgradeAction: Update any integrations parsing the Limits API response to use
+      the new MonthlyPlatformEventsUsageEntitlement field instead of
+      MonthlyPlatformEvents when targeting v48.0+.
+    source:
+      document: v48-spring20.pdf
+      page: 538
+      heading: Get Your Platform Event Entitlement Based on Your Contract Start Date
+    confidence: high
+    id: v48-rest-017
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: The lightning-input number type now formats according to Salesforce
+      locale during entry (not just on blur), removes increment/decrement
+      buttons, prevents scroll-to-change behavior, fires change events when
+      input becomes invalid, and preserves invalid input for correction instead
+      of clearing it.
+    detail: "Multiple behavioral shifts affect number input handling: locale
+      formatting applies immediately rather than only on focus loss; spinner
+      buttons are removed entirely; mouse scroll no longer modifies values; the
+      change event now fires when input is cleared due to invalidity; and
+      invalid entries remain visible for user correction. Similar locale changes
+      apply to date/datetime inputs."
+    upgradeAction: "Review any code that depends on lightning-input number behavior:
+      handlers for change events may now receive empty string values when input
+      is invalid; tests relying on increment buttons or scroll-to-change must be
+      updated; any logic expecting delayed locale formatting needs revision."
+    source:
+      document: v48-spring20.pdf
+      page: 539
+      heading: New and Changed Lightning Web Components
+    confidence: high
+    id: v48-lwc-013
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: The lightning/uiListApi module now returns only fields explicitly
+      requested via displayColumns, fields/optionalFields parameters, and
+      standard system fields—previously it also included unrequested fields, so
+      components relying on those extra fields will break.
+    upgradeAction: Audit LWC code using lightning/uiListApi and explicitly request
+      any fields your component needs that were previously returned
+      automatically but not declared.
+    source:
+      document: v48-spring20.pdf
+      page: 541
+      heading: New and Changed Modules for Lightning Web Components
+    confidence: high
+    id: v48-lwc-014
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: components compiled at API >= 48.0
+    summary: lightning:datatable and lightning:treeGrid no longer use primitive cell
+      elements in their internal markup, which may break custom styling or
+      JavaScript hooks that depended on the previous DOM structure.
+    detail: The generated markup for these components changed for performance
+      reasons. Salesforce explicitly warns against depending on internal markup
+      for styling or functional hooks.
+    upgradeAction: Before upgrading components to v48+, audit any CSS selectors or
+      JavaScript that traverses the internal DOM of lightning:datatable or
+      lightning:treeGrid and update them to use supported attributes or events
+      instead.
+    source:
+      document: v48-spring20.pdf
+      page: 543
+      heading: New and Changed Aura Components
+    confidence: high
+    id: v48-aura-004
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: components compiled at API >= 48.0
+    summary: lightning:input number, date, and datetime types now format values
+      using the Salesforce locale during entry rather than the OS/device locale,
+      and number inputs no longer have increment/decrement buttons or
+      scroll-to-change behavior.
+    detail: Number inputs also preserve invalid values for correction instead of
+      clearing them, dispatch change events when set to empty string on invalid
+      input, and no longer auto-round very long numbers. These changes also
+      apply to lightning:inputField for the same field types.
+    upgradeAction: Review forms using lightning:input with number, date, or datetime
+      types to ensure the new locale-consistent formatting and removed stepper
+      buttons do not affect user workflows or validation logic.
+    source:
+      document: v48-spring20.pdf
+      page: 543
+      heading: New and Changed Aura Components
+    confidence: high
+    id: v48-aura-005
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+      - Integration
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: FlowExecutionErrorEvent platform event now guarantees values in
+      EventType, FlowApiName, InterviewGuid, and InterviewStartDate fields that
+      were previously nullable, and adds four new fields for richer error
+      context.
+    detail: Subscribers to FlowExecutionErrorEvent gain ContextObject,
+      ContextRecordId, FlowVersionNumber, and InterviewStartedById fields. More
+      importantly, existing integrations relying on null-checks for EventType,
+      FlowApiName, InterviewGuid, or InterviewStartDate must be updated since
+      these fields now always contain values.
+    upgradeAction: Review any subscriber code that checks for null in EventType,
+      FlowApiName, InterviewGuid, or InterviewStartDate; those branches are now
+      dead code and the payload structure has changed.
+    source:
+      document: v48-spring20.pdf
+      page: 567
+      heading: New and Changed Standard Platform Events
+    confidence: high
+    id: v48-flow-008
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOQL statement length limit raised from 20,000 to 100,000 characters,
+      and child-to-parent relationship limit increased from 35 to 55, allowing
+      more complex queries.
+    source:
+      document: v48-spring20.pdf
+      page: 568
+      heading: SOQL
+    confidence: high
+    id: v48-soql-002
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: deprecated
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; Flash renditions stop
+      being created by default in Summer '20, and are fully removed in Winter
+      '21
+    summary: The Chatter REST API endpoint for file renditions ceases producing
+      Adobe Flash output. After Winter '21 the resource no longer returns Flash
+      renditions at all.
+    detail: Code that relies on /connect/files/{fileId}/rendition to obtain SWF
+      previews must migrate to the
+      /connect/files/{fileId}/previews/previewFormat endpoint and request SVG
+      instead.
+    upgradeAction: Audit integrations calling the rendition resource for Flash
+      format; switch to the previews/previewFormat endpoint with SVG before
+      Winter '21.
+    source:
+      document: v48-spring20.pdf
+      page: 571
+      heading: New and Changed Chatter REST API Resources
+    confidence: high
+    id: v48-rest-018
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The FormulaFunction object no longer contains the fields
+      IsAllowedInEntityContext, IsAllowedInFlowContext, and
+      IsAllowedInVisualforceContext. Code querying these fields will fail.
+    upgradeAction: Update any Tooling API queries or integrations that reference
+      these removed fields to use the new FormulaFunctionAllowedType object
+      instead.
+    source:
+      document: v48-spring20.pdf
+      page: 586
+      heading: Tooling API
+    confidence: high
+    id: v48-rest-019
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: "Several Tooling API objects now require additional permissions:
+      ApexClassMember and ApexTriggerMember need View All Data plus Author Apex;
+      ApexComponentMember, ApexPageMember, and ContainerAsyncRequest need View
+      All Data plus Customize Application; MetadataContainer needs View All Data
+      plus either Author Apex or Customize Application; OperationLog needs View
+      Setup and Configuration; and
+      PlatformEventChannel/PlatformEventChannelMember queries by ID now enforce
+      View Setup and Configuration."
+    upgradeAction: Verify that integration users and connected app profiles have the
+      newly required permission combinations, or API calls to these objects will
+      fail with insufficient privileges.
+    source:
+      document: v48-spring20.pdf
+      page: 586
+      heading: Tooling API
+    confidence: high
+    id: v48-rest-020
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Territory2 metadata type now requires unlocked packages to have no
+      namespace across all API versions, aligning its behavior with
+      Territory2Type which already had this requirement.
+    upgradeAction: Verify that any unlocked packages containing Territory2 metadata
+      do not specify a namespace; adjust package configuration if necessary
+      before deployment.
+    source:
+      document: v48-spring20.pdf
+      page: 587
+      heading: Metadata API
+    confidence: high
+    id: v48-packaging-007
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Territory2Model no longer supports namespaces in unlocked packages
+      across all API versions, fixing an inconsistency where territory models
+      could previously be deployed with a namespace.
+    upgradeAction: Remove namespace references from unlocked packages that contain
+      Territory2Model metadata before deploying.
+    source:
+      document: v48-spring20.pdf
+      page: 587
+      heading: Metadata API
+    confidence: high
+    id: v48-packaging-008
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide after critical update activation (enforced February 18, 2020)
+    summary: Flow and process formulas now correctly return null when a record
+      variable is null or when traversing a null lookup relationship, rather
+      than failing or returning unexpected values.
+    upgradeAction: Review flows that use formula resources accessing record
+      variables or lookup fields; ensure downstream logic handles null returns
+      appropriately.
+    source:
+      document: v48-spring20.pdf
+      page: 607
+      heading: Critical Updates
+    confidence: high
+    id: v48-flow-009
+  - apiVersion: "48.0"
+    release: Spring '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide after critical update activation (postponed to Spring '21)
+    summary: Apex controllers with @AuraEnabled methods that omit explicit sharing
+      declarations will default to 'with sharing' enforcement, applying the
+      current user's sharing rules to all SOQL queries and DML operations.
+    detail: This affects orgs created after Spring '18 or those that previously
+      activated the retired 'without sharing' critical update. Controllers must
+      explicitly declare 'without sharing' if system-mode data access is
+      required.
+    upgradeAction: Audit all @AuraEnabled Apex controllers lacking explicit sharing
+      keywords; add 'without sharing' where system-mode access is intentional,
+      or verify functionality under user sharing constraints.
+    source:
+      document: v48-spring20.pdf
+      page: 607
+      heading: Critical Updates
+    confidence: high
+    id: v48-apex-009

@@ -1,0 +1,50 @@
+{
+  "name": "idea-almanac",
+  "version": "0.1.0",
+  "description": "Almanac scanner — find Salesforce API version debt in a repo or org. Repo scans make zero network calls.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "keywords": [
+    "salesforce",
+    "api-version",
+    "technical-debt",
+    "sfdx",
+    "scanner",
+    "apex",
+    "lwc",
+    "release-notes"
+  ],
+  "author": "Idea Bulut Solutions (https://ideabulut.com)",
+  "homepage": "https://github.com/IdeaBulutSolutions/idea-almanac/tree/main/packages/scanner#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IdeaBulutSolutions/idea-almanac.git",
+    "directory": "packages/scanner"
+  },
+  "bugs": {
+    "url": "https://github.com/IdeaBulutSolutions/idea-almanac/issues"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "almanac": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "schema",
+    "prompts",
+    "corpus-data",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node scripts/build-assets.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^5.8.0",
+    "yaml": "^2.9.0"
+  }
+}

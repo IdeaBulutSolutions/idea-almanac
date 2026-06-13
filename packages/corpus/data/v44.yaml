@@ -1,0 +1,1163 @@
+apiVersion: "44.0"
+release: Winter '19
+reviewed: true
+entries:
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version, enforced Summer '20
+    summary: The legacy Territory Management feature will be fully removed in Summer
+      '20, eliminating access to its APIs and underlying data structures for any
+      integrations that depend on them.
+    detail: Announced in Winter '19 with retirement scheduled for Summer '20. Any
+      code querying Territory Management objects or calling related APIs will
+      fail after enforcement. Migration path is Enterprise Territory Management.
+    upgradeAction: Audit integrations and Apex code for references to original
+      Territory Management objects (Territory, AccountTerritoryAssignmentRule,
+      etc.) and migrate to Enterprise Territory Management APIs before Summer
+      '20.
+    source:
+      document: v44-winter19.pdf
+      page: 125
+      heading: Territory Management Is Being Retired
+    confidence: high
+    id: v44-rest-001
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: The Connect for Office add-ons for Excel and Word, along with standard
+      Mail Merge functionality, will be removed in February 2019. Any
+      integrations or workflows relying on these features will stop working.
+    upgradeAction: Identify any automated processes or user workflows depending on
+      the Excel/Word add-ons or standard Mail Merge and migrate to alternative
+      solutions before February 2019.
+    source:
+      document: v44-winter19.pdf
+      page: 170
+      heading: Connect for Office
+    confidence: high
+    id: v44-other-001
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The ServiceReport object now supports Apex triggers, enabling custom
+      automation such as sending notifications when service reports are created
+      or modified.
+    source:
+      document: v44-winter19.pdf
+      page: 218
+      heading: Write Service Report Triggers
+    confidence: high
+    id: v44-apex-001
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version (critical update
+      applied October 5, 2018)
+    summary: Guest users in Sites and Communities lost all default record CRUD
+      permissions. Code or integrations that assumed guest users could read,
+      create, update, or delete records without explicit profile configuration
+      will fail.
+    upgradeAction: Review guest user profiles for all Sites and Communities.
+      Explicitly grant required object permissions where guest access is
+      intentional; verify integrations and anonymous Apex/Visualforce pages that
+      relied on implicit record access.
+    source:
+      document: v44-winter19.pdf
+      page: 363
+      heading: Improve Security for Sites and Communities by Restricting Record Access
+        for Guest Users
+    confidence: high
+    id: v44-sharing-001
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Internal users can now authenticate to Communities via external OpenID
+      Connect providers (e.g., Facebook), requiring the Apex RegistrationHandler
+      to distinguish internal from external user creation.
+    upgradeAction: Update your Auth.RegistrationHandler implementation's createUser
+      method to detect internal vs external users via userData attributes and
+      handle account/contact association logic accordingly.
+    source:
+      document: v44-winter19.pdf
+      page: 368
+      heading: Give Internal Users Login Access to Communities Through an External
+        Authentication Provider
+    confidence: high
+    id: v44-auth-001
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: OAuth authentication for internal community users is now supported on
+      community domains, enabling connected apps and integrations to
+      authenticate internal users through community endpoints rather than
+      requiring the main Salesforce domain.
+    source:
+      document: v44-winter19.pdf
+      page: 369
+      heading: Set Different Login Policies for Internal Community Users (Generally
+        Available)
+    confidence: medium
+    id: v44-auth-002
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide when deploying flow metadata using API version 44.0
+    summary: Flow metadata retrieval and deployment no longer appends version
+      numbers to flow names. Existing flow files containing version number
+      suffixes must be updated before deploying with API 44.0.
+    upgradeAction: Before deploying with API 44.0, use Metadata API or Salesforce
+      CLI to remove version number suffixes from flow file names in your source
+      control.
+    source:
+      document: v44-winter19.pdf
+      page: 419
+      heading: Use Strategies to Recommend Flows to Users and Community Members (Pilot)
+    confidence: high
+    id: v44-packaging-001
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version (requires opt-in via
+      Process Automation Settings)
+    summary: Production orgs can now deploy flows and processes in an already-active
+      state via Change Sets or Metadata API, bypassing manual activation.
+      Deployments that activate flows trigger Apex test runs and require 75%
+      coverage of active processes and autolaunched flows.
+    detail: A new org setting 'Deploy processes and flows as active' enables CI/CD
+      workflows to ship active automation without post-deployment clicks. The
+      deployment validates that your Apex tests exercise at least 75% of active
+      processes and autolaunched flows; failure rolls back the deploy.
+      Non-production orgs always allowed active deployment, so the setting only
+      surfaces in production.
+    source:
+      document: v44-winter19.pdf
+      page: 421
+      heading: Deploy Active Processes and Flows Using Change Sets or Metadata API
+    confidence: high
+    id: v44-packaging-002
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: packaging-metadata
+    appliesWhen: deployments and retrievals using Metadata API version 44.0 or later
+    summary: Flow metadata file names no longer include version numbers when using
+      API 44.0+, requiring migration of existing flow files and deprecating the
+      flowDefinitions directory for deploy/retrieve operations.
+    detail: The Flow metadata type's fullName field behavior changed and a new
+      status field was added. Flow definitions become unnecessary but if
+      included, the activeVersionNumber in the definition overrides the flow's
+      status field, potentially activating an older version than intended.
+    upgradeAction: Before deploying with API 44.0+, rename flow files to remove
+      version suffixes (e.g., myflow-3.flow becomes myflow.flow), clear the
+      flowDefinitions directory, ensure each active flow has status set to
+      Active, and remove unused flow versions from the flows directory.
+    source:
+      document: v44-winter19.pdf
+      page: 423
+      heading: Upgrade Flow Files to Version 44.0 with Metadata API
+    confidence: low
+    id: v44-packaging-003
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide when deploying or retrieving via Metadata API version 44.0+
+    summary: Flow metadata file names no longer include version numbers when using
+      API 44.0. The fullName field behavior changed and a new status field was
+      added, making flowDefinitions unnecessary for deployment.
+    detail: When pushing or pulling flow metadata at API 44.0+, files must be
+      renamed to remove version suffixes (e.g., myflow-1.flow-meta.xml becomes
+      myflow.flow-meta.xml). If flowDefinitions are still deployed alongside
+      flows, the activeVersionNumber in the definition overrides the flow's
+      status field, which can cause unexpected activation of older versions.
+    upgradeAction: "Before upgrading to API 44.0: rename flow files to remove
+      version numbers, ensure sfdx-project.json uses sourceApiVersion 44.0,
+      empty the flowDefinitions directory, and set the status field to Active
+      for each active flow. Avoid reusing scratch orgs when pushing updated
+      source."
+    source:
+      document: v44-winter19.pdf
+      page: 423
+      heading: Upgrade Flow Files to API Version 44.0 with the Salesforce CLI
+    confidence: high
+    id: v44-packaging-004
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Two new Tooling API objects (FlowTestCoverage and
+      FlowElementTestCoverage) allow developers to query test coverage metrics
+      for processes and autolaunched flows executed by Apex tests.
+    source:
+      document: v44-winter19.pdf
+      page: 424
+      heading: Track Process and Flow Test Coverage
+    confidence: high
+    id: v44-flow-001
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version (critical update
+      auto-enabled May 17, 2019)
+    summary: Lightning pageReference.state properties and URL query parameters now
+      require namespace prefixes; unprefixed parameters are stripped from URLs
+      to prevent cross-package naming collisions.
+    detail: Components in managed packages must use their registered namespace,
+      while components without a namespace must use the default 'c__' prefix.
+      This affects Lightning Experience and the Salesforce mobile app but not
+      Visualforce or Classic URLs.
+    upgradeAction: Audit all Lightning components that read or write
+      pageReference.state or URL query parameters. Add the appropriate namespace
+      prefix (registered namespace or 'c__') to each parameter name before the
+      enforcement date.
+    source:
+      document: v44-winter19.pdf
+      page: 433
+      heading: Add a Namespace Prefix to pageReference.state Properties and Query
+        Parameters
+    confidence: high
+    id: v44-lwc-001
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce now auto-generates an Apex handler class (named
+      AutocreatedDiscLoginHandler*) when admins configure Login Discovery for
+      communities, providing a customizable entry point for passwordless login
+      logic and multi-IdP routing.
+    detail: The generated handler can be extended to support custom identifiers
+      (Federation ID, vendor ID) and to programmatically route users to the
+      correct SSO provider. Developers working on community authentication flows
+      should be aware this handler exists and can be customized.
+    source:
+      document: v44-winter19.pdf
+      page: 435
+      heading: Login Discovery
+    confidence: medium
+    id: v44-auth-003
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Internal users can now authenticate to Communities via external OpenID
+      Connect providers (e.g., Google), requiring the Apex registration
+      handler's createUser method to distinguish between internal and external
+      user creation.
+    upgradeAction: Update any OpenID Connect registration handler Apex classes to
+      detect whether the authenticating user should be provisioned as internal
+      or external, using attributes in the userData object.
+    source:
+      document: v44-winter19.pdf
+      page: 443
+      heading: Direct Internal User Authentication to Communities
+    confidence: high
+    id: v44-auth-004
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce introduces SCIM 2.0 REST endpoints for identity management,
+      adding /v2/ paths alongside the existing v1 endpoints with new resources
+      for Roles, ResourceTypes, and Me.
+    source:
+      document: v44-winter19.pdf
+      page: 445
+      heading: SCIM 2.0
+    confidence: medium
+    id: v44-rest-002
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce now includes a session index parameter in SAML single
+      sign-on and single logout flows, enabling identity and service providers
+      to correlate logout requests with specific user sessions.
+    detail: When Salesforce acts as the identity provider, it generates and
+      transmits the session index during SSO, then includes the same value in
+      SLO requests. When acting as service provider, Salesforce stores the
+      incoming session index and returns it in logout responses. Integrations
+      relying on SAML SLO that require session correlation can now use this
+      parameter.
+    source:
+      document: v44-winter19.pdf
+      page: 446
+      heading: SAML Session Index Support
+    confidence: medium
+    id: v44-auth-005
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: The updated_at claim in UserInfo, identity URL responses, and ID tokens
+      changes from an ISO 8601 string with offset (e.g.,
+      2017-07-28T19:17:41.000+0000) to a JSON number per OpenID Connect Core
+      1.0. The address claim in ID tokens also switches from a stringified map
+      to a proper nested JSON object.
+    upgradeAction: Audit integrations parsing updated_at or address from Salesforce
+      identity endpoints or ID tokens. Update parsers to handle the new numeric
+      timestamp format and nested JSON object for address instead of the
+      previous string representations.
+    source:
+      document: v44-winter19.pdf
+      page: 446
+      heading: JSON-Compliant Values in Endpoints and Tokens
+    confidence: high
+    id: v44-auth-006
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Internal users can now authenticate via OAuth on community domains when
+      the new profile setting is enabled, allowing connected apps and API
+      integrations to function for internal users accessing communities.
+    source:
+      document: v44-winter19.pdf
+      page: 447
+      heading: Login Policies (Generally Available)
+    confidence: medium
+    id: v44-auth-007
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: API calls using Enterprise SOAP API version >= 44.0
+    summary: Tenant secret destruction now uses the Status field rather than
+      SecretValue in the Enterprise API. Cache-Only Key Service users can
+      activate and archive secrets via Status updates. The encrypted boolean on
+      CustomField metadata is deprecated.
+    detail: Starting with API v44.0, destroying tenant secrets requires updating the
+      Status field instead of SecretValue. Additionally, the Metadata API gains
+      an encryptionScheme enum on CustomField allowing programmatic changes
+      between probabilistic and deterministic encryption modes. The legacy
+      encrypted boolean field is deprecated in v44.0+.
+    upgradeAction: Update any integrations that destroy tenant secrets by modifying
+      SecretValue to use the Status field instead. Review code referencing the
+      deprecated encrypted boolean on CustomField metadata and migrate to
+      encryptionScheme.
+    source:
+      document: v44-winter19.pdf
+      page: 453
+      heading: Tenant Secret Statuses and Schemes
+    confidence: high
+    id: v44-soap-001
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+      - Integration
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version; auto-enforced March 16, 2019
+    summary: My Domain URLs now omit instance names by default, changing the
+      hostname used by Visualforce pages, Community Builder, Site.com, and
+      content file URLs. Integrations or code that parses or hardcodes
+      instance-specific hostnames will break.
+    detail: This critical update removes instance identifiers (e.g., na44) from My
+      Domain hostnames to provide URL stability across org migrations. The
+      change affects all URL references to Visualforce pages, communities, and
+      file content. A deactivation option exists for compatibility issues with
+      older AppExchange packages.
+    upgradeAction: Audit any code, integrations, or external systems that parse or
+      store Salesforce hostnames expecting instance names. Update regex patterns
+      or hardcoded URLs to handle instanceless formats before enforcement.
+    source:
+      document: v44-winter19.pdf
+      page: 461
+      heading: Instanceless My Domain URLs
+    confidence: high
+    id: v44-vf-001
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version; auto-enabled for orgs
+      without custom Lightning components or packages containing them
+    summary: Stricter CSP enforcement moved from a critical update to a toggleable
+      org setting, blocking inline JavaScript in script tags and event handlers
+      when enabled.
+    detail: The setting prohibits unsafe-inline for script-src in Lightning
+      Experience, Salesforce mobile app, and standalone Lightning apps.
+      Third-party libraries relying on inline scripts will break. Orgs with
+      existing custom Lightning components or installed packages containing them
+      have this disabled by default; all other orgs have it auto-enabled.
+    upgradeAction: Audit Lightning components for inline JavaScript patterns like
+      onclick handlers or dynamically inserted script tags; refactor to use
+      standard Lightning event handling before enabling stricter CSP.
+    source:
+      document: v44-winter19.pdf
+      page: 466
+      heading: Stricter Content Security Policy (CSP) Changed from a Critical Update
+        to an Org Setting
+    confidence: high
+    id: v44-lwc-002
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide when admin enables 'Freeze JavaScript Prototypes' in
+      Session Settings; affects all Lightning components regardless of API
+      version
+    summary: A new org-level security setting prevents Lightning component code from
+      modifying built-in JavaScript prototypes (Object, Array, DOM APIs, etc.),
+      which breaks components that extend or polyfill native prototypes.
+    detail: When enabled, the runtime freezes prototypes of global JavaScript
+      objects shared across namespaces. Components that patch Array.prototype,
+      Object.prototype, or similar will throw errors. The setting is off by
+      default but can be toggled in Session Settings.
+    upgradeAction: Before enabling this setting, audit all Aura and LWC code for
+      prototype modifications (e.g., Array.prototype.customMethod) and refactor
+      to use standalone utility functions instead.
+    source:
+      document: v44-winter19.pdf
+      page: 467
+      heading: Freeze JavaScript Prototypes for Improved Security and Stability
+    confidence: high
+    id: v44-lwc-003
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - AuraDefinitionBundle
+    behaviorArea: apex-runtime
+    appliesWhen: Aura components compiled at API >= 44.0
+    summary: Apex methods can now declare cacheability directly via
+      @AuraEnabled(cacheable=true) annotation, eliminating the need for
+      client-side setStorable() calls on each action invocation.
+    detail: For components at v44.0+, the cacheable annotation on the server method
+      controls caching behavior. Components at v43.0 or earlier must continue
+      using the JavaScript setStorable() approach. This is a versioned change
+      affecting how Aura components interact with Apex controllers.
+    source:
+      document: v44-winter19.pdf
+      page: 468
+      heading: Mark Apex Methods as Cacheable
+    confidence: high
+    id: v44-apex-002
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The AuraLocalizationService date formatting methods no longer support
+      the uppercase W token for week-of-year. Use lowercase w instead.
+    detail: "Additionally, several date tokens are deprecated: y/Y/YY/YYYY should
+      migrate to yyyy or yy, uppercase A for AM/PM should become lowercase a,
+      and DD for day-of-month should become dd."
+    upgradeAction: Search JavaScript files for formatDate() and related
+      AuraLocalizationService calls using W, Y, YY, YYYY, A, or DD tokens and
+      replace them with the preferred equivalents before upgrading.
+    source:
+      document: v44-winter19.pdf
+      page: 468
+      heading: Token Changes for Formatting Dates in JavaScript API Methods
+    confidence: high
+    id: v44-aura-001
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The undocumented Moment.js global variable that was previously
+      accessible in Lightning components has been blocked. Components that
+      relied on this internal library will break.
+    upgradeAction: Audit custom Lightning components for references to the moment
+      global variable. Upload Moment.js as a static resource and update
+      components to load it explicitly.
+    source:
+      document: v44-winter19.pdf
+      page: 470
+      heading: Removed moment Global Variable
+    confidence: high
+    id: v44-aura-002
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: components compiled at API >= 44.0
+    summary: The lightning:empApi component enables Aura components to subscribe to
+      Streaming API channels (platform events, PushTopic, generic events, Change
+      Data Capture) via a shared CometD connection, allowing multiple streaming
+      subscriptions in a single browser session.
+    source:
+      document: v44-winter19.pdf
+      page: 471
+      heading: New and Changed Lightning Components
+    confidence: high
+    id: v44-aura-003
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: components compiled at API >= 44.0
+    summary: URLs for components using lightning:isUrlAddressable and
+      lightning:navigation are now case-sensitive, meaning previously working
+      URLs with different casing may break.
+    upgradeAction: Audit any hardcoded or dynamically generated navigation URLs that
+      reference addressable components and ensure the casing matches exactly.
+    source:
+      document: v44-winter19.pdf
+      page: 471
+      heading: New and Changed Lightning Components
+    confidence: high
+    id: v44-aura-004
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: A new IMAGEPROXYURL function lets Visualforce pages fetch external
+      images through a secure proxy, preventing credential-stealing attacks from
+      malicious third-party image requests.
+    source:
+      document: v44-winter19.pdf
+      page: 476
+      heading: Securely Retrieve and Display Third-Party Images in Visualforce Pages
+    confidence: high
+    id: v44-vf-002
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: A new merge field syntax $IFrameResource.<resource_name> allows
+      embedding static HTML resources in iframes served from an isolated domain,
+      preventing untrusted third-party content from accessing the main
+      Visualforce context.
+    source:
+      document: v44-winter19.pdf
+      page: 477
+      heading: Improve Security by Isolating Untrusted Third-Party Content with iframes
+    confidence: high
+    id: v44-vf-003
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Protected URL redirect parameters (retURL, startURL, cancelURL,
+      saveURL) in Visualforce pages now match case-insensitively. Previously,
+      variant casings like 'returl' bypassed the protected-parameter redirect
+      restrictions; now all casing variants are recognized and restricted to
+      salesforce.com/*.force.com domains.
+    upgradeAction: Review any Visualforce pages or integrations that relied on case
+      variations of these parameters to redirect to external domains; such
+      redirects will now be blocked.
+    source:
+      document: v44-winter19.pdf
+      page: 477
+      heading: URL Redirect Parameters Are No Longer Case-Sensitive
+    confidence: high
+    id: v44-vf-004
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: System.UserInfo.getSessionId() now returns a valid session ID when
+      invoked from asynchronous Apex (Batch, Future, Queueable, Scheduled)
+      executed by an active user, whereas it previously returned null in all
+      async contexts.
+    detail: The method still returns null when the async code runs under internal
+      users such as the automated process user or proxy users. This enables
+      callouts to Salesforce APIs from async Apex without workarounds.
+    upgradeAction: Review async Apex that previously worked around null session IDs;
+      existing workarounds may now be redundant or could conflict with the newly
+      returned value.
+    source:
+      document: v44-winter19.pdf
+      page: 479
+      heading: Streamline API Calls to Your Org from Apex Code
+    confidence: high
+    id: v44-apex-003
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: UserInfo.getSessionId() now returns a valid session ID when called from
+      asynchronous Apex contexts (Batch, Future, Queueable, Scheduled) instead
+      of returning null.
+    detail: Previously this method always returned null in async contexts, forcing
+      workarounds. Code that checked for null or avoided calling getSessionId()
+      in async Apex may now need adjustment if it relied on the null behavior.
+    upgradeAction: Review async Apex that calls getSessionId() or checks its return
+      value; remove any null-handling workarounds if they cause
+      double-processing now that valid IDs are returned.
+    source:
+      document: v44-winter19.pdf
+      page: 481
+      heading: Changed Apex Classes
+    confidence: high
+    id: v44-apex-004
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The System.Callable interface enables loosely coupled integrations
+      between Apex classes, triggers, and packages by defining a common call
+      signature that allows runtime invocation without compile-time
+      dependencies.
+    source:
+      document: v44-winter19.pdf
+      page: 482
+      heading: New Apex Interfaces
+    confidence: high
+    id: v44-apex-005
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: Apex code calling ConnectApi.User at API >= 44.0
+    summary: The ConnectApi.User output class no longer populates the stamps
+      property for performance reasons; code must now query stamps via SOQL
+      instead.
+    upgradeAction: Replace any reliance on ConnectApi.User.stamps with a direct SOQL
+      query against the appropriate stamps object before upgrading past v44.0.
+    source:
+      document: v44-winter19.pdf
+      page: 487
+      heading: New and Changed Chatter in Apex Output Classes
+    confidence: high
+    id: v44-apex-006
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: New Tooling API objects FlowTestCoverage and FlowElementTestCoverage
+      enable querying which flow elements were executed during Apex test runs,
+      allowing programmatic flow coverage analysis.
+    source:
+      document: v44-winter19.pdf
+      page: 493
+      heading: Tooling API New and Changed Objects
+    confidence: medium
+    id: v44-apex-007
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: metadata deployments and retrievals targeting API >= 44.0
+    summary: Several BotVersion metadata fields (apexClass, botVariable, field,
+      leftOperandBotVariable, LocalMlDomain, operandType, sobjectType, value)
+      were removed starting in API 44.0 and replaced with new fields for
+      invocation actions and conversation variables.
+    detail: Einstein Bot metadata restructured how dialog actions reference Apex,
+      Flows, and other invocable actions. The apexClass field is replaced by
+      invocationActionType and invocationActionName. Bot variable handling
+      shifted to new fields like conversationVariables, leftOperandName,
+      leftOperandType, sourceName, targetName, variableName, and variableType.
+    upgradeAction: Update any deployment scripts or metadata packages that reference
+      the removed BotVersion fields to use the replacement fields before
+      deploying at API 44.0 or higher.
+    source:
+      document: v44-winter19.pdf
+      page: 494
+      heading: Metadata API
+    confidence: high
+    id: v44-packaging-005
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: BatchApexErrorEvent platform event enables Apex batch jobs to publish
+      error events that can be subscribed to for monitoring and handling batch
+      failures programmatically.
+    detail: This new platform event type allows developers to implement automated
+      error handling and monitoring for batch Apex operations by subscribing to
+      error events rather than relying solely on email notifications or manual
+      AsyncApexJob queries.
+    source:
+      document: v44-winter19.pdf
+      page: 500
+      heading: New Objects
+    confidence: high
+    id: v44-apex-008
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The EventLogFile object now filters out unrelated error events from the
+      UI_EVENT_SOURCE field in Lightning Error event type logs, which may affect
+      monitoring or analytics code that relied on the previous unfiltered data.
+    upgradeAction: Review any code that parses Lightning Error event logs from
+      EventLogFile and verify it still receives the expected data after
+      unrelated UI_EVENT_SOURCE entries are filtered out.
+    source:
+      document: v44-winter19.pdf
+      page: 502
+      heading: Changed Objects
+    confidence: medium
+    id: v44-rest-003
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The /limits/ endpoint now calculates storage using binary units (1 KB =
+      1024 bytes) instead of decimal units (1 KB = 1000 bytes), aligning with
+      the Salesforce UI but returning different numeric values than before.
+    upgradeAction: Review any code that parses storage values from /limits/ and
+      adjusts thresholds or displays; the reported numbers will be approximately
+      4.9% lower for the same actual storage.
+    source:
+      document: v44-winter19.pdf
+      page: 509
+      heading: New and Changed Calls
+    confidence: high
+    id: v44-rest-004
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: SOAP API requests at version 44.0 and later
+    summary: The OwnerChangeOptions header gains two new type values including
+      KeepSalesTeam, which controls whether an opportunity's sales team is
+      preserved during owner reassignment.
+    source:
+      document: v44-winter19.pdf
+      page: 510
+      heading: New, Changed, and Deprecated Calls
+    confidence: medium
+    id: v44-soap-002
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API calls to Chatter REST API at version >= 44.0
+    summary: The UserDetail and UserSummary response bodies no longer include the
+      stamps property for performance reasons; code relying on this field must
+      switch to SOQL queries.
+    upgradeAction: Replace any integration logic that reads the stamps property from
+      UserDetail or UserSummary responses with equivalent SOQL queries against
+      the User object.
+    source:
+      document: v44-winter19.pdf
+      page: 515
+      heading: New and Changed Chatter REST API Response Bodies
+    confidence: low
+    id: v44-rest-005
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: User Interface API child-relationships endpoint now supports pagination
+      via pageToken query parameter, with currentPageToken, nextPageToken, and
+      previousPageToken fields in the response body.
+    source:
+      document: v44-winter19.pdf
+      page: 522
+      heading: Other User Interface API Changes
+    confidence: medium
+    id: v44-rest-006
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The lightning:quickActionAPI component introduces JavaScript methods
+      (getAvailableActions, getAvailableActionFields) that let custom Aura
+      components programmatically discover and interact with quick actions on
+      record pages, mirroring capabilities previously available only via Case
+      Feed Publisher APIs in Classic.
+    source:
+      document: v44-winter19.pdf
+      page: 523
+      heading: Quick Action JavaScript API
+    confidence: high
+    id: v44-aura-005
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Open CTI onNavigationChange() callback now fires when a console tab
+      refreshes, such as after saving a newly created case, eliminating the need
+      for users to switch tabs to trigger the event.
+    upgradeAction: Review CTI integrations that rely on onNavigationChange() to
+      ensure they handle the additional invocations from tab refreshes and
+      inline record creation without duplicate processing or performance issues.
+    source:
+      document: v44-winter19.pdf
+      page: 523
+      heading: Open CTI API
+    confidence: high
+    id: v44-rest-007
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Custom metadata records retrieved via SOQL in Apex can now be modified
+      in memory, whereas previously they were immutable. Audit and calculated
+      fields remain read-only, and DML to persist changes still requires the
+      Metadata API.
+    source:
+      document: v44-winter19.pdf
+      page: 525
+      heading: Instantiate Custom Metadata Types in Apex
+    confidence: high
+    id: v44-apex-009
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The orgPreferences format in scratch org definition files is deprecated
+      in favor of the new settings format, with removal planned for Spring '19.
+    detail: Scratch org definitions must migrate from the orgPreferences block to
+      the new settings block, which mirrors Metadata API settings structure and
+      supports all Metadata API settings including non-Boolean fields. The two
+      formats cannot be mixed in the same definition file.
+    upgradeAction: Convert scratch org definition files from orgPreferences to the
+      settings format before Spring '19. Note that setting names must use lower
+      camel case in the definition file even though Metadata API documentation
+      shows upper camel case.
+    source:
+      document: v44-winter19.pdf
+      page: 536
+      heading: Get More Configuration Options with Scratch Org Settings
+    confidence: high
+    id: v44-packaging-006
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Unlocked packages now support non-zero patch version numbers in
+      sfdx-project.json and the force:package:version:create command, enabling
+      semantic versioning patterns like major.minor.patch.build.
+    source:
+      document: v44-winter19.pdf
+      page: 538
+      heading: Patch Version Numbers in Unlocked Packages Are Supported
+    confidence: high
+    id: v44-packaging-007
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The SubscriberPackageVersion Tooling API object now exposes a
+      Dependencies field, allowing SOQL queries to retrieve the ordered list of
+      dependent package version IDs for an installed unlocked package.
+    source:
+      document: v44-winter19.pdf
+      page: 539
+      heading: Extract Dependency Information for Unlocked Packages
+    confidence: high
+    id: v44-packaging-008
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Unlocked package upgrades now hard-delete a much larger set of metadata
+      types (including LightningComponentBundle, NamedCredential,
+      PermissionSetGroup, QuickAction, RemoteSiteSetting, and many others) from
+      the subscriber org when those components are removed from the package
+      source.
+    detail: Previously only a limited set of metadata types were hard-deleted on
+      package upgrade; others were merely deprecated. This expansion means
+      removing components like NamedCredential, RemoteSiteSetting, or
+      LightningComponentBundle from your unlocked package source will now
+      permanently delete them from subscriber orgs upon upgrade, potentially
+      breaking integrations or dependent code.
+    upgradeAction: Before publishing package versions that remove any of the newly
+      hard-deleted metadata types, audit subscriber orgs for dependencies on
+      those components. Communicate removals to subscribers and ensure no
+      external integrations or code rely on NamedCredentials,
+      RemoteSiteSettings, or other hard-deleted items.
+    source:
+      document: v44-winter19.pdf
+      page: 540
+      heading: More Metadata Components Are Hard-Deleted in Unlocked Packages
+    confidence: high
+    id: v44-packaging-009
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Unlocked packages now support automatic reassociation of deprecated
+      metadata when installing a new package that contains the same components,
+      eliminating the need to manually uninstall deprecated items before
+      migrating them between packages.
+    source:
+      document: v44-winter19.pdf
+      page: 542
+      heading: Enable Migration of Deprecated Metadata in Unlocked Packages
+    confidence: high
+    id: v44-packaging-010
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: High-volume platform events become GA, enabling asynchronous event
+      publishing at scale via Metadata API (eventType=HighVolume), Apex, CometD,
+      and declarative tools. Daily CometD delivery allocations now enforced per
+      edition.
+    detail: Unlike standard platform events, high-volume events publish
+      asynchronously through a queue and persist for replay up to three days.
+      Developers integrating via CometD should plan for new daily delivery
+      quotas that vary by edition and optional add-on licenses.
+    source:
+      document: v44-winter19.pdf
+      page: 544
+      heading: Scale Your Event-Based Apps with High-Volume Platform Events (Generally
+        Available)
+    confidence: medium
+    id: v44-rest-008
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Change Data Capture reaches GA, providing a CometD/Streaming API
+      channel that pushes near-real-time create/update/delete/undelete events
+      for selected standard and custom objects to external subscribers.
+    detail: Subscribers connect via Streaming API and can replay stored events for
+      up to three days. GA release includes Shield Platform Encryption support
+      (requires Event Bus tenant secret), granular per-object View All
+      permissions instead of View All Data, SHA-256 hashing for large-text diff
+      verification, and a revised changeOrigin header format that exposes API
+      name/version plus client ID.
+    source:
+      document: v44-winter19.pdf
+      page: 544
+      heading: Keep Your External Data Up to Date with Change Data Capture (Generally
+        Available)
+    confidence: high
+    id: v44-rest-009
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version; auto-enabled Summer
+      '19 (May 17, 2019)
+    summary: Lightning pageReference.state properties and URL query parameters
+      without namespace prefixes are stripped from org URLs, potentially
+      breaking navigation state passed between components.
+    upgradeAction: Audit Lightning components that read or write pageReference.state
+      or query parameters; add namespace prefixes to all custom parameters
+      before the enforcement date.
+    source:
+      document: v44-winter19.pdf
+      page: 547
+      heading: Critical Updates
+    confidence: high
+    id: v44-lwc-004
+  - apiVersion: "44.0"
+    release: Winter '19
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version; enforced October 5, 2018
+    summary: Guest users on Sites and Communities lose all default record CRUD
+      access; any integration or public-facing code relying on implicit guest
+      record access will fail without explicit object permission grants.
+    upgradeAction: Review Sites/Communities guest user profiles and explicitly grant
+      required object permissions; test all anonymous/guest user flows for
+      record access failures.
+    source:
+      document: v44-winter19.pdf
+      page: 547
+      heading: Critical Updates
+    confidence: high
+    id: v44-sharing-002

@@ -1,0 +1,36 @@
+# dependencies / build
+node_modules/
+dist/
+# corpus data bundled into the scanner package at build time (scripts/build-assets.mjs)
+packages/scanner/corpus-data/
+coverage/
+*.tsbuildinfo
+
+# corpus input PDFs are never committed
+packages/corpus/input-pdfs/*
+!packages/corpus/input-pdfs/NAMING.md
+
+# pipeline working files (work/ holds extracted source text, cache/ holds raw
+# LLM responses quoting it — neither is ever committed)
+packages/corpus/pipeline/work/
+packages/corpus/pipeline/cache/
+
+# generated reports
+almanac-report.json
+almanac-report.html
+almanac-report.md
+almanac-impact.md
+almanac-impact-bundle.md
+# …except the committed sample report
+!packages/scanner/examples/almanac-report.json
+!packages/scanner/examples/almanac-report.html
+!packages/scanner/examples/almanac-report.md
+!packages/scanner/examples/almanac-impact.md
+
+# misc
+*.log
+.DS_Store
+
+# LICENSE/NOTICE copied into the scanner package at build time (root files are canonical)
+packages/scanner/LICENSE
+packages/scanner/NOTICE

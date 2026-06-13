@@ -1,0 +1,173 @@
+/**
+ * Report assembly. The Report object is the single source of
+ * truth for every reporter and prompt — headlines are pre-computed here so
+ * all outputs show identical dates.
+ */
+import type { Inventory } from '../core/inventory.js';
+import { assignTier, type Schedule, type TierResult } from '../core/tiering.js';
+import { debtScore } from '../core/score.js';
+
+export const REPORT_SCHEMA_VERSION = '1.0.0';
+
+export interface ReportComponent {
+  id: string;
+  type: string;
+  apiVersion: string | null;
+  versionSource: 'explicit' | 'inherited';
+  location: string;
+  tier: string;
+  tierLabel?: string;
+  retirementDate?: string;
+  severity?: 'critical' | 'high' | 'medium' | 'info';
+}
+
+export interface ReportIntegration {
+  type: 'api-usage' | 'soap-login';
+  clientName: string;
+  apiFamily: string;
+  apiVersion: string;
+  requestCount?: number;
+  tier: string;
+  tierLabel?: string;
+  retirementDate?: string;
+  severity?: 'critical' | 'high' | 'medium' | 'info';
+}
+
+export interface Headline {
+  date: string;
+  count: number;
+  message: string;
+}
+
+export interface Report {
+  schemaVersion: string;
+  generatedAt: string;
+  scanner: { name: string; version: string };
+  mode: 'repo' | 'org';
+  target: { path?: string; org?: string };
+  schedule: { currentApiVersion: string; source: string };
+  debtScore: number;
+  headlines: Headline[];
+  summary: {
+    totalComponents: number;
+    totalIntegrations: number;
+    byTier: Record<string, number>;
+  };
+  components: ReportComponent[];
+  integrations: ReportIntegration[];
+  warnings: { code: string; message: string; location?: string }[];
+}
+
+export interface BuildReportOptions {
+  mode: 'repo' | 'org';
+  target: { path?: string; org?: string };
+  scheduleSource: string;
+  scannerVersion: string;
+  now?: Date;
+}
+
+export function buildReport(
+  inventory: Inventory,
+  schedule: Schedule,
+  opts: BuildReportOptions,
+): Report {
+  const ruleOrder = new Map(schedule.rules.map((r, i) => [r.tier, i]));
+  const tierRank = (tier: string) => ruleOrder.get(tier) ?? schedule.rules.length;
+
+  const tiered: TierResult[] = [];
+
+  const components: ReportComponent[] = inventory.items.map((item) => {
+    const t = assignTier(item, schedule);
+    tiered.push(t);
+    return {
+      id: item.id,
+      type: item.type,
+      apiVersion: item.apiVersion,
+      versionSource: item.versionSource,
+      location: item.location,
+      tier: t.tier,
+      ...(t.label !== undefined && { tierLabel: t.label }),
+      ...(t.date !== undefined && { retirementDate: t.date }),
+      ...(t.severity !== undefined && { severity: t.severity }),
+    };
+  });
+
+  const integrations: ReportIntegration[] = inventory.integrations.map((finding) => {
+    const t = assignTier(
+      { apiVersion: finding.apiVersion, soapLogin: finding.type === 'soap-login' },
+      schedule,
+    );
+    tiered.push(t);
+    return {
+      ...finding,
+      tier: t.tier,
+      ...(t.label !== undefined && { tierLabel: t.label }),
+      ...(t.date !== undefined && { retirementDate: t.date }),
+      ...(t.severity !== undefined && { severity: t.severity }),
+    };
+  });
+
+  // Ranked: most urgent tier first, then lowest version first.
+  components.sort(
+    (a, b) =>
+      tierRank(a.tier) - tierRank(b.tier) ||
+      versionNum(a.apiVersion) - versionNum(b.apiVersion) ||
+      a.id.localeCompare(b.id),
+  );
+  integrations.sort(
+    (a, b) =>
+      tierRank(a.tier) - tierRank(b.tier) ||
+      versionNum(a.apiVersion) - versionNum(b.apiVersion) ||
+      a.clientName.localeCompare(b.clientName),
+  );
+
+  const byTier: Record<string, number> = {};
+  for (const entry of [...components, ...integrations]) {
+    byTier[entry.tier] = (byTier[entry.tier] ?? 0) + 1;
+  }
+
+  // Headlines: one per dated (date, label) group, soonest date first.
+  const groups = new Map<string, { date: string; label: string; count: number }>();
+  for (const entry of [...components, ...integrations]) {
+    if (entry.retirementDate === undefined) continue;
+    const label = entry.tierLabel ?? entry.tier;
+    const key = `${entry.retirementDate}|${label}`;
+    const group = groups.get(key) ?? { date: entry.retirementDate, label, count: 0 };
+    group.count += 1;
+    groups.set(key, group);
+  }
+  const headlines: Headline[] = [...groups.values()]
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .map((g) => ({
+      date: g.date,
+      count: g.count,
+      message: `${g.count} item${g.count === 1 ? '' : 's'} — ${g.label}`,
+    }));
+
+  return {
+    schemaVersion: REPORT_SCHEMA_VERSION,
+    generatedAt: (opts.now ?? new Date()).toISOString(),
+    scanner: { name: 'idea-almanac', version: opts.scannerVersion },
+    mode: opts.mode,
+    target: opts.target,
+    schedule: { currentApiVersion: schedule.currentApiVersion, source: opts.scheduleSource },
+    debtScore: debtScore(tiered),
+    headlines,
+    summary: {
+      totalComponents: components.length,
+      totalIntegrations: integrations.length,
+      byTier,
+    },
+    components,
+    integrations,
+    warnings: inventory.warnings,
+  };
+}
+
+function versionNum(v: string | null): number {
+  return v === null ? Number.POSITIVE_INFINITY : Number.parseFloat(v);
+}
+
+export function renderJson(report: Report): string {
+  return `${JSON.stringify(report, null, 2)}\n`;
+}

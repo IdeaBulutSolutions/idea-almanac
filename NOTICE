@@ -1,0 +1,11 @@
+Almanac — a seasonal record of every Salesforce release, and the scanner
+that reads your org against it.
+
+Copyright 2026 Idea Bulut Solutions (https://ideabulut.com)
+
+This product includes a corpus of original, own-words summaries of
+developer-relevant Salesforce release changes with source pointers
+(document, page, heading). It contains no verbatim Salesforce
+release-note text. Salesforce and related marks are trademarks of
+Salesforce, Inc.; this project is not affiliated with or endorsed by
+Salesforce, Inc.

@@ -1,0 +1,149 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-01-01T00:00:00.000Z",
+  "scanner": {
+    "name": "idea-almanac",
+    "version": "0.0.0-snapshot"
+  },
+  "mode": "repo",
+  "target": {
+    "path": "test/fixtures/sample-sfdx-repo"
+  },
+  "schedule": {
+    "currentApiVersion": "67.0",
+    "source": "built-in retirement-schedule.json"
+  },
+  "debtScore": 27,
+  "headlines": [
+    {
+      "date": "2025-06",
+      "count": 1,
+      "message": "1 item — Already failing - retired Summer '25 (REST 410 / SOAP 500 / Bulk 400)"
+    },
+    {
+      "date": "2028-06",
+      "count": 1,
+      "message": "1 item — Retires Summer '28 (deprecated Summer '27)"
+    }
+  ],
+  "summary": {
+    "totalComponents": 10,
+    "totalIntegrations": 0,
+    "byTier": {
+      "retired": 1,
+      "breaks-2028": 1,
+      "stale": 7,
+      "current": 1
+    }
+  },
+  "components": [
+    {
+      "id": "force-app/main/default/classes/AncientHelper.cls-meta.xml",
+      "type": "ApexClass",
+      "apiVersion": "28.0",
+      "versionSource": "explicit",
+      "location": "force-app/main/default/classes/AncientHelper.cls-meta.xml",
+      "tier": "retired",
+      "tierLabel": "Already failing - retired Summer '25 (REST 410 / SOAP 500 / Bulk 400)",
+      "retirementDate": "2025-06",
+      "severity": "critical"
+    },
+    {
+      "id": "force-app/main/default/classes/LegacyService.cls-meta.xml",
+      "type": "ApexClass",
+      "apiVersion": "35.0",
+      "versionSource": "explicit",
+      "location": "force-app/main/default/classes/LegacyService.cls-meta.xml",
+      "tier": "breaks-2028",
+      "tierLabel": "Retires Summer '28 (deprecated Summer '27)",
+      "retirementDate": "2028-06",
+      "severity": "high"
+    },
+    {
+      "id": "force-app/main/default/aura/legacyPanel/legacyPanel.cmp-meta.xml",
+      "type": "Aura",
+      "apiVersion": "45.0",
+      "versionSource": "explicit",
+      "location": "force-app/main/default/aura/legacyPanel/legacyPanel.cmp-meta.xml",
+      "tier": "stale",
+      "tierLabel": "Drifting (>1 year behind)",
+      "severity": "info"
+    },
+    {
+      "id": "manifest/package.xml",
+      "type": "Manifest",
+      "apiVersion": "45.0",
+      "versionSource": "explicit",
+      "location": "manifest/package.xml",
+      "tier": "stale",
+      "tierLabel": "Drifting (>1 year behind)",
+      "severity": "info"
+    },
+    {
+      "id": "force-app/main/default/triggers/AccountTrigger.trigger-meta.xml",
+      "type": "ApexTrigger",
+      "apiVersion": "52.0",
+      "versionSource": "explicit",
+      "location": "force-app/main/default/triggers/AccountTrigger.trigger-meta.xml",
+      "tier": "stale",
+      "tierLabel": "Drifting (>1 year behind)",
+      "severity": "info"
+    },
+    {
+      "id": "force-app/main/default/lwc/orderList/orderList.js-meta.xml",
+      "type": "LWC",
+      "apiVersion": "55.0",
+      "versionSource": "inherited",
+      "location": "force-app/main/default/lwc/orderList/orderList.js-meta.xml",
+      "tier": "stale",
+      "tierLabel": "Drifting (>1 year behind)",
+      "severity": "info"
+    },
+    {
+      "id": "sfdx-project.json",
+      "type": "ProjectDefault",
+      "apiVersion": "55.0",
+      "versionSource": "explicit",
+      "location": "sfdx-project.json",
+      "tier": "stale",
+      "tierLabel": "Drifting (>1 year behind)",
+      "severity": "info"
+    },
+    {
+      "id": "manifest/deploy/package.xml",
+      "type": "Manifest",
+      "apiVersion": "60.0",
+      "versionSource": "explicit",
+      "location": "manifest/deploy/package.xml",
+      "tier": "stale",
+      "tierLabel": "Drifting (>1 year behind)",
+      "severity": "info"
+    },
+    {
+      "id": "force-app/main/default/flows/Order_Fulfillment.flow-meta.xml",
+      "type": "Flow",
+      "apiVersion": "61.0",
+      "versionSource": "explicit",
+      "location": "force-app/main/default/flows/Order_Fulfillment.flow-meta.xml",
+      "tier": "stale",
+      "tierLabel": "Drifting (>1 year behind)",
+      "severity": "info"
+    },
+    {
+      "id": "force-app/main/default/classes/ModernController.cls-meta.xml",
+      "type": "ApexClass",
+      "apiVersion": "67.0",
+      "versionSource": "explicit",
+      "location": "force-app/main/default/classes/ModernController.cls-meta.xml",
+      "tier": "current"
+    }
+  ],
+  "integrations": [],
+  "warnings": [
+    {
+      "code": "malformed-xml",
+      "message": "Could not parse XML",
+      "location": "force-app/main/default/pages/Broken.page-meta.xml"
+    }
+  ]
+}

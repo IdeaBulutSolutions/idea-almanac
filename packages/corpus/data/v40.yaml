@@ -1,0 +1,1771 @@
+apiVersion: "40.0"
+release: Summer '17
+reviewed: true
+entries:
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex Metadata API is now available, allowing Apex code to
+      programmatically retrieve and deploy metadata without requiring external
+      callouts to the Metadata API.
+    source:
+      document: v40-summer17.pdf
+      page: 9
+      heading: You Asked for It!
+    confidence: medium
+    id: v40-apex-001
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Modifying any Apex class now invalidates the entire platform cache,
+      clearing cached data across all partitions.
+    upgradeAction: Account for cache invalidation in deployment strategies; avoid
+      frequent Apex deployments in production if cache stability is critical to
+      performance.
+    source:
+      document: v40-summer17.pdf
+      page: 10
+      heading: Release Notes Changes
+    confidence: high
+    id: v40-apex-002
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; Salesforce for
+      Outlook versions 2.9.3 and earlier stop functioning when TLS 1.0 is
+      disabled in July 2017
+    summary: Salesforce for Outlook versions prior to 3.0.0 will cease to function
+      once TLS 1.0 encryption is disabled, breaking sync and side panel
+      functionality for users on older versions.
+    upgradeAction: Ensure all Salesforce for Outlook installations are upgraded to
+      version 3.0.0 or later before July 2017 to maintain sync and side panel
+      functionality.
+    source:
+      document: v40-summer17.pdf
+      page: 92
+      heading: Microsoft® Integration
+    confidence: high
+    id: v40-auth-001
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version (announced for a
+      near-future release)
+    summary: External object records returned by SOSL or global searches will
+      receive temporary Salesforce IDs instead of permanent ones, breaking any
+      code that stores or relies on these IDs persisting across queries.
+    detail: This change was announced in Summer '17 for a future release. Code or
+      integrations that cache external object record IDs from search results, or
+      that expect the same external data row to have the same Salesforce ID on
+      subsequent retrievals, will fail once enforcement begins.
+    upgradeAction: Audit Apex, integrations, and third-party packages for any logic
+      that stores or compares Salesforce record IDs of external objects obtained
+      via SOSL or search. Refactor to use the external ID field instead.
+    source:
+      document: v40-summer17.pdf
+      page: 98
+      heading: Salesforce Connect
+    confidence: medium
+    id: v40-soql-001
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: User Interface API enters Developer Preview, providing a single REST
+      endpoint that returns combined metadata, layout definitions, and record
+      data for building custom UIs without multiple API calls.
+    detail: This new REST API surface consolidates what previously required separate
+      calls to describe layouts, retrieve metadata, and fetch record data. While
+      in Developer Preview, production use is not recommended.
+    source:
+      document: v40-summer17.pdf
+      page: 100
+      heading: Development
+    confidence: medium
+    id: v40-rest-001
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide when Lightning Knowledge is enabled
+    summary: Enabling Lightning Knowledge removes access to the 'ArticleType' field
+      in SOQL queries and API calls, breaking any custom code that references
+      this field.
+    upgradeAction: Audit Apex classes, triggers, and integrations for SOQL queries
+      or API calls referencing the ArticleType field on Knowledge objects before
+      enabling Lightning Knowledge.
+    source:
+      document: v40-summer17.pdf
+      page: 103
+      heading: "Customer Service Features: Lightning Experience Considerations"
+    confidence: high
+    id: v40-soql-002
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version (Lightning Experience only)
+    summary: SOQL queries against Knowledge Article Version (KAV) objects no longer
+      require explicit language and publishStatus filters; omitted filters now
+      default to the current user's language and 'online' status.
+    detail: Previously, KAV queries failed or behaved unexpectedly without these
+      filters. Existing queries that rely on retrieving all languages or all
+      publish statuses by omitting filters will now receive a narrower default
+      result set.
+    upgradeAction: Review KAV SOQL queries that intentionally omit language or
+      publishStatus filters; if they expect to return articles across all
+      languages or statuses, add explicit filter criteria to preserve that
+      behavior.
+    source:
+      document: v40-summer17.pdf
+      page: 207
+      heading: Query Quickly with Updates to SOQL Queries for Knowledge Article
+        Version (KAV)
+    confidence: medium
+    id: v40-soql-003
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version, effective Spring '18
+    summary: Chatter Answers will be fully retired in Spring '18, after which the
+      feature stops functioning and all existing Chatter Answers data becomes
+      inaccessible through the platform.
+    upgradeAction: Migrate any integrations or customizations that depend on Chatter
+      Answers to an alternative Q&A solution before Spring '18. Export any
+      Chatter Answers data you need to retain.
+    source:
+      document: v40-summer17.pdf
+      page: 247
+      heading: Chatter Answers Retires in Spring '18
+    confidence: high
+    id: v40-rest-002
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Wave Templates introduces a new REST API endpoint (/wave/templates) and
+      corresponding Metadata API type (WaveTemplate) enabling developers to
+      programmatically create, export, modify, and deploy templated analytics
+      apps.
+    source:
+      document: v40-summer17.pdf
+      page: 342
+      heading: Introducing Wave Templates
+    confidence: medium
+    id: v40-rest-003
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Wave REST API gains GA endpoints for data connectors and recipes,
+      enabling programmatic import from external sources and dataset
+      transformation management.
+    source:
+      document: v40-summer17.pdf
+      page: 343
+      heading: Updates to the REST API
+    confidence: high
+    id: v40-rest-004
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The Wave Apex SDK introduces ConnectApi.Wave.executeQuery and
+      Wave.QueryBuilder classes, allowing Apex code to construct and run SAQL
+      queries against Wave datasets directly from server-side logic.
+    source:
+      document: v40-summer17.pdf
+      page: 344
+      heading: Query your Dataset with the Wave Apex SDK
+    confidence: high
+    id: v40-apex-003
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+      - VisualforcePage
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The Wave Analytics Web SDK introduces two Lightning events (wave:update
+      and wave:selectionChanged) enabling custom components to programmatically
+      filter dashboards and react to user selections within Wave assets.
+    source:
+      document: v40-summer17.pdf
+      page: 346
+      heading: Communicate with Wave Dashboards Using the Web SDK
+    confidence: high
+    id: v40-aura-001
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: Lightning components compiled at API >= 40.0
+    summary: LockerService security architecture becomes mandatory for Lightning
+      components at API version 40.0 and above, while components at 39.0 or
+      earlier remain exempt from enforcement.
+    detail: This enforcement applies within Communities. Components created before
+      Summer '17 (API 39.0 and lower) continue without LockerService
+      restrictions, but any new or upgraded component at 40.0+ must comply with
+      LockerService's isolation and security rules.
+    upgradeAction: Before upgrading custom Lightning components past API 39.0,
+      verify they function correctly under LockerService
+      restrictions—particularly DOM access patterns, third-party library
+      compatibility, and cross-namespace communication.
+    source:
+      document: v40-summer17.pdf
+      page: 350
+      heading: "Critical Update Activation: LockerService in Communities"
+    confidence: high
+    id: v40-lwc-001
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+      - VisualforcePage
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; enforced March 2018
+      for Communities, July 2017 for portals and sites
+    summary: Salesforce will reject TLS 1.0 connections to Communities starting
+      March 2018, requiring all browser access, inbound API calls, and outbound
+      integrations to use TLS 1.1 or higher.
+    detail: The July 2017 TLS 1.0 disablement deadline was extended to March 2018
+      specifically for Lightning and Visualforce Communities. Partner portals,
+      customer portals, and Force.com/Site.com sites remain on the original July
+      2017 deadline. A Critical Update toggle allows early opt-in.
+    upgradeAction: Verify all API integrations connecting to Communities use TLS
+      1.1+. Test browser compatibility and update any legacy clients or
+      middleware that default to TLS 1.0.
+    source:
+      document: v40-summer17.pdf
+      page: 350
+      heading: Extended Deadline for TLS 1.0 Disablement in Communities
+    confidence: high
+    id: v40-auth-002
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The Network metadata component type is now deployable via change sets,
+      enabling migration of Lightning Communities and Salesforce Tabs +
+      Visualforce communities between connected orgs.
+    detail: Communities can only be updated (not created) via inbound change
+      sets—the target org must already contain a community with a matching name.
+      Deployments fully overwrite the destination community. Limited
+      Administration settings transfer; page variations, audience targeting, and
+      topics are excluded.
+    source:
+      document: v40-summer17.pdf
+      page: 357
+      heading: Move Communities Between Orgs with Change Sets
+    confidence: medium
+    id: v40-packaging-001
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Two new Aura components, forceCommunity:appLauncher and
+      forceCommunity:notifications, let developers embed App Launcher and
+      notification UIs inside custom Lightning components for communities.
+    source:
+      document: v40-summer17.pdf
+      page: 387
+      heading: Add App Launcher and Notifications Components to Lightning Components
+        in Communities
+    confidence: high
+    id: v40-aura-002
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version (enforced on
+      auto-activation date)
+    summary: The HYPERLINK formula function no longer permits JavaScript in the URL
+      argument, blocking execution to prevent XSS vulnerabilities.
+    detail: "Formula fields that previously used javascript: URLs in HYPERLINK will
+      stop working once this critical update activates. Alternative patterns
+      include custom buttons with onClick handlers (Classic only), Lightning
+      Quick Actions invoking LWC/Aura components, or Visualforce pages with Apex
+      controllers that perform server-side redirects."
+    upgradeAction: Search for formula fields using HYPERLINK with JavaScript URLs
+      (use Workbench query per Salesforce guidance) and migrate to supported
+      alternatives before the auto-activation date.
+    source:
+      document: v40-summer17.pdf
+      page: 471
+      heading: Block Execution of JavaScript in the HYPERLINK Function (Critical Update)
+    confidence: high
+    id: v40-sharing-001
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: Tooling API requests at API version >= 40.0
+    summary: Flow-related errors returned by the Tooling API now use the
+      FLOW_EXCEPTION error code instead of UNKNOWN_EXCEPTION, and include
+      extendedErrorDetails with a specific extendedErrorCode and
+      formulaExpression fields for diagnostic context.
+    upgradeAction: Update error-handling code that parses Tooling API responses to
+      recognize FLOW_EXCEPTION and consume the new extendedErrorDetails
+      structure.
+    source:
+      document: v40-summer17.pdf
+      page: 478
+      heading: Get Extended Error Details for Flows in the Tooling API
+    confidence: high
+    id: v40-rest-005
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: Metadata API deployments made at API >= 40.0
+    summary: Permission set deployments now fully replace target org metadata
+      instead of merging with existing values. Deploying a permission set file
+      that omits a previously-enabled user permission will disable that
+      permission in the target org.
+    detail: Prior to v40, deploying retrieved permission set metadata merged the
+      deployment contents with the target org's existing permission set
+      configuration, leaving unmentioned permissions intact. From v40 onward,
+      the deployment payload is treated as the authoritative source, and any
+      permission absent from the file is removed.
+    upgradeAction: Audit CI/CD pipelines and deployment scripts to ensure permission
+      set metadata files are complete before deploying at API 40.0+. Retrieve
+      full permission sets rather than partial extracts, or explicitly include
+      all intended permissions to avoid unintended revocation.
+    source:
+      document: v40-summer17.pdf
+      page: 487
+      heading: Permission Set Metadata Behavior Change
+    confidence: high
+    id: v40-packaging-002
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: External object rows returned via SOSL or Salesforce searches now count
+      against a dedicated 100,000 rows/hour limit rather than the general 50,000
+      rows/hour retrieval limit, reducing the likelihood of hitting rate caps
+      during search operations.
+    source:
+      document: v40-summer17.pdf
+      page: 490
+      heading: New Rate Limit Applied to External Object Search Results
+    confidence: medium
+    id: v40-soql-004
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+      - ApexClass
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version (future release enforcement)
+    summary: External object records returned by SOSL and Salesforce searches will
+      receive temporary Salesforce IDs instead of permanent ones, meaning the
+      same external data row may have different record IDs across queries.
+    detail: This is a pre-announcement for a near-future change. Code or
+      integrations that cache or rely on external object record IDs remaining
+      stable across SOSL/search retrievals will break when enforcement occurs.
+    upgradeAction: Audit Apex, integrations, and third-party packages that store or
+      compare Salesforce record IDs for external objects retrieved via SOSL or
+      global search; refactor to use the external ID field instead.
+    source:
+      document: v40-summer17.pdf
+      page: 490
+      heading: Prepare for Temporary Salesforce IDs for External Object Records
+    confidence: medium
+    id: v40-soql-005
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexTrigger
+      - Flow
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version (Critical Update activation)
+    summary: When processes, workflow rules, or Apex triggers update a record that
+      also triggered an email notification (task assignment, case owner change,
+      user welcome, etc.), Salesforce previously suppressed those emails.
+      Activating this Critical Update restores the emails, which may cause
+      duplicates if you added workaround notifications.
+    upgradeAction: Audit workflows, processes, and triggers for supplemental email
+      alerts added to compensate for suppressed notifications. Remove those
+      workarounds before or after activating the update to prevent duplicate
+      emails reaching users.
+    source:
+      document: v40-summer17.pdf
+      page: 491
+      heading: Stop Automated Field Updates from Suppressing Email Notifications
+        (Critical Update)
+    confidence: high
+    id: v40-apex-004
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Profile password policies and session settings can now be retrieved and
+      deployed via the Metadata API, enabling programmatic access to security
+      configurations that previously required manual screenshots.
+    source:
+      document: v40-summer17.pdf
+      page: 495
+      heading: Export Profile Password Policies
+    confidence: high
+    id: v40-packaging-003
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: A new Apex method System.Site.getExperienceId() lets custom login pages
+      retrieve the Experience ID cookie value, enabling dynamic branding logic
+      based on user context such as employee vs customer flows.
+    source:
+      document: v40-summer17.pdf
+      page: 496
+      heading: Command Your Brand with Dynamic Branding
+    confidence: high
+    id: v40-auth-003
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce Identity URLs response now includes Tooling API REST and
+      SOAP endpoints in its urls array, allowing tools that discover available
+      services programmatically to enumerate Tooling API availability.
+    source:
+      document: v40-summer17.pdf
+      page: 498
+      heading: Require Identity Confirmation When Adding Two-Factor Authentication
+    confidence: medium
+    id: v40-rest-006
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: The loginURL query parameter is deprecated starting Winter '18.
+      Integrations using this parameter for authentication redirects should
+      migrate to supported alternatives.
+    upgradeAction: Audit code and integrations that pass loginURL as a query
+      parameter and update them to use the recommended authentication flow
+      before the parameter is removed.
+    source:
+      document: v40-summer17.pdf
+      page: 499
+      heading: Deprecating loginURL Query Parameter
+    confidence: medium
+    id: v40-auth-004
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce now reserves the path prefixes /id/, /idp/, and /saml/ for
+      authentication endpoints. Attempts to save site or community paths using
+      these prefixes will fail with an error.
+    detail: Existing sites using these prefixes continue to work but may conflict
+      with authentication endpoints. Salesforce recommends migrating away from
+      these prefixes to avoid issues with current or future identity provider
+      endpoints.
+    upgradeAction: Audit Experience Cloud sites and communities for paths starting
+      with /id/, /idp/, or /saml/. Rename any matching paths before they
+      conflict with Salesforce authentication routing.
+    source:
+      document: v40-summer17.pdf
+      page: 500
+      heading: Avoid Using Path Prefixes Reserved by Salesforce
+    confidence: high
+    id: v40-auth-005
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Connected apps using SAML with OAuth single sign-on now support IP
+      relaxation, matching the existing OAuth-only behavior. Additionally,
+      refresh token exchanges can bypass IP restrictions, allowing users to
+      continue sessions from outside restricted networks after initial
+      authentication.
+    detail: This extends IP bypass capabilities to SAML+OAuth connected apps
+      (including Salesforce1) and introduces the option to relax IP restrictions
+      during refresh token flows. Developers building integrations that rely on
+      strict IP enforcement during token refresh should verify their security
+      assumptions still hold.
+    upgradeAction: Review connected app configurations to ensure IP relaxation
+      settings align with your security requirements, particularly for apps
+      using SAML+OAuth or long-lived refresh tokens.
+    source:
+      document: v40-summer17.pdf
+      page: 502
+      heading: Streamline Connected App Access with Improved IP Relaxation
+    confidence: medium
+    id: v40-auth-006
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: queries against LoginEvent using API >= 40.0
+    summary: The Id field on LoginEvent is no longer populated starting in API
+      version 40.0; code must use the new UniqueKey field as the primary key
+      instead.
+    detail: Existing queries or integrations that reference LoginEvent.Id will
+      receive null values when running at API 40.0 or higher. Additionally,
+      historical LoginEvent data from prior releases may be temporarily
+      unavailable for up to 7 days after the Summer '17 release.
+    upgradeAction: Update all SOQL queries, Apex code, and external integrations
+      that reference LoginEvent.Id to use UniqueKey instead before upgrading to
+      API 40.0.
+    source:
+      document: v40-summer17.pdf
+      page: 511
+      heading: Use Async SOQL and UniqueKey for More Flexibility in Login Forensics
+    confidence: high
+    id: v40-soql-006
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The UI Tracking event type in Event Monitoring stops returning data in
+      Summer '17 and will be fully removed in Winter '18. Integrations pulling
+      this event type via the Event Monitoring REST API must migrate to the new
+      Lightning Experience event types.
+    upgradeAction: Audit any code or integrations querying EventLogFile for the
+      UITracking event type and migrate to the replacement Lightning Experience
+      event types before Winter '18.
+    source:
+      document: v40-summer17.pdf
+      page: 512
+      heading: Prepare Your Org for UI Tracking Event Type Retirement
+    confidence: high
+    id: v40-rest-007
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: Lightning components with API version >= 40.0
+    summary: LockerService security enforcement activates for any Lightning
+      component at API version 40.0 or higher, imposing JavaScript strict mode,
+      DOM access containment to same-namespace components, restricted global
+      references via secure wrappers, and access limited to supported framework
+      APIs only.
+    detail: Components below v40.0 remain exempt from LockerService. The enforcement
+      is purely version-based per component—a v39.0 component nested inside a
+      v40.0 parent still runs without LockerService. Managed package components
+      follow the same rules; the separate managed-package toggle was removed.
+    upgradeAction: Before bumping a component past v39.0, verify all JavaScript uses
+      strict-mode-compatible patterns, third-party libraries work under strict
+      mode, DOM traversal stays within your namespace, and code relies only on
+      published framework APIs. Test in sandbox with the API Viewer to confirm
+      SecureWindow/SecureDocument/SecureElement cover your needs.
+    source:
+      document: v40-summer17.pdf
+      page: 519
+      heading: LockerService Critical Update Activation
+    confidence: high
+    id: v40-aura-003
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide when critical updates are activated (sandbox/DE in Summer
+      '17, all orgs by Winter '19)
+    summary: Stricter Content Security Policy enforcement removes unsafe-inline and
+      unsafe-eval from script-src, breaking Lightning components that rely on
+      inline scripts or eval-based patterns.
+    detail: "Two critical updates decouple stricter CSP from LockerService. When
+      activated, inline scripts in Lightning components and community page head
+      markup become prohibited. Timeline: sandbox/DE orgs Summer '17, production
+      orgs Spring '18, mandatory enforcement Winter '19 (Oct 2018)."
+    upgradeAction: Audit Lightning components for inline script usage and eval
+      patterns. Test in sandbox with critical updates activated before Winter
+      '19 enforcement deadline. Remove inline scripts from community page head
+      markup.
+    source:
+      document: v40-summer17.pdf
+      page: 521
+      heading: Critical Updates for Stricter CSP Restrictions
+    confidence: high
+    id: v40-lwc-002
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version (Critical Update enforcement)
+    summary: Lightning components can no longer invoke non-global Apex controller
+      methods from managed packages. Cross-namespace calls now require the Apex
+      method to be marked global, not just public.
+    upgradeAction: Audit Lightning component code that calls Apex methods in managed
+      packages; any method not marked global will fail once the critical update
+      is enforced. Contact package vendors if you depend on their public-only
+      methods.
+    source:
+      document: v40-summer17.pdf
+      page: 523
+      heading: Disable Access to Non-global Apex Controller Methods in Managed
+        Packages (Critical Update)
+    confidence: high
+    id: v40-apex-005
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning components can now override View, New, Edit, and Tab standard
+      actions on objects in Lightning Experience and Salesforce1, using the
+      lightning:actionOverride interface. Unlike Visualforce overrides, these do
+      not affect Salesforce Classic.
+    detail: Components implementing lightning:actionOverride appear in the override
+      menu for any object and action, so developers must handle being invoked on
+      unexpected objects gracefully. Overridden actions always render as full
+      pages rather than panels. Lightning record pages take precedence over View
+      action overrides, and action overrides are silently ignored in Lightning
+      console apps.
+    source:
+      document: v40-summer17.pdf
+      page: 524
+      heading: Override Standard Actions with Lightning Components
+    confidence: high
+    id: v40-aura-004
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The force:recordPreview component is deprecated and replaced by
+      force:recordData. The new component returns records in a different
+      structure based on the User Interface API, requiring migration of any code
+      that reads the targetRecord attribute.
+    detail: The targetRecord attribute now returns data in the UI API shape with
+      nested fields objects containing displayValue and value properties, rather
+      than the previous flat structure. A new targetFields attribute provides
+      simplified field access (e.g., v.targetFields.Name instead of
+      v.targetRecord.fields.Name.value).
+    upgradeAction: Refactor components using force:recordPreview to
+      force:recordData. Update code that reads targetRecord to handle the new
+      nested UI API response shape, or switch to using the simpler targetFields
+      attribute.
+    source:
+      document: v40-summer17.pdf
+      page: 527
+      heading: Lightning Data Service (Beta)
+    confidence: high
+    id: v40-aura-005
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Calling cmp.get() on an invalid Aura component now returns null instead
+      of throwing an InvalidComponent error, and cmp.set() on an invalid
+      component silently does nothing.
+    detail: This aligns Aura with standard JavaScript patterns where invalid
+      references yield null rather than exceptions. Existing code that caught
+      InvalidComponent errors will no longer receive them; instead it must check
+      for null return values or use cmp.isValid().
+    upgradeAction: Review Aura controllers for try/catch blocks expecting
+      InvalidComponent errors and convert them to null checks. Ensure
+      asynchronous callbacks (setTimeout, Promises) either check cmp.isValid()
+      or handle null from cmp.get().
+    source:
+      document: v40-summer17.pdf
+      page: 530
+      heading: Streamlined Validity Checks for Components
+    confidence: high
+    id: v40-aura-006
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The force:hasSObjectName interface now works in quick actions and
+      standard action overrides, not just Lightning record pages. Components
+      implementing this interface in those contexts can now receive the current
+      record's sObject API name.
+    source:
+      document: v40-summer17.pdf
+      page: 530
+      heading: Use the force:hasSObjectName Interface with Quick Actions
+    confidence: high
+    id: v40-aura-007
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The force:createRecord event gains a defaultFieldValues attribute,
+      enabling Aura components to open the record create panel with fields
+      already filled in.
+    source:
+      document: v40-summer17.pdf
+      page: 531
+      heading: Use force:createRecord to Prepopulate Fields on the Record Create Panel
+    confidence: high
+    id: v40-aura-008
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The useAppcache attribute on <aura:application> is deprecated because
+      browser vendors have dropped AppCache support. Standalone Aura apps using
+      this attribute may encounter cross-browser issues.
+    upgradeAction: Remove the useAppcache attribute from any <aura:application> tags
+      in standalone .app resources to prevent browser compatibility problems.
+    source:
+      document: v40-summer17.pdf
+      page: 532
+      heading: Deprecated useAppcache Attribute in aura:application
+    confidence: high
+    id: v40-aura-009
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version (when LockerService is
+      enabled)
+    summary: LockerService no longer blocks the instanceof operator in JavaScript
+      except for array checks, where Array.isArray() must still be used because
+      Proxy objects do not support instanceof with native arrays.
+    upgradeAction: Review any workarounds you implemented to avoid instanceof under
+      LockerService; they can now be simplified. Ensure array-type checks use
+      Array.isArray() rather than instanceof Array.
+    source:
+      document: v40-summer17.pdf
+      page: 532
+      heading: Removed LockerService Restriction on instanceof in JavaScript
+    confidence: high
+    id: v40-lwc-003
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The langLocale attribute on ui:inputDate, ui:inputDateTime,
+      ui:outputDate, and ui:outputDateTime is deprecated. Validation now
+      restricts langLocale to values matching the user's Language or Locale
+      settings; mismatched values fall back to the user's Language setting.
+    upgradeAction: Remove explicit langLocale attribute usage from these UI
+      components and rely on the user's configured Language/Locale settings
+      instead. Test date/time formatting in components that previously set
+      langLocale to non-matching values.
+    source:
+      document: v40-summer17.pdf
+      page: 533
+      heading: New and Changed Lightning Components
+    confidence: high
+    id: v40-aura-010
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The aura:valueRender event is introduced as the recommended way to
+      detect when a component finishes rendering, replacing custom renderer
+      overrides.
+    source:
+      document: v40-summer17.pdf
+      page: 536
+      heading: New and Changed Lightning Events
+    confidence: medium
+    id: v40-aura-011
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The addHandler() method for dynamically attaching event handlers in
+      Aura components is deprecated; use Component.addEventHandler() instead.
+    upgradeAction: Replace any calls to addHandler() with the new addEventHandler()
+      method in your Aura component controllers, helpers, and renderers.
+    source:
+      document: v40-summer17.pdf
+      page: 537
+      heading: New JavaScript API Methods
+    confidence: high
+    id: v40-aura-012
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Einstein Vision API reaches general availability, providing image
+      classification and object detection endpoints with a prediction-call quota
+      (1,000 free monthly predictions). Authentication requires an Einstein
+      Platform account and JWT-based access tokens generated from a downloaded
+      private key.
+    source:
+      document: v40-summer17.pdf
+      page: 538
+      heading: Einstein Vision Is Now Generally Available
+    confidence: high
+    id: v40-rest-008
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version (enforced February 10, 2017)
+    summary: Clickjack protection for legacy browsers now extends to Visualforce
+      pages using showHeader="false" on API versions 26.0 and earlier,
+      potentially breaking pages that relied on being embeddable in frames.
+    upgradeAction: Review any Visualforce pages at API 26.0 or earlier with
+      showHeader="false" that are intentionally embedded in iframes; they may
+      now be blocked by clickjack protection.
+    source:
+      document: v40-summer17.pdf
+      page: 543
+      heading: Use Advanced PDF to Render Visualforce Pages as PDF Files (Pilot)
+    confidence: high
+    id: v40-vf-001
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: The sforce.one.createRecord JavaScript function gains a new optional
+      defaultFieldValues parameter that lets developers pre-fill fields
+      (including hidden ones) when opening the record-create panel in Lightning
+      Experience.
+    source:
+      document: v40-summer17.pdf
+      page: 544
+      heading: Prepopulate Fields on a Record Create Panel
+    confidence: high
+    id: v40-vf-002
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: A new VisualforceAccessMetrics object is now queryable via SOAP API,
+      enabling programmatic retrieval of daily page view counts for Visualforce
+      pages with 90-day retention.
+    source:
+      document: v40-summer17.pdf
+      page: 544
+      heading: Access Visualforce Page Metrics Using the SOAP API
+    confidence: high
+    id: v40-soap-001
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: JavaScript remoting calls to Apex remote actions now roll back all DML
+      when the method throws an exception, whereas previously the transaction
+      committed despite the error.
+    upgradeAction: Review Apex remote action methods that throw exceptions after
+      performing DML; any code relying on partial commits before an exception
+      must be refactored since transactions now fully roll back.
+    source:
+      document: v40-summer17.pdf
+      page: 545
+      heading: Roll Back Changes in Your Org When Remote JavaScript Methods Throw
+        Exceptions
+    confidence: high
+    id: v40-vf-003
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version (auto-activation
+      postponed to October 15, 2017)
+    summary: When CSRF protection is enabled on a Visualforce page's GET requests,
+      direct URL navigation and plain HTML anchor links stop working.
+      Controllers must return PageReference objects instead of raw URL strings,
+      and markup must use URLFOR(), $Page, or apex:outputLink to generate links
+      with the required token.
+    detail: This critical update from Spring '17 expands the 'Require CSRF
+      Protection on GET requests' checkbox beyond delete-action overrides. Once
+      activated org-wide, any page with this option enabled rejects requests
+      lacking a CSRF token. Apex controller methods returning String URLs for
+      navigation fail; they must return PageReference instances so the platform
+      can append the token automatically.
+    upgradeAction: Audit Visualforce pages with CSRF GET protection enabled. Replace
+      plain anchor hrefs with apex:outputLink, $Page, or URLFOR(). Refactor Apex
+      navigation methods to return PageReference instead of String URLs. Test
+      all inbound links before the October 2017 enforcement date.
+    source:
+      document: v40-summer17.pdf
+      page: 545
+      heading: Allow CSRF Protection on GET Requests to Visualforce Pages Critical
+        Update Postponed
+    confidence: high
+    id: v40-vf-004
+  - apiVersion: "40.0"
+    introducedIn: "26.0"
+    release: Summer '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version — enforced February
+      10, 2017 for all orgs
+    summary: Visualforce pages with showHeader="false" at API version 26.0 or
+      earlier now include clickjack protection markup for legacy browsers,
+      potentially breaking pages displayed in iframes.
+    detail: This critical update injects HTML and JavaScript for legacy browser
+      clickjack protection into Visualforce pages that previously omitted it.
+      Pages configured with showHeader="false" on API 26.0 or earlier that rely
+      on being embedded in third-party iframes may be blocked. The behavior is
+      tied to org-level session settings and Sites clickjack protection level
+      settings.
+    upgradeAction: Verify that Visualforce pages with showHeader="false" on API 26.0
+      or earlier still render correctly, especially those intentionally embedded
+      in iframes. Adjust clickjack protection settings or page configurations if
+      legitimate embedding is blocked.
+    source:
+      document: v40-summer17.pdf
+      page: 546
+      heading: Add Clickjack Protection for Legacy Browsers to Visualforce Pages
+        Without Page Header Is Now Enforced (Critical Update)
+    confidence: high
+    id: v40-vf-005
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning Design System CSS class naming switched from double-dash BEM
+      notation (.slds-block--modifier) to single-underscore notation
+      (.slds-block_modifier); the old syntax remains supported for 18 months
+      before removal.
+    detail: Double-dash notation conflicted with HTML comment syntax. Existing
+      stylesheets using the old class names continue to work during the
+      deprecation window but must be updated before backwards compatibility
+      ends.
+    upgradeAction: Search Visualforce, LWC, and Aura components for SLDS classes
+      using double-dash notation and migrate to single-underscore equivalents
+      before the 18-month grace period expires.
+    source:
+      document: v40-summer17.pdf
+      page: 546
+      heading: Lightning Design System
+    confidence: high
+    id: v40-vf-006
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce DX beta renames the project configuration file from
+      sfdx-workspace.json to sfdx-project.json, changes CLI command names (e.g.,
+      force:workspace:create becomes force:project:create), removes several CLI
+      parameters and commands, and switches JSON property naming to lower camel
+      case.
+    detail: "Key breaking changes: project file renamed, UseDecomposition parameter
+      removed (source transformation now default), scratch org definition
+      properties renamed (Company->orgName, Email->adminEmail),
+      FirstName/LastName/TemplateId properties dropped, -j short parameter for
+      JSON removed (use --json), and authorization shifts from Environment Hub
+      to Developer Hub for scratch org creation."
+    upgradeAction: Run force:project:upgrade to convert pilot JSON files to beta
+      format. Update any scripts or CI/CD pipelines that reference old CLI
+      command names, parameter names, or the old project filename. Verify
+      scratch org definition files use the new property names and orgPreferences
+      array syntax.
+    source:
+      document: v40-summer17.pdf
+      page: 555
+      heading: Beta Changes That Affect the Pilot Salesforce DX Environment
+    confidence: medium
+    id: v40-packaging-004
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex gains the ability to retrieve and deploy metadata programmatically
+      via new classes in the Metadata namespace, initially supporting custom
+      metadata records and page layouts.
+    detail: This extends the Apex language with native metadata manipulation
+      capabilities previously requiring external Metadata API calls. Packages
+      can now customize configuration during install/upgrade flows directly in
+      Apex. Delete operations are not supported through this interface.
+    source:
+      document: v40-summer17.pdf
+      page: 559
+      heading: Retrieve and Deploy Metadata in Apex
+    confidence: high
+    id: v40-apex-006
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Editing, deploying, or upgrading an Apex class now invalidates Platform
+      Cache entries, potentially causing cache misses where previously cached
+      data would have been returned.
+    detail: Any modification to an Apex class—whether via Setup, Developer Console,
+      Metadata API deployment, or package install/upgrade—now triggers cache
+      invalidation. Code that assumes cache entries persist across deployments
+      may experience unexpected misses.
+    upgradeAction: Review code relying on Platform Cache to ensure it handles cache
+      misses gracefully. Implement the Cache.CacheBuilder interface or follow
+      platform cache best practices to safely rebuild cache entries on miss.
+    source:
+      document: v40-summer17.pdf
+      page: 559
+      heading: Modifying an Apex Class Invalidates Platform Cache
+    confidence: high
+    id: v40-apex-007
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Platform Cache gains a new Cache.CacheBuilder interface that automates
+      cache-miss handling; implementing classes define a doLoad method that the
+      runtime invokes only when the requested key is absent.
+    source:
+      document: v40-summer17.pdf
+      page: 560
+      heading: Safely Cache Values with the New Cache Builder Interface
+    confidence: high
+    id: v40-apex-008
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Platform cache put and remove operations from the Cache namespace now
+      work inside Visualforce controller constructors and getter methods, where
+      they previously failed or were unsupported.
+    source:
+      document: v40-summer17.pdf
+      page: 560
+      heading: Cache Operations Supported in Visualforce Controllers
+    confidence: high
+    id: v40-apex-009
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Two new methods in System.Messaging let you extract attachments from
+      forwarded inbound emails and control attachment handling when rendering
+      stored email templates.
+    source:
+      document: v40-summer17.pdf
+      page: 561
+      heading: Handle Attachments Easily with New Messaging Methods
+    confidence: high
+    id: v40-apex-010
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide once the critical update is activated
+    summary: Lightning components outside a managed package namespace can no longer
+      invoke Apex controller methods that lack the global modifier. Previously
+      accessible public methods now throw errors when called across namespace
+      boundaries.
+    upgradeAction: Audit Lightning components that call Apex controllers from
+      installed packages; ensure all invoked methods are marked global in the
+      package. Replace calls to non-global methods with supported global
+      alternatives before activating this update.
+    source:
+      document: v40-summer17.pdf
+      page: 561
+      heading: Disable Access to Non-global Apex Controller Methods in Managed
+        Packages (Critical Update)
+    confidence: high
+    id: v40-packaging-005
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version (Critical Update enforcement)
+    summary: The POST method on the Tooling API's runTestsSynchronous endpoint now
+      requires the calling user to have View Setup permission, which was not
+      previously enforced.
+    upgradeAction: Ensure any integration users or connected apps invoking POST on
+      /tooling/runTestsSynchronous have the View Setup and Configuration
+      permission assigned before the critical update is activated.
+    source:
+      document: v40-summer17.pdf
+      page: 561
+      heading: POST Method for runTestsSynchronous Requires View Setup Permission
+        (Critical Update)
+    confidence: medium
+    id: v40-rest-009
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The Metadata namespace gains classes for reading and deploying custom
+      metadata, page layouts, and related components directly from Apex, plus
+      Wave namespace classes for building SAQL queries programmatically.
+    detail: Key additions include Metadata.Operations for executing metadata
+      retrieve/deploy operations, Metadata.CustomMetadata and
+      Metadata.DeployContainer for deploying custom metadata records, various
+      Layout-related classes for inspecting page layouts, and Wave.QueryBuilder
+      for constructing SAQL queries in code.
+    source:
+      document: v40-summer17.pdf
+      page: 562
+      heading: New Apex Classes
+    confidence: high
+    id: v40-apex-011
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: "Two new Apex interfaces arrive: Metadata.DeployCallback for handling
+      asynchronous metadata deployment results, and Cache.CacheBuilder for
+      safely generating cache values on miss. Both extend Apex's platform
+      integration capabilities."
+    source:
+      document: v40-summer17.pdf
+      page: 567
+      heading: New Apex Interfaces
+    confidence: high
+    id: v40-apex-012
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: VisualforceAccessMetrics object introduced, enabling programmatic
+      access to usage statistics for Visualforce pages—useful for identifying
+      which pages to migrate or retire.
+    source:
+      document: v40-summer17.pdf
+      page: 580
+      heading: New Objects
+    confidence: medium
+    id: v40-rest-010
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API requests at version >= 40.0
+    summary: The LoginEvent object's Id field is no longer populated starting in
+      v40.0; integrations must switch to using the new UniqueKey field as the
+      primary key for queries.
+    upgradeAction: Update any code querying LoginEvent to use UniqueKey instead of
+      Id as the primary key before upgrading API calls to v40.0+.
+    source:
+      document: v40-summer17.pdf
+      page: 581
+      heading: Changed Objects
+    confidence: low
+    id: v40-rest-011
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API requests at version >= 40.0
+    summary: QuoteLineItem.Product2Id becomes a required field at v40.0+ but cannot
+      be updated via API, affecting integrations that create or modify quote
+      line items.
+    upgradeAction: Ensure integrations creating QuoteLineItem records supply
+      Product2Id on insert and do not attempt to update it when calling v40.0+
+      APIs.
+    source:
+      document: v40-summer17.pdf
+      page: 581
+      heading: Changed Objects
+    confidence: low
+    id: v40-rest-012
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOSL WITH HIGHLIGHT clause now supports custom fields and custom
+      objects, allowing developers to highlight search terms in results from
+      custom schema elements.
+    source:
+      document: v40-summer17.pdf
+      page: 583
+      heading: WITH HIGHLIGHT Supports Custom Fields and Objects
+    confidence: high
+    id: v40-soql-007
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOSL gains a WITH SPELL_CORRECTION clause that lets developers
+      explicitly disable automatic spell correction on search queries by setting
+      it to false.
+    source:
+      document: v40-summer17.pdf
+      page: 584
+      heading: Disable Spell Correction on a Search Query with WITH SPELL_CORRECTION
+    confidence: high
+    id: v40-soql-008
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Search Suggested Records REST endpoint gains a useSearchScope
+      parameter that filters suggestions to the calling user's most frequently
+      used objects, reducing the need to explicitly enumerate object types in
+      each request.
+    source:
+      document: v40-summer17.pdf
+      page: 586
+      heading: "Changed Resource: Search Suggested Records"
+    confidence: medium
+    id: v40-rest-013
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: The setPassword() SOAP call can no longer be used for users to change
+      their own passwords; code must switch to the new changeOwnPassword() call
+      instead.
+    upgradeAction: Replace any setPassword() self-service password-change logic with
+      changeOwnPassword() before upgrading to Summer '17.
+    source:
+      document: v40-summer17.pdf
+      page: 586
+      heading: New and Changed Calls
+    confidence: high
+    id: v40-soap-002
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexTrigger
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Platform events reach general availability, enabling event-driven
+      messaging via Apex triggers and CometD/API subscribers for custom
+      notifications both within Salesforce and from external systems.
+    detail: Publishers can emit events through Apex or REST/SOAP APIs; subscribers
+      consume them via Apex triggers or CometD clients. Events are
+      non-transactional (cannot be rolled back) and retained for 24 hours with
+      replay capability. Edition-based hourly publish limits and daily CometD
+      delivery limits apply.
+    source:
+      document: v40-summer17.pdf
+      page: 601
+      heading: Deliver Custom Notifications with Platform Events (Generally Available)
+    confidence: high
+    id: v40-rest-014
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The Databinding.ObjectMapper class and its transform methods have been
+      deleted after deprecation in the prior release, so any Apex code still
+      referencing them will fail to compile or execute.
+    upgradeAction: Search for usages of Databinding.ObjectMapper and replace with
+      alternative JSON serialization approaches before upgrading.
+    source:
+      document: v40-summer17.pdf
+      page: 602
+      heading: Supported CometD Versions for Streaming API
+    confidence: high
+    id: v40-apex-013
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Streaming API now requires CometD client library version 3.0.9 or
+      newer; older CometD versions may exhibit undefined behavior or connection
+      failures.
+    upgradeAction: Audit all Streaming API clients and upgrade any CometD libraries
+      below 3.0.9 to a supported version.
+    source:
+      document: v40-summer17.pdf
+      page: 602
+      heading: Supported CometD Versions for Streaming API
+    confidence: high
+    id: v40-rest-015
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Tooling API and Metadata API now support an option to complete save
+      operations successfully while still returning warnings, rather than
+      failing the entire operation when warnings exist.
+    source:
+      document: v40-summer17.pdf
+      page: 603
+      heading: Warnings Returned from Successful Metadata Save Operations
+    confidence: medium
+    id: v40-rest-016
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Tooling API gains a composite resource at
+      /services/data/vXX.X/tooling/composite, allowing multiple operations in a
+      single HTTP request to reduce round trips.
+    source:
+      document: v40-summer17.pdf
+      page: 603
+      heading: Improve the Performance of Tools and Apps Built with Tooling API By
+        Using the Composite Resource
+    confidence: high
+    id: v40-rest-017
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: FieldDefinition gains IsSearchPrefilterable, letting developers check
+      whether a lookup field can serve as a SOSL WHERE prefilter before the full
+      search executes.
+    source:
+      document: v40-summer17.pdf
+      page: 603
+      heading: Tooling API New and Changed Objects
+    confidence: medium
+    id: v40-soql-009
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: retrievals using API >= 40.0
+    summary: PermissionSet metadata retrieval now returns all associated content
+      (Apex class assignments, object CRUD, field permissions, etc.) instead of
+      only app and system permissions. Packages and retrieval scripts may
+      receive substantially more data than before.
+    detail: Prior to v40.0, retrieving PermissionSet metadata returned only app and
+      system permissions; junction metadata like Apex class access and object
+      CRUD were included only when the related component was also in the package
+      definition. From v40.0 onward, all permission set content exposed in
+      Metadata API is retrieved unconditionally.
+    upgradeAction: Review deployment and CI scripts that parse or diff PermissionSet
+      metadata; expect larger payloads and adjust validation logic accordingly.
+    source:
+      document: v40-summer17.pdf
+      page: 604
+      heading: Metadata API
+    confidence: high
+    id: v40-packaging-006
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Lightning API has been renamed to User Interface API and its base
+      URL path changed from /lapi to /ui-api, requiring updates to any
+      integration code calling these endpoints.
+    upgradeAction: Update REST calls from /services/data/vXX/lapi/* to
+      /services/data/vXX/ui-api/* and rename any references to Lightning API in
+      documentation or code comments.
+    source:
+      document: v40-summer17.pdf
+      page: 609
+      heading: Lightning API Name Changed to User Interface API
+    confidence: high
+    id: v40-rest-018
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The User Interface API Object Info response now includes a
+      childRelationships property exposing metadata about an object's child
+      relationships, available from the record-ui, object-info, and
+      record-defaults/clone endpoints.
+    source:
+      document: v40-summer17.pdf
+      page: 611
+      heading: Object Info Response Body Includes Child Relationships
+    confidence: medium
+    id: v40-rest-019
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The User Interface API Record Exception Error response now returns
+      additional properties to help diagnose compound field errors and duplicate
+      record violations, including the constituent field name and detailed
+      duplicate matching results.
+    source:
+      document: v40-summer17.pdf
+      page: 612
+      heading: Record Exception Error Includes Information About Compound Fields and
+        Duplicate Records
+    confidence: medium
+    id: v40-rest-020
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Open CTI saveLog method no longer auto-refreshes records after
+      creation or update; callers must now explicitly invoke refreshView within
+      the callback to see updated data.
+    upgradeAction: Audit CTI integrations using saveLog and add a refreshView call
+      in the callback if your code depends on seeing fresh record state after
+      the save completes.
+    source:
+      document: v40-summer17.pdf
+      page: 615
+      heading: Open CTI API
+    confidence: high
+    id: v40-rest-021
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Custom Metadata Types now support Long Text Area fields (GA), allowing
+      storage of configuration strings exceeding the previous 255-character
+      limit for text fields.
+    source:
+      document: v40-summer17.pdf
+      page: 617
+      heading: Custom Metadata Types Support Long Text Areas (Generally Available)
+    confidence: high
+    id: v40-packaging-007
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new CHANNEL_ORDERS namespace introduces Apex classes for automating
+      partner order submission, editing, recall, and cloning, replacing the
+      legacy Partner Order Submit API.
+    detail: The new API requires Channel Order App v2.0+ and is available only to
+      eligible Salesforce partners. The legacy Partner Order Submit API remains
+      functional but will receive no further updates.
+    source:
+      document: v40-summer17.pdf
+      page: 620
+      heading: Automate Order Processing with the Channel Order Apex API
+    confidence: medium
+    id: v40-apex-014
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: ISVs can now programmatically read and write metadata from Apex code
+      via the new Metadata namespace, enabling apps to configure custom metadata
+      components during or after package installation.
+    source:
+      document: v40-summer17.pdf
+      page: 621
+      heading: Metadata Access in Apex
+    confidence: high
+    id: v40-apex-015
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide after critical update auto-activation
+    summary: Apex controller methods in managed packages that lack the global access
+      modifier become inaccessible to Lightning components outside the package
+      namespace once this critical update activates.
+    upgradeAction: Audit any Lightning components consuming managed-package Apex
+      controllers and verify they only invoke global methods; refactor or
+      contact the ISV if you depend on non-global methods.
+    source:
+      document: v40-summer17.pdf
+      page: 622
+      heading: Critical Updates
+    confidence: high
+    id: v40-apex-016
+  - apiVersion: "40.0"
+    release: Summer '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Flow
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide after critical update auto-activation
+    summary: Automated field updates from processes, workflow rules, and Apex
+      triggers no longer suppress system-generated email notifications (such as
+      task assignment emails) once this critical update is enabled.
+    upgradeAction: Review automation that previously relied on email suppression;
+      end users may receive notifications they did not before, so adjust
+      automation logic or user expectations accordingly.
+    source:
+      document: v40-summer17.pdf
+      page: 622
+      heading: Critical Updates
+    confidence: high
+    id: v40-apex-017

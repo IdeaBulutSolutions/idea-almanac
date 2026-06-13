@@ -1,0 +1,1135 @@
+apiVersion: "31.0"
+release: Summer '14
+reviewed: true
+entries:
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex tests running with SeeAllData=false can now create and insert
+      PricebookEntry records against the standard price book, removing a
+      long-standing test-isolation workaround requirement.
+    source:
+      document: v31-summer14.pdf
+      page: 8
+      heading: You Asked for It!
+    confidence: high
+    id: v31-apex-001
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Connected Apps experience modified API access controls, potentially
+      affecting how OAuth-based integrations authenticate and what data they can
+      reach.
+    upgradeAction: Review connected app configurations and test OAuth flows to
+      confirm integrations still have expected API access after the change.
+    source:
+      document: v31-summer14.pdf
+      page: 14
+      heading: General Enhancements
+    confidence: low
+    id: v31-auth-001
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Visualforce pages served to unauthenticated users can now leverage
+      caching, which may affect page behavior if your code assumed fresh data on
+      every guest request.
+    source:
+      document: v31-summer14.pdf
+      page: 17
+      heading: Communities
+    confidence: medium
+    id: v31-vf-001
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: The original Forecasts 1.0 (Classic) feature is completely retired as
+      of Summer '14, requiring any integrations or code depending on it to
+      migrate to Collaborative Forecasting.
+    upgradeAction: Identify any code, reports, or integrations that reference
+      Forecasts 1.0 APIs or objects and migrate them to the Collaborative
+      Forecasting equivalents before upgrading.
+    source:
+      document: v31-summer14.pdf
+      page: 17
+      heading: Sales
+    confidence: medium
+    id: v31-other-001
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Live Agent REST API gains new visitor resources, and a Search
+      Suggested Queries resource in the Knowledge REST API becomes generally
+      available.
+    source:
+      document: v31-summer14.pdf
+      page: 20
+      heading: Service
+    confidence: medium
+    id: v31-rest-001
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Cross-domain session exchanges now use POST requests instead of GET,
+      which may affect custom integrations that intercept or rely on the
+      previous GET-based exchange mechanism.
+    upgradeAction: Review any custom code or proxies that inspect cross-domain
+      authentication flows and ensure they handle POST requests for session
+      exchanges.
+    source:
+      document: v31-summer14.pdf
+      page: 26
+      heading: Security
+    confidence: medium
+    id: v31-auth-002
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Connected apps that previously bypassed user profile checks now enforce
+      the 'API Enabled' permission, so users without that permission lose access
+      to affected apps including Salesforce1 mobile, Salesforce for Outlook, and
+      partner integrations.
+    upgradeAction: Audit which users rely on affected connected apps and either
+      grant them the 'API Enabled' profile permission or notify them of access
+      loss before the Summer '14 upgrade.
+    source:
+      document: v31-summer14.pdf
+      page: 36
+      heading: API Access Change for Connected Apps
+    confidence: high
+    id: v31-auth-003
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: SOAP API gains describePrimaryCompactLayouts() call for retrieving
+      primary compact layout metadata across specified object types.
+    source:
+      document: v31-summer14.pdf
+      page: 82
+      heading: Salesforce1 App Development Overview
+    confidence: medium
+    id: v31-soap-001
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: REST API adds a Tabs resource returning all tabs including Flexible
+      Pages, and extends Compact Layouts resource to support bulk fetching up to
+      100 objects in a single request.
+    source:
+      document: v31-summer14.pdf
+      page: 82
+      heading: Salesforce1 App Development Overview
+    confidence: medium
+    id: v31-rest-002
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex code sending push notifications to Mobile SDK connected apps is
+      constrained to 10 method calls per transaction and 2,000 recipients per
+      call, with daily org limits varying by app type (35k for internal apps, 5k
+      for AppExchange apps).
+    source:
+      document: v31-summer14.pdf
+      page: 85
+      heading: Push Notification Limits
+    confidence: high
+    id: v31-apex-002
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: The identity URL response now includes a push_service_type field
+      indicating whether a connected app uses APNS (apple) or GCM (androidGcm)
+      for push notifications.
+    source:
+      document: v31-summer14.pdf
+      page: 86
+      heading: Check the Push Notification Service Type
+    confidence: high
+    id: v31-auth-004
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version (requires admin opt-in)
+    summary: Certain Chatter Apex methods for public groups, group feeds, and group
+      search can now be invoked by unauthenticated guest users when an admin
+      enables the setting, allowing developers to build public Visualforce pages
+      exposing community content.
+    source:
+      document: v31-summer14.pdf
+      page: 115
+      heading: Guest User Access to Public Chatter Groups Without Logging In
+    confidence: medium
+    id: v31-apex-003
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Unauthenticated Visualforce pages in community sites are now
+      server-cached by default (10 minutes), controllable via the cache and
+      expires page attributes.
+    detail: Previously only static resources were cached for community sites. Now
+      unauthenticated Visualforce pages are cached at the proxy layer.
+      Developers can override this by setting cache="false" or adjusting the
+      expires attribute on individual pages.
+    source:
+      document: v31-summer14.pdf
+      page: 116
+      heading: Other Changes in Communities
+    confidence: medium
+    id: v31-vf-002
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Forecasts 1.0 (Classic) has been fully retired and is no longer
+      accessible. Any integrations or code referencing Forecasts 1.0 API
+      endpoints or objects will cease to function.
+    upgradeAction: Migrate any existing Forecasts 1.0 integrations to Collaborative
+      Forecasts before this release. Review and update any Apex or API code that
+      queries or manipulates Forecasts 1.0 objects.
+    source:
+      document: v31-summer14.pdf
+      page: 127
+      heading: Forecasts 1.0 (Classic) is Retired in Summer '14
+    confidence: medium
+    id: v31-rest-003
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Territory Management 2.0 introduces nine new API objects for
+      programmatically managing territories, assigning records, and assigning
+      users.
+    source:
+      document: v31-summer14.pdf
+      page: 127
+      heading: Model, Manage, and Analyze Your Sales Territories with Territory
+        Management 2.0 (Beta)
+    confidence: medium
+    id: v31-rest-004
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Live Agent Deployment API gains addCustomDetail.doKnowledgeSearch,
+      enabling automated Knowledge article searches triggered by pre-chat form
+      data when a chat session begins.
+    source:
+      document: v31-summer14.pdf
+      page: 181
+      heading: "Live Agent Deployment API: New Methods"
+    confidence: medium
+    id: v31-rest-005
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Four new Live Agent REST API resources (Availability, Breadcrumb,
+      Settings, VisitorId) allow developers to customize chat visitor sessions
+      and track visitor navigation in mobile and web applications.
+    source:
+      document: v31-summer14.pdf
+      page: 181
+      heading: "Live Agent REST API: New Visitor Resources"
+    confidence: medium
+    id: v31-rest-006
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: HTML Area home page components now use a stricter rich text editor that
+      blocks JavaScript, CSS, iframes, and manual HTML entry. Components with
+      unsupported code will stop working in Summer '15 when the platform removes
+      that markup.
+    detail: Existing HTML Area components with advanced markup continue functioning
+      temporarily but are migrated to a legacy editor. Starting Summer '15, all
+      unsupported code (JS, CSS, iframes) will be stripped. Salesforce
+      recommends migrating to the new Visualforce Area component for any home
+      page content requiring scripts or custom markup.
+    upgradeAction: Audit HTML Area home page components for JavaScript, CSS, or
+      iframe usage. Migrate any components with restricted markup to Visualforce
+      Area components before Summer '15 to avoid breakage.
+    source:
+      document: v31-summer14.pdf
+      page: 207
+      heading: Home Page Components
+    confidence: high
+    id: v31-vf-003
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: "SOQL queries against ProcessInstance, ProcessInstanceNode,
+      ProcessInstanceStep, and ProcessInstanceWorkitem return incomplete data
+      for historical approval records: fields like CompletedDate, LastActorId,
+      and elapsed time values may be null depending on when the approval was
+      completed relative to the Summer '14 rollout."
+    detail: Approval processes completed before Summer '14 never have
+      ProcessInstanceNode, ProcessInstanceStep, or ProcessInstanceWorkitem data
+      populated. Approvals pending during rollout require subsequent action
+      before these child objects are populated. CompletedDate is permanently
+      null for instances completed before January 1, 2013. Elapsed time fields
+      remain zero for workitems whose corresponding steps existed pre-rollout.
+      Sandbox copies overwrite SubmittedDate and submitter fields with copy
+      metadata.
+    upgradeAction: Audit any integration or Apex code querying approval history
+      objects; add null-safety checks for CompletedDate, LastActorId, and
+      elapsed time fields when processing records that may predate Summer '14.
+    source:
+      document: v31-summer14.pdf
+      page: 218
+      heading: Considerations for Approval History Reports
+    confidence: high
+    id: v31-soql-001
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Trigger-ready flows now support Apex Plug-in elements but no longer
+      permit choice or dynamic choice resources; flows containing these
+      resources lose their trigger-ready status.
+    upgradeAction: Audit existing trigger-ready flows for choice or dynamic choice
+      resources and remove them before upgrading, or the flow will no longer be
+      launchable via Apex, workflow actions, or URLs.
+    source:
+      document: v31-summer14.pdf
+      page: 220
+      heading: Changes to Trigger-Ready Flows
+    confidence: high
+    id: v31-flow-001
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Flows can now traverse relationships from sObject variables to access
+      fields on related records using dot notation, enabling cross-object field
+      references without additional lookups.
+    detail: References follow the syntax {!sObjectVariable.RelatedObject.FieldName}.
+      If any intermediate relationship in the chain is null, the element fails
+      unless a fault path is defined. The final field being null does not cause
+      failure. These references do not count against cross-object relationship
+      limits or DML limits.
+    source:
+      document: v31-summer14.pdf
+      page: 223
+      heading: Cross-Object Field References in Flows
+    confidence: high
+    id: v31-flow-002
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (critical update with
+      auto-activation date)
+    summary: Flows now count against standard Apex governor limits for DML
+      statements and SOQL queries. Create/update/delete elements consume DML
+      limits, and lookup elements consume query limits.
+    detail: This critical update brings Flow execution under the same transactional
+      resource constraints as Apex. Flows invoked from workflow rules share
+      their transaction's limits. Screen-based flows start new transactions on
+      each Next click, resetting limits per screen.
+    upgradeAction: Test all flows before the auto-activation date to identify limit
+      violations. Consolidate multiple DML operations into single elements and
+      use Fast elements with sObject collections to batch operations on multiple
+      records.
+    source:
+      document: v31-summer14.pdf
+      page: 226
+      heading: Governor Limits Enforced on All Flows
+    confidence: high
+    id: v31-flow-003
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version
+    summary: Orgs can now opt into sending cross-domain session data via POST
+      instead of GET, keeping session tokens out of URLs and server logs when
+      users navigate between domains (e.g., Visualforce pages).
+    source:
+      document: v31-summer14.pdf
+      page: 233
+      heading: Cross-Domain Exchanges Switch to POST Requests
+    confidence: medium
+    id: v31-sharing-001
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: OAuth identity URL requests can now include a custom_permissions scope
+      parameter, which returns a map showing which custom permissions are
+      associated with the connected app and whether the current user has each
+      permission enabled.
+    detail: This feature is a Developer Preview as of Summer '14. The UI option to
+      configure this scope in connected app OAuth settings was not available
+      until July 2014. When the scope is included and the connected app has
+      associated custom permissions, the identity URL response includes a
+      custom_permissions object with boolean values for each permission.
+    source:
+      document: v31-summer14.pdf
+      page: 234
+      heading: Get Custom Permissions in the Identity URL Response
+    confidence: medium
+    id: v31-auth-005
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: OAuth token responses now return sfdc_community_id and
+      sfdc_community_url parameters when the authenticated user belongs to a
+      Salesforce community, enabling integrations to detect community context
+      from the auth flow.
+    source:
+      document: v31-summer14.pdf
+      page: 235
+      heading: Community ID and URL Values Included in OAuth Responses
+    confidence: high
+    id: v31-auth-006
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: An OAuth access token can now retrieve identity URLs for multiple users
+      within the same org, provided the token was obtained with 'full' or 'api'
+      scope and belongs to a user with 'API Enabled' permission.
+    detail: Previously, an access token was limited to retrieving only the identity
+      URL returned in the original token response. This change allows broader
+      identity URL access when scope and permission requirements are satisfied,
+      which may affect security assumptions in multi-user integrations.
+    upgradeAction: Review integrations that assume access tokens cannot retrieve
+      other users' identity URLs; if your security model relied on that
+      isolation, add explicit authorization checks.
+    source:
+      document: v31-summer14.pdf
+      page: 236
+      heading: New Conditions for Access To Multiple Identity URLs With One Access Token
+    confidence: medium
+    id: v31-auth-007
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce now exposes an OpenID Connect discovery endpoint at
+      /.well-known/openid-configuration, allowing OAuth clients to
+      programmatically retrieve authorization endpoints, supported scopes, and
+      signing algorithms without hardcoding these values.
+    source:
+      document: v31-summer14.pdf
+      page: 236
+      heading: OpenID Connect Discovery Endpoint Added
+    confidence: high
+    id: v31-auth-008
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Microsoft Access Control Service can now serve as an OAuth
+      authentication provider, enabling integrations with Office 365 services
+      like SharePoint Online. The generated Auth Provider Id can be used with
+      the Auth.AuthToken Apex class for token management.
+    source:
+      document: v31-summer14.pdf
+      page: 238
+      heading: Microsoft Authentication Provider Support
+    confidence: high
+    id: v31-auth-009
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: The DISTANCE() formula function and SOQL WHERE/ORDER BY DISTANCE()
+      clauses now accept compound address fields in addition to geolocation
+      fields, enabling address-based proximity queries without extracting
+      latitude/longitude separately.
+    source:
+      document: v31-summer14.pdf
+      page: 244
+      heading: Other Changes in Force.com Customization
+    confidence: high
+    id: v31-soql-002
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Sandbox creation and refresh now automatically copies connected apps
+      installed via packages, but org-created connected apps still require
+      manual recreation after sandbox copy or refresh.
+    detail: When refreshing or creating sandboxes, packaged connected apps (e.g.,
+      from AppExchange) are now included automatically. Connected apps created
+      directly in the production org are not copied and must be deleted and
+      recreated manually in the sandbox to match production configuration.
+    upgradeAction: "Review sandbox refresh procedures: verify packaged connected app
+      OAuth flows work post-refresh, and update runbooks to include manual
+      recreation steps for org-created connected apps."
+    source:
+      document: v31-summer14.pdf
+      page: 247
+      heading: Packaged Connected Apps Copied to Sandboxes
+    confidence: medium
+    id: v31-auth-010
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The Force.com Migration Tool now honors the rollbackOnError setting in
+      build.xml instead of always defaulting to true, meaning deployments to
+      non-production orgs can now proceed partially if you explicitly set it to
+      false.
+    upgradeAction: Review your build.xml files to ensure rollbackOnError is
+      explicitly set to your intended value, since the tool no longer ignores
+      this parameter. Production deployments still require true.
+    source:
+      document: v31-summer14.pdf
+      page: 249
+      heading: Force.com Migration Tool Support for rollbackOnError
+    confidence: high
+    id: v31-packaging-001
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Canvas apps embedded via <apex:canvasApp> can now request specific
+      object fields in the signed request by setting the new entityFields
+      attribute, rather than receiving only the record Id.
+    source:
+      document: v31-summer14.pdf
+      page: 250
+      heading: entityFields Attribute Added to <apex:canvasApp>
+    confidence: high
+    id: v31-vf-004
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: Canvas apps can now subscribe to a new orientation event that fires
+      when a mobile device rotates, providing updated dimensions and orientation
+      angle to help responsive layouts adjust.
+    source:
+      document: v31-summer14.pdf
+      page: 253
+      heading: Orientation Event for Handling Mobile Device Orientation
+    confidence: medium
+    id: v31-other-002
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Canvas apps using signed request authentication can now
+      programmatically request fresh signed request data via new SDK methods
+      refreshSignedRequest() and repost(), enabling session refresh and
+      post-redirect re-authentication without reloading the entire app.
+    source:
+      document: v31-summer14.pdf
+      page: 255
+      heading: Request a Signed Request On Demand
+    confidence: high
+    id: v31-auth-011
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Canvas apps using signed request authentication can now support user
+      self-authorization, previously only available with OAuth. Apps must handle
+      both GET and POST requests depending on whether the user has already
+      approved access.
+    upgradeAction: If implementing self-authorization for signed request canvas
+      apps, update your web application to handle GET requests with the
+      _sfdc_canvas_authvalue parameter and initiate OAuth approval flow when
+      user_approval_required is received.
+    source:
+      document: v31-summer14.pdf
+      page: 256
+      heading: Signed Request Canvas Apps Can Be User-Approved
+    confidence: high
+    id: v31-auth-012
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Canvas apps can now integrate SAML-based SSO flows, allowing developers
+      to chain SAML authentication with signed request or OAuth authorization
+      for seamless user login.
+    detail: New SDK methods refreshSignedRequest and repost let canvas apps obtain
+      fresh signed requests after SAML authentication completes. Connected App
+      configuration gains a SAML Initiation Method field to control whether
+      Salesforce or the canvas app initiates the SSO flow.
+    source:
+      document: v31-summer14.pdf
+      page: 257
+      heading: SAML Single Sign-On for Canvas Apps
+    confidence: high
+    id: v31-auth-013
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Canvas apps can now implement a custom Apex lifecycle handler via the
+      CanvasLifecycleHandler interface, enabling server-side control over
+      context data sent to the app and custom rendering behavior.
+    source:
+      document: v31-summer14.pdf
+      page: 257
+      heading: Custom App Lifecycle
+    confidence: medium
+    id: v31-apex-004
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+      - ApexClass
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Remote Objects operations (create, retrieve, update, del) can now be
+      overridden with custom @RemoteAction Apex methods, allowing developers to
+      extend or replace built-in controller behavior.
+    detail: Override methods must follow a specific signature and can delegate to
+      RemoteObjectController for default behavior. Custom controllers run in
+      system mode by default, so using 'with sharing' is recommended to enforce
+      security.
+    source:
+      document: v31-summer14.pdf
+      page: 262
+      heading: Overriding Default Remote Objects Operations
+    confidence: high
+    id: v31-vf-005
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: Visualforce pages compiled at API >= 31.0 when used in Salesforce1 apps
+    summary: The sforce.one JavaScript navigation utility now tracks the Visualforce
+      page's API version and delivers version-specific behavior, so bumping a
+      page's version may alter how sforce.one functions behave.
+    detail: Prior to 31.0, sforce.one was unversioned; all pre-31.0 versions behave
+      identically to 31.0. From 31.0 onward, updating a page's API version
+      automatically updates the sforce.one behavior it receives. Developers can
+      pin a specific version using sforce.one.getVersion() if newer behavior
+      causes issues.
+    upgradeAction: When upgrading a Visualforce page past 31.0, test Salesforce1
+      navigation flows. If sforce.one behavior regresses, either fix the code,
+      revert the page version, or explicitly request an older sforce.one version
+      via getVersion().
+    source:
+      document: v31-summer14.pdf
+      page: 267
+      heading: API Versioning for sforce.one Functions
+    confidence: high
+    id: v31-vf-006
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: Visualforce pages compiled at API >= 31.0
+    summary: A new invokeAfterAction attribute on apex:dynamicComponent lets the
+      component creation method run after page action methods complete, enabling
+      dynamic components to depend on initialization results or callout data.
+    source:
+      document: v31-summer14.pdf
+      page: 270
+      heading: Deferred Creation of Dynamic Components
+    confidence: high
+    id: v31-vf-007
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: Visualforce pages set to API >= 31.0
+    summary: The markerFill and fillColor attributes on <apex:lineSeries> now
+      correctly inherit from strokeColor when not explicitly set, fixing a bug
+      where manually-specified strokeColor values were not propagated to markers
+      and fill.
+    upgradeAction: Review any <apex:lineSeries> charts that explicitly set
+      markerFill or fillColor to values different from strokeColor; after
+      upgrading past 31.0, those explicit values still apply, but charts relying
+      on the old buggy behavior (mixed colors) will now show uniform colors.
+    source:
+      document: v31-summer14.pdf
+      page: 273
+      heading: <apex:lineSeries> markerFill and fillColor Attributes Default to
+        strokeColor
+    confidence: high
+    id: v31-vf-008
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+      - Integration
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version (critical update with
+      scheduled activation date)
+    summary: Visualforce now generates and manages session IDs differently to handle
+      cross-server transitions more reliably. Custom integrations that parse or
+      depend on specific session ID values may break.
+    upgradeAction: Review any custom integration code that captures or manipulates
+      Visualforce session IDs. Test in sandbox before the critical update
+      activates in production.
+    source:
+      document: v31-summer14.pdf
+      page: 273
+      heading: Enhanced Session ID Management for Visualforce
+    confidence: high
+    id: v31-vf-009
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: All governor limits on Apex describe calls (sObjects, fields, field
+      sets, child relationships, picklists, record types) have been eliminated.
+      The 100-object and 100-statement caps no longer apply.
+    detail: Methods like describeSObjects, fields, fieldSets, getChildRelationships,
+      and getRecordTypeInfos are now unbounded. The Limits class methods that
+      tracked describe consumption (e.g., getFieldsDescribes,
+      getLimitFieldsDescribes) are removed for API 31.0+ and deprecated for API
+      30.0 and earlier.
+    upgradeAction: Remove any defensive code that batched describe calls or checked
+      describe limits. If your code calls the removed Limits methods
+      (getFieldsDescribes, getLimitFieldsDescribes, etc.), delete those calls
+      when targeting API 31.0+; on older versions they still exist but return
+      meaningless values.
+    source:
+      document: v31-summer14.pdf
+      page: 274
+      heading: Describe Limits Removed
+    confidence: high
+    id: v31-apex-005
+  - apiVersion: "31.0"
+    introducedIn: "30.0"
+    release: Summer '14
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: Apex classes and triggers compiled at API >= 31.0
+    summary: The Limits class methods for script statement tracking
+      (getLimitPicklistDescribes, getLimitRecordTypesDescribes, and related
+      methods) are removed starting in API 31.0. They remain available but
+      deprecated in API 30.0 and earlier.
+    detail: Since the script statement limit itself stopped being enforced in Winter
+      '14, these Limits methods no longer serve a purpose. Code referencing them
+      will fail to compile at API 31.0+.
+    upgradeAction: Remove any calls to script-statement Limits methods
+      (getLimitPicklistDescribes, getLimitRecordTypesDescribes, etc.) before
+      upgrading classes past API 30.0.
+    source:
+      document: v31-summer14.pdf
+      page: 275
+      heading: Script Statement Limits Methods Removed
+    confidence: high
+    id: v31-apex-006
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex tests can now create price book entries without requiring
+      SeeAllData=true. The new Test.getStandardPricebookId() method returns the
+      standard price book ID, enabling isolated test data for price book
+      scenarios.
+    upgradeAction: Refactor existing tests that use SeeAllData=true solely for price
+      book access to use Test.getStandardPricebookId() instead, improving test
+      isolation.
+    source:
+      document: v31-summer14.pdf
+      page: 275
+      heading: Create Price Book Entries in Apex Tests
+    confidence: high
+    id: v31-apex-007
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: Apex code calling ConnectApi methods at API >= 31.0
+    summary: Chatter feeds now return feed elements instead of feed items starting
+      in v31.0. Feed elements use a capabilities model where features like
+      likes, comments, and topics are only available when the corresponding
+      capability property exists on the element.
+    detail: The ConnectApi namespace introduces FeedElement as the new abstract
+      parent class (with FeedItem and Bundle as concrete subclasses). Code using
+      getFeedItem/postFeedItem methods should migrate to
+      getFeedElement/postFeedElement for forward compatibility. The
+      capabilities-based model replaces the previous assumption that all feed
+      items support comments, likes, and topics uniformly.
+    upgradeAction: When upgrading past 31.0, refactor ConnectApi code to use
+      getFeedElement/postFeedElement methods and check for capability properties
+      before accessing features like likes or comments on feed elements.
+    source:
+      document: v31-summer14.pdf
+      page: 283
+      heading: New and Changed Chatter in Apex Classes
+    confidence: high
+    id: v31-apex-008
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: components compiled at API >= 31.0
+    summary: The ConnectApi.FeedItem class now extends ConnectApi.FeedElement,
+      moving properties like body, createdDate, id, modifiedDate, parent,
+      relativeDate, and url to the parent class. The moderationFlags property is
+      removed and replaced by the ModerationCapability object accessed through
+      capabilities. The preamble property is renamed to header on FeedElement.
+    upgradeAction: Update Apex code referencing ConnectApi.FeedItem.moderationFlags
+      to use ConnectApi.FeedElement.capabilities.moderation.moderationFlags
+      instead. Replace references to preamble with header. Verify code accessing
+      moved properties still compiles correctly.
+    source:
+      document: v31-summer14.pdf
+      page: 291
+      heading: New and Changed Chatter in Apex Output Classes
+    confidence: high
+    id: v31-apex-009
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: AccountTerritoryAssignmentRuleItem records can now be created or
+      deleted via the API when the parent rule's BooleanFilter is null, removing
+      a previous restriction that affected all API versions.
+    upgradeAction: Review any integration logic that assumed
+      AccountTerritoryAssignmentRuleItem creation/deletion would fail when
+      BooleanFilter is null; this now succeeds.
+    source:
+      document: v31-summer14.pdf
+      page: 300
+      heading: Changed Objects
+    confidence: high
+    id: v31-soap-002
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: API requests made at version >= 31.0
+    summary: "The editable field on DescribeLayoutItem was removed and replaced with
+      two separate fields: editableForNew (controls editability when creating
+      records) and editableForUpdate (controls editability when updating
+      records)."
+    detail: Code parsing describeLayout() responses that relied on the single
+      editable field will break. The replacement fields provide more granular
+      control but require updating any integration code that checks editability.
+    upgradeAction: Update integrations consuming describeLayout() responses to read
+      editableForNew and editableForUpdate instead of editable. Test
+      layout-aware UIs to ensure create vs. edit editability logic works
+      correctly.
+    source:
+      document: v31-summer14.pdf
+      page: 305
+      heading: SOAP API
+    confidence: low
+    id: v31-soap-003
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: When a Chatter REST API request includes both URL query parameters and
+      a JSON request body, resource-specific query parameters are silently
+      discarded and only the body is processed.
+    detail: Parameters like originalFeedElementId in the query string are ignored if
+      you also send a request body. Only non-resource-specific parameters
+      (bearer tokens, _HttpMethod) are honored alongside the body.
+    upgradeAction: Audit integrations that POST to Chatter endpoints with both query
+      parameters and request bodies; move any required values into the JSON body
+      to ensure they are processed.
+    source:
+      document: v31-summer14.pdf
+      page: 307
+      heading: General Updates to Chatter REST API
+    confidence: medium
+    id: v31-rest-007
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Tooling API's ContainerAsyncRequest object replaces the CompilerErrors
+      field with a new DeployDetails field that provides richer error
+      information including line numbers and component names.
+    upgradeAction: Update any custom tooling or IDE integrations that read the
+      CompilerErrors field from ContainerAsyncRequest responses to use
+      DeployDetails instead.
+    source:
+      document: v31-summer14.pdf
+      page: 326
+      heading: Tooling API
+    confidence: medium
+    id: v31-rest-008
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The upsertMetadata() call is now available, allowing synchronous
+      create-or-update of metadata components matched by fullname in a single
+      operation.
+    source:
+      document: v31-summer14.pdf
+      page: 326
+      heading: Metadata API Calls
+    confidence: high
+    id: v31-packaging-002
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: API requests made against endpoint version 31.0 or later
+    summary: The legacy Metadata API calls create(), update(), delete(), and
+      checkStatus() are removed starting in v31.0. Clients calling these against
+      the v31+ endpoint will fail.
+    upgradeAction: Replace create/update/delete with the synchronous CRUD
+      equivalents (createMetadata, updateMetadata, deleteMetadata) introduced
+      earlier. Replace checkStatus() in retrieve workflows with
+      checkRetrieveStatus() polling only.
+    source:
+      document: v31-summer14.pdf
+      page: 326
+      heading: Metadata API Calls
+    confidence: low
+    id: v31-packaging-003
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: changed
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: AsyncResult fields (done, message, state, statusCode) are deprecated in
+      favor of RetrieveResult for retrieve operations. Only the id field remains
+      active.
+    upgradeAction: Migrate code that reads AsyncResult status fields to use
+      RetrieveResult.status, RetrieveResult.done, and related fields instead
+      when calling retrieve().
+    source:
+      document: v31-summer14.pdf
+      page: 327
+      heading: Metadata Types and Fields
+    confidence: high
+    id: v31-soap-004
+  - apiVersion: "31.0"
+    release: Summer '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: PackageLicense and UserPackageLicense objects are now exposed as
+      queryable and writable standard objects via the API, enabling programmatic
+      bulk assignment and revocation of managed package licenses.
+    source:
+      document: v31-summer14.pdf
+      page: 346
+      heading: Assign Package Licenses Using the API
+    confidence: high
+    id: v31-rest-009

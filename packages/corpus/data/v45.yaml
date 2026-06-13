@@ -1,0 +1,1542 @@
+apiVersion: "45.0"
+release: Spring '19
+reviewed: true
+entries:
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: Tooling API requests at API version >= 45.0
+    summary: Several Tooling API metadata objects now require View Setup and
+      Configuration permission. Users without this permission can no longer
+      query ColorDefinition, FormulaFunction, FormulaFunctionCategory,
+      FormulaOperator, IconDefinition, or TabDefinition.
+    upgradeAction: Verify that integrations querying these Tooling API objects have
+      the View Setup and Configuration permission assigned, or handle permission
+      errors gracefully.
+    source:
+      document: v45-spring19.pdf
+      page: 12
+      heading: Release Note Changes
+    confidence: high
+    id: v45-rest-001
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex method parameters in Lightning components now undergo stricter
+      validation and deserialization. Data passed to Apex controllers is more
+      rigorously type-checked before method invocation.
+    upgradeAction: Test Lightning component interactions with Apex controllers to
+      ensure parameter data types conform to method signatures, particularly for
+      edge cases involving type coercion.
+    source:
+      document: v45-spring19.pdf
+      page: 12
+      heading: Release Note Changes
+    confidence: medium
+    id: v45-apex-001
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning web components can now be deployed to the utility bar by
+      declaring the lightning__UtilityBar target in the component's metadata
+      configuration file. Note that utility bar LWCs cannot yet use APIs or run
+      as background utilities.
+    source:
+      document: v45-spring19.pdf
+      page: 76
+      heading: Use Lightning Web Components in the Utility Bar
+    confidence: high
+    id: v45-lwc-001
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version; auto-activated
+      October 30, 2019
+    summary: AccountShare records switch from the TerritoryManual reason code to
+      Territory2AssociationManual for manual territory assignments, breaking any
+      Apex or integrations that filter or query on the old value.
+    detail: This Critical Update replaces all existing TerritoryManual reason codes
+      with Territory2AssociationManual and uses the new code going forward. The
+      change is irreversible once activated and propagates across existing
+      records.
+    upgradeAction: Search Apex code and integrations for references to the
+      TerritoryManual reason code on AccountShare and replace with
+      Territory2AssociationManual before the auto-activation date.
+    source:
+      document: v45-spring19.pdf
+      page: 115
+      heading: Enable Manual Account Sharing in Enterprise Territory Management
+        (Critical Update)
+    confidence: high
+    id: v45-sharing-001
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Original Territory Management is fully retired in Summer '20, meaning
+      any integrations or Apex code referencing its objects (Territory,
+      AccountTerritoryAssignmentRule, UserTerritory, etc.) or API endpoints will
+      cease to function.
+    detail: After retirement, the feature and its underlying data become
+      inaccessible. Organizations must migrate to Enterprise Territory
+      Management before Summer '20 to preserve territory-based logic in custom
+      code or integrations.
+    upgradeAction: Audit Apex, SOQL queries, and API integrations for references to
+      original territory management objects; migrate to Enterprise Territory
+      Management objects and APIs before the Summer '20 release.
+    source:
+      document: v45-spring19.pdf
+      page: 118
+      heading: Original Territory Management Is Being Retired
+    confidence: high
+    id: v45-rest-002
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+      - Flow
+    behaviorArea: api-rest
+    appliesWhen: org-wide for orgs created in Spring '19 or later
+    summary: Organizations provisioned from Spring '19 onward now count email
+      alerts, simple email actions, Send Email flow actions, and REST API calls
+      against the 5,000 daily external email cap. Older orgs remain limited only
+      for Apex and non-REST API sends.
+    detail: This is an org-creation-date-based enforcement change, not a component
+      version change. Pre-Spring '19 orgs keep the legacy counting (Apex and
+      SOAP/Bulk API only). New orgs hitting the limit receive an email
+      notification and a debug log entry.
+    upgradeAction: For new orgs or sandbox refreshes post-Spring '19, audit total
+      external email volume across flows, email alerts, and REST API
+      integrations to avoid hitting the combined 5,000/day ceiling.
+    source:
+      document: v45-spring19.pdf
+      page: 132
+      heading: Expanded Enforcement of Daily External Email Limit for New Orgs
+    confidence: high
+    id: v45-rest-003
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: Connect for Office (Excel and Word add-ons) along with standard Mail
+      Merge functionality have been fully retired and are no longer available
+      for use.
+    upgradeAction: Migrate any workflows relying on Connect for Office or standard
+      Mail Merge to alternative solutions documented in Salesforce's product
+      retirement resources.
+    source:
+      document: v45-spring19.pdf
+      page: 156
+      heading: Connect for Office
+    confidence: medium
+    id: v45-other-001
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning Web Components become generally available as a new component
+      model, enabling developers to build custom elements using standard HTML
+      and modern JavaScript that can coexist with Aura components on community
+      pages.
+    source:
+      document: v45-spring19.pdf
+      page: 305
+      heading: Use Custom Lightning Web Components in Communities
+    confidence: high
+    id: v45-lwc-002
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The lightning:container component can now be used within Lightning
+      Communities, enabling developers to embed third-party JavaScript framework
+      applications (React, Angular, Vue) in community pages.
+    source:
+      document: v45-spring19.pdf
+      page: 305
+      heading: Get More Use Out of Your Code with Lightning Container Components in
+        Communities
+    confidence: high
+    id: v45-aura-001
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version
+    summary: A new org-wide setting lets admins disable the default sharing behavior
+      that gives case contacts (and their role hierarchy) automatic access to
+      cases. When disabled, developers must implement manual shares or Apex
+      managed sharing to grant case access to community users.
+    upgradeAction: If this setting is disabled in your org, review any community
+      user workflows that assume contacts can see their associated cases and
+      implement explicit sharing via Apex managed sharing or manual shares where
+      needed.
+    source:
+      document: v45-spring19.pdf
+      page: 321
+      heading: Restrict Community User Access to Cases (Generally Available)
+    confidence: high
+    id: v45-sharing-002
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: When the _iframeDomain URL variable is missing in Internet Explorer,
+      the platform now falls back to checking an iframeDomain cookie to
+      determine allowed iframe embedding domains, enabling a workaround for IE's
+      URL variable persistence issues.
+    detail: Developers embedding Visualforce pages in iframes for Communities/Sites
+      can now set an iframeDomain cookie via the Apex Cookie class to whitelist
+      framing domains. This provides a fallback when IE fails to preserve the
+      _iframeDomain URL parameter across page navigations.
+    upgradeAction: If your Communities or Sites embed Visualforce pages in iframes
+      and you support Internet Explorer users, implement the iframeDomain cookie
+      pattern shown in the release notes to ensure consistent iframe behavior.
+    source:
+      document: v45-spring19.pdf
+      page: 322
+      heading: Set the iframeDomain Cookie in Sites and Communities in Internet Explorer
+    confidence: medium
+    id: v45-vf-001
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+      - ApexClass
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Community identity verification pages can now be fully customized using
+      Visualforce markup and new Apex methods, replacing the
+      Salesforce-generated form while retaining verification functionality.
+    source:
+      document: v45-spring19.pdf
+      page: 323
+      heading: Create Your Own Verify Page for Community Sign-Ups
+    confidence: medium
+    id: v45-vf-002
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: The $Site.AdminEmailAddress merge field stops returning the Site
+      Contact email and instead returns an empty string. Code relying on this
+      field must switch to a SOQL query against the Site object to retrieve the
+      admin email.
+    upgradeAction: Search Visualforce pages and components for
+      $Site.AdminEmailAddress references. Replace them with an Apex controller
+      method that queries SELECT Admin.Email FROM Site WHERE Id =
+      :Site.getSiteId() and exposes the result.
+    source:
+      document: v45-spring19.pdf
+      page: 324
+      heading: $Site.AdminEmailAddress to Be Deprecated in Summer '19
+    confidence: high
+    id: v45-vf-003
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Asset files in managed packages can now be updated and republished,
+      with automatic propagation to subscriber orgs. However,
+      ContentDocumentLink shares on existing assets cannot be updated through
+      the package—only new shares can be added.
+    detail: This changes the immutability model for asset files in managed packages.
+      Developers can now version asset file documents in the developer org with
+      automatic delivery to subscribers. The sharing limitation via
+      ContentDocumentLink means integrations that relied on packaging to
+      distribute share configurations for assets need adjustment.
+    source:
+      document: v45-spring19.pdf
+      page: 330
+      heading: Update Asset Files in Managed Packages
+    confidence: medium
+    id: v45-packaging-001
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The Flow metadata type gains an isTemplate field (Metadata API) and
+      IsTemplate field (Tooling API), enabling processes and flows to be marked
+      as clonable templates that can be opened even when installed from managed
+      packages.
+    source:
+      document: v45-spring19.pdf
+      page: 370
+      heading: Create or Install Pre-Built Business Processes That You Can Customize
+    confidence: high
+    id: v45-packaging-002
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Flows and processes can now perform lookup, create, and update
+      operations on Salesforce Connect external objects, enabling automation
+      that spans internal and external data sources within a single flow.
+    source:
+      document: v45-spring19.pdf
+      page: 372
+      heading: Access Data Outside Salesforce with Processes and Flows via External
+        Objects
+    confidence: medium
+    id: v45-flow-001
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: External Services schemas no longer reject variable names that match
+      Apex reserved keywords like 'end', 'number', 'object', or 'transaction',
+      removing previous naming restrictions when importing external API
+      definitions.
+    source:
+      document: v45-spring19.pdf
+      page: 398
+      heading: Include Reserved Apex Names in External Services Schema
+    confidence: high
+    id: v45-rest-004
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version (critical update
+      auto-enabled May 17, 2019)
+    summary: Lightning components must prefix all pageReference.state properties and
+      URL query parameters with a namespace (registered or the default 'c__');
+      unprefixed parameters are stripped from /lightning/ URLs.
+    detail: This critical update resolves naming collisions between package
+      components by requiring namespace prefixes on custom query parameters.
+      Components lacking the prefix will have those parameters silently removed
+      from URLs. Visualforce, Salesforce Classic, Communities, and standard
+      report parameters are unaffected.
+    upgradeAction: Audit all Lightning components that read or write
+      pageReference.state or custom query parameters. Add your registered
+      namespace or the default 'c__' prefix. Test navigation flows involving
+      /lightning/ URLs both inside and outside managed packages.
+    source:
+      document: v45-spring19.pdf
+      page: 398
+      heading: Add a Namespace Prefix to pageReference.state Properties and Query
+        Parameters
+    confidence: high
+    id: v45-lwc-003
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Developers can now implement a custom Apex handler using the
+      MyDomainLoginDiscoveryHandler interface to enable identity-first login
+      flows, where users enter an identifier (email/phone) and are routed to the
+      appropriate authentication method or IdP.
+    source:
+      document: v45-spring19.pdf
+      page: 401
+      heading: My Domain Login Discovery
+    confidence: high
+    id: v45-auth-001
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version (requires My Domain enabled)
+    summary: A new UserAuthCertificate object is available via REST API, SOAP API,
+      and standard API operations, enabling programmatic management of
+      PEM-encoded X.509 certificates for user authentication.
+    detail: External API tools like Data Loader can now integrate with the
+      UserAuthCertificate object to upload and manage per-user digital
+      certificates. This extends the authentication options available to API
+      consumers building identity integrations.
+    source:
+      document: v45-spring19.pdf
+      page: 403
+      heading: Certificate-Based Authentication
+    confidence: medium
+    id: v45-auth-002
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: OAuth 2.0 dynamic client registration and token introspection endpoints
+      are now GA, allowing OAuth clients to programmatically register child
+      connected apps and inspect token state across the org.
+    detail: Connected apps can now use the RFC 7591 dynamic registration endpoint to
+      create child OAuth clients automatically, and the RFC 7662 introspection
+      endpoint to query access/refresh token validity. Admins can also grant a
+      single connected app permission to introspect all tokens org-wide.
+    source:
+      document: v45-spring19.pdf
+      page: 404
+      heading: Integrations with Auth 2.0 Endpoints
+    confidence: high
+    id: v45-auth-003
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; affects newly created
+      connected apps and any existing app whose secret is replaced via Metadata
+      API
+    summary: OAuth 2.0 connected app client secrets now require a minimum of 32
+      characters. Existing apps are unaffected, but any new app or secret
+      replacement via Metadata API must meet this length requirement.
+    upgradeAction: If you programmatically create or replace connected app secrets
+      via Metadata API, ensure the consumerSecret value is at least 32
+      characters long.
+    source:
+      document: v45-spring19.pdf
+      page: 405
+      heading: Client Secret New Size Requirement
+    confidence: high
+    id: v45-auth-004
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: A new Apex method System.UserManagement.sendAsyncEmailConfirmation() is
+      available to trigger asynchronous email verification for users, enabling
+      deferred identity confirmation workflows.
+    source:
+      document: v45-spring19.pdf
+      page: 407
+      heading: Asynchronous Email Verifications
+    confidence: high
+    id: v45-auth-005
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: External Identity license users can now be created without an
+      associated Contact record via Apex, SOAP, or Bulk API, simplifying user
+      provisioning for identity-only scenarios.
+    source:
+      document: v45-spring19.pdf
+      page: 407
+      heading: Contactless External Identity Users
+    confidence: high
+    id: v45-auth-006
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Embedded Login now supports a meta tag that redirects users back to
+      your website after self-registration instead of to the community page,
+      using an auto-generated start URL for the OAuth user-agent flow.
+    upgradeAction: If you use Embedded Login self-registration and want
+      post-registration redirect to your site, add the
+      salesforce-self-register-starturl-enabled meta tag to your login page.
+    source:
+      document: v45-spring19.pdf
+      page: 409
+      heading: Redirect to Website After Self-Registration
+    confidence: medium
+    id: v45-auth-007
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Organizations can now enforce high-assurance session requirements for
+      UserRole and Role Metadata API operations, meaning integrations using
+      standard session tokens may fail if high-assurance is enabled and the
+      session does not meet the requirement.
+    upgradeAction: If your org enables this setting, ensure Metadata API
+      integrations that modify roles use authentication flows that produce
+      high-assurance sessions, or handle 401/insufficient-session-level errors
+      gracefully.
+    source:
+      document: v45-spring19.pdf
+      page: 410
+      heading: Secure Access to Editing Roles
+    confidence: medium
+    id: v45-auth-008
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Cache-only encryption keys can now be managed programmatically via
+      Enterprise API, including rotation, generation, and
+      certificate/named-credential updates.
+    detail: Organizations using the Cache-Only Key Service add-on can now automate
+      key lifecycle operations through Enterprise API rather than manual Setup
+      configuration. This enables scripted key rotation workflows and
+      integration with external key management systems.
+    source:
+      document: v45-spring19.pdf
+      page: 413
+      heading: Cache-Only Key Service (Generally Available)
+    confidence: medium
+    id: v45-rest-005
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning Web Components becomes generally available as a second
+      programming model alongside Aura, allowing developers to build custom
+      elements using standard HTML and modern JavaScript with native browser
+      performance.
+    source:
+      document: v45-spring19.pdf
+      page: 428
+      heading: Lightning Web Components (Generally Available)
+    confidence: high
+    id: v45-lwc-004
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning Locker now sanitizes SVG files by stripping embedded
+      JavaScript, which may break components that relied on scripted SVG content
+      for legitimate functionality.
+    upgradeAction: Review any SVG assets used in Lightning components for embedded
+      scripts; refactor scripted interactions into component JavaScript instead
+      of inline SVG code.
+    source:
+      document: v45-spring19.pdf
+      page: 430
+      heading: Changes in Lightning Locker
+    confidence: medium
+    id: v45-lwc-005
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Data passed from Aura JavaScript controllers to Apex methods now
+      undergoes stricter type validation and improved deserialization for
+      Integer, Long, Double, Date, Time, List, SObject, and Object parameters.
+      Previously silent mismatches now throw detailed errors.
+    upgradeAction: Review Aura components that call Apex methods with numeric, date,
+      time, or collection parameters. Code relying on loose type coercion or
+      workarounds for previous deserialization bugs may fail or behave
+      differently.
+    source:
+      document: v45-spring19.pdf
+      page: 430
+      heading: Improved Data Validation and Conversion for Apex Method Parameters
+    confidence: high
+    id: v45-aura-002
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+      - ApexClass
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Aura component JavaScript controllers can now pass JavaScript objects
+      directly to Apex controller methods that accept custom Apex class
+      parameters, with automatic type mapping when the Apex class properties
+      have @AuraEnabled annotations with getters and setters.
+    source:
+      document: v45-spring19.pdf
+      page: 431
+      heading: Use Custom Apex Types as Apex Method Parameters
+    confidence: high
+    id: v45-aura-003
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Aura component attributes of type Array, Set, or List now require
+      square brackets around default values. Omitting the brackets is deprecated
+      and may cause unpredictable runtime behavior.
+    upgradeAction: Audit Aura components for array/set/list attributes with
+      unbracketed defaults and update them to use bracket syntax, e.g.
+      default="['red', 'green', 'blue']".
+    source:
+      document: v45-spring19.pdf
+      page: 432
+      heading: Deprecated Default Values Without Square Brackets for Array, Set, and
+        List Attributes
+    confidence: high
+    id: v45-aura-004
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning components can now reference asset files by developer name
+      using the $ContentAsset global value provider, eliminating hardcoded file
+      paths or URLs for images, stylesheets, and JavaScript libraries.
+    source:
+      document: v45-spring19.pdf
+      page: 433
+      heading: Reference Asset Files with the $ContentAsset Global Value Provider
+    confidence: high
+    id: v45-lwc-006
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: The $Locale global value provider gains four new date-time formatting
+      attributes (longDateFormat, shortDateFormat, shortDatetimeFormat,
+      shortTimeFormat) for locale-aware display in Lightning components.
+    source:
+      document: v45-spring19.pdf
+      page: 433
+      heading: New Date-Time $Locale Attributes
+    confidence: medium
+    id: v45-lwc-007
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning Web Components introduce Shadow DOM encapsulation, which
+      hides component internals from traditional DOM queries and breaks existing
+      Selenium-style UI tests that rely on global DOM traversal.
+    detail: Elements rendered by LWC now contain a shadowRoot property that
+      encapsulates their DOM subtree as a DocumentFragment. Standard DOM
+      querying methods cannot reach elements inside this shadow boundary,
+      requiring test frameworks to use shadow-piercing techniques.
+    upgradeAction: Audit existing Selenium WebDriver or similar UI tests for global
+      DOM queries against Lightning components. Migrate unit tests to Lightning
+      Testing Service (Aura) or lwc-jest (LWC), and update end-to-end tests to
+      handle Shadow DOM traversal.
+    source:
+      document: v45-spring19.pdf
+      page: 434
+      heading: DOM Inspection Tests Are Subject to Change
+    confidence: high
+    id: v45-lwc-008
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Aura components created dynamically via $A.createComponent() or
+      $A.createComponents() can no longer include <script> tags. This closes a
+      security gap that previously allowed script injection in dynamically
+      generated components.
+    upgradeAction: Audit any code using $A.createComponent() that injects script
+      tags. Refactor to upload JavaScript as a static resource and reference it
+      with <ltng:require> in the component markup instead.
+    source:
+      document: v45-spring19.pdf
+      page: 435
+      heading: Script Tags Blocked in Dynamically Created Components
+    confidence: high
+    id: v45-aura-005
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The navigateToURL event now handles URL fragments consistently between
+      Lightning Experience and Communities, aligning Community navigation
+      behavior with Lightning Experience.
+    upgradeAction: Review any Aura components using navigateToURL with URL fragments
+      in Communities; navigation flow may change if code relied on the previous
+      inconsistent behavior.
+    source:
+      document: v45-spring19.pdf
+      page: 435
+      heading: Improved Navigation Experiences in Communities
+    confidence: medium
+    id: v45-aura-006
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: The force:navigateToURL event no longer opens a new tab when navigating
+      to hash-only URLs like '#123'. Developers should migrate to the
+      standard__webPage PageReference type for external URL navigation.
+    upgradeAction: Review Aura components using force:navigateToURL with hash URLs
+      and verify navigation behavior still meets requirements. Consider
+      migrating to the navigation service with standard__webPage PageReference
+      for external URLs.
+    source:
+      document: v45-spring19.pdf
+      page: 435
+      heading: Navigate to a URL with the standard__webPage Page Reference Type
+    confidence: medium
+    id: v45-lwc-009
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning Data Service error responses now use a Fetch-API-style
+      structure with body, ok, status, and statusText properties instead of the
+      previous type/message/details shape, requiring code that handles LDS
+      errors to update from error.message to error.body.message or
+      error.body[].message.
+    upgradeAction: Refactor all LDS error handlers in Lightning web components to
+      access error.body.message (for write operations) or error.body[].message
+      (for read operations) instead of error.message, and update any logic that
+      inspected the old type/details properties.
+    source:
+      document: v45-spring19.pdf
+      page: 435
+      heading: Lightning Data Service Returns New Error Values
+    confidence: high
+    id: v45-lwc-010
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+      - Any
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The platform now blocks deletion of custom fields referenced by Aura
+      components, preventing a previously silent metadata operation that caused
+      runtime failures.
+    upgradeAction: If deployment scripts or CI pipelines delete custom fields
+      programmatically, expect failures when those fields are bound in Aura
+      markup; update deletion logic to handle the new validation error.
+    source:
+      document: v45-spring19.pdf
+      page: 436
+      heading: Improved Validation for Custom Field Deletion
+    confidence: high
+    id: v45-aura-007
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning components can now establish WebSocket connections by adding
+      CSP Trusted Sites with the wss:// protocol; the insecure ws:// protocol
+      remains blocked.
+    source:
+      document: v45-spring19.pdf
+      page: 436
+      heading: Create CSP Trusted Sites to Use WebSocket Connections
+    confidence: high
+    id: v45-lwc-011
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: Visualforce pages set to API version >= 45.0
+    summary: Visualforce pages gain access to sforce.one.showToast(), a JavaScript
+      function that wraps the force:showToast Aura event, enabling toast
+      notifications from VF pages in Lightning contexts.
+    source:
+      document: v45-spring19.pdf
+      page: 438
+      heading: Show a Toast with a New JavaScript Function
+    confidence: high
+    id: v45-vf-004
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Visualforce pages using both <apex:detail> and <apex:enhancedList> with
+      a custom object's standard controller now render correctly together,
+      whereas previously they conflicted and caused rendering issues.
+    upgradeAction: If you implemented workarounds for this conflict (separate pages,
+      custom controllers, or JavaScript fixes), verify they still work and
+      consider removing them.
+    source:
+      document: v45-spring19.pdf
+      page: 439
+      heading: The <apex:detail> and <apex:enhancedList> Components Sorted Out Their
+        Differences
+    confidence: medium
+    id: v45-vf-005
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Visualforce pages can now store up to 170KB of view state, raised from
+      the previous 135KB ceiling, allowing more complex page structures before
+      hitting governor limits.
+    source:
+      document: v45-spring19.pdf
+      page: 439
+      heading: Create More Complex Visualforce Pages with Increased View State Limit
+    confidence: high
+    id: v45-vf-006
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: A fix for blank pages when Visualforce forms trigger navigation in
+      Lightning Experience changes the DOM structure, breaking Selenium and
+      similar UI tests that rely on iframe selectors or internal DOM elements.
+    detail: Visualforce pages with apex:form elements causing page navigation (such
+      as Cancel buttons or apex:commandButton) previously showed blank pages in
+      Lightning Experience. The fix alters how iframes are structured, requiring
+      test code to dynamically locate the active Visualforce iframe rather than
+      relying on static DOM paths.
+    upgradeAction: Update UI automation tests to avoid hardcoded DOM selectors; use
+      dynamic iframe switching patterns like waiting for the active vfFrameId
+      iframe after POST operations.
+    source:
+      document: v45-spring19.pdf
+      page: 439
+      heading: Fix to Blank Page Issue Requires Test Updates
+    confidence: high
+    id: v45-vf-007
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: soql-sosl
+    appliesWhen: Apex classes and triggers compiled at API >= 45.0 (beta feature,
+      not recommended for earlier versions)
+    summary: New WITH SECURITY_ENFORCED clause available in SOQL SELECT statements
+      within Apex to automatically enforce field-level and object-level
+      security, throwing an exception when the user lacks access to referenced
+      fields or objects.
+    detail: This beta feature simplifies FLS enforcement by eliminating manual
+      permission checks. When any field or object in the SELECT clause is
+      inaccessible, the query throws an exception rather than silently omitting
+      data. Not recommended for use in Apex with API versions below 45.0.
+    source:
+      document: v45-spring19.pdf
+      page: 440
+      heading: Enforce Field-Level Security Permissions for SOQL Queries (Beta)
+    confidence: medium
+    id: v45-soql-001
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Any
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version (Critical Update
+      enforcement postponed to Summer '19)
+    summary: A critical update improving how Salesforce caches org schema
+      information fixes bugs where actual behavior diverged from documented
+      object and field handling, particularly around version-specific scenarios.
+    detail: Originally scheduled for Spring '19 auto-activation but postponed to
+      Summer '19. The update corrects rare intermittent issues with undocumented
+      object types and version-specific field handling discrepancies. While
+      documented schema behavior remains the same, code relying on undocumented
+      quirks may break.
+    upgradeAction: Review Apex code that interacts with schema metadata or relies on
+      edge-case object/field behavior. Test thoroughly after the critical update
+      activates to catch any code depending on previously buggy caching
+      behavior.
+    source:
+      document: v45-spring19.pdf
+      page: 441
+      heading: Enable Improved Caching of Org Schema (Critical Update, Postponed)
+    confidence: medium
+    id: v45-apex-002
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new Trigger.operationType context variable provides the current DML
+      operation type as a System.TriggerOperation enum value, enabling cleaner
+      trigger logic without boolean flag checks.
+    source:
+      document: v45-spring19.pdf
+      page: 441
+      heading: Obtain DML Operation Information Using Trigger.operationType Context
+        Variable
+    confidence: high
+    id: v45-apex-003
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The Flow metadata type gains an isTemplate field (Metadata API) and
+      IsTemplate field (Tooling API), enabling managed package developers to
+      mark flows and processes as templates that subscribers can view, clone,
+      and customize while still receiving package upgrades.
+    source:
+      document: v45-spring19.pdf
+      page: 447
+      heading: Package Pre-Built Business Processes That Subscribers Can Open and
+        Build Upon
+    confidence: high
+    id: v45-packaging-003
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Managed and unmanaged packages can now include flows and processes
+      without an active version, distributing the latest inactive version to
+      subscribers who can then choose when to activate.
+    source:
+      document: v45-spring19.pdf
+      page: 448
+      heading: Package Inactive Processes and Flows
+    confidence: high
+    id: v45-packaging-004
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version, effective March 1, 2019
+    summary: Trialforce web forms for provisioning trial orgs are being retired.
+      Partners must migrate to the SignupRequest API for programmatic trial org
+      provisioning.
+    upgradeAction: Replace any Trialforce web form integrations with SignupRequest
+      API calls before March 1, 2019. Update provisioning workflows to use the
+      API-based approach.
+    source:
+      document: v45-spring19.pdf
+      page: 448
+      heading: Support for Trialforce Web Forms Is Ending
+    confidence: high
+    id: v45-rest-006
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Change Data Capture entity selections can now be retrieved and deployed
+      via the PlatformEventChannel metadata type, enabling CDC configurations to
+      be source-controlled and migrated across environments.
+    source:
+      document: v45-spring19.pdf
+      page: 453
+      heading: Migrate Change Data Capture Entity Selections with Metadata API
+    confidence: high
+    id: v45-packaging-005
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Change Data Capture now emits events when custom field type conversions
+      modify data, such as when incompatible type changes null out field values.
+      Previously these data modifications were silently ignored by CDC.
+    upgradeAction: Review CDC subscribers for unexpected event volume increases
+      after field type conversions; ensure downstream systems handle change
+      events triggered by bulk data nullification from incompatible field
+      conversions.
+    source:
+      document: v45-spring19.pdf
+      page: 453
+      heading: Capture Data Changes for Field Type Conversions
+    confidence: high
+    id: v45-rest-007
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Change Data Capture now emits events when picklist field values are
+      renamed or replaced across records, whereas previously these bulk picklist
+      value changes were silently ignored.
+    detail: When a picklist value is renamed or replaced at the metadata level, all
+      records with that value now generate change events. These events may be
+      batched, with multiple record IDs appearing in the recordIds header field.
+    upgradeAction: Review CDC subscribers for handling of batched events containing
+      recordIds arrays, and verify downstream systems can process the increased
+      event volume from picklist value changes.
+    source:
+      document: v45-spring19.pdf
+      page: 453
+      heading: Capture Data Changes for Picklist Values Across Records
+    confidence: high
+    id: v45-rest-008
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: High-volume platform events become GA and are now the default type for
+      newly created event definitions. Standard-volume events defined in API
+      44.0 and earlier remain supported, but new standard-volume definitions are
+      blocked.
+    detail: Publishing high-volume events is asynchronous via a queue, so event
+      delivery may be delayed compared to synchronous publishing. Usage-based
+      entitlements apply to CometD subscribers only; Apex triggers, processes,
+      and flows are exempt from those limits.
+    upgradeAction: Review any automation that creates new PlatformEvent metadata—new
+      events will be high-volume by default. Test that downstream CometD
+      subscribers handle the async delivery model and stay within daily delivery
+      allocations.
+    source:
+      document: v45-spring19.pdf
+      page: 454
+      heading: Scale Your Event-Based Apps with High-Volume Platform Events (Generally
+        Available)
+    confidence: high
+    id: v45-other-002
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Platform event publishing failures now return specific status codes
+      (PLATFORM_EVENT_PUBLISHING_UNAVAILABLE for service outages, LIMIT_EXCEEDED
+      for quota violations) in SaveResult instead of generic errors, enabling
+      precise error handling in Apex and API integrations.
+    upgradeAction: Update error-handling code to check for these new status codes if
+      you need to distinguish between transient service issues and limit
+      violations when publishing platform events.
+    source:
+      document: v45-spring19.pdf
+      page: 455
+      heading: New Status Codes for Event Publishing Failures
+    confidence: high
+    id: v45-rest-009
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version; effective October 12, 2019
+    summary: The Force.com IDE Eclipse plug-in reaches end-of-life in October 2019,
+      after which no support, updates, or documentation will be provided and the
+      GitHub repository will be archived.
+    upgradeAction: Migrate development workflows to Salesforce Extensions for VS
+      Code or a partner IDE before October 2019; update CI/CD pipelines and team
+      tooling documentation accordingly.
+    source:
+      document: v45-spring19.pdf
+      page: 457
+      heading: Force.com IDE Is Being Retired in October 2019
+    confidence: high
+    id: v45-packaging-006
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning Web Components (LWC) are introduced as a new component model
+      alongside Aura components. Both coexist within the Lightning Component
+      framework, giving developers a standards-based alternative for building
+      UI.
+    detail: This release debuts the LWC programming model with a comprehensive set
+      of base components covering buttons, data entry, data display, forms,
+      layout, navigation, and visual elements. Existing Aura components continue
+      to work unchanged.
+    source:
+      document: v45-spring19.pdf
+      page: 459
+      heading: New and Changed Lightning Web Components
+    confidence: high
+    id: v45-lwc-012
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: components compiled at API >= 45.0
+    summary: The tabindex attribute on 15 lightning base components now accepts only
+      0 or -1; positive values are rejected. Components defaulting to tabindex=0
+      participate in sequential keyboard navigation, while -1 makes them
+      focusable but excluded from tab order.
+    upgradeAction: Audit Aura components for tabindex values greater than 0 on
+      lightning:button, lightning:input, lightning:select, and similar base
+      components; replace with 0 or -1 before upgrading to v45+.
+    source:
+      document: v45-spring19.pdf
+      page: 464
+      heading: New and Changed Aura Components
+    confidence: high
+    id: v45-aura-008
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: components compiled at API >= 45.0
+    summary: lightning:formattedDateTime now requires IANA time zone names (e.g.,
+      America/Los_Angeles) for the timeZone attribute; short codes like PST may
+      throw errors in browsers using the ECMAScript Internationalization API.
+    upgradeAction: Replace short time zone codes (PST, EST, etc.) with full IANA
+      identifiers in any lightning:formattedDateTime usage before upgrading.
+    source:
+      document: v45-spring19.pdf
+      page: 464
+      heading: New and Changed Aura Components
+    confidence: high
+    id: v45-aura-009
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: New OrgLimit and OrgLimits classes let Apex code programmatically query
+      governor limit names, current consumption, and maximum values at runtime.
+    source:
+      document: v45-spring19.pdf
+      page: 467
+      heading: New Apex Classes
+    confidence: high
+    id: v45-apex-004
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: String.format() now accepts List<Object> instead of List<String>,
+      automatically converting non-string types via their toString() methods.
+      Existing code passing List<String> remains compatible, but behavior
+      differs when non-string objects are passed.
+    detail: The formattingArguments parameter changed from List<String> to
+      List<Object>. Non-string types are implicitly converted using their
+      toString() overrides. This enables passing numbers, dates, and custom
+      objects directly without manual conversion.
+    upgradeAction: Review code calling String.format() to verify that implicit
+      toString() conversions on non-string arguments produce expected output,
+      especially for custom Apex types with overridden toString() methods.
+    source:
+      document: v45-spring19.pdf
+      page: 468
+      heading: Changed Apex Classes
+    confidence: high
+    id: v45-apex-005
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: A new Auth.MyDomainLoginDiscoveryHandler interface enables custom
+      two-step login flows where users first provide an identifier (email/phone)
+      and the handler then determines authentication method (password or IdP
+      redirect).
+    source:
+      document: v45-spring19.pdf
+      page: 469
+      heading: New Apex Interface
+    confidence: high
+    id: v45-auth-009
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: IframeWhiteListUrl object introduced to maintain an allowlist of
+      external domains permitted to frame Visualforce pages, giving developers a
+      way to control cross-origin embedding via API.
+    source:
+      document: v45-spring19.pdf
+      page: 478
+      heading: New Objects
+    confidence: medium
+    id: v45-rest-010
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: API requests at version 45.0 and later
+    summary: AccountShare records created via manual territory assignment now use
+      Territory2AssociationManual as the RowCause value instead of
+      TerritoryManual, which was used in API version 44.0 and earlier.
+    upgradeAction: Update any code or integrations that filter or match on
+      RowCause='TerritoryManual' for AccountShare records to use
+      Territory2AssociationManual when targeting API 45.0+.
+    source:
+      document: v45-spring19.pdf
+      page: 480
+      heading: Changed Objects
+    confidence: high
+    id: v45-soap-001
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOQL queries on AccountUserTerritory2View now require a filter
+      criterion specifying at least one AccountId; queries without this filter
+      will fail.
+    upgradeAction: Add an AccountId filter to any existing SOQL queries against
+      AccountUserTerritory2View to prevent query failures.
+    source:
+      document: v45-spring19.pdf
+      page: 480
+      heading: Changed Objects
+    confidence: high
+    id: v45-soql-002
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Next Best Action Connect REST resources that were introduced in API
+      versions 43.0 and 44.0 now require a minimum API version of 45.0.
+      Integrations calling these endpoints at older versions will fail.
+    upgradeAction: Update any integrations using Next Best Action endpoints
+      (recommendation-strategies, recommendations, reactions) to specify API
+      version 45.0 or later in the request URL.
+    source:
+      document: v45-spring19.pdf
+      page: 490
+      heading: New and Changed Chatter REST API Resources
+    confidence: high
+    id: v45-rest-011
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API requests made at version >= 45.0
+    summary: The UI API /ui-api/records/{recordId} endpoint now accepts requests
+      with only the optionalFields parameter, whereas earlier versions required
+      either fields or layoutTypes to be present.
+    upgradeAction: Review any UI API client code that constructs record requests to
+      confirm field parameter handling still behaves as expected when upgrading
+      past v45.
+    source:
+      document: v45-spring19.pdf
+      page: 498
+      heading: User Interface API
+    confidence: low
+    id: v45-rest-012
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: Tooling API queries at API >= 45.0
+    summary: Several Tooling API objects now require the 'View Setup and
+      Configuration' permission to query. ColorDefinition, FormulaFunction,
+      FormulaFunctionCategory, FormulaOperator, IconDefinition, and
+      TabDefinition all enforce this permission check starting in v45.0.
+    detail: Integrations or Apex code querying these Tooling API objects will
+      receive errors if the context user lacks the View Setup and Configuration
+      permission. Additionally, SiteDetail in Tooling API now requires this
+      permission in v45.0+; guest user queries must switch to SOAP API.
+    upgradeAction: Audit integrations querying ColorDefinition, FormulaFunction,
+      FormulaFunctionCategory, FormulaOperator, IconDefinition, TabDefinition,
+      or SiteDetail via Tooling API. Ensure the running user has View Setup and
+      Configuration permission, or migrate SiteDetail guest-user queries to SOAP
+      API.
+    source:
+      document: v45-spring19.pdf
+      page: 498
+      heading: Tooling API
+    confidence: high
+    id: v45-rest-013
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: LightningComponentBundle metadata type introduced to support the new
+      Lightning web components framework, distinct from the existing
+      AuraDefinitionBundle type for Aura components.
+    source:
+      document: v45-spring19.pdf
+      page: 500
+      heading: Metadata API
+    confidence: high
+    id: v45-packaging-007
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: metadata retrievals or deployments at API >= 45.0
+    summary: ProfileActionOverride can no longer be defined directly on Profile
+      metadata; it must be accessed through CustomApplication instead, and Home
+      page assignments now require a corresponding app assignment.
+    upgradeAction: Refactor any Profile metadata that defines ProfileActionOverride
+      to instead define it within CustomApplication, and ensure Home page
+      assignments include app associations.
+    source:
+      document: v45-spring19.pdf
+      page: 500
+      heading: Metadata API
+    confidence: high
+    id: v45-packaging-008
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The force:package2:* CLI commands were removed in salesforcedx
+      v44.3.0+, breaking any CI/CD scripts or automation that still referenced
+      them.
+    upgradeAction: Migrate scripts from force:package2:* commands to the replacement
+      force:package:* equivalents before upgrading past salesforcedx v44.3.
+    source:
+      document: v45-spring19.pdf
+      page: 506
+      heading: Salesforce CLI
+    confidence: high
+    id: v45-packaging-009
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide after critical update activation (auto-activates post-Spring '19)
+    summary: Process and Flow formulas now correctly return null when evaluating
+      expressions involving null record variables or null lookup relationship
+      fields, rather than potentially returning unexpected non-null defaults.
+    upgradeAction: Review processes and flows that rely on formula evaluations
+      involving record variables or lookup fields; ensure downstream logic
+      handles null returns correctly.
+    source:
+      document: v45-spring19.pdf
+      page: 509
+      heading: Critical Updates
+    confidence: high
+    id: v45-flow-002
+  - apiVersion: "45.0"
+    release: Spring '19
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide after critical update activation (postponed to Winter '20)
+    summary: Managed package Apex controller methods that are not declared with the
+      global access modifier become inaccessible to components outside the
+      package, preventing previously working cross-package calls.
+    upgradeAction: Audit any calls to managed package controller methods from your
+      org's components; coordinate with package vendors if you depend on
+      non-global methods that will become inaccessible.
+    source:
+      document: v45-spring19.pdf
+      page: 509
+      heading: Critical Updates
+    confidence: high
+    id: v45-apex-006

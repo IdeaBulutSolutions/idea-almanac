@@ -1,0 +1,1293 @@
+apiVersion: "32.0"
+release: Winter '15
+reviewed: true
+entries:
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex triggers can now be written on the NetworkMember object, enabling
+      custom automation when users join or leave communities.
+    source:
+      document: v32-winter15.pdf
+      page: 21
+      heading: Communities
+    confidence: medium
+    id: v32-apex-001
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex triggers are now supported on the Territory2 and
+      UserTerritory2Association objects, enabling automation of territory
+      assignment workflows.
+    source:
+      document: v32-winter15.pdf
+      page: 23
+      heading: Sales
+    confidence: medium
+    id: v32-apex-002
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce is ending support for the CTI Toolkit, which provided
+      JavaScript-based computer-telephony integration for call centers.
+      Integrations relying on this toolkit will need to migrate to Open CTI.
+    upgradeAction: Migrate any custom CTI Toolkit implementations to Open CTI before
+      the retirement date; test softphone functionality and call center
+      integrations thoroughly.
+    source:
+      document: v32-winter15.pdf
+      page: 26
+      heading: Service
+    confidence: medium
+    id: v32-other-001
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Connected apps that previously bypassed user profile settings now
+      require users to have the 'API Enabled' profile permission. Apps like
+      Salesforce1, Salesforce for Outlook, and Connect for Office will stop
+      working for users lacking this permission.
+    upgradeAction: Audit which users access affected connected apps and ensure they
+      have 'API Enabled' via profile or permission set, or notify them of lost
+      access.
+    source:
+      document: v32-winter15.pdf
+      page: 40
+      heading: API Access Change for Connected Apps
+    confidence: high
+    id: v32-auth-001
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Analytics Cloud (Wave) assets cannot be managed via Metadata API,
+      packaged, or versioned; migration between sandbox and production must be
+      performed manually.
+    detail: This platform limitation means developers cannot use standard deployment
+      workflows (package.xml, sfdx, change sets) for Wave dashboards, lenses, or
+      datasets. The Default Org Template is also unsupported for org duplication
+      containing Wave assets.
+    source:
+      document: v32-winter15.pdf
+      page: 57
+      heading: Analytics Cloud Limitations
+    confidence: medium
+    id: v32-packaging-001
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Custom Lightning components can now be exposed in the Salesforce1
+      mobile navigation menu by creating a Lightning Component tab, though these
+      tabs remain unsupported on the full desktop site.
+    source:
+      document: v32-winter15.pdf
+      page: 70
+      heading: Add Lightning Components to the Navigation Menu in Salesforce1
+    confidence: medium
+    id: v32-aura-001
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Developers can now write Apex triggers on the NetworkMember object to
+      respond to community membership changes, enabling custom event handling
+      and notifications when members are added, updated, or removed.
+    source:
+      document: v32-winter15.pdf
+      page: 109
+      heading: Apex Triggers Supported on the NetworkMember Object
+    confidence: high
+    id: v32-apex-003
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Chatter in Apex now supports retrieving topics, feeds, and user
+      profiles for guest users in public communities, enabling custom
+      Visualforce pages to display this content without authentication.
+    source:
+      document: v32-winter15.pdf
+      page: 109
+      heading: Display More Public Community Content
+    confidence: medium
+    id: v32-apex-004
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexTrigger
+      - Integration
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Community reputation points can now be modified via sObject API, and
+      Apex triggers can fire based on user point totals, enabling custom
+      automation around reputation events.
+    source:
+      document: v32-winter15.pdf
+      page: 119
+      heading: Developer Enhancements and Apex Triggers for Reputation
+    confidence: medium
+    id: v32-apex-005
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: The UserTerritory2Association object now includes a RoleInTerritory
+      field in SOAP API v32.0, enabling programmatic access to territory role
+      assignments.
+    source:
+      document: v32-winter15.pdf
+      page: 125
+      heading: Identify Territory Users by Territory Role
+    confidence: medium
+    id: v32-soap-001
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Territory Management 2.0 now supports Apex triggers on the Territory2
+      and UserTerritory2Association objects, enabling automation of territory
+      assignment and membership changes.
+    source:
+      document: v32-winter15.pdf
+      page: 126
+      heading: Apex Triggers Added to the Territory2 and UserTerritory2Association
+        Objects
+    confidence: high
+    id: v32-apex-006
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Territory Management 2.0 introduces five new metadata types to the
+      Metadata API at version 32.0, enabling programmatic deployment and
+      retrieval of territory configurations.
+    source:
+      document: v32-winter15.pdf
+      page: 127
+      heading: Metadata API Support
+    confidence: medium
+    id: v32-packaging-002
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The triggerUserEmail API field now respects per-user notification
+      preferences when the org setting is enabled, meaning API-created task
+      assignments may no longer send emails to users who have opted out, even
+      when triggerUserEmail=true.
+    detail: Previously, setting triggerUserEmail=true on API task creation always
+      sent notifications. With the new user-level setting exposed, individual
+      users can suppress these emails. Integrations relying on guaranteed email
+      delivery for task assignments must account for this user preference
+      override.
+    upgradeAction: Review integrations that create tasks via API with
+      triggerUserEmail=true and expect email delivery. If guaranteed
+      notification is required, consider alternative notification mechanisms or
+      document that users can opt out.
+    source:
+      document: v32-winter15.pdf
+      page: 144
+      heading: Let Your Users Control Task Notifications Globally
+    confidence: medium
+    id: v32-rest-001
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: Work.com Perform objects for performance summaries are now accessible
+      via SOAP API, enabling programmatic management of performance summary
+      workflows.
+    source:
+      document: v32-winter15.pdf
+      page: 152
+      heading: Other Changes in Work.com
+    confidence: medium
+    id: v32-soap-002
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Data.com Search API now exposes FirstName and LastName fields on
+      DatacloudContact records, which were previously hidden. Queries can now
+      retrieve these fields directly.
+    source:
+      document: v32-winter15.pdf
+      page: 153
+      heading: Data.com API Enhanced
+    confidence: medium
+    id: v32-rest-002
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce ends support for the CTI Toolkit after Summer '15. Partners
+      using adapter programs built with this toolkit for call center telephony
+      integration will lose official support.
+    upgradeAction: Migrate call center integrations from CTI Toolkit adapters to
+      Open CTI before Summer '15 support cutoff.
+    source:
+      document: v32-winter15.pdf
+      page: 162
+      heading: Retirement of Support for the Salesforce CTI Toolkit
+    confidence: high
+    id: v32-other-002
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version
+    summary: Self-Service Portal pages can no longer redirect to external
+      (non-Salesforce) domains via retURL, startURL, cancelURL, or saveURL
+      parameters. Attempts to do so now produce an error instead of completing
+      the redirect.
+    upgradeAction: Audit Self-Service Portal pages for redirect parameters pointing
+      to external URLs. Replace indirect redirects with direct links or
+      implement the redirect logic in Visualforce/Apex using PageReference.
+    source:
+      document: v32-winter15.pdf
+      page: 184
+      heading: Other Changes in Service Cloud
+    confidence: high
+    id: v32-sharing-001
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version
+    summary: When unlisted groups are enabled, Apex and Visualforce code running in
+      system mode bypasses unlisted group visibility controls, potentially
+      exposing these groups to non-members through custom pages or AppExchange
+      apps.
+    detail: Because Apex executes in system mode without checking user permissions,
+      any Visualforce page or AppExchange app querying CollaborationGroup can
+      surface unlisted groups to users who should not see them. Additionally,
+      users accessing such pages can inadvertently act with owner-level
+      privileges on unlisted groups.
+    upgradeAction: Audit existing Apex and Visualforce code that queries
+      CollaborationGroup. Add explicit SOQL filters to exclude unlisted groups
+      (NetworkType = 'Unlisted'), implement permission checks, and review
+      sharing settings before enabling unlisted groups.
+    source:
+      document: v32-winter15.pdf
+      page: 196
+      heading: Unlisted Group Limitations
+    confidence: high
+    id: v32-sharing-002
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Custom permissions become generally available, enabling developers to
+      define granular access checks in Apex code that control feature visibility
+      based on permission set or profile assignments.
+    detail: Developers can now create custom permissions and query them in Apex to
+      conditionally expose functionality (e.g., hiding or showing Visualforce
+      buttons). This release adds support for required custom permissions
+      (dependencies between permissions), unmanaged package inclusion, and
+      profile settings in packages.
+    source:
+      document: v32-winter15.pdf
+      page: 207
+      heading: Manage Access to Custom Processes and Apps (Generally Available)
+    confidence: high
+    id: v32-apex-007
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning Connect introduces external objects that can be queried via
+      SOQL and SOSL, enabling real-time access to data stored outside Salesforce
+      through OData 2.0 callouts without data replication.
+    detail: "External objects behave differently from standard/custom objects in
+      queries—they execute web service callouts at runtime. This affects query
+      performance characteristics and governor limits. External objects support
+      lookup relationships, Metadata API deployment, change sets, and packages.
+      Note: This feature was announced as pilot/beta in Winter '15 with GA
+      anticipated November 2014–January 2015."
+    source:
+      document: v32-winter15.pdf
+      page: 212
+      heading: Access External Data with Lightning Connect
+    confidence: low
+    id: v32-soql-001
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide once critical update is activated
+    summary: "A critical update fixes how screen fields in loops obtain their
+      initial value: after activation, each loop iteration uses the configured
+      default rather than the value entered in a prior iteration."
+    detail: Before this fix, a screen field inside a loop retained the last-entered
+      value across iterations, which could cause incorrect data to carry
+      forward. Once activated, the field resets to its defined default at the
+      start of each new loop iteration, while backward navigation still
+      preserves the user's entry.
+    upgradeAction: Review flows that use screens inside loops and rely on
+      cross-iteration value persistence; after activating the critical update,
+      add explicit variable assignments if prior-iteration values are
+      intentionally needed.
+    source:
+      document: v32-winter15.pdf
+      page: 219
+      heading: Behavior Changed for Default Values in Flow Screen Fields
+    confidence: high
+    id: v32-flow-001
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: New Apex methods on ProcessSubmitRequest allow specifying a submitter
+      programmatically, enabling bulk submission of approval requests on behalf
+      of other users.
+    source:
+      document: v32-winter15.pdf
+      page: 220
+      heading: Specify a Submitter for an Approval Process
+    confidence: high
+    id: v32-apex-008
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Event Monitoring reaches GA, exposing the EventLogFile object via REST
+      and SOAP APIs for retrieving 28 event types including Apex execution, API
+      calls, Bulk API operations, and Visualforce requests.
+    detail: Developers can now query EventLogFile to pull audit logs covering Apex
+      callouts, triggers, SOAP/REST/Bulk API usage, login events, and more. Logs
+      are generated daily with a 30-day retention window for licensed orgs.
+      Schema for each EventType may change between releases, so integrations
+      should validate LogFileFieldNames and LogFileFieldTypes at the start of
+      each release cycle.
+    source:
+      document: v32-winter15.pdf
+      page: 224
+      heading: Use Event Monitoring to Understand Organization Trends (Generally
+        Available)
+    confidence: high
+    id: v32-rest-003
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: API logins from callouts using API version >= 32.0
+    summary: Callouts that perform API logins now require security tokens when using
+      API version 32.0 or higher. Previously, tokens were optional for
+      callout-based logins.
+    upgradeAction: Before upgrading callout code past API 31.0, ensure security
+      tokens are appended to passwords in any login() calls made from Apex HTTP
+      callouts or external integrations that authenticate via SOAP/REST login
+      endpoints.
+    source:
+      document: v32-winter15.pdf
+      page: 226
+      heading: Security Tokens Required for API Logins from Callouts
+    confidence: high
+    id: v32-auth-002
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Flow
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Administrators can now attach Flow-based login flows to user profiles,
+      enabling custom post-authentication logic such as two-factor
+      authentication, terms acceptance, or registration steps using the new
+      Auth.SessionManagement Apex class.
+    detail: Login flows are built in Flow Designer and can leverage a new Apex
+      plugin interface (Process.Plugin) combined with Auth.SessionManagement for
+      TOTP validation. Pre-defined flow variables (LoginFlow_UserId,
+      LoginFlow_IpAddress, etc.) are injected at runtime. Flows apply to
+      UI-based authentication only—API logins and frontdoor.jsp session handoffs
+      are excluded.
+    source:
+      document: v32-winter15.pdf
+      page: 226
+      heading: Customize and Manage User Authentication with Login Flows
+    confidence: high
+    id: v32-auth-003
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Organizations can now export authentication certificates and private
+      keys to JKS keystores and import them from local keystores, enabling
+      certificate portability between orgs for connected apps and integration
+      configurations.
+    source:
+      document: v32-winter15.pdf
+      page: 229
+      heading: Export and Import Authentication Certificates between Organizations for
+        Flexible Certificate and Key Management
+    confidence: medium
+    id: v32-auth-004
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: LinkedIn can now serve as an external authentication provider for
+      Salesforce SSO, requiring a custom Apex registration handler to map user
+      attributes and provision accounts.
+    source:
+      document: v32-winter15.pdf
+      page: 229
+      heading: Configure a LinkedIn Authentication Provider
+    confidence: high
+    id: v32-auth-005
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: JWT bearer tokens now accept 'sub' (subject) as an alternative to 'prn'
+      (principal) for specifying the username, aligning with the evolving OAuth
+      2.0 JWT bearer spec. When both are present, 'prn' takes precedence.
+    source:
+      document: v32-winter15.pdf
+      page: 240
+      heading: OAuth 2.0 JWT Bearer Token Support Expands to Meet the Current Standards
+    confidence: high
+    id: v32-auth-006
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce now exposes SCIM 1.1 REST endpoints for programmatic user,
+      group, and entitlement management, including Salesforce-specific
+      extensions for manager ID, external users, custom attributes, and
+      permission sets.
+    source:
+      document: v32-winter15.pdf
+      page: 243
+      heading: Use the System for Cross-domain Identity Management (SCIM), a
+        Standards-based User Management API
+    confidence: high
+    id: v32-rest-004
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+      - ApexClass
+    behaviorArea: sharing-security
+    appliesWhen: custom Force.com Community site pages compiled at API >= 32.0
+    summary: Guest user session IDs are no longer generated or exposed on custom
+      Community pages at API 32.0+, eliminating a vulnerability that allowed
+      anonymous API access via guest user permissions.
+    detail: The Apex UserInfo.getSessionId() method behavior changes at this version
+      for guest contexts. Code that previously captured or relied on guest
+      session IDs will no longer receive them.
+    upgradeAction: Review any custom Community pages that call
+      UserInfo.getSessionId() in guest context or pass session tokens to
+      external systems; these integrations will stop working after upgrading to
+      32.0.
+    source:
+      document: v32-winter15.pdf
+      page: 244
+      heading: Security Fix Protects Organization Data from Guest Users
+    confidence: high
+    id: v32-sharing-003
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (critical update with
+      opt-in period before auto-activation)
+    summary: Flow screens in loops now reset to their defined default values on each
+      iteration instead of retaining the previously entered value from earlier
+      visits to that screen.
+    upgradeAction: Review flows that loop through screens and rely on user-entered
+      values persisting across iterations; you may need to store values in
+      variables explicitly if the old behavior was intended.
+    source:
+      document: v32-winter15.pdf
+      page: 250
+      heading: Critical Updates
+    confidence: high
+    id: v32-flow-002
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (critical update with
+      opt-in period before auto-activation)
+    summary: Flow creators now receive a separate fault notification email for every
+      unhandled interview error, rather than only the first occurrence when
+      multiple faults share similar messages.
+    upgradeAction: Prepare for increased email volume from flow faults; consider
+      adding error handling to flows or updating email filters if the higher
+      notification frequency becomes disruptive.
+    source:
+      document: v32-winter15.pdf
+      page: 250
+      heading: Critical Updates
+    confidence: high
+    id: v32-flow-003
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version, when update is activated
+    summary: Static resources like images, JavaScript, and CSS files get served from
+      the Visualforce domain instead of the standard Salesforce domain after
+      activation. Hardcoded URLs or cross-origin references may break.
+    upgradeAction: Audit pages for hardcoded static resource URLs and ensure
+      references use $Resource or URLFOR() patterns. Test all pages relying on
+      static resources after activation.
+    source:
+      document: v32-winter15.pdf
+      page: 250
+      heading: Other Changes in Force.com
+    confidence: medium
+    id: v32-vf-001
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: A new org setting permits Metadata API and change set deployments to
+      proceed even when Apex scheduled jobs, batch jobs, or future methods
+      reference the components being deployed, eliminating the need to cancel
+      those jobs first.
+    detail: Previously, deploying an Apex class used by an active or pending job
+      caused the entire deployment to fail. The new Deployment Settings toggle
+      bypasses this blocker, though enabling it may cause running jobs to fail
+      if the deployed code introduces incompatible changes.
+    source:
+      document: v32-winter15.pdf
+      page: 252
+      heading: Deploy with Active Jobs
+    confidence: high
+    id: v32-packaging-003
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: Force.com Canvas framework adds navigation methods that allow canvas
+      apps to trigger Salesforce1 navigation events (like record creation)
+      without requiring Visualforce wrapper pages.
+    source:
+      document: v32-winter15.pdf
+      page: 255
+      heading: Use Salesforce1 Methods to Integrate Navigation with Canvas Apps
+    confidence: medium
+    id: v32-other-003
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: "Remote Objects, a feature enabling JavaScript-based DML operations on
+      sObjects within Visualforce pages, reaches general availability with two
+      new query operators: 'in' and 'nin' for matching against value arrays."
+    source:
+      document: v32-winter15.pdf
+      page: 257
+      heading: Add Data Access to Your Visualforce Pages with Remote Objects
+        (Generally Available)
+    confidence: high
+    id: v32-vf-002
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: Visualforce pages set to API version >= 32.0
+    summary: Visualforce expressions referencing encrypted sObject fields now return
+      masked/encrypted values instead of decrypted plaintext, closing a data
+      exposure gap that existed in earlier versions.
+    detail: Components like apex:outputText, apex:column, and raw merge expressions
+      now behave consistently with apex:inputField and apex:outputField by
+      preserving encryption. Apex controller properties returning Apex variables
+      (not sObject fields) still expose decrypted values since Apex lacks an
+      encrypted type.
+    upgradeAction: Review pages that display encrypted custom fields via expressions
+      or output components; if business logic depends on seeing plaintext
+      values, refactor to use controller methods or keep the page at API 31.0 or
+      earlier.
+    source:
+      document: v32-winter15.pdf
+      page: 258
+      heading: Preserve sObject Field Encryption in Visualforce Expressions
+    confidence: high
+    id: v32-vf-003
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version (Critical Update activation)
+    summary: Static resources (images, JS, CSS) now load from the Visualforce domain
+      instead of the Salesforce domain when this Critical Update is enabled,
+      breaking any hardcoded absolute URLs pointing to the old domain.
+    upgradeAction: Replace hardcoded static resource URLs with $Resource global
+      variable and URLFOR() function references. Test in sandbox before enabling
+      the Critical Update in production.
+    source:
+      document: v32-winter15.pdf
+      page: 259
+      heading: Serve Static Resources from the Visualforce Domain
+    confidence: high
+    id: v32-vf-004
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The Queueable interface provides a new asynchronous Apex pattern
+      offering job ID tracking, chaining capabilities, and higher governor
+      limits compared to @future methods.
+    detail: Developers can now implement the Queueable interface and use
+      System.enqueueJob() to submit async work that returns a trackable job ID
+      (correlates to AsyncApexJob). Jobs can be chained from within execute()
+      with a max stack depth of two. Limit of 50 enqueued jobs per transaction.
+      In test context, enqueueJob returns null and chaining is prohibited.
+    source:
+      document: v32-winter15.pdf
+      page: 260
+      heading: Submit and Monitor Jobs for Asynchronous Execution with the Queueable
+        Interface
+    confidence: high
+    id: v32-apex-009
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The per-transaction governor limit for @future method invocations
+      increased from 10 to 50, and the callout limit rose from an unspecified
+      lower value to 100.
+    source:
+      document: v32-winter15.pdf
+      page: 262
+      heading: Run More Future Methods and Callouts
+    confidence: high
+    id: v32-apex-010
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The SearchPromotionRule sObject can now be created and manipulated via
+      Apex, enabling programmatic management of promoted search terms for
+      Knowledge articles.
+    source:
+      document: v32-winter15.pdf
+      page: 263
+      heading: Apex Supported for the SearchPromotionRule sObject
+    confidence: high
+    id: v32-apex-011
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: Apex classes compiled at API >= 32.0
+    summary: ConnectApi methods and classes that operate on feed items are replaced
+      by new feed-element-based equivalents; legacy feed-item methods are no
+      longer supported when targeting v32.0+.
+    detail: The Chatter-in-Apex surface switches from ConnectApi.FeedItem to the
+      broader ConnectApi.FeedElement hierarchy. Attachment handling also moves
+      entirely to capabilities, so code referencing attachments or older
+      FeedItem methods will fail to compile or behave unexpectedly at v32.0.
+    upgradeAction: Before upgrading Apex classes past v31, refactor any ConnectApi
+      calls using FeedItem-based methods or attachment parameters to their
+      FeedElement and capabilities counterparts.
+    source:
+      document: v32-winter15.pdf
+      page: 268
+      heading: General Updates to Chatter in Apex
+    confidence: high
+    id: v32-apex-012
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: Apex classes compiled at API >= 32.0
+    summary: ConnectApi feed item methods are removed in API 32.0; code must migrate
+      to the feed element equivalents (e.g., getFeedItem → getFeedElement,
+      postFeedItem → postFeedElement).
+    detail: API 31.0 was transitional, supporting both feed item and feed element
+      methods. Starting in 32.0, only feed element methods remain. Apex code
+      versioned at 32.0+ calling deprecated feed item methods will fail to
+      compile or execute.
+    upgradeAction: Before upgrading Apex classes past API 31.0, replace all
+      ChatterFeeds feed item method calls with their feed element counterparts
+      per the migration table, and update any code handling FeedItem return
+      types to FeedElement types.
+    source:
+      document: v32-winter15.pdf
+      page: 270
+      heading: New and Changed Chatter in Apex Classes
+    confidence: high
+    id: v32-apex-013
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: Apex code compiled at API >= 32.0
+    summary: Several Chatter in Apex input classes are removed at v32.0 and replaced
+      with capability-based equivalents. Code using CanvasAttachmentInput,
+      ContentAttachmentInput, FeedItemAttachmentInput, LinkAttachmentInput,
+      NewFileAttachmentInput, or PollAttachmentInput must migrate to the new
+      CapabilityInput classes.
+    detail: The attachment-based pattern for feed elements is replaced by a
+      capabilities model. FeedItemInput.attachment and
+      FeedItemInput.isBookmarkedByCurrentUser properties are also removed. A
+      migration table maps each deprecated class to its replacement (e.g.,
+      CanvasAttachmentInput → CanvasCapabilityInput,
+      ContentAttachmentInput/NewFileAttachmentInput → ContentCapabilityInput).
+    upgradeAction: Before upgrading Apex classes past v31.0, refactor any Chatter
+      posting code to use the new ConnectApi.*CapabilityInput classes and the
+      capabilities property instead of the removed attachment classes and
+      properties.
+    source:
+      document: v32-winter15.pdf
+      page: 278
+      heading: New and Changed Chatter in Apex Input Classes
+    confidence: high
+    id: v32-apex-014
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: api-rest
+    appliesWhen: Apex classes using ConnectApi (Chatter in Apex) compiled at API >= 32.0
+    summary: Multiple ConnectApi attachment classes are removed and replaced with
+      capability classes. Code referencing the old classes will fail to compile
+      at v32.0+.
+    detail: Classes like ConnectApi.ApprovalAttachment, ContentAttachment,
+      LinkAttachment, FeedItemAttachment, and several others no longer exist.
+      Their functionality moved to corresponding Capability classes (e.g.,
+      ApprovalCapability, ContentCapability). Properties on FeedItem such as
+      attachment, comments, isBookmarkedByCurrentUser, likes, and topics are
+      also removed in favor of capabilities-based access.
+    upgradeAction: Before upgrading past 32.0, refactor all ConnectApi code to use
+      the new Capability classes and access feed element properties through the
+      capabilities property instead of direct attachment properties.
+    source:
+      document: v32-winter15.pdf
+      page: 281
+      heading: New and Changed Chatter in Apex Output Classes
+    confidence: high
+    id: v32-rest-005
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: EventLogFile object reaches general availability, providing queryable
+      access to org operational event logs for usage and behavior analysis after
+      being in pilot since API 29.0.
+    detail: The EventLogFile object allows programmatic access to event monitoring
+      data. Schema may change between releases, so developers should validate
+      against LogFileFieldNames and LogFileFieldTypes fields at each release
+      boundary.
+    source:
+      document: v32-winter15.pdf
+      page: 297
+      heading: New Objects
+    confidence: high
+    id: v32-rest-006
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The UserProfile object is deprecated starting in API version 32.0 and
+      should be removed from all integrations before the Winter '15 release goes
+      live.
+    upgradeAction: Audit code and integrations for UserProfile object references and
+      migrate to alternative approaches before upgrading to v32.0.
+    source:
+      document: v32-winter15.pdf
+      page: 298
+      heading: Changed Objects
+    confidence: high
+    id: v32-rest-007
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOQL gains a new USING SCOPE clause that allows queries to filter
+      records by predefined scope categories, giving developers finer control
+      over which records are returned.
+    source:
+      document: v32-winter15.pdf
+      page: 302
+      heading: SOQL
+    confidence: medium
+    id: v32-soql-002
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOSL gains a WITH SNIPPET clause that returns highlighted excerpts
+      showing where search terms matched, useful for building search UIs that
+      display context around hits.
+    source:
+      document: v32-winter15.pdf
+      page: 302
+      heading: SOSL
+    confidence: medium
+    id: v32-soql-003
+  - apiVersion: "32.0"
+    introducedIn: "26.0"
+    release: Winter '15
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: SOAP and REST API requests at API version 26.0 and later
+    summary: Compound geolocation fields can now be selected in SOAP and REST
+      queries starting from API version 26.0, whereas previously this capability
+      required version 30.0 or higher.
+    detail: This retroactive expansion of functionality means integrations on older
+      API versions (26.0-29.0) gain the ability to query compound geolocation
+      fields without upgrading.
+    source:
+      document: v32-winter15.pdf
+      page: 304
+      heading: SOAP API
+    confidence: high
+    id: v32-soap-003
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API requests made at version 32.0 and later
+    summary: Chatter REST API resources, request bodies, and response bodies that
+      operated on feed items are no longer supported starting in v32.0. Clients
+      must migrate to the new feed-element-based resources and the capabilities
+      model.
+    detail: The feed model changed from feed items to feed elements in v31.0, and
+      v32.0 completes this transition by dropping support for older
+      feed-item-only endpoints. Attachments are also replaced by capabilities,
+      allowing feed items to have multiple capabilities instead of a single
+      attachment.
+    upgradeAction: Before upgrading API calls to v32.0, inventory all Chatter REST
+      API integrations using feed-item resources, request bodies, or response
+      bodies and migrate them to the equivalent feed-element resources and
+      capabilities-based patterns.
+    source:
+      document: v32-winter15.pdf
+      page: 306
+      heading: General Updates
+    confidence: high
+    id: v32-rest-008
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: integrations using Chatter REST API at version 32.0 and later
+    summary: Chatter REST API migrates from feed-item resources to feed-element
+      resources. Legacy endpoints like /chatter/feed-items are no longer
+      supported at v32.0+; code must switch to /chatter/feed-elements
+      equivalents.
+    detail: "API v31.0 supported both feed-item and feed-element patterns as a
+      transitional release. Starting in v32.0, only feed-element resources work.
+      This affects bookmarks, likes, comments, polls, topics, moderation, and
+      all feed retrieval endpoints. Response bodies also changed—Action Link
+      returns Platform Action, Action Link Group returns Platform Action Group,
+      and Dashboard Component Snapshot returns a new response body instead of
+      Feed Item Attachment: Dashboard."
+    upgradeAction: Audit all Chatter REST API calls for /feed-items paths and
+      migrate them to /feed-elements equivalents before upgrading to API v32.0.
+      Update any code parsing Action Link, Action Link Group, or Dashboard
+      Component Snapshot responses to handle the new response body structures.
+    source:
+      document: v32-winter15.pdf
+      page: 310
+      heading: New and Changed Resources
+    confidence: high
+    id: v32-rest-009
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: integrations using Chatter REST API at API >= 32.0
+    summary: Several Chatter REST API request body types were removed in v32.0 and
+      replaced with new Capability Input patterns. Attachment Input types
+      (Canvas App, Existing Content, Feed Poll, Link, New File Upload) and Feed
+      Poll Input no longer exist; callers must switch to the corresponding
+      Capability Input request bodies.
+    detail: The attachment property on Feed Item Input and Comment Input is replaced
+      by a capabilities property. Feed Item Input also drops
+      isBookmarkedByCurrentUser (use capabilities.bookmarks) and
+      originalFeedItemId (use originalFeedElementId). Code calling these
+      endpoints at v32.0+ with the old request body structure will fail.
+    upgradeAction: Before upgrading API calls to v32.0, refactor request payloads to
+      use the new Capability Input bodies (Canvas Capability Input, Content
+      Capability Input, Link Capability Input, Poll Capability Input) and the
+      capabilities property instead of attachment.
+    source:
+      document: v32-winter15.pdf
+      page: 317
+      heading: New and Changed Request Bodies
+    confidence: high
+    id: v32-rest-010
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: integrations using Chatter REST API at version 32.0 and later
+    summary: The Chatter REST API restructures feed items around a capabilities
+      model, removing properties like attachment, comments,
+      isBookmarkedByCurrentUser, isLikedByCurrentUser, likes, likesMessage,
+      myLike, and topics from the Feed Item response body and relocating them
+      under a new capabilities property. Feed Item Attachment response bodies
+      are replaced by corresponding Capability response bodies.
+    detail: Code consuming Feed Item responses must migrate from top-level
+      properties (attachment, comments, likes, topics, etc.) to the nested
+      capabilities structure. For example, feedItem.isLikedByCurrentUser becomes
+      feedItem.capabilities.chatterLikes.isLikedByCurrentUser, and attachment
+      types like Content or Poll become Content Capability or Poll Capability
+      accessed via capabilities.content or capabilities.poll. The Comment
+      response body's feedItem property is replaced by feedElement, and Comment
+      Page's comments property is replaced by items.
+    upgradeAction: Before upgrading integrations past API version 31.0, refactor
+      code that reads Feed Item properties (attachment, comments, likes, topics,
+      isBookmarkedByCurrentUser, isLikedByCurrentUser, likesMessage, myLike) to
+      use the new capabilities-based structure. Update references to Feed Item
+      Attachment types to their Capability equivalents, and change
+      Comment.feedItem to Comment.feedElement.
+    source:
+      document: v32-winter15.pdf
+      page: 320
+      heading: New and Changed Response Bodies
+    confidence: high
+    id: v32-rest-011
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The AuraDefinitionBundle metadata type is introduced to represent
+      Lightning component bundles containing definitions and resources for
+      components, applications, events, or interfaces.
+    source:
+      document: v32-winter15.pdf
+      page: 339
+      heading: Metadata Types and Fields
+    confidence: medium
+    id: v32-packaging-004
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Connected apps now support custom consumer key and secret values, and
+      two new OAuth authentication providers (LinkedIn and Twitter) become
+      available for community login integration.
+    detail: The consumerKey field becomes write-enabled at creation time, and
+      consumerSecret can be customized instead of relying on
+      Salesforce-generated values. Both require alphanumeric strings of 8-256
+      characters.
+    source:
+      document: v32-winter15.pdf
+      page: 339
+      heading: Metadata Types and Fields
+    confidence: high
+    id: v32-auth-007
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The DandBCompany object transitions from read-only to fully
+      CRUD-enabled, allowing create, update, and delete operations.
+      Organizations with Data.com automated Clean enabled may see manual changes
+      overwritten during sync cycles.
+    upgradeAction: Review any integrations that assumed DandBCompany was immutable.
+      If using automated Clean, verify that new write operations won't conflict
+      with the Clean process.
+    source:
+      document: v32-winter15.pdf
+      page: 343
+      heading: Data.com API
+    confidence: medium
+    id: v32-rest-012
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The publisher.js API events (selectAction, setActionInputValues) now
+      accept Post and Social Post actions, enabling custom console components to
+      programmatically interact with Chatter posts and social posts.
+    source:
+      document: v32-winter15.pdf
+      page: 344
+      heading: Publisher.js API
+    confidence: medium
+    id: v32-rest-013
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: api-rest
+    appliesWhen: components using Console Integration Toolkit at API >= 32.0
+    summary: "Two Console Integration Toolkit methods were renamed in v32.0:
+      isCustomConsoleComponentWindowHidden() became
+      isCustomConsoleComponentHidden(), and
+      setCustomConsoleComponentWindowVisible() became
+      setCustomConsoleComponentVisible()."
+    upgradeAction: When upgrading console components past v31.0, replace calls to
+      the old method names with their shortened v32.0 equivalents.
+    source:
+      document: v32-winter15.pdf
+      page: 344
+      heading: Salesforce Console API (Integration Toolkit)
+    confidence: high
+    id: v32-rest-014
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: External Data Source metadata components can now be included in managed
+      and unmanaged packages, allowing ISVs to distribute Salesforce Connect
+      integrations with external objects and custom fields.
+    detail: After package installation, subscribers must reauthenticate to external
+      servers—re-entering passwords for password auth or updating OAuth callback
+      URLs and re-initiating auth flows. External objects are packaged as custom
+      object components. Certain attributes are locked or developer-editable in
+      managed packages.
+    source:
+      document: v32-winter15.pdf
+      page: 347
+      heading: Package External Data Integrations
+    confidence: medium
+    id: v32-packaging-005
+  - apiVersion: "32.0"
+    release: Winter '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Person Account record types, fields, and related components can now be
+      included in managed and unmanaged packages, enabling ISVs to build B2C
+      apps that leverage Person Accounts.
+    source:
+      document: v32-winter15.pdf
+      page: 349
+      heading: Other Changes in Force.com Development
+    confidence: medium
+    id: v32-packaging-006

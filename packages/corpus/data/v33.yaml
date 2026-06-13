@@ -1,0 +1,1458 @@
+apiVersion: "33.0"
+release: Spring '15
+reviewed: true
+entries:
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex collections without guaranteed ordering (Sets and Map key
+      iteration) now follow a consistent, predictable iteration sequence. Code
+      relying on arbitrary iteration behavior may see different results.
+    upgradeAction: Review code that iterates over Sets or Map keys where order
+      assumptions existed. Verify tests pass with the new deterministic
+      ordering.
+    source:
+      document: v33-spring15.pdf
+      page: 11
+      heading: Release Notes Changes
+    confidence: medium
+    id: v33-apex-001
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: components compiled at API >= 33.0
+    summary: The <apex:page> tag has modified default attribute values when rendered
+      within Salesforce1 mobile context, potentially altering page presentation
+      or functionality.
+    upgradeAction: Test Visualforce pages accessed through Salesforce1 after
+      upgrading API version; explicitly set attributes if the new defaults cause
+      issues.
+    source:
+      document: v33-spring15.pdf
+      page: 11
+      heading: Release Notes Changes
+    confidence: medium
+    id: v33-vf-001
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce is ending support for the legacy CTI Toolkit, which provided
+      desktop telephony integration. Integrations built on this toolkit will
+      stop working.
+    upgradeAction: Migrate any CTI Toolkit-based telephony integrations to Open CTI
+      before support ends.
+    source:
+      document: v33-spring15.pdf
+      page: 29
+      heading: Service
+    confidence: medium
+    id: v33-other-001
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOQL queries against external objects now support the COUNT() aggregate
+      function, enabling row-count operations on Lightning Connect OData
+      sources.
+    source:
+      document: v33-spring15.pdf
+      page: 33
+      heading: Data
+    confidence: medium
+    id: v33-soql-001
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The critical update enforcing governor limits on all executed flows has
+      its activation date changed, affecting when flows become subject to
+      standard execution limits.
+    upgradeAction: Review flow execution patterns for governor limit compliance
+      before the new enforcement date, particularly flows with heavy DML or
+      query operations.
+    source:
+      document: v33-spring15.pdf
+      page: 33
+      heading: Business Logic and Process Automation
+    confidence: low
+    id: v33-flow-001
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: SAML just-in-time user provisioning can now be customized via an Apex
+      handler class, allowing developers to programmatically control user
+      creation and updates during SSO login.
+    source:
+      document: v33-spring15.pdf
+      page: 35
+      heading: Security and Identity
+    confidence: medium
+    id: v33-auth-001
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOSL search infrastructure switches from bigram to morphological
+      tokenization, significantly altering how East Asian (CJKT) text is
+      matched. Queries that previously matched substrings within compound words
+      now require exact morphological boundaries.
+    detail: The tokenization change affects all SOSL search API calls. For example,
+      searching for 京都 (Kyoto) previously matched 東京都 (Tokyo Prefecture) via
+      bigram overlap; now it does not. Additionally, alphanumeric strings are
+      tokenized differently—web2lead becomes separate tokens (web, 2, lead,
+      etc.), changing which records match partial searches. Records with 300+
+      Kanji-only characters are tokenized as Chinese, making them unsearchable
+      for Japanese-language users.
+    upgradeAction: Run SOSL-dependent integrations in sandbox before Summer '15
+      rollout to verify expected search results, especially for CJKT content and
+      alphanumeric identifier searches.
+    source:
+      document: v33-spring15.pdf
+      page: 48
+      heading: Get Faster and More Relevant Search Results (Generally Available)
+    confidence: high
+    id: v33-soql-002
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: New sObjects (InsightsExternalData, InsightsExternalDataPart) enable
+      programmatic upload of external CSV data to Analytics Cloud via REST,
+      SOAP, or Apex APIs.
+    source:
+      document: v33-spring15.pdf
+      page: 82
+      heading: Bring in External Data
+    confidence: medium
+    id: v33-rest-001
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: The sforce.one.navigateToRelatedList() JavaScript function now accepts
+      different parameter values, which may break existing Salesforce1 mobile
+      navigation code that relied on the previous accepted values.
+    upgradeAction: Review any Visualforce pages using
+      sforce.one.navigateToRelatedList() and verify the parameter values conform
+      to the new accepted format.
+    source:
+      document: v33-spring15.pdf
+      page: 124
+      heading: Salesforce1 App Development Overview
+    confidence: medium
+    id: v33-vf-002
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: The contract-specific approval functionality has been fully retired.
+      Organizations can no longer create, approve, or reject contract approval
+      requests, and the legacy feature is now read-only.
+    upgradeAction: Migrate any contract approval workflows to standard Salesforce
+      approval processes before this retirement takes effect. Existing approval
+      request records remain accessible in read-only mode.
+    source:
+      document: v33-spring15.pdf
+      page: 170
+      heading: Other Changes in the Sales Cloud
+    confidence: high
+    id: v33-other-002
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex classes can now implement custom handlers to programmatically set
+      default values for email action fields in Case Feed, including template
+      selection and From address based on case attributes.
+    source:
+      document: v33-spring15.pdf
+      page: 176
+      heading: Set Default Email Action Defaults with Apex
+    confidence: medium
+    id: v33-apex-002
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce ends support for all versions of the CTI Toolkit after
+      Spring '15. Partners with CTI adapter integrations must migrate to Open
+      CTI.
+    upgradeAction: Migrate any CTI Toolkit-based adapter integrations to Open CTI
+      before support ends.
+    source:
+      document: v33-spring15.pdf
+      page: 189
+      heading: Retirement of Support for the Salesforce CTI Toolkit
+    confidence: high
+    id: v33-other-003
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The ChatterMessage object now supports Apex triggers, enabling
+      programmatic moderation of private messages via before insert triggers
+      that can validate message content and reject messages using addError.
+    detail: Triggers can inspect the Body, SenderId, SentDate, and SendingNetworkId
+      fields. Only before insert triggers are practical since ChatterMessage is
+      not updatable, meaning after insert triggers that attempt modifications
+      will fail at runtime.
+    source:
+      document: v33-spring15.pdf
+      page: 211
+      heading: Moderate Chatter Private Messages with Apex Triggers
+    confidence: high
+    id: v33-apex-003
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: Address and geolocation compound fields are now blocked in BLANKVALUE,
+      CASE, NULLVALUE, PRIORVALUE, and comparison/equality operators within
+      formulas. Existing formulas using these combinations must be corrected
+      before they can be saved again.
+    upgradeAction: Review formulas referencing compound fields in the now-blocked
+      functions and operators; refactor to use individual field components
+      (e.g., BillingStreet instead of BillingAddress) before editing those
+      formulas.
+    source:
+      document: v33-spring15.pdf
+      page: 219
+      heading: Availability of Compound Fields in Formula Functions Changed
+    confidence: high
+    id: v33-other-004
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOQL queries against external objects now support the COUNT() aggregate
+      function when the backing OData source implements $inlinecount.
+    source:
+      document: v33-spring15.pdf
+      page: 223
+      heading: SOQL Queries of External Objects Can Include the COUNT() Aggregate
+        Function
+    confidence: high
+    id: v33-soql-003
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Field Audit Trail GA introduces the FieldHistoryArchive object and
+      HistoryRetentionPolicy metadata type, enabling long-term field history
+      retention queryable via REST, SOAP, and Tooling APIs with a restricted
+      SOQL subset.
+    detail: Developers can now define retention policies through Metadata API and
+      query archived field history from FieldHistoryArchive using a bounded SOQL
+      feature set. This provides a new integration surface for
+      compliance-oriented data access.
+    source:
+      document: v33-spring15.pdf
+      page: 224
+      heading: Retain Field History with Field Audit Trail (Generally Available)
+    confidence: medium
+    id: v33-rest-002
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Process Builder processes can now be deployed via change sets,
+      packages, and the Metadata API by treating them as Flow components (with
+      type Workflow for Metadata API deployments).
+    source:
+      document: v33-spring15.pdf
+      page: 231
+      heading: Other Changes in the Process Builder
+    confidence: high
+    id: v33-packaging-001
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The flow:interview Visualforce component gains an allowShowPause
+      attribute, enabling page-level control over whether users can pause
+      embedded flow interviews.
+    source:
+      document: v33-spring15.pdf
+      page: 233
+      heading: Control Which Users Can Pause Flows
+    confidence: high
+    id: v33-flow-002
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The @InvocableMethod annotation provides a new way to expose Apex
+      methods to Flows, Process Builder, and the REST API, offering bulk
+      operation support and simpler syntax compared to the Process.Plugin
+      interface.
+    source:
+      document: v33-spring15.pdf
+      page: 236
+      heading: Give Flows Access to Apex Classes More Easily
+    confidence: high
+    id: v33-apex-004
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: A new Apex debug log event FLOW_ELEMENT_DEFERRED now fires when bulk
+      flow elements (like Record Create) are deferred until all interviews in
+      the transaction complete, aiding troubleshooting of flow execution timing.
+    source:
+      document: v33-spring15.pdf
+      page: 241
+      heading: Other Changes in Visual Workflow
+    confidence: high
+    id: v33-apex-005
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Organizations can now implement a custom Apex class using the
+      SamlJitHandler interface to control SAML-based just-in-time user
+      provisioning logic, replacing or supplementing the previous attribute-only
+      approach.
+    detail: Salesforce can auto-generate a starter implementation of the
+      SamlJitHandler interface, or developers can write their own from scratch.
+      This provides programmatic control over user creation and updates during
+      SSO flows.
+    source:
+      document: v33-spring15.pdf
+      page: 246
+      heading: Customize SAML Just-in-Time User Provisioning with an Apex Class
+    confidence: high
+    id: v33-auth-002
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Connected apps now support multiple callback URLs (OAuth redirect_uri
+      values), enabling a single connected app to serve multiple OAuth flows or
+      environments.
+    source:
+      document: v33-spring15.pdf
+      page: 247
+      heading: Use Multiple Callback URLs for Connected Apps
+    confidence: high
+    id: v33-auth-003
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Facebook Auth. Provider configuration now allows custom Authorize,
+      Token, and User Info endpoint URLs, enabling integrations to target a
+      specific Facebook API version rather than defaulting to the version of the
+      connected Facebook app.
+    source:
+      document: v33-spring15.pdf
+      page: 247
+      heading: Edit Authorize, Token, and User Info Endpoints for Facebook Auth.
+        Provider
+    confidence: medium
+    id: v33-auth-004
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: A new unauthenticated endpoint at /.well-known/auth-configuration
+      exposes SAML, Auth Provider, and branding settings for communities and My
+      Domain custom URLs in JSON format, enabling apps to discover SSO
+      configuration without a session.
+    source:
+      document: v33-spring15.pdf
+      page: 248
+      heading: Get Authentication Configuration Settings for a Custom Domain or
+        Community from a URL
+    confidence: high
+    id: v33-auth-005
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Named Credentials are now available, allowing Apex callouts to
+      reference a credential by name instead of hardcoding endpoints and
+      authentication logic. This lets Salesforce handle OAuth or basic auth
+      automatically and bypasses the need for explicit Remote Site Settings.
+    detail: Developers can point callouts to a named credential rather than a raw
+      URL, delegating authentication (OAuth 2.0 or basic password) to the
+      platform. This simplifies code, improves security by keeping secrets out
+      of Apex, and eases multi-environment deployments since each org can define
+      the same credential name with different endpoints.
+    source:
+      document: v33-spring15.pdf
+      page: 249
+      heading: Create Named Credentials to Define Callout Endpoints and Their
+        Authentication Settings
+    confidence: high
+    id: v33-auth-006
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: The Auth.AuthManagement.getCurrentSession() Apex method now returns a
+      LoginHistoryId, and AuthSession gains this field, enabling developers to
+      correlate multiple sessions to a single login event for auditing or
+      reporting.
+    source:
+      document: v33-spring15.pdf
+      page: 249
+      heading: Track Login History by ID with Session Context
+    confidence: high
+    id: v33-auth-007
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Outbound SAML SSO requests to identity providers can now be signed with
+      RSA-SHA256 instead of the weaker RSA-SHA1 algorithm, enabling
+      compatibility with IdPs like ADFS that require stronger signing.
+    source:
+      document: v33-spring15.pdf
+      page: 251
+      heading: Sign SAML Single Sign-On Requests with RSA-SHA256
+    confidence: high
+    id: v33-auth-008
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: OAuth 2.0 Web Server Flow now supports PKCE (Proof Key for Code
+      Exchange) via optional code_challenge and code_verifier parameters,
+      enabling clients to guard against authorization code interception attacks.
+    detail: Clients can generate a random code_verifier, hash it to produce
+      code_challenge, pass the challenge to the authorization endpoint and the
+      verifier to the token endpoint. Salesforce validates the pair and rejects
+      mismatches. This is the standard RFC 7636 PKCE extension.
+    source:
+      document: v33-spring15.pdf
+      page: 252
+      heading: Provide Code Challenge and Verifier Values for OAuth 2.0 Web Server Flow
+    confidence: high
+    id: v33-auth-009
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: The OAuth 2.0 username-password flow now returns a unified error
+      response of 'invalid_grant — authentication failure' for all credential
+      failures, replacing the previous specific error codes that distinguished
+      between bad passwords, expired tokens, and invalid users.
+    upgradeAction: Update any integration code that parses OAuth error responses to
+      handle the consolidated 'invalid_grant — authentication failure' message
+      instead of relying on distinct error codes to differentiate failure
+      reasons.
+    source:
+      document: v33-spring15.pdf
+      page: 253
+      heading: OAuth 2.0 Username-Password Flow Error Messages Changed
+    confidence: high
+    id: v33-auth-010
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version, once API Client
+      Whitelisting is enabled by Salesforce
+    summary: API Client Whitelisting blocks all API client applications (Data
+      Loader, Salesforce1, Force.com Migration Tool, etc.) by default unless
+      each client is configured as an approved connected app or the user has the
+      'Use Any API Client' permission.
+    detail: When enabled, this feature requires administrator approval for every API
+      client. Existing integrations will break until explicitly whitelisted as
+      connected apps. The feature must be enabled by contacting Salesforce.
+    upgradeAction: Before enabling, inventory all API clients in use and configure
+      them as approved connected apps, or assign 'Use Any API Client' permission
+      to affected users to prevent integration outages.
+    source:
+      document: v33-spring15.pdf
+      page: 253
+      heading: Control Individual API Client Access to Your Salesforce Organization
+    confidence: high
+    id: v33-auth-011
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide upon critical update activation (auto-activation date varies)
+    summary: The escapeHtml3, escapeHtml4, and escapeEcmaScript String methods now
+      escape additional characters beyond their previous behavior, potentially
+      affecting output that relied on the old escaping rules.
+    upgradeAction: Review code using these escape methods and verify output still
+      renders correctly after additional characters are escaped; update any
+      logic that depended on specific characters passing through unescaped.
+    source:
+      document: v33-spring15.pdf
+      page: 260
+      heading: Critical Updates
+    confidence: high
+    id: v33-apex-006
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Quick Deploy now allows production deployments to skip Apex test
+      execution for components validated within the past 96 hours, provided all
+      tests passed during validation and org-wide coverage meets the 75%
+      threshold.
+    detail: This feature applies to both change sets and Metadata API deployments.
+      Programmatic access is available via the new deployRecentValidation()
+      Metadata API call, which accepts the validation ID from a prior successful
+      validation-only deployment.
+    source:
+      document: v33-spring15.pdf
+      page: 263
+      heading: Deploy Your Components in Less Time (Generally Available)
+    confidence: high
+    id: v33-packaging-002
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: deployments using Metadata API version >= 33.0
+    summary: "Two new manifest files let you control deletion timing during
+      deployments: destructiveChangesPre.xml runs deletions before component
+      updates, destructiveChangesPost.xml runs them after. This enables
+      single-deployment handling of components with dependencies."
+    detail: Prior to v33.0, only destructiveChanges.xml existed and deletions always
+      ran first. The new manifests let you, for example, update an Apex class to
+      remove a reference to a custom object and then delete that object in the
+      same deployment. The legacy destructiveChanges.xml still works in v33.0+
+      with deletions-first behavior.
+    source:
+      document: v33-spring15.pdf
+      page: 265
+      heading: Delete Components before and after Component Updates
+    confidence: high
+    id: v33-packaging-003
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: New Visualforce components (<apex:map> and <apex:mapMarker>) allow
+      developers to embed interactive maps with markers based on addresses or
+      geolocations without writing custom JavaScript for third-party mapping
+      services.
+    source:
+      document: v33-spring15.pdf
+      page: 267
+      heading: Use Visualforce Map Components to Show Location Data More Clearly
+    confidence: medium
+    id: v33-vf-003
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: Visualforce pages compiled at API >= 33.0
+    summary: The flow:interview Visualforce component gains an allowShowPause
+      attribute, enabling developers to control whether users see the pause
+      option when running embedded flows.
+    source:
+      document: v33-spring15.pdf
+      page: 268
+      heading: New Attributes for <flow:interview>
+    confidence: high
+    id: v33-vf-004
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: The sforce.one.navigateToRelatedList() function no longer accepts
+      internal IDs for standard related lists; only API names are valid.
+      Hard-coded internal IDs will stop working.
+    upgradeAction: Audit Visualforce pages using sforce.one.navigateToRelatedList()
+      and replace any hard-coded internal list IDs with the corresponding API
+      names.
+    source:
+      document: v33-spring15.pdf
+      page: 268
+      heading: Change in Parameter Values for sforce.one.navigateToRelatedList()
+    confidence: high
+    id: v33-vf-005
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: Visualforce pages compiled at API >= 33.0 when rendered in Salesforce1
+    summary: Visualforce pages at v33+ running inside Salesforce1 now default
+      showHeader, sidebar, and standardStylesheet to false, suppressing standard
+      Salesforce CSS and JavaScript resources that were previously included even
+      though the header/sidebar HTML was already hidden.
+    detail: Prior to v33, pages in Salesforce1 only removed header/sidebar HTML but
+      still loaded the associated stylesheets and scripts. Pages relying on
+      standard Salesforce styles for components like apex:inputField may see
+      layout differences, though Visualforce will still include required
+      resources for standard UI components.
+    upgradeAction: Test Visualforce pages in Salesforce1 after upgrading past v33 to
+      verify styling and JavaScript-dependent components still render correctly;
+      explicitly set standardStylesheet='true' if your page relies on suppressed
+      styles.
+    source:
+      document: v33-spring15.pdf
+      page: 269
+      heading: Change in Attribute Defaults for <apex:page> When in Salesforce1
+    confidence: high
+    id: v33-vf-006
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: URLFOR now returns direct download URLs for attachments instead of
+      redirect URLs, eliminating an extra network round-trip per attachment
+      link.
+    detail: Previously URLFOR with $Action.Attachment.Download returned a URL that
+      issued a server-side redirect to the actual file. Now it returns the final
+      URL directly. This improves page load times for pages with many attachment
+      links but may affect code that expected or parsed the intermediate
+      redirect response.
+    upgradeAction: Review any code that inspects or manipulates URLFOR-generated
+      attachment URLs, particularly if it expected redirect behavior or parsed
+      intermediate responses.
+    source:
+      document: v33-spring15.pdf
+      page: 269
+      heading: URLs Returned by the URLFOR Function Optimized for Attachments
+    confidence: medium
+    id: v33-vf-007
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version (requires critical
+      update activation for existing orgs; enabled by default for new orgs)
+    summary: Batch job submission now routes jobs through a flex queue with a new
+      'Holding' status before they reach 'Queued'. This affects SOQL queries
+      against AsyncApexJob that filter on Status values.
+    detail: When Database.executeBatch is called, jobs enter 'Holding' status in the
+      flex queue (up to 100 jobs) before moving to 'Queued' when resources are
+      available. Code querying AsyncApexJob.Status must account for this new
+      status value. Additionally, Database.executeBatch now throws
+      LimitException when the flex queue reaches 100 jobs.
+    upgradeAction: Review any Apex code or integrations that query
+      AsyncApexJob.Status and ensure they handle the new 'Holding' value. Update
+      exception handling around Database.executeBatch to catch LimitException
+      when the 100-job flex queue limit is reached.
+    source:
+      document: v33-spring15.pdf
+      page: 271
+      heading: Submit More Batch Jobs with Apex Flex Queue (Generally Available)
+    confidence: high
+    id: v33-apex-008
+  - apiVersion: "33.0"
+    introducedIn: "30.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: Apex controllers and Visualforce pages compiled at API >= 30.0
+    summary: The Continuation class enables asynchronous callouts from Visualforce
+      pages, bypassing the limit of 10 concurrent synchronous requests lasting
+      over 5 seconds. Requests are processed via callback methods while the page
+      suspends.
+    detail: This feature was introduced in API version 30.0 but is documented here
+      in Spring '15. Up to three callouts can run in parallel within a single
+      Continuation. The pattern requires returning a Continuation object from an
+      action method and defining a callback method to process the response.
+    source:
+      document: v33-spring15.pdf
+      page: 272
+      heading: Make Long-Running Callouts from a Visualforce Page
+    confidence: high
+    id: v33-vf-008
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Queueable Apex now supports unlimited job chaining (five in
+      Developer/Trial orgs), removing the previous one-chain limit introduced in
+      Winter '15.
+    source:
+      document: v33-spring15.pdf
+      page: 276
+      heading: Chain More Jobs with Queueable Apex
+    confidence: high
+    id: v33-apex-009
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex gains native Address and Location classes for accessing compound
+      address and geolocation fields directly, rather than querying only their
+      individual component fields.
+    source:
+      document: v33-spring15.pdf
+      page: 276
+      heading: Access Address and Geolocation Compound Fields Using Apex
+    confidence: high
+    id: v33-apex-010
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: HTTP callout request and response size limits doubled to 6 MB for
+      synchronous Apex and 12 MB for asynchronous Apex, up from the previous 3
+      MB cap.
+    source:
+      document: v33-spring15.pdf
+      page: 277
+      heading: Make Apex Callouts with More Data
+    confidence: high
+    id: v33-apex-011
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: "Apex callouts can now reference named credentials in the endpoint URL
+      using the callout: prefix, letting Salesforce handle authentication
+      automatically instead of requiring manual credential management in code."
+    source:
+      document: v33-spring15.pdf
+      page: 277
+      heading: Simplify Authenticated Apex Callouts by Specifying Named Credentials as
+        Endpoints
+    confidence: high
+    id: v33-apex-012
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version (Release Update
+      activation required)
+    summary: The escapeHtml3 and escapeHtml4 methods now escape single quotes, and
+      escapeEcmaScript now escapes angle brackets (< and >), which may alter
+      output strings that previously passed these characters through unmodified.
+    upgradeAction: Review code that relies on escapeHtml3, escapeHtml4, or
+      escapeEcmaScript output. If downstream consumers expect unescaped single
+      quotes or angle brackets, adjust parsing or switch to custom escaping
+      logic.
+    source:
+      document: v33-spring15.pdf
+      page: 279
+      heading: String Methods Fixed for Escaping Additional Characters
+    confidence: high
+    id: v33-apex-013
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: Bug fixes to code coverage calculation may cause reported percentages
+      to differ from previous runs even without code changes. Manually deleted
+      rows in ApexCodeCoverageAggregate are now recreated when tests execute,
+      and other calculation bugs were corrected.
+    upgradeAction: Rerun all Apex tests after the Spring '15 release to refresh
+      coverage metrics and verify your org still meets deployment thresholds
+      before attempting any production deploys.
+    source:
+      document: v33-spring15.pdf
+      page: 279
+      heading: Code Coverage Bug Fixes
+    confidence: high
+    id: v33-apex-014
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version (critical update
+      affects all API versions)
+    summary: Activating this critical update makes Map and Set iteration order
+      deterministic and repeatable across executions, but the new fixed order
+      may differ from the previous arbitrary order.
+    detail: Code that relied on a particular iteration sequence for unordered
+      collections—such as assertions against stringified maps or logic assuming
+      element positions—may fail when the critical update is enabled because the
+      deterministic order could differ from whatever order happened to exist
+      before.
+    upgradeAction: Before enabling, audit Apex code that iterates over Maps or Sets
+      and depends on element ordering (e.g., string comparisons, positional
+      logic). Refactor to use explicit sorting or order-independent assertions.
+    source:
+      document: v33-spring15.pdf
+      page: 279
+      heading: Predictable Iteration Order for Unordered Collections
+    confidence: high
+    id: v33-apex-015
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: New ConnectApi methods let Apex code create, read, and delete action
+      link group definitions programmatically, with access restricted to the
+      creating namespace and requiring either ownership or Modify All Data
+      permission.
+    source:
+      document: v33-spring15.pdf
+      page: 291
+      heading: New and Changed Chatter in Apex Classes
+    confidence: medium
+    id: v33-apex-016
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning Components (Beta) gains system events (aura:doneRendering,
+      aura:locationChange, aura:valueChange, etc.), Salesforce1
+      navigation/action events (force:createRecord, force:navigateToSObject,
+      force:refreshView, etc.), and UI events for menu expand/collapse, enabling
+      richer component interaction and lifecycle handling.
+    source:
+      document: v33-spring15.pdf
+      page: 302
+      heading: New Events
+    confidence: medium
+    id: v33-aura-001
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning component markup now enforces case sensitivity, meaning
+      attribute names, component references, and event names must match their
+      declarations exactly in terms of upper and lowercase characters.
+    upgradeAction: Review all Lightning component markup for case mismatches in
+      attribute names, component tags, and event references. Fix any
+      inconsistencies before upgrading.
+    source:
+      document: v33-spring15.pdf
+      page: 304
+      heading: Case Sensitivity
+    confidence: high
+    id: v33-aura-002
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning component markup now enforces case sensitivity throughout,
+      including attribute references and expressions. Previously only JavaScript
+      and CSS references were case-sensitive.
+    upgradeAction: Audit Lightning component markup for case mismatches in attribute
+      names, custom field references, and expressions. A reference like
+      {!v.myObject.myNamespace__amount__c} will break if the field is actually
+      myNamespace__Amount__c.
+    source:
+      document: v33-spring15.pdf
+      page: 304
+      heading: Authoring Support Added in More Editions
+    confidence: high
+    id: v33-aura-003
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning components no longer mandate that an org have a registered
+      namespace; orgs without one now receive a default namespace automatically,
+      removing a prerequisite that previously blocked component authoring in
+      simpler orgs.
+    source:
+      document: v33-spring15.pdf
+      page: 304
+      heading: Namespace Requirement Removed
+    confidence: high
+    id: v33-lwc-001
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning components now accept the 'c' namespace as a universal alias
+      for the org's namespace, eliminating the need to hardcode explicit
+      namespace prefixes when referencing components, custom objects/fields, and
+      Apex classes.
+    detail: Organizations without a registered namespace must use 'c'. Those with a
+      namespace can use either their explicit prefix or 'c'. This improves code
+      portability for unmanaged packages and copy-paste sharing.
+    source:
+      document: v33-spring15.pdf
+      page: 305
+      heading: Support Added for Default Namespace
+    confidence: high
+    id: v33-aura-004
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning components and applications now support inheritance via
+      extensible, extends, and abstract attributes, enabling one component or
+      app to inherit attributes and registered events from another.
+    source:
+      document: v33-spring15.pdf
+      page: 305
+      heading: Extend Lightning Components and Apps
+    confidence: high
+    id: v33-aura-005
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning Components gain the <ltng:require> tag for loading external
+      CSS and JavaScript from static resources, with support for ordered loading
+      and a callback action when scripts finish loading.
+    source:
+      document: v33-spring15.pdf
+      page: 307
+      heading: Load External CSS or JavaScript Libraries
+    confidence: high
+    id: v33-aura-006
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: NamedCredential object introduced, allowing callout endpoints and
+      authentication parameters to be bundled into a single reusable definition
+      for Apex HTTP callouts.
+    source:
+      document: v33-spring15.pdf
+      page: 308
+      heading: New Objects
+    confidence: high
+    id: v33-auth-012
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Approval object no longer permits create, update, or upsert
+      operations via API; integrations that programmatically create or modify
+      approval records will fail.
+    upgradeAction: Audit integrations and Apex code for any DML or API calls
+      targeting Approval records and refactor to use supported approval process
+      APIs instead.
+    source:
+      document: v33-spring15.pdf
+      page: 310
+      heading: Changed Objects
+    confidence: high
+    id: v33-rest-003
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: REST API now supports CORS, allowing JavaScript in web browsers to make
+      cross-origin requests to Salesforce endpoints when the origin is added to
+      the CORS whitelist.
+    detail: Developers can add origins to the whitelist via Setup > Security
+      Controls > CORS. Requests from whitelisted origins receive appropriate
+      CORS headers; non-whitelisted origins get HTTP 403. OAuth tokens are still
+      required for authenticated endpoints.
+    source:
+      document: v33-spring15.pdf
+      page: 314
+      heading: REST API
+    confidence: high
+    id: v33-rest-004
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Action links are now generally available, allowing developers to embed
+      clickable buttons in feed elements that can invoke HTTP requests to
+      Salesforce or external APIs, including support for templates with binding
+      and context variables.
+    source:
+      document: v33-spring15.pdf
+      page: 318
+      heading: General Updates to Chatter REST API
+    confidence: medium
+    id: v33-rest-005
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: Chatter REST API calls at API version >= 33.0
+    summary: The `followed` and `viewed` request parameters on user recommendation
+      endpoints are superseded by `contextAction` and `contextObjectId` starting
+      in v33.0.
+    detail: When calling recommendation resources under
+      /chatter/users/{userId}/recommendations, the older followed and viewed
+      parameters should be replaced with the newer contextAction and
+      contextObjectId parameters for API version 33.0 and later.
+    upgradeAction: Update any integration code calling user recommendation endpoints
+      to use contextAction and contextObjectId instead of followed and viewed
+      parameters.
+    source:
+      document: v33-spring15.pdf
+      page: 323
+      heading: New and Changed Chatter REST API Resources
+    confidence: medium
+    id: v33-rest-006
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API requests targeting version >= 33.0
+    summary: Chatter REST API renamed enum values for the Action Link Definition
+      Input 'method' property (e.g., 'Delete' becomes 'HttpDelete') and Action
+      Link Input 'status' property (e.g., 'New' becomes 'NewStatus'). Code using
+      the old string values will fail on v33+.
+    upgradeAction: Update any integrations that create or manipulate action links to
+      use the new enum strings (HttpDelete, HttpGet, HttpHead, HttpPatch,
+      HttpPost, HttpPut for method; FailedStatus, NewStatus, PendingStatus,
+      SuccessfulStatus for status) before calling API v33.0 or later.
+    source:
+      document: v33-spring15.pdf
+      page: 325
+      heading: New and Changed Chatter REST API Request Bodies
+    confidence: low
+    id: v33-rest-007
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Chatter REST API response bodies now use different enum string values
+      for the method property on Action Link Definition (e.g., 'Delete' becomes
+      'HttpDelete') and the status property on Platform Action (e.g., 'Failed'
+      becomes 'FailedStatus'). The Platform Action type value 'AnchorAction' is
+      renamed to 'ProductivityAction'.
+    detail: Integrations parsing these response bodies must update any code that
+      checks for the old enum values. The method property changes affect action
+      links, while status and type changes affect Platform Action responses.
+    upgradeAction: Update any integration code that parses Action Link Definition
+      method values or Platform Action status/type values to use the new enum
+      strings.
+    source:
+      document: v33-spring15.pdf
+      page: 327
+      heading: New and Changed Chatter REST API Response Bodies
+    confidence: high
+    id: v33-rest-008
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-bulk
+    appliesWhen: org-wide regardless of component API version
+    summary: "Bulk API gains three new request headers: one to disable batch retries
+      for jobs with timing-out batches, one to control line-ending
+      interpretation (LF vs CRLF) for text area fields during uploads, and one
+      to enable automatic primary-key chunking for queries on very large
+      tables."
+    source:
+      document: v33-spring15.pdf
+      page: 330
+      heading: Bulk API
+    confidence: high
+    id: v33-bulk-001
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Generic streaming reaches GA in Streaming API v33.0, enabling custom
+      push notifications for events unrelated to Salesforce record changes.
+    source:
+      document: v33-spring15.pdf
+      page: 331
+      heading: Streaming API
+    confidence: high
+    id: v33-rest-009
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: SOAP Tooling API clients targeting API version 33.0 or later
+    summary: Metadata types in the SOAP Tooling API moved to a dedicated namespace
+      (metadata.tooling.soap.sforce.com) and dropped the 'Metadata' suffix from
+      type names. Existing clients hitting older endpoints remain unaffected.
+    upgradeAction: When upgrading SOAP Tooling API clients to v33+, update WSDL
+      imports and type references to use the new namespace and unsuffixed names.
+    source:
+      document: v33-spring15.pdf
+      page: 331
+      heading: Tooling API
+    confidence: high
+    id: v33-soap-001
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The Metadata API gains deployRecentValidation(), allowing deployment of
+      previously validated components without re-running Apex tests, provided
+      the validation succeeded within the past 96 hours and all org tests passed
+      during that validation.
+    source:
+      document: v33-spring15.pdf
+      page: 334
+      heading: Metadata API Calls
+    confidence: high
+    id: v33-packaging-004
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: SharingRules metadata type restructured to use child subtypes
+      (SharingCriteriaRule, SharingOwnerRule, SharingTerritoryRule) with
+      wildcard retrieval support, while the legacy per-object sharing rule types
+      (AccountSharingRules, CampaignSharingRules, etc.) are removed.
+    detail: Deployments and retrievals that reference the removed types will fail.
+      Migrate package.xml and retrieval scripts to use the consolidated
+      SharingRules type with wildcards instead.
+    upgradeAction: Update package.xml files and any CI/CD scripts that reference the
+      removed sharing rule types (AccountSharingRules, CampaignSharingRules,
+      CaseSharingRules, ContactSharingRules, LeadSharingRules,
+      OpportunitySharingRules, AccountTerritorySharingRules,
+      CustomObjectSharingRules) to use the unified SharingRules type.
+    source:
+      document: v33-spring15.pdf
+      page: 334
+      heading: Metadata Types and Fields
+    confidence: high
+    id: v33-packaging-005
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The publisher.js API now fires events for Post and Social Post actions,
+      enabling custom Service Cloud console components to programmatically
+      interact with these publisher actions.
+    source:
+      document: v33-spring15.pdf
+      page: 337
+      heading: Publisher.js API
+    confidence: medium
+    id: v33-rest-010
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Console Integration Toolkit adds a displayName attribute to
+      getPageInfo() responses and introduces setSidebarVisible() for
+      programmatic sidebar control.
+    source:
+      document: v33-spring15.pdf
+      page: 337
+      heading: Salesforce Console API (Integration Toolkit)
+    confidence: medium
+    id: v33-rest-011
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: REST API gains Invocable Actions, a unified endpoint for invoking
+      standard actions (Email, Chatter Post, Submit for Approval) and custom
+      actions (Apex, Email Alert, Flow, Quick Action) with consistent
+      request/response shapes and programmatic describe support.
+    source:
+      document: v33-spring15.pdf
+      page: 338
+      heading: Invocable Actions
+    confidence: high
+    id: v33-rest-012
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: ISVs can now delete Visualforce pages, Visualforce components, and
+      static resources from managed packages. Deleted components remain
+      available in subscriber orgs under Unused Components until the subscriber
+      explicitly removes them.
+    detail: This extends the Spring '14 deletion capability to additional component
+      types. Deleted components cannot be restored or recreated with the same
+      API name. Subscribers retain data and must opt-in to final deletion.
+    source:
+      document: v33-spring15.pdf
+      page: 340
+      heading: Streamline Managed Packages by Deleting Unused Components
+    confidence: high
+    id: v33-packaging-006
+  - apiVersion: "33.0"
+    release: Spring '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Named Credential metadata can now be included in managed and unmanaged
+      packages, enabling ISVs to distribute authenticated callout configurations
+      alongside their Apex code.
+    detail: Subscribers must reauthenticate after installation (re-enter password or
+      re-initiate OAuth flow). Certificates referenced by named credentials are
+      not packageable and must exist in the subscriber org with matching names.
+    source:
+      document: v33-spring15.pdf
+      page: 340
+      heading: Package Named Credentials
+    confidence: high
+    id: v33-packaging-007

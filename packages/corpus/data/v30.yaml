@@ -1,0 +1,1088 @@
+apiVersion: "30.0"
+release: Spring '14
+reviewed: true
+entries:
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version, effective Summer '14
+    summary: The legacy Forecasts 1.0 (Classic) feature will be removed in Summer
+      '14, requiring orgs still using it to migrate to Collaborative Forecasts
+      or another forecasting approach.
+    upgradeAction: Identify any integrations or automations dependent on Forecasts
+      1.0 APIs or data structures and migrate them to Collaborative Forecasts
+      before Summer '14.
+    source:
+      document: v30-spring14.pdf
+      page: 133
+      heading: Forecasts 1.0 (Classic) Will Be Retired in Summer '14
+    confidence: high
+    id: v30-other-001
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The Analytics API becomes callable from Apex code, allowing developers
+      to programmatically run reports and retrieve results within server-side
+      logic.
+    source:
+      document: v30-spring14.pdf
+      page: 191
+      heading: Analytics API Available in Apex
+    confidence: high
+    id: v30-apex-002
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: OAuth token responses now include the token_type field set to "Bearer",
+      which may affect integrations that parse the response structure strictly.
+    upgradeAction: Review OAuth token parsing logic to ensure it handles the
+      additional token_type field in responses.
+    source:
+      document: v30-spring14.pdf
+      page: 239
+      heading: Token Type “Bearer” Included in OAuth Responses
+    confidence: high
+    id: v30-auth-001
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: "Several session security settings are now enabled by default for
+      all organizations and can no longer be disabled from the Session Settings
+      page: HTTPS required, SMS identity confirmation, clickjack protection,
+      and CSRF protection on non-setup pages."
+    detail: These defaults include requiring secure HTTPS connections, enabling
+      SMS-based identity confirmation, and enabling clickjack and CSRF
+      protections. Integrations or embedded pages relying on HTTP or lacking
+      CSRF tokens may break.
+    upgradeAction: Verify all integrations use HTTPS, ensure embedded content
+      handles clickjack headers, and confirm API calls include proper CSRF
+      tokens where required.
+    source:
+      document: v30-spring14.pdf
+      page: 243
+      heading: Default Session Settings Protect Your Organization
+    confidence: high
+    id: v30-auth-002
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexTrigger
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: "Communities moderation gains API and Chatter REST API support: a new
+      NetworkActivityAudit object tracks flagging/moderation actions,
+      NetworkModeration exposes flagged items, and Apex triggers can now
+      programmatically flag posts, comments, and files based on custom
+      criteria."
+    source:
+      document: v30-spring14.pdf
+      page: 121
+      heading: Moderation Enhancements
+    confidence: high
+    id: v30-rest-001
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: A new Place Order REST API is now generally available, providing
+      endpoints under /commerce/sale for programmatically creating orders and
+      order products on contracts.
+    source:
+      document: v30-spring14.pdf
+      page: 143
+      heading: Resources for the Place Order REST API
+    confidence: medium
+    id: v30-rest-002
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new Apex interface Support.MilestoneTriggerTimeCalculator lets
+      developers programmatically compute milestone trigger times based on case
+      properties, enabling dynamic SLA calculations without creating separate
+      entitlement processes for each scenario.
+    source:
+      document: v30-spring14.pdf
+      page: 164
+      heading: Make SLAs Scalable with Dynamic Entitlement Processes
+    confidence: high
+    id: v30-apex-003
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: "The <liveAgent:clientChatInput> Visualforce component gains two new
+      attributes: useMultiline for multi-line text input with line breaks, and
+      autoResizeElementId for dynamically resizing the chat transcript
+      container."
+    source:
+      document: v30-spring14.pdf
+      page: 177
+      heading: Improve the Customer Chat Window with Visualforce
+    confidence: high
+    id: v30-vf-003
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version, effective Spring '15
+    summary: Salesforce is ending support for the CTI Toolkit, which partners used
+      to build desktop adapter programs for computer-telephony integration.
+      Organizations relying on CTI Toolkit integrations must migrate to Open
+      CTI.
+    upgradeAction: Migrate any CTI Toolkit-based integrations to Open CTI before
+      Spring '15 to maintain telephony integration functionality.
+    source:
+      document: v30-spring14.pdf
+      page: 179
+      heading: Retirement of Support for the Salesforce CTI Toolkit
+    confidence: high
+    id: v30-other-003
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: A new analytics:reportChart component allows embedding report charts
+      directly in Visualforce pages by referencing the report ID, eliminating
+      the need for iframe or JavaScript workarounds.
+    source:
+      document: v30-spring14.pdf
+      page: 192
+      heading: Embed Report Charts in Visualforce Pages
+    confidence: high
+    id: v30-vf-004
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The 'Create and Customize List Views' permission can now be retrieved
+      and deployed through Metadata API, enabling automated permission
+      management in CI/CD pipelines.
+    source:
+      document: v30-spring14.pdf
+      page: 197
+      heading: API Access to List Views
+    confidence: high
+    id: v30-packaging-001
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The SiteDotCom metadata type is now deployable via Metadata API,
+      enabling CI/CD pipelines to migrate Site.com and Communities sites between
+      orgs, though a 40 MB asset limit applies.
+    detail: Assets exceeding the 40 MB threshold in the .site archive will appear
+      broken after deployment and require manual export/import to resolve.
+    source:
+      document: v30-spring14.pdf
+      page: 203
+      heading: Deploying Sites with the Metadata API
+    confidence: medium
+    id: v30-packaging-002
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Field sets become GA, enabling Visualforce pages to dynamically iterate
+      over administrator-defined field groupings; this lets managed packages
+      expose subscriber-customizable field layouts without code changes.
+    source:
+      document: v30-spring14.pdf
+      page: 219
+      heading: Field Sets Are Generally Available
+    confidence: high
+    id: v30-vf-005
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: OAuth 2.0 authorization endpoint now accepts a login_hint parameter
+      that pre-populates the username field on the login page, simplifying SSO
+      and multi-account flows.
+    source:
+      document: v30-spring14.pdf
+      page: 233
+      heading: Specify the Username Login Hint
+    confidence: high
+    id: v30-auth-003
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: The OAuth Identity URL response now returns additional user profile
+      fields including email verification status, name components, address
+      details, phone information, and whether the requesting connected app is
+      installed for that user.
+    source:
+      document: v30-spring14.pdf
+      page: 234
+      heading: Identity URL Response Includes More Information
+    confidence: medium
+    id: v30-auth-004
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce introduces a new /services/oauth2/userinfo REST endpoint
+      that returns user profile data in the OpenID Connect standard format when
+      called with a valid OAuth access token.
+    source:
+      document: v30-spring14.pdf
+      page: 234
+      heading: New UserInfo Endpoint for OpenID Connect Compliance
+    confidence: high
+    id: v30-auth-005
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: OAuth flows gain OpenID Connect-compliant scopes (profile, email,
+      address, phone, openid, offline_access) for connected apps requesting
+      access tokens, enabling standardized identity claims and offline refresh
+      token requests.
+    source:
+      document: v30-spring14.pdf
+      page: 237
+      heading: New Access Token Scopes
+    confidence: high
+    id: v30-auth-006
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce now issues OpenID Connect-compliant ID tokens (JWTs) when
+      OAuth requests include the openid scope, and publishes public keys at a
+      well-known endpoint for signature verification.
+    detail: The user-agent flow requires response_type=token id_token plus a nonce
+      parameter; the web-server flow requires response_type=code with openid
+      scope. Integrations can retrieve signing keys from
+      https://login.salesforce.com/id/keys to validate the JWT signature using
+      the kid claim.
+    source:
+      document: v30-spring14.pdf
+      page: 238
+      heading: OpenID Connect ID Token and Public Keys
+    confidence: high
+    id: v30-auth-007
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Authentication Provider configuration now supports custom default
+      scopes, letting you override the provider's built-in scope set when
+      redirecting users to Facebook, Salesforce, or OpenID Connect authorization
+      endpoints.
+    source:
+      document: v30-spring14.pdf
+      page: 244
+      heading: Define Default Scopes for Authentication Providers
+    confidence: high
+    id: v30-auth-008
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Auth Providers now expose an OAuth-Only Initialization URL that returns
+      access/refresh tokens without SSO, enabling integrations to obtain
+      third-party tokens for already-authenticated Salesforce users.
+    source:
+      document: v30-spring14.pdf
+      page: 246
+      heading: OAuth-Only Flow for Auth. Providers
+    confidence: medium
+    id: v30-auth-009
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce now supports encrypted SAML assertions both as an identity
+      provider (encrypting outbound assertions to connected apps with AES-128,
+      AES-256, or Triple-DES) and as a service provider (decrypting inbound
+      assertions using a configured certificate).
+    source:
+      document: v30-spring14.pdf
+      page: 246
+      heading: Encryption for SAML Assertions
+    confidence: high
+    id: v30-auth-010
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: OAuth 2.0 web server and refresh token flows now accept JWT-based
+      client assertions as an alternative to consumer secrets, enabling
+      automated integrations where the secret is unavailable.
+    detail: When client_secret is omitted from the token request, Salesforce
+      automatically checks for client_assertion (a JWT signed with the private
+      key matching the connected app's certificate) and client_assertion_type
+      parameters. This supports RS256-signed bearer tokens.
+    source:
+      document: v30-spring14.pdf
+      page: 248
+      heading: Provide Client Assertion Values for OpenID Connect OAuth Flows
+    confidence: high
+    id: v30-auth-011
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+      - ApexClass
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: Geolocation compound fields with partial null values (one of
+      latitude/longitude null but not both) now return null in SOQL SELECT and
+      are excluded from DISTANCE() and ORDER BY calculations, whereas querying
+      individual component fields still returns the actual stored values.
+    detail: When using the compound geolocation field syntax in SELECT, records with
+      invalid data (one component null) return null for the entire field.
+      However, querying the individual __latitude__s and __longitude__s
+      components returns whatever is actually stored. This affects how you
+      detect and handle incomplete geolocation data.
+    upgradeAction: Review SOQL queries using compound geolocation fields in SELECT
+      clauses; if you need to distinguish genuinely null geolocations from
+      invalid partial-null ones, query the individual latitude/longitude
+      components instead.
+    source:
+      document: v30-spring14.pdf
+      page: 262
+      heading: Other Changes to Geolocation Fields
+    confidence: medium
+    id: v30-soql-001
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: SOAP and REST API calls at API >= 30.0
+    summary: Standard addresses on objects like Account, Contact, and Quote are now
+      queryable as compound fields (e.g., BillingAddress, MailingAddress)
+      returning a structured data type, simplifying SOQL queries and enabling
+      DISTANCE() calculations when geocoded.
+    source:
+      document: v30-spring14.pdf
+      page: 263
+      heading: Standard Address Compound Fields
+    confidence: high
+    id: v30-rest-003
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - VisualforcePage
+      - VisualforceComponent
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Address and geolocation compound fields are available in SOAP and REST
+      APIs but cannot be used in Apex or Visualforce; only individual field
+      components work in those contexts. DISTANCE() for address fields works
+      only in SOQL WHERE clauses, not in formula fields or Apex.
+    detail: Compound fields are read-only via API and require updating through
+      individual components. Apex has no data type for compound fields, so
+      developers must access latitude, longitude, street, city, etc. separately.
+      Custom compound address fields are not supported—only standard object
+      addresses. Geolocation components of address fields must be populated via
+      an external geocoding service.
+    upgradeAction: When integrating with address or geolocation data, use individual
+      field components in Apex and Visualforce code. For proximity filtering,
+      use SOQL DISTANCE() in WHERE clauses only.
+    source:
+      document: v30-spring14.pdf
+      page: 266
+      heading: Compound Field Considerations and Limitations
+    confidence: medium
+    id: v30-rest-004
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version; triggered by any
+      sandbox refresh after Spring '14
+    summary: Sandbox refreshes now rewrite all user email addresses to an
+      @example.com domain, which the Salesforce MTA silently discards. Code or
+      integrations that rely on sandbox-originated emails reaching real inboxes
+      will stop working.
+    detail: Prior format was email@domain.com.sandboxName; new format is
+      email=domain.com@example.com. Users must manually restore a deliverable
+      address after each refresh if they need to receive emails.
+    upgradeAction: Audit any CI pipelines, test harnesses, or integrations that
+      expect to receive emails sent from sandboxes; configure alternate
+      notification channels or have users reset addresses post-refresh.
+    source:
+      document: v30-spring14.pdf
+      page: 267
+      heading: Sandbox User Email Addresses Modified on Refresh
+    confidence: high
+    id: v30-other-004
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version (Developer Preview)
+    summary: Visualforce Remote Objects introduces the apex:remoteObjectModel
+      component, enabling JavaScript-based CRUD operations on sObjects without
+      Apex controllers or @RemoteAction methods.
+    detail: This component defines which sObject and fields are accessible via
+      Remote Objects, supporting shorthand names for cleaner JavaScript code.
+      Available as Developer Preview in this release.
+    source:
+      document: v30-spring14.pdf
+      page: 277
+      heading: <apex:remoteObjectModel>
+    confidence: medium
+    id: v30-vf-006
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: Visualforce pages at API >= 30.0
+    summary: The new <apex:remoteObjectField> component allows developers to define
+      field shorthand names for Remote Objects, enabling use of nicknames in
+      client-side JavaScript instead of full API field names.
+    source:
+      document: v30-spring14.pdf
+      page: 278
+      heading: <apex:remoteObjectField>
+    confidence: medium
+    id: v30-vf-007
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: The apex:actionFunction component now supports a namespace attribute
+      that prefixes generated JavaScript function names, helping avoid naming
+      collisions in pages with multiple action functions or third-party scripts.
+    source:
+      document: v30-spring14.pdf
+      page: 278
+      heading: namespace Attribute Added to <apex:actionFunction>
+    confidence: high
+    id: v30-vf-008
+  - apiVersion: "30.0"
+    introducedIn: "25.0"
+    release: Spring '14
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: The layout attribute on <apex:component>, which controls the wrapping
+      HTML around custom components, was previously restricted to API 25.0+ but
+      is now backported to work with all API versions.
+    source:
+      document: v30-spring14.pdf
+      page: 280
+      heading: layout Attribute of <apex:component> Supports All API Versions
+    confidence: high
+    id: v30-vf-009
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: Visualforce pages compiled at API >= 30.0
+    summary: When showHeader is false, <apex:page> now generates an HTML <title>
+      element if a <head> is present, whereas previously it did not. Pages
+      relying on the absence of a <title> element may see unexpected behavior.
+    upgradeAction: Review pages with showHeader="false" that do not expect a <title>
+      element. If using applyHtmlTag="false" or applyBodyTag="false", the title
+      attribute is ignored and no action is needed.
+    source:
+      document: v30-spring14.pdf
+      page: 280
+      heading: Changes to title Attribute of <apex:page>
+    confidence: high
+    id: v30-vf-010
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: The analytics:reportChart component reaches GA status, allowing
+      developers to embed Salesforce report charts directly into Visualforce
+      pages with optional data filtering.
+    source:
+      document: v30-spring14.pdf
+      page: 281
+      heading: <analytics:reportChart>—Generally Available
+    confidence: medium
+    id: v30-vf-011
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: components compiled at API >= 30.0
+    summary: "PageReference constructor now correctly parses anchor fragments (the #
+      symbol and text after it) in URIs instead of URL-encoding the hash as
+      %23."
+    detail: Prior to v30, passing a URI with an anchor like
+      '/home/home.jsp#logTicket' to the PageReference constructor resulted in
+      the hash being escaped to %23. Developers had to work around this by using
+      setAnchor() separately. Code using the workaround continues to function.
+    upgradeAction: Review any PageReference code that used setAnchor() workarounds
+      or that expected %23 encoding; verify anchor handling behaves as intended
+      after upgrading.
+    source:
+      document: v30-spring14.pdf
+      page: 283
+      heading: PageReference URIs Support Anchors
+    confidence: high
+    id: v30-vf-013
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: sharing-security
+    appliesWhen: Apex classes compiled at API >= 30.0
+    summary: JavaScript remoting calls to @RemoteAction methods now honor the
+      class's sharing declaration consistently with standard Visualforce
+      requests. Classes without an explicit sharing keyword default to system
+      mode (without sharing), fixing a bug where remoting previously defaulted
+      to with sharing.
+    detail: Prior to v30, @RemoteAction methods in classes lacking a sharing
+      declaration ran as if declared with sharing when invoked via JavaScript
+      remoting, but ran in system mode for standard Visualforce requests. This
+      inconsistency is corrected at v30+, meaning remoting calls now run in
+      system mode by default, matching the documented Apex behavior.
+    upgradeAction: Before upgrading controllers to API 30.0+, audit @RemoteAction
+      methods in classes without explicit sharing keywords. If your remoting
+      logic relied on the implicit with sharing behavior, add explicit 'with
+      sharing' to the class definition to preserve row-level security
+      enforcement.
+    source:
+      document: v30-spring14.pdf
+      page: 283
+      heading: JavaScript Remoting Requests Default to System Mode (without sharing)
+    confidence: high
+    id: v30-sharing-001
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Force.com Canvas now exposes a Controller.js library enabling
+      Visualforce pages to publish, subscribe, and unsubscribe to events with
+      embedded canvas apps, plus resize canvas iFrames programmatically.
+    source:
+      document: v30-spring14.pdf
+      page: 288
+      heading: Using Events Between a Canvas App and a Visualforce Page
+    confidence: medium
+    id: v30-vf-014
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: Apex classes and triggers compiled at API >= 30.0
+    summary: Sites class methods (changePassword, createPersonAccountPortalUser,
+      createPortalUser, forgotPassword, login) now consume DML limits instead of
+      committing the transaction. Pre-30.0 code commits on call, preventing
+      rollback; v30+ code adds to DML counters but preserves savepoint rollback
+      capability.
+    detail: "This is a double-edged change: code at v30+ gains the ability to roll
+      back past these calls using savepoints, but must now account for DML
+      statement and record limits. Code below v30 implicitly commits, breaking
+      any savepoint set earlier in the transaction."
+    upgradeAction: When upgrading past 30.0, verify that any transaction calling
+      these methods has sufficient DML headroom. Also confirm that any
+      pre-upgrade code relying on the implicit commit behavior is refactored if
+      rollback semantics are now expected.
+    source:
+      document: v30-spring14.pdf
+      page: 291
+      heading: Changes to Methods in the Sites Class
+    confidence: high
+    id: v30-apex-004
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new Apex interface Support.MilestoneTriggerTimeCalculator allows
+      developers to programmatically compute dynamic time triggers for
+      entitlement milestones based on case properties and milestone type.
+    source:
+      document: v30-spring14.pdf
+      page: 291
+      heading: MilestoneTriggerTimeCalculator Interface
+    confidence: high
+    id: v30-apex-005
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The Limits class methods getInteractionQueries() and
+      getLimitInteractionQueries() have been removed from the platform after
+      being part of a Visual Workflow pilot.
+    upgradeAction: Search for any usage of Limits.getInteractionQueries() or
+      Limits.getLimitInteractionQueries() and remove those calls, as they will
+      cause compilation errors.
+    source:
+      document: v30-spring14.pdf
+      page: 292
+      heading: getInteractionQueries() and getLimitInteractionQueries() Limits Methods
+        Removed
+    confidence: high
+    id: v30-apex-006
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: EncodingUtil gains a convertFromHex method that parses a hexadecimal
+      string into a Blob, complementing existing encoding utilities.
+    source:
+      document: v30-spring14.pdf
+      page: 292
+      heading: convertFromHex(String)
+    confidence: high
+    id: v30-apex-007
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The String class gains unescapeUnicode(), which converts escaped
+      Unicode sequences (e.g., \u00EA) back to their literal characters.
+    source:
+      document: v30-spring14.pdf
+      page: 294
+      heading: unescapeUnicode()
+    confidence: high
+    id: v30-apex-008
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - VisualforcePage
+    behaviorArea: apex-runtime
+    appliesWhen: components compiled at API >= 30.0
+    summary: The Site.getPrefix() method is superseded by Site.getPathPrefix()
+      starting in v30.0. Code referencing the old method should migrate to the
+      new one for correct URL path prefix retrieval in site contexts.
+    upgradeAction: Replace calls to Site.getPrefix() with Site.getPathPrefix() when
+      upgrading components past API version 30.0.
+    source:
+      document: v30-spring14.pdf
+      page: 298
+      heading: getPathPrefix()
+    confidence: medium
+    id: v30-apex-009
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The deprecated Limits.getScriptStatements() method no longer returns
+      actual statement counts; it now returns an approximation derived from CPU
+      time consumption relative to the CPU timeout limit.
+    detail: Since the script statement governor limit was removed in Winter '14, the
+      platform stopped tracking statement counts. Starting Spring '14, this
+      method returns a computed value based on CPU usage ratios rather than real
+      statement tallies. Code relying on precise statement counts will see
+      different numbers.
+    upgradeAction: Remove any logic that depends on Limits.getScriptStatements() or
+      Limits.getLimitScriptStatements() for monitoring or decision-making;
+      migrate to Limits.getCpuTime() and Limits.getLimitCpuTime() instead.
+    source:
+      document: v30-spring14.pdf
+      page: 299
+      heading: Behavior Change of Limits.getScriptStatements
+    confidence: high
+    id: v30-apex-010
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: Apex code compiled at API >= 30.0
+    summary: The ConnectApi.PhoneNumber.type property is removed starting in API
+      30.0; code must use the new phoneType property instead.
+    upgradeAction: Replace any references to ConnectApi.PhoneNumber.type with
+      phoneType before upgrading Apex classes past version 29.0.
+    source:
+      document: v30-spring14.pdf
+      page: 303
+      heading: New and Changed Chatter in Apex Output Classes
+    confidence: high
+    id: v30-apex-011
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: A new org setting isolates auto-number sequences during Apex tests so
+      that test record creation no longer causes gaps in production auto-number
+      fields.
+    source:
+      document: v30-spring14.pdf
+      page: 307
+      heading: New Independent Auto-Number Sequence Test Option
+    confidence: high
+    id: v30-apex-012
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: The UserRecordAccess object can now be queried as a foreign key lookup
+      on records, enabling inline access checks like `SELECT Id,
+      UserRecordAccess.HasReadAccess FROM Account` without filtering by UserId
+      or RecordId.
+    upgradeAction: Review SOQL queries that previously used separate
+      UserRecordAccess queries; consider refactoring to use the new inline
+      foreign-key syntax for simpler access checks.
+    source:
+      document: v30-spring14.pdf
+      page: 310
+      heading: Changed Objects
+    confidence: medium
+    id: v30-soap-002
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOQL now supports compound address and geolocation fields in SELECT,
+      WHERE (with DISTANCE()), and ORDER BY clauses via SOAP and REST APIs,
+      enabling location-based queries against standard address fields like
+      BillingAddress.
+    source:
+      document: v30-spring14.pdf
+      page: 318
+      heading: SOQL
+    confidence: high
+    id: v30-soql-002
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOSL queries now support an OFFSET clause, enabling developers to skip
+      a specified number of rows when paginating through search results.
+    source:
+      document: v30-spring14.pdf
+      page: 318
+      heading: SOSL
+    confidence: high
+    id: v30-soql-003
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: integrations calling SOAP API at version 30.0+
+    summary: The DescribeQuickActionResult object renamed its field from
+      sourceSobjectType to contextSobjectType, which will break client code
+      parsing that response.
+    upgradeAction: Update any integration code that reads the sourceSobjectType
+      field from DescribeQuickActionResult to use contextSobjectType instead
+      before upgrading to API 30.0.
+    source:
+      document: v30-spring14.pdf
+      page: 320
+      heading: SOAP API
+    confidence: high
+    id: v30-soap-003
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API requests made at version 30.0 and later
+    summary: The 'type' property on the Phone Number response body was removed
+      starting in API version 30.0; callers must switch to the new 'phoneType'
+      property.
+    upgradeAction: Update any code that reads the 'type' field from Phone Number
+      responses to use 'phoneType' instead before upgrading past API version
+      29.0.
+    source:
+      document: v30-spring14.pdf
+      page: 326
+      heading: New and Changed Response Bodies
+    confidence: high
+    id: v30-rest-005
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: Tooling API v30.0 introduces objects for programmatic Apex test
+      execution and result retrieval, enabling custom CI/CD tooling to queue
+      tests and poll results without relying on Metadata API deploy cycles.
+    source:
+      document: v30-spring14.pdf
+      page: 337
+      heading: Tooling API
+    confidence: high
+    id: v30-apex-013
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Metadata API v30.0 introduces synchronous CRUD operations
+      (createMetadata, readMetadata, updateMetadata, deleteMetadata,
+      renameMetadata) alongside cancelDeploy for aborting in-flight deployments,
+      enabling tooling to perform metadata operations without polling.
+    source:
+      document: v30-spring14.pdf
+      page: 337
+      heading: Metadata API Calls
+    confidence: high
+    id: v30-packaging-003
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The CustomApplication metadata type now supports retrieving and
+      deploying standard apps (not just custom apps) by using the standard__
+      prefix in package.xml manifests.
+    source:
+      document: v30-spring14.pdf
+      page: 338
+      heading: Metadata Types and Fields
+    confidence: high
+    id: v30-packaging-004
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: A new REST API for order management enables creating contracts, orders,
+      and order products in a single call, allowing integration with external
+      commerce systems.
+    source:
+      document: v30-spring14.pdf
+      page: 348
+      heading: Place Order API
+    confidence: high
+    id: v30-rest-006
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: ISVs can now delete certain managed package components (custom objects,
+      fields, buttons/links, tabs, field sets, record types, validation rules)
+      via UI or Metadata API using destructiveChanges.xml, enabling cleanup of
+      accumulated components across release cycles.
+    detail: Deleted components remain accessible in subscriber orgs under 'Unused
+      Components' until the subscriber explicitly removes them, preserving data
+      export and integration modification opportunities. Components referenced
+      by other metadata cannot be deleted.
+    source:
+      document: v30-spring14.pdf
+      page: 348
+      heading: Deleting Components in Managed Packages
+    confidence: high
+    id: v30-packaging-005
+  - apiVersion: "30.0"
+    release: Spring '14
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: ISV partners can now query the MetricsDataFile object via SOAP API to
+      retrieve daily usage metrics (custom object record counts, Visualforce
+      page hits and load times) for their managed packages across subscriber
+      orgs. Usage Metrics was a pilot feature in Spring '14.
+    source:
+      document: v30-spring14.pdf
+      page: 352
+      heading: The MetricsDataFile Object
+    confidence: medium
+    id: v30-soap-004

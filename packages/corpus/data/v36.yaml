@@ -1,0 +1,1391 @@
+apiVersion: "36.0"
+release: Spring '16
+reviewed: true
+entries:
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex test methods can now programmatically set and modify the
+      CreatedDate field on test records, enabling more realistic date-dependent
+      logic testing without workarounds.
+    source:
+      document: v36-spring16.pdf
+      page: 9
+      heading: You Asked for It!
+    confidence: high
+    id: v36-apex-001
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: jQuery is no longer automatically injected into custom Lightning
+      components. Components that relied on the implicit jQuery global must now
+      explicitly load it as a static resource.
+    upgradeAction: Audit Lightning components for jQuery usage and add explicit
+      jQuery static resource references where needed before upgrading.
+    source:
+      document: v36-spring16.pdf
+      page: 10
+      heading: Release Notes Changes
+    confidence: high
+    id: v36-lwc-001
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: TLS 1.0 is being disabled for HTTPS connections including Force.com
+      Migration Tool, requiring clients to support TLS 1.2. Integrations using
+      older encryption protocols will fail.
+    upgradeAction: Verify all integration clients, including Data Loader, Force.com
+      Migration Tool, and custom callouts support TLS 1.2 before the enforcement
+      date.
+    source:
+      document: v36-spring16.pdf
+      page: 10
+      heading: Release Notes Changes
+    confidence: high
+    id: v36-auth-001
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Financial Services Cloud exposes its custom objects and fields through
+      SOAP API, and introduces a new Industries REST API endpoint for retrieving
+      a unified view of individual person records.
+    source:
+      document: v36-spring16.pdf
+      page: 104
+      heading: APIs for Integration
+    confidence: medium
+    id: v36-rest-001
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOQL gains a new 'allPrivate' query scope for the Report and Dashboard
+      objects, enabling queries against items stored in any user's private
+      folder when the caller has the 'Manage All Private Reports and Dashboards'
+      permission.
+    source:
+      document: v36-spring16.pdf
+      page: 162
+      heading: Manage Everyone's Reports and Dashboards
+    confidence: high
+    id: v36-soql-001
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Wave REST API graduates from Pilot to GA at version 36. The
+      previously used internal/private API is deprecated and will stop working
+      after 12 months; clients using it cannot access dashboards created with
+      Spring '16 tools.
+    detail: Developers relying on the undocumented internal Wave API must migrate to
+      the official GA endpoints. During the 12-month grace period, the internal
+      API remains functional but cannot interact with assets built using new
+      dashboard designers introduced in this release.
+    upgradeAction: Identify any integrations calling the internal Wave API endpoints
+      and migrate them to the official Wave REST API GA before the 12-month
+      sunset window closes.
+    source:
+      document: v36-spring16.pdf
+      page: 196
+      heading: Wave REST API Moves into the Limelight
+    confidence: high
+    id: v36-rest-002
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Wave REST API gains extended metadata representations for dimensions
+      and measures, allowing developers to define derived measures and derived
+      dimensions with full control over dataset structure and dashboard
+      rendering.
+    source:
+      document: v36-spring16.pdf
+      page: 197
+      heading: Enhance Dashboard Data with New Extended Metadata Representations in
+        the REST API
+    confidence: medium
+    id: v36-rest-003
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; requires Salesforce
+      enablement and Enable Guest Access to the Support API setting
+    summary: A new REST API endpoint allows unauthenticated case creation from
+      external apps or websites, bypassing Web-to-Case forms. Unauthenticated
+      submissions route through the Web-to-Case queue while authenticated
+      requests create cases immediately.
+    source:
+      document: v36-spring16.pdf
+      page: 212
+      heading: Create Cases from the REST API
+    confidence: medium
+    id: v36-rest-004
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Social Customer Service moderation now uses new ReviewedStatus picklist
+      values ('Needed' and 'Reviewed'). Orgs with custom Apex classes that don't
+      extend the default must manually update their code to set the
+      reviewedStatus field and adjust list filters.
+    upgradeAction: If your org uses a custom Apex class for social post moderation
+      that was copied from the default rather than extended, add the
+      setModeration method to set reviewedStatus='Needed' when no case is
+      created, and update your moderation list filter accordingly.
+    source:
+      document: v36-spring16.pdf
+      page: 219
+      heading: Moderate Social Posts Easier and Faster (Generally Available)
+    confidence: medium
+    id: v36-apex-002
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: A new JavaScript API enables developers to programmatically select and
+      execute macros within custom Service Cloud console components, allowing
+      filtered or curated macro displays.
+    detail: The API is limited to building new custom console components in
+      Salesforce Classic; it does not modify the behavior of the standard macros
+      widget. Developers can leverage this to surface contextually relevant
+      macros (e.g., by usage frequency or language) to agents.
+    source:
+      document: v36-spring16.pdf
+      page: 221
+      heading: Run Macros Programmatically Using the API
+    confidence: medium
+    id: v36-soap-001
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: deprecated
+    impact: retirement
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Aloha community templates that do not support Lightning components will
+      be retired in Summer '16 (May 2016). Organizations using older
+      non-Lightning Aloha templates must upgrade to the Spring '16 version to
+      continue functioning.
+    upgradeAction: Migrate any Aloha communities to the Spring '16 template version
+      before Summer '16 to avoid loss of functionality when non-Lightning
+      template support ends.
+    source:
+      document: v36-spring16.pdf
+      page: 270
+      heading: Extensible Aloha Template with Lightning Components
+    confidence: medium
+    id: v36-lwc-002
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Custom Lightning components in Community Builder no longer receive
+      jQuery automatically; components relying on jQuery will break unless you
+      add a manual script reference in the community's head markup.
+    upgradeAction: Audit custom Lightning components for jQuery dependencies and add
+      an explicit script tag in Community Builder's head markup settings before
+      upgrading.
+    source:
+      document: v36-spring16.pdf
+      page: 282
+      heading: jQuery No Longer Automatically Included for Custom Lightning Components
+    confidence: high
+    id: v36-lwc-003
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Data.com Social Profile Match API is permanently removed starting
+      Summer '16, so any integrations calling this API to retrieve social
+      profile handles will fail.
+    upgradeAction: Remove or replace any code that calls the Data.com Social Profile
+      Match API before Summer '16; social handles must now be managed manually.
+    source:
+      document: v36-spring16.pdf
+      page: 333
+      heading: Retirement of Data.com Social Key
+    confidence: high
+    id: v36-rest-005
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: FlexiPage metadata deployed or retrieved at API >= 36.0
+    summary: The Recent Items component's entityNames property in FlexiPage XML now
+      requires JSON array syntax instead of comma-separated strings. Existing
+      pages using the old format will fail validation.
+    upgradeAction: Update any FlexiPage XML files containing Recent Items components
+      to use JSON array format for entityNames (e.g., change 'Account,obj__c' to
+      '["Account","obj__c"]').
+    source:
+      document: v36-spring16.pdf
+      page: 350
+      heading: Change in How the Recent Items Component's entityNames Values Are Listed
+    confidence: high
+    id: v36-packaging-001
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; enforced Q1 2016 when
+      Salesforce disables TLS 1.0
+    summary: TLS 1.0 will be disabled for all Salesforce connections starting Q1
+      2016, requiring TLS 1.2 for all inbound and outbound API traffic including
+      Data Loader batch operations.
+    upgradeAction: Verify that Java environments, API clients, and integration
+      middleware support TLS 1.2 before Q1 2016 enforcement. Update Data Loader
+      to Spring '16 version which adds TLS 1.2 support.
+    source:
+      document: v36-spring16.pdf
+      page: 361
+      heading: Data Loader
+    confidence: high
+    id: v36-auth-002
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: A new VerificationHistory object is now available for querying user
+      identity verification events from the past six months, enabling
+      programmatic auditing of two-factor authentication activity.
+    source:
+      document: v36-spring16.pdf
+      page: 375
+      heading: Track User Identity Verifications
+    confidence: medium
+    id: v36-auth-003
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: A new Auth.SessionManagement.generateVerificationUrl method lets
+      developers trigger identity verification flows from custom Apex code,
+      enabling step-up authentication before displaying sensitive content.
+    source:
+      document: v36-spring16.pdf
+      page: 376
+      heading: Implement Identity Verification in Your Custom Solution with Apex
+    confidence: high
+    id: v36-auth-004
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version, when org policy
+      requires high-assurance sessions for connected apps, reports, or
+      dashboards
+    summary: Analytics API and SOAP API calls now fail with an error when attempting
+      to access resources protected by a high-assurance session policy from a
+      standard-assurance session.
+    upgradeAction: Review integrations using Analytics or SOAP APIs that access
+      connected apps, reports, or dashboards. If your org enforces
+      high-assurance session requirements, ensure API clients perform step-up
+      authentication or device activation before accessing protected resources.
+    source:
+      document: v36-spring16.pdf
+      page: 376
+      heading: Improved Security for High-Assurance Resource Access Using APIs
+    confidence: high
+    id: v36-auth-005
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Developers can now implement the Auth.AuthProviderPlugin interface to
+      build custom SSO authentication providers for external identity systems
+      not natively supported by Salesforce.
+    source:
+      document: v36-spring16.pdf
+      page: 379
+      heading: Create a Custom Authentication Provider Plug-in with Apex
+    confidence: high
+    id: v36-auth-006
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Transaction Security introduces a new Apex interface
+      (TxnSecurity.PolicyCondition) allowing developers to write custom policy
+      evaluation logic that intercepts real-time org events and triggers actions
+      like blocking operations or requiring MFA.
+    source:
+      document: v36-spring16.pdf
+      page: 384
+      heading: Transaction Security Policies Address Security Issues
+    confidence: medium
+    id: v36-apex-003
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce introduces org-specific API client certificates as a
+      replacement for the older proxy.salesforce.com certificate, affecting
+      workflow outbound messages, AJAX proxy, certain Apex PageReference
+      methods, and delegated authentication callouts to endpoints using
+      Microsoft Trusted Root Certificate Program.
+    detail: A Microsoft Windows update on April 19, 2016 retires the root
+      certificate for the legacy proxy.salesforce.com certificate. Organizations
+      with remote HTTPS endpoints that request or require client certificates
+      must switch to the new org-specific certificate via Certificate and Key
+      Management in Setup to maintain connectivity.
+    upgradeAction: If your Apex callouts, workflow outbound messages, or delegated
+      authentication integrations target endpoints requiring client certificates
+      under the Microsoft Trusted Root Certificate Program, generate and
+      configure an org-specific API client certificate before the April 2016
+      enforcement date.
+    source:
+      document: v36-spring16.pdf
+      page: 389
+      heading: Use an API Client Certificate for Improved Security
+    confidence: high
+    id: v36-auth-007
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Force.com Migration Tool v36.0 automatically enables TLS 1.1 and 1.2
+      when running on Java 7+, and Salesforce has announced plans to discontinue
+      TLS 1.0 support entirely.
+    detail: Deployments using the Migration Tool with Java 6 will continue using TLS
+      1.0, but this will break once Salesforce retires TLS 1.0. The text is
+      truncated but signals an impending TLS 1.0 retirement.
+    upgradeAction: Ensure your CI/CD and local environments running the Force.com
+      Migration Tool use Java 7 or later to avoid deployment failures when TLS
+      1.0 is retired.
+    source:
+      document: v36-spring16.pdf
+      page: 391
+      heading: Enhanced Security with the Force.com Migration Tool
+    confidence: medium
+    id: v36-packaging-002
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: "Sandboxes now support a post-copy hook: implement the new
+      SandboxPostCopy interface in an Apex class, and the platform will execute
+      it automatically after every sandbox create or refresh operation."
+    detail: The interface provides a SandboxContext parameter exposing the org ID,
+      sandbox ID, and sandbox name, enabling automated data seeding, config
+      changes, or cleanup tasks without manual intervention.
+    source:
+      document: v36-spring16.pdf
+      page: 392
+      heading: Run Script After Sandbox Creation and Refresh
+    confidence: high
+    id: v36-apex-004
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: The Metadata API now supports upsertMetadata() for custom metadata
+      records, allowing insert-or-update operations that prevent duplicate
+      record creation.
+    source:
+      document: v36-spring16.pdf
+      page: 394
+      heading: Upsert Custom Metadata Records
+    confidence: high
+    id: v36-soap-002
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: "User.UITheme, User.UIThemeDisplayed, UserInfo.getUiTheme(), and
+      UserInfo.getUiThemeDisplayed() now return two new values: Theme4d for
+      Lightning Experience and Theme4t for Salesforce1 mobile, in addition to
+      the existing theme identifiers."
+    upgradeAction: Review code that switches on UITheme return values to handle
+      Theme4d and Theme4t; switch statements or conditionals checking only for
+      Theme1/Theme2/Theme3 may fall through to unexpected branches when users
+      access the app via Lightning Experience or Salesforce1.
+    source:
+      document: v36-spring16.pdf
+      page: 396
+      heading: Use User.UITheme and UserInfo.getUiTheme() to Determine User Experience
+        Context
+    confidence: high
+    id: v36-vf-001
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: New ApexTestSuite and TestSuiteMembership objects allow grouping test
+      classes into reusable suites, runnable via Developer Console or API
+      (Tooling REST/SOAP runTestsAsynchronous).
+    source:
+      document: v36-spring16.pdf
+      page: 399
+      heading: Create Test Suites of Commonly Used Apex Test Classes
+    confidence: high
+    id: v36-apex-005
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex test runs can now be configured to abort after a specified number
+      of failures via Developer Console or Tooling API, preventing wasted time
+      on doomed runs.
+    detail: The new maxFailedTests parameter (Tooling API REST/SOAP) and Developer
+      Console setting let you cap failures before the run halts. Values range
+      from 0 (stop on first failure) to 1,000,000. Asynchronous runs finish
+      in-flight tests before stopping.
+    source:
+      document: v36-spring16.pdf
+      page: 400
+      heading: Stop a Test Run That's Failing Miserably
+    confidence: high
+    id: v36-apex-006
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: A new System.Test.setCreatedDate method allows test code to assign
+      arbitrary CreatedDate values to sObjects after insertion, enabling tests
+      that depend on record age or date-based logic.
+    source:
+      document: v36-spring16.pdf
+      page: 400
+      heading: Set and Modify the CreatedDate Field in Apex Tests
+    confidence: high
+    id: v36-apex-007
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: Test.startTest() and Test.stopTest() now consistently reset all
+      governor limits including SOQL query counts within the enclosed block,
+      fixing prior inconsistent behavior where some limits like SOQL queries did
+      not always reset.
+    upgradeAction: Review tests that may have passed despite exceeding limits due to
+      the old inconsistent reset behavior; they may now fail if the code under
+      test genuinely exceeds limits.
+    source:
+      document: v36-spring16.pdf
+      page: 401
+      heading: Call Test.startTest() to Reliably Reset Limits in Apex Tests
+    confidence: high
+    id: v36-apex-008
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: The @future method workaround for MIXED_DML_OPERATION errors now
+      functions correctly within Apex test contexts. Previously, using @future
+      to separate setup and non-setup sObject DML still threw errors during test
+      execution; this bug has been resolved.
+    upgradeAction: If you have test workarounds or skip logic due to this bug, you
+      can now rely on the standard @future pattern for mixed DML in tests.
+    source:
+      document: v36-spring16.pdf
+      page: 401
+      heading: Use @future to Avoid the Dreaded MIXED_DML_OPERATION Error in Apex Tests
+    confidence: high
+    id: v36-apex-009
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: PageReference.getContent() and getContentAsPdf() can now be invoked
+      after Savepoint creation, extending the Winter '16 relaxation that first
+      allowed these calls after DML.
+    detail: Previously, calling getContent() or getContentAsPdf() after establishing
+      a Savepoint would fail. This restriction is now lifted for internal calls,
+      enabling PDF generation workflows in asynchronous Apex that use
+      transactional rollback patterns.
+    source:
+      document: v36-spring16.pdf
+      page: 404
+      heading: Make Calls to PageReference.getContent() After DML and Savepoints
+    confidence: high
+    id: v36-apex-010
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: The Auth.SessionManagement methods validateTotpTokenForKey and
+      validateTotpTokenForUser that lack a description parameter are deprecated
+      in favor of new overloads requiring a description argument.
+    upgradeAction: Replace calls to validateTotpTokenForKey(sharedKey, totpCode) and
+      validateTotpTokenForUser(totpCode) with the new three-parameter versions
+      that include a description.
+    source:
+      document: v36-spring16.pdf
+      page: 409
+      heading: Changed Apex Classes
+    confidence: high
+    id: v36-auth-008
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Developers can now build custom OAuth-based authentication providers by
+      implementing the new Auth.AuthProviderPlugin interface, enabling SSO
+      integrations beyond the built-in provider types.
+    source:
+      document: v36-spring16.pdf
+      page: 412
+      heading: New Apex Interfaces
+    confidence: high
+    id: v36-auth-009
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The System.SandboxPostCopy interface allows Apex classes to execute
+      automated setup tasks immediately after sandbox creation or refresh.
+    source:
+      document: v36-spring16.pdf
+      page: 412
+      heading: New Apex Interfaces
+    confidence: high
+    id: v36-apex-011
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: Apex classes compiled at API >= 36.0
+    summary: The postFeedElement method overload that uploads a binary file while
+      creating a feed post has been removed. Code must now upload files
+      separately before attaching them to posts.
+    upgradeAction: Refactor any code using postFeedElement(communityId, feedElement,
+      feedElementFileUpload) to first upload files via ContentVersion, then
+      attach using the new postFeedElement method with the files property in
+      FeedElementCapabilitiesInput.
+    source:
+      document: v36-spring16.pdf
+      page: 413
+      heading: New and Changed Chatter in Apex Classes
+    confidence: high
+    id: v36-apex-012
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: Apex classes compiled at API >= 36.0
+    summary: Five ConnectApi.Recommendations methods lacking the channel parameter
+      have been removed and replaced with versions requiring the channel
+      argument.
+    upgradeAction: Update calls to getRecommendationsForUser,
+      getScheduledRecommendations, and createScheduledRecommendation to use the
+      new overloads that include the channel parameter.
+    source:
+      document: v36-spring16.pdf
+      page: 413
+      heading: New and Changed Chatter in Apex Classes
+    confidence: high
+    id: v36-apex-013
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: Apex code using ConnectApi compiled at API >= 36.0
+    summary: Feed posts can no longer upload a binary file and create the post in a
+      single call. Files must be uploaded separately first, then attached via
+      the new FilesCapabilityInput and FileIdInput classes.
+    detail: The content property on FeedElementCapabilitiesInput is removed for feed
+      posts. Code that previously uploaded files inline when creating feed items
+      must be refactored to upload files first, then reference them by ID using
+      the new files property.
+    upgradeAction: "Refactor any Chatter in Apex code that creates feed posts with
+      inline file uploads to use a two-step process: upload the file first, then
+      attach it using ConnectApi.FilesCapabilityInput with the file ID."
+    source:
+      document: v36-spring16.pdf
+      page: 416
+      heading: New and Changed Chatter in Apex Input Classes
+    confidence: high
+    id: v36-apex-014
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: Apex classes compiled at API >= 36.0
+    summary: "Two ConnectApi output class properties were removed:
+      EmailMessageCapability.textBody (replaced by body) and
+      FeedElementCapabilities.content (replaced by files). Code referencing
+      these properties will fail at v36+."
+    upgradeAction: Before upgrading past 36.0, search for references to
+      ConnectApi.EmailMessageCapability.textBody and
+      ConnectApi.FeedElementCapabilities.content; migrate to the body and files
+      properties respectively.
+    source:
+      document: v36-spring16.pdf
+      page: 418
+      heading: New and Changed Chatter in Apex Output Classes
+    confidence: high
+    id: v36-apex-015
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version (enforcement begins
+      Summer '16)
+    summary: The Lightning Component framework will strictly enforce access system
+      attribute checks starting Summer '16. Components currently triggering
+      browser console warnings for accessing resources without proper access
+      attributes will fail at runtime once enforcement begins.
+    detail: Spring '16 logs warnings in debug mode when code accesses components,
+      attributes, or events lacking appropriate access permissions. Summer '16
+      converts these warnings to hard failures. Asynchronous code in setTimeout,
+      setInterval, or Promises must use $A.getCallback() to preserve execution
+      context, otherwise only global resources remain accessible.
+    upgradeAction: Enable debug mode, review browser console for access check
+      warnings, then either add access='global' to resources you own, remove
+      references to inaccessible resources, fix attribute name casing, or wrap
+      async code in $A.getCallback().
+    source:
+      document: v36-spring16.pdf
+      page: 427
+      heading: Don't Ignore Browser Console Warnings for Access Check Violations!
+    confidence: high
+    id: v36-aura-001
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning components gain a format() function for dynamically
+      substituting placeholder values into custom labels at runtime, available
+      both in markup expressions and via $A.util.format() in JavaScript
+      controllers.
+    source:
+      document: v36-spring16.pdf
+      page: 428
+      heading: Dynamically Populate Label Parameters with format()
+    confidence: high
+    id: v36-aura-002
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The Aura framework method $A.error() is deprecated; developers should
+      use the native JavaScript Error object instead for error handling in
+      Lightning components.
+    upgradeAction: Replace calls to $A.error() with standard JavaScript Error
+      construction (e.g., throw new Error('message')) throughout your Aura
+      components.
+    source:
+      document: v36-spring16.pdf
+      page: 429
+      heading: $A.error() Is Deprecated
+    confidence: high
+    id: v36-aura-003
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+      - LWC
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The undocumented Sfdc JavaScript global object is no longer injected
+      into Lightning containers. Components that relied on this internal utility
+      will break, except for the officially supported Sfdc.canvas API which
+      remains available.
+    detail: Visualforce containers still expose the Sfdc global, so Lightning
+      components embedded in Visualforce via Lightning Out may still access it,
+      but this is unsupported and non-portable. Components should be refactored
+      to remove any Sfdc dependencies other than Sfdc.canvas.
+    upgradeAction: Search your Lightning component JavaScript for references to the
+      Sfdc global (excluding Sfdc.canvas). Replace any usages with supported
+      APIs or pass required values from Visualforce via component attributes.
+    source:
+      document: v36-spring16.pdf
+      page: 429
+      heading: Sfdc JavaScript Global Is Removed
+    confidence: high
+    id: v36-aura-004
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning components can now pass List and Map objects as parameters to
+      server-side Apex controller methods without triggering
+      UnsupportedOperationException errors that occurred in earlier releases.
+    detail: This bug fix removes the need for workarounds developers may have
+      implemented to avoid the exception when passing collection types to Apex
+      controllers from Lightning components.
+    upgradeAction: Review and potentially remove any workarounds previously
+      implemented to avoid UnsupportedOperationException when passing List or
+      Map parameters to Apex controllers.
+    source:
+      document: v36-spring16.pdf
+      page: 429
+      heading: Lightning Components
+    confidence: medium
+    id: v36-aura-005
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; enforced January 1, 2016
+    summary: The www.salesforce.com endpoint no longer routes API login requests to
+      the appropriate instance. Integrations must now authenticate directly
+      against login.salesforce.com (or test.salesforce.com for sandboxes).
+    upgradeAction: Update all API client configurations and connection strings that
+      use www.salesforce.com as the login endpoint to use
+      https://login.salesforce.com instead.
+    source:
+      document: v36-spring16.pdf
+      page: 431
+      heading: Retirement of Endpoint Routing for API Logins
+    confidence: high
+    id: v36-rest-006
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: ApexTestSuite and TestSuiteMembership objects enable grouping Apex test
+      classes into named suites for selective test execution, allowing
+      developers to organize and run subsets of tests programmatically via the
+      API.
+    source:
+      document: v36-spring16.pdf
+      page: 431
+      heading: New Objects
+    confidence: high
+    id: v36-apex-016
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API requests at version 36.0 and later
+    summary: FeedItem content attachment fields (ContentData, ContentDescription,
+      ContentFileName, ContentSize, ContentType) were removed and are only
+      accessible in API version 35.0 and earlier. Content attachments must now
+      be created through the FeedAttachment object instead.
+    upgradeAction: Update integrations that create FeedItem content attachments to
+      use the FeedAttachment object and FeedEntityId relationship field instead
+      of the removed ContentData/ContentFileName fields.
+    source:
+      document: v36-spring16.pdf
+      page: 432
+      heading: Changed Objects
+    confidence: high
+    id: v36-rest-007
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The HashtagDefinition object loses API access across all versions,
+      breaking any integration that queries or references it.
+    upgradeAction: Remove or replace any SOQL queries, API calls, or integrations
+      that reference HashtagDefinition before upgrading.
+    source:
+      document: v36-spring16.pdf
+      page: 439
+      heading: Retired Objects
+    confidence: high
+    id: v36-rest-008
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOQL gains an allPrivate scope for querying Report and Dashboard
+      records stored in any user's private folder, enabling bulk cleanup or
+      auditing scenarios previously requiring per-user context switches.
+    source:
+      document: v36-spring16.pdf
+      page: 440
+      heading: Query Records Saved in All Users' Private Folders with the allPrivate
+        Query Scope
+    confidence: high
+    id: v36-soql-002
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: The DISTANCE() function now works with location and address fields in
+      SOQL, enabling geolocation-based queries to calculate distances between
+      geographic points.
+    source:
+      document: v36-spring16.pdf
+      page: 440
+      heading: DISTANCE() Support with Location-based SOQL Queries
+    confidence: high
+    id: v36-soql-003
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOQL queries using convertCurrency() in the SELECT clause can now
+      assign column aliases, enabling cleaner result handling in Apex and API
+      consumers.
+    source:
+      document: v36-spring16.pdf
+      page: 440
+      heading: Aliasing in SELECT convertCurrency() Statements
+    confidence: high
+    id: v36-soql-004
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOQL gains a FORMAT() function that returns locale-aware string
+      representations of number, date, time, and currency fields, matching the
+      Salesforce Classic UI display. The function supports aliasing and can be
+      nested with aggregate functions or convertCurrency().
+    source:
+      document: v36-spring16.pdf
+      page: 440
+      heading: Formatting for Number, Date, Time, and Currency Fields in SELECT Clauses
+    confidence: high
+    id: v36-soql-005
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: REST API now offers a parameterized search endpoint as an alternative
+      to constructing SOSL query strings, allowing developers to pass search
+      criteria as URL parameters instead.
+    source:
+      document: v36-spring16.pdf
+      page: 441
+      heading: "New Resource: Parameterized Search"
+    confidence: medium
+    id: v36-rest-009
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: REST API gains a new resource for traversing sObject relationships via
+      friendly URLs, enabling retrieval, update, or deletion of related records
+      through relationship paths.
+    source:
+      document: v36-spring16.pdf
+      page: 441
+      heading: "New Resource: SObject Relationships"
+    confidence: medium
+    id: v36-rest-010
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: The Tooling SOAP API runTests() call gains a maxFailedTests parameter
+      that lets you halt test execution after a specified number of failures,
+      useful for fail-fast CI pipelines.
+    source:
+      document: v36-spring16.pdf
+      page: 441
+      heading: Changed Calls
+    confidence: high
+    id: v36-apex-017
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API requests targeting version 36.0 and later
+    summary: Files-related Chatter REST API endpoints moved from /chatter/ paths to
+      /connect/ paths starting in v36.0, breaking existing integrations that use
+      the old URIs.
+    detail: Endpoints such as /chatter/files/{fileId}, /chatter/folders/{folderId},
+      and /chatter/users/{userId}/files have been relocated under /connect/.
+      Code calling the legacy paths against API v36.0+ will fail. Additionally,
+      you can no longer upload a binary file and create a feed post in the same
+      request.
+    upgradeAction: Update REST client code to use the new /connect/files/ and
+      /connect/folders/ endpoint paths before upgrading to API version 36.0.
+      Also refactor any logic that uploads a file and posts in a single request
+      into two separate calls.
+    source:
+      document: v36-spring16.pdf
+      page: 442
+      heading: New and Changed Chatter REST API Resources
+    confidence: high
+    id: v36-rest-011
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API calls at version >= 36.0
+    summary: Creating feed posts with binary file uploads in a single Chatter REST
+      API request is no longer supported. Files must be uploaded separately
+      first, then attached using the new files property on Feed Element
+      Capabilities Input.
+    detail: The content property for attaching files during feed post creation has
+      been removed. Developers must now upload files to Salesforce first, then
+      reference them by ID when creating feed posts. Additionally,
+      Recommendation Audience Input no longer supports memberOperationType and
+      members properties directly; these must now be specified via Custom List
+      Audience Input.
+    upgradeAction: "Refactor any code that creates feed posts with inline binary
+      attachments to use a two-step process: upload the file first, then attach
+      by file ID. Also update any recommendation audience API calls to use the
+      new Custom List Audience Input structure."
+    source:
+      document: v36-spring16.pdf
+      page: 447
+      heading: New and Changed Chatter REST API Request Bodies
+    confidence: low
+    id: v36-rest-012
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: integrations calling Chatter REST API at version 36.0 or later
+    summary: The Feed Element Capabilities response body replaces its 'content'
+      property with 'files', requiring integrations that parse this field to
+      update their code when targeting v36.0+.
+    upgradeAction: Update any code parsing Feed Element Capabilities responses to
+      use the 'files' property instead of 'content' when calling API version
+      36.0 or later.
+    source:
+      document: v36-spring16.pdf
+      page: 449
+      heading: New and Changed Chatter REST API Response Bodies
+    confidence: high
+    id: v36-rest-013
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: integrations calling Chatter REST API at version 36.0 or later
+    summary: The Email Message Capability response body drops the 'textbody'
+      property in favor of 'body', breaking integrations that rely on the old
+      field name.
+    upgradeAction: Refactor code that reads 'textbody' from Email Message Capability
+      responses to use 'body' instead when calling API version 36.0 or later.
+    source:
+      document: v36-spring16.pdf
+      page: 449
+      heading: New and Changed Chatter REST API Response Bodies
+    confidence: high
+    id: v36-rest-014
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: DatacloudContact now supports Count(ContactId) with GROUP BY for
+      companyName, Department, Level, and Title fields, enabling aggregate
+      queries to determine record counts by field value.
+    detail: Single-field grouping only; multiple field grouping and roll-up/cube
+      operators are not supported. Several existing fields also gained Filter,
+      Group, Sort, and Restricted Picklist properties.
+    source:
+      document: v36-spring16.pdf
+      page: 456
+      heading: Data.com API
+    confidence: medium
+    id: v36-rest-015
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-bulk
+    appliesWhen: org-wide regardless of component API version
+    summary: Bulk API now accepts and returns JSON in addition to CSV/XML, enabling
+      developers to use JSON for job creation, batches, and query results.
+    source:
+      document: v36-spring16.pdf
+      page: 458
+      heading: JSON Support for Bulk API
+    confidence: high
+    id: v36-bulk-001
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Durable Generic Streaming reaches GA, letting subscribers replay
+      PushTopic and generic streaming events from the past 24 hours via a new
+      /cometd/replay/ endpoint and replayId-based options.
+    detail: Events now carry a replayId field; subscribers can request all retained
+      events (-2), only new events (-1), or events after a specific replayId.
+      The createdDate timestamp format changed to use Z suffix instead of +0000
+      for UTC.
+    source:
+      document: v36-spring16.pdf
+      page: 458
+      heading: Replay Generic Streaming Events (Generally Available)
+    confidence: high
+    id: v36-rest-016
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version (requires beta
+      enablement by Salesforce)
+    summary: PushTopic streaming events can now be replayed within a 24-hour
+      retention window using a new /cometd/replay/ endpoint, allowing
+      subscribers to retrieve past events rather than only receiving real-time
+      ones.
+    source:
+      document: v36-spring16.pdf
+      page: 460
+      heading: Replay PushTopic Streaming Events (Beta)
+    confidence: medium
+    id: v36-rest-017
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: Tooling API now supports ApexTestSuite and TestSuiteMembership objects,
+      enabling programmatic creation and management of Apex test suites for
+      organizing test runs.
+    source:
+      document: v36-spring16.pdf
+      page: 461
+      heading: Tooling API New and Changed Objects
+    confidence: medium
+    id: v36-apex-018
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: "Tooling API test execution calls gain new parameters:
+      runTestsAsynchronous accepts ApexTestSuite IDs, and both runTests and
+      runTestsAsynchronous support maxFailedTests to cap failures before
+      aborting a run."
+    source:
+      document: v36-spring16.pdf
+      page: 462
+      heading: Tooling API Calls and Methods
+    confidence: high
+    id: v36-apex-019
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: Metadata API requests at API >= 36.0
+    summary: The
+      ActivitiesSettings.allowUsersToRelateMultipleContactsToTasksAndEvents
+      field becomes read-only starting in API v36.0, preventing any code from
+      modifying Shared Activities enablement via the Metadata API.
+    detail: Previously this field appeared writable but changing it was never
+      supported and could cause integration errors. Code in older API versions
+      that attempts to set this field must be updated to avoid failures when
+      targeting v36.0+.
+    upgradeAction: Audit any Metadata API deployments or tooling that sets
+      allowUsersToRelateMultipleContactsToTasksAndEvents and remove those
+      assignments before upgrading to API 36.0.
+    source:
+      document: v36-spring16.pdf
+      page: 463
+      heading: Metadata API Types
+    confidence: high
+    id: v36-packaging-003
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The CLOSE_TAB console event now includes a tabObjectId payload element
+      containing the closed tab's object ID, though it may be empty or null for
+      tabs that close on submission.
+    source:
+      document: v36-spring16.pdf
+      page: 468
+      heading: Salesforce Console API (Integration Toolkit)
+    confidence: medium
+    id: v36-rest-018
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide upon critical update activation (auto-activation postponed
+      to Summer '16)
+    summary: The PageReference getContent() and getContentAsPDF() methods now count
+      as callouts, meaning they are subject to callout limits and cannot be
+      invoked after DML in the same transaction context.
+    detail: Originally scheduled for auto-activation in Spring '16, this critical
+      update has been delayed to Summer '16. When active, code that calls these
+      methods after performing DML or that exceeds callout limits will fail.
+    upgradeAction: Review Apex code that uses PageReference.getContent() or
+      getContentAsPDF(). Ensure these calls occur before any DML operations and
+      that total callout limits are not exceeded. Test with the critical update
+      enabled before auto-activation.
+    source:
+      document: v36-spring16.pdf
+      page: 481
+      heading: Critical Updates
+    confidence: high
+    id: v36-apex-020
+  - apiVersion: "36.0"
+    release: Spring '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: visualforce
+    appliesWhen: org-wide upon critical update activation (auto-activation postponed
+      to Summer '16)
+    summary: Static resources will be served from the Visualforce domain instead of
+      the core Salesforce domain, which may break hardcoded URL references or
+      cross-origin requests that assume the old domain.
+    detail: Originally scheduled for auto-activation in Spring '16, postponed to
+      Summer '16. This domain change affects how browsers enforce same-origin
+      policies and may require CORS configuration updates.
+    upgradeAction: Audit Visualforce pages, JavaScript, and integrations for
+      hardcoded static resource URLs. Update any cross-origin configurations
+      that reference the old domain. Test with the critical update enabled.
+    source:
+      document: v36-spring16.pdf
+      page: 481
+      heading: Critical Updates
+    confidence: high
+    id: v36-vf-002

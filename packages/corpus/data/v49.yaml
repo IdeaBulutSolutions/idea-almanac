@@ -1,0 +1,1928 @@
+apiVersion: "49.0"
+release: Summer '20
+reviewed: true
+entries:
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version; IE11 access ends
+      December 31, 2020 (with Extended Support opt-in)
+    summary: Internet Explorer 11 support for Lightning Experience reaches
+      end-of-life on December 31, 2020, even with Extended Support enabled.
+      Integrations or automated tests relying on IE11 WebDriver or similar
+      tooling will break after this date.
+    upgradeAction: Migrate any Selenium/WebDriver test suites or embedded browser
+      tooling from IE11 to a supported Chromium-based browser before December
+      31, 2020.
+    source:
+      document: v49-summer20.pdf
+      page: 66
+      heading: Supported Browsers and Devices for Lightning Experience
+    confidence: medium
+    id: v49-other-001
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; retirement date July 10, 2020
+    summary: The Einstein Voice Assistant beta feature is being removed from the
+      platform entirely. Any integrations or automations that depend on this
+      voice interface will stop functioning after the retirement date.
+    upgradeAction: Identify and remove any code or integrations that rely on
+      Einstein Voice Assistant APIs before the July 10, 2020 retirement date.
+    source:
+      document: v49-summer20.pdf
+      page: 104
+      heading: Salesforce Einstein
+    confidence: high
+    id: v49-rest-001
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Customizable Forecasting feature and its API endpoints are no
+      longer accessible. Any integrations querying or writing forecasting data
+      through this feature will fail.
+    upgradeAction: Identify any API calls or integrations relying on Customizable
+      Forecasting objects and migrate them to use Collaborative Forecasts APIs
+      before upgrading.
+    source:
+      document: v49-summer20.pdf
+      page: 148
+      heading: Customizable Forecasting Was Retired
+    confidence: high
+    id: v49-rest-002
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version, effective Summer '21
+    summary: Salesforce is retiring the legacy Original Territory Management feature
+      entirely. After retirement, all API access and underlying data for this
+      feature becomes unavailable.
+    detail: Any integrations querying or manipulating territory data via the
+      original territory management objects will cease to function. The
+      replacement is Enterprise Territory Management, which uses a different
+      data model.
+    upgradeAction: Audit integrations for references to original territory
+      management objects and migrate to Enterprise Territory Management APIs
+      before Summer '21. Export and archive all territory data while access
+      remains.
+    source:
+      document: v49-summer20.pdf
+      page: 148
+      heading: Original Territory Management Is Being Retired
+    confidence: medium
+    id: v49-rest-003
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; enabled by default
+      for orgs created Summer '20+, opt-in for existing orgs
+    summary: Email Address Internationalization (EAI) enables Unicode characters in
+      the local part of email addresses throughout Salesforce, requiring
+      integrations to handle UTF-8 encoded email addresses and use the latest
+      API version.
+    detail: Integrations that parse, validate, or store email addresses must be
+      updated to support non-ASCII characters in the portion before the @
+      symbol. Fields storing email addresses should use the email data type, and
+      the entire email path must support UTF-8 encoding.
+    upgradeAction: Audit integrations that handle email addresses to ensure UTF-8
+      support, update email validation logic to accept Unicode characters,
+      verify email-type fields are used for storage, and upgrade to the latest
+      API version before enabling EAI.
+    source:
+      document: v49-summer20.pdf
+      page: 150
+      heading: Connect Globally with Email Address Internationalization
+    confidence: high
+    id: v49-rest-004
+  - apiVersion: "49.0"
+    introducedIn: "48.0"
+    release: Summer '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version — enforced immediately
+      since Spring '20
+    summary: Visualforce Classic email templates sent to guest users in communities,
+      sites, or portals no longer render correctly unless explicitly configured
+      to bypass the new guest security restrictions.
+    detail: This security policy shipped in Spring '20 (API 48.0) with immediate
+      enforcement. The Summer '20 notes republish the guidance. Templates must
+      include the renderUsingSystemContextWithoutSharing="True" attribute to
+      restore access for guest recipients.
+    upgradeAction: Audit all Visualforce email templates targeting guest users and
+      add renderUsingSystemContextWithoutSharing="True" to each template's root
+      component; test email delivery to portal/community guest accounts.
+    source:
+      document: v49-summer20.pdf
+      page: 151
+      heading: Email Templates
+    confidence: high
+    id: v49-vf-001
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: A new SOAP API object UserEmailCalendarSync enables programmatic bulk
+      assignment of users to Einstein Activity Capture configurations,
+      supporting automated user provisioning workflows.
+    source:
+      document: v49-summer20.pdf
+      page: 153
+      heading: Add Users to an Einstein Activity Capture Configuration with SOAP API
+    confidence: medium
+    id: v49-soap-001
+  - apiVersion: "49.0"
+    introducedIn: "48.0"
+    release: Summer '20
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version; retirement scheduled
+      for December 2020
+    summary: Salesforce for Outlook will stop functioning in December 2020 when IE11
+      extended support ends, breaking contact/event/task sync and the Side Panel
+      connection to Salesforce.
+    detail: Any integrations relying on Salesforce for Outlook's sync capabilities
+      or Side Panel functionality will cease to work. Salesforce recommends
+      migrating to the Outlook Integration or Einstein Activity Capture as
+      replacement products.
+    upgradeAction: Migrate any workflows or user processes depending on Salesforce
+      for Outlook sync to the Outlook Integration or Einstein Activity Capture
+      before December 2020.
+    source:
+      document: v49-summer20.pdf
+      page: 172
+      heading: Salesforce for Outlook Is Being Retired in December 2020
+    confidence: high
+    id: v49-other-002
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Pardot API now supports authentication via Salesforce Connected Apps,
+      eliminating the requirement for a dedicated Pardot-only user account to
+      authenticate API calls.
+    upgradeAction: Consider migrating existing Pardot API integrations from
+      Pardot-only user credentials to Salesforce Connected App authentication
+      for unified credential management.
+    source:
+      document: v49-summer20.pdf
+      page: 184
+      heading: "Pardot API: New and Changed Items"
+    confidence: medium
+    id: v49-auth-001
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The recalculateForecast invocable action now recalculates all account
+      forecasts rather than being limited to a single account forecast, which
+      may affect Flows relying on the previous single-account behavior.
+    upgradeAction: Review Flows using the recalculateForecast action to ensure they
+      handle the expanded scope of recalculating all forecasts instead of just
+      one.
+    source:
+      document: v49-summer20.pdf
+      page: 304
+      heading: Manufacturing Cloud Has New and Changed Invocable Actions
+    confidence: medium
+    id: v49-flow-001
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: LWC developers can now import community context data using the
+      @salesforce/community scoped module when building components for Lightning
+      communities.
+    source:
+      document: v49-summer20.pdf
+      page: 373
+      heading: Get Information About the Current Community in Lightning Web Components
+    confidence: high
+    id: v49-lwc-001
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: ExperienceBundle metadata retrieval now includes theme layout
+      configuration properties (header visibility, navigation display, max
+      width) in the theme JSON files, enabling programmatic manipulation of
+      community theme settings.
+    source:
+      document: v49-summer20.pdf
+      page: 374
+      heading: ExperienceBundle Supports Theme Layout Properties
+    confidence: high
+    id: v49-packaging-001
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Any
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version
+    summary: Guest users now have enforced private org-wide defaults and restricted
+      sharing mechanisms. Apex managed sharing, manual sharing, public groups,
+      and queues can no longer grant record access to guest users—only guest
+      user sharing rules work.
+    detail: This enforcement affects any code that previously relied on Apex managed
+      sharing or other sharing mechanisms to provide guest user access to
+      records. Orgs created before Winter '20 must migrate to guest user sharing
+      rules.
+    upgradeAction: Audit all Apex managed sharing code that grants access to guest
+      users and replace with guest user sharing rules. Test community/site
+      functionality to verify guest users retain appropriate record access after
+      the enforcement.
+    source:
+      document: v49-summer20.pdf
+      page: 379
+      heading: Secure Guest Users' Org-Wide Defaults and Sharing Model (Previously
+        Released Security Alert, Enforced)
+    confidence: high
+    id: v49-sharing-001
+  - apiVersion: "49.0"
+    introducedIn: "48.0"
+    release: Summer '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Visualforce email templates sent to guest users no longer render data
+      by default due to restricted guest user data access. Templates must
+      explicitly opt into system context to function.
+    detail: This security policy was enforced starting Spring '20. Because guest
+      users have limited Salesforce data access, Visualforce email templates
+      targeting them fail to render data unless the template explicitly uses
+      system context. The fix requires adding
+      renderUsingSystemContextWithoutSharing="True" to the emailTemplate tag,
+      and the user editing the template must have the Author Apex permission.
+    upgradeAction: Audit all Visualforce email templates sent to guest users in
+      communities, sites, and portals. Add
+      renderUsingSystemContextWithoutSharing="True" to the emailTemplate tag and
+      ensure editors have the Author Apex permission.
+    source:
+      document: v49-summer20.pdf
+      page: 382
+      heading: Ensure Guest User Access to Emails Created with Visualforce Email
+        Templates
+    confidence: high
+    id: v49-vf-002
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Connect REST API changes its default file rendition from Adobe Flash to
+      a non-Flash format starting Summer '20, and will completely stop
+      generating Flash renditions in Winter '21.
+    upgradeAction: Update any integrations consuming file renditions via Connect
+      REST API to request SVG renditions explicitly instead of relying on the
+      default or expecting Flash output.
+    source:
+      document: v49-summer20.pdf
+      page: 393
+      heading: Switch Your File Rendition in Connect REST API
+    confidence: high
+    id: v49-rest-005
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Connected apps can now subscribe to custom notification types via API
+      and Setup, enabling external apps to receive Salesforce custom
+      notifications. New Connect REST API Notifications Resources allow
+      programmatic management of custom notification subscriptions and status.
+    source:
+      document: v49-summer20.pdf
+      page: 402
+      heading: Send Custom Notifications to External Apps with Notification Builder
+        Platform
+    confidence: medium
+    id: v49-rest-006
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Installing or upgrading unlocked packages now deletes Flows that were
+      removed from earlier package versions, whereas previously these orphaned
+      Flows persisted in the target org.
+    detail: This applies only to unlocked 2GP packages in Summer '20. Deleting Flow
+      versions from 1GP packages or 2GP managed packages is explicitly not
+      supported in this release.
+    upgradeAction: Before upgrading unlocked packages, verify that any Flows removed
+      from the package source are safe to delete in subscriber orgs; check for
+      external references or dependencies on those Flows.
+    source:
+      document: v49-summer20.pdf
+      page: 440
+      heading: "Second-Generation Packaging Improvements: Delete Earlier Flows from
+        Packages"
+    confidence: high
+    id: v49-packaging-003
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Flow
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Flows can now expose Apex-defined variables for input/output when
+      invoked from Subflow elements, Visualforce pages, or as actions, enabling
+      complex data structures to be passed across flow boundaries.
+    source:
+      document: v49-summer20.pdf
+      page: 446
+      heading: Access Apex-Defined Variables from Outside Flows
+    confidence: high
+    id: v49-flow-002
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (enforcement postponed
+      to Winter '22)
+    summary: Process Builder processes that check for field changes or use
+      ISCHANGED() will evaluate against the original record values when a field
+      started as null, potentially altering which criteria nodes fire.
+    detail: This release update changes how multi-criteria processes handle fields
+      that initially had null values. When a record update triggers a process
+      and the field was originally null, the process now correctly evaluates
+      against that null original value rather than potentially using an
+      intermediate value. Originally scheduled for Summer '20 enforcement, then
+      Winter '21, now postponed to Winter '22.
+    upgradeAction: Review Process Builder processes using the 'execute only when
+      specified changes are made' option or ISCHANGED() in criteria. Test
+      behavior with records where monitored fields start as null to confirm
+      expected outcomes before enforcement.
+    source:
+      document: v49-summer20.pdf
+      page: 448
+      heading: Evaluate Criteria Based on Original Record Values in Process Builder
+        (Update, Postponed)
+    confidence: high
+    id: v49-flow-003
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version (Release Update
+      enforced Spring '21)
+    summary: "Bulk REST API calls to invocable actions switch to partial-save
+      semantics: a single failed action no longer rolls back the entire
+      transaction. Instead, Salesforce retries successful actions up to three
+      times and only rolls back the specific failures."
+    detail: This Release Update was postponed from Spring '20 to Winter '21 and
+      again to Spring '21. External callouts cannot be rolled back and may
+      execute multiple times under partial save. Certain action types (Invocable
+      Apex, External Services, and several Order Management actions) remain
+      excluded from partial save. The retry behavior can also increase
+      transaction duration and accelerate limit consumption.
+    upgradeAction: Audit REST API integrations invoking actions in bulk to handle
+      partial success responses. Ensure idempotency for any external callouts
+      triggered by invocable actions, since they may fire more than once.
+    source:
+      document: v49-summer20.pdf
+      page: 449
+      heading: Enable Partial Save for Invocable Actions (Update, Postponed)
+    confidence: high
+    id: v49-rest-007
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+      - ApexClass
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (Release Update
+      enforced Spring '21)
+    summary: Flows will fail at runtime when invoking legacy Apex actions
+      (Process.Plugin implementations) marked as public rather than global, and
+      global actions with public describe/invoke methods become inaccessible
+      across namespaces.
+    detail: This Release Update enforces access-modifier semantics for legacy Apex
+      plug-ins. Public legacy Apex actions from managed packages will no longer
+      execute in flows and will disappear from Flow Builder. Originally
+      scheduled for Summer '20, enforcement was postponed to Spring '21.
+    upgradeAction: Identify flows using legacy Apex actions from managed packages.
+      Verify each referenced Apex class is declared global with global describe
+      and invoke methods. Contact package developers to update access modifiers
+      or migrate to @InvocableMethod-based implementations before Spring '21
+      enforcement.
+    source:
+      document: v49-summer20.pdf
+      page: 451
+      heading: Make Flows Respect Access Modifiers for Legacy Apex Actions (Update,
+        Postponed)
+    confidence: high
+    id: v49-flow-004
+  - apiVersion: "49.0"
+    introducedIn: "45.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version; auto-enforced January
+      30, 2022 for existing orgs, enabled by default for orgs created Winter '20
+      or later
+    summary: Salesforce replaces JDK8-based date/time locale formats with
+      ICU-standard formats across the platform. API version 45.0 and later
+      surfaces these new formats, and org-wide enforcement occurred January
+      2022.
+    detail: This release update changes how dates and times are formatted for all
+      locales. Code that parses or compares formatted date/time strings may
+      break if it assumed the old JDK8 patterns. The en_CA locale requires
+      separate opt-in via User Interface settings.
+    upgradeAction: Query active user locales with the provided SOQL, then test any
+      code that parses or pattern-matches formatted date/time strings.
+      Coordinate with package vendors to confirm ICU compatibility before
+      enforcement.
+    source:
+      document: v49-summer20.pdf
+      page: 462
+      heading: Enable ICU Locale Formats (Previously Released Update)
+    confidence: high
+    id: v49-other-003
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The ApprovalProcess metadata type now exposes a processOrder field,
+      enabling programmatic control of active approval process evaluation order
+      through Metadata API, change sets, and unlocked packages.
+    source:
+      document: v49-summer20.pdf
+      page: 466
+      heading: Control the Order of Active Approval Processes Programmatically
+    confidence: high
+    id: v49-packaging-004
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce IoT Explorer Edition is being phased out and subscriptions
+      will not be renewed. Organizations using IoT Explorer integrations must
+      migrate to Lightning Flow for IoT capabilities.
+    upgradeAction: Audit any integrations or automations built on IoT Explorer
+      Edition and plan migration to Lightning Flow before subscription expiry.
+    source:
+      document: v49-summer20.pdf
+      page: 469
+      heading: Salesforce IoT Explorer Edition Is Being Retired
+    confidence: medium
+    id: v49-other-004
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Two new Apex methods in System.UserManagement let developers
+      programmatically trigger and complete two-factor authentication flows for
+      email, SMS, Salesforce Authenticator, or TOTP verification.
+    source:
+      document: v49-summer20.pdf
+      page: 475
+      heading: Initiate Two-Factor Authentication with Apex
+    confidence: high
+    id: v49-auth-002
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The .well-known/auth-configuration endpoint now returns LoginPageType
+      and LoginPageTypeConfigs fields, enabling integrations to programmatically
+      detect login page configuration including whether pages use Visualforce or
+      Designer and embedded login settings.
+    source:
+      document: v49-summer20.pdf
+      page: 479
+      heading: Discover Login Page Attributes with New JSON Response Fields
+    confidence: medium
+    id: v49-rest-008
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Scratch org definition files now accept additional Shield Platform
+      Encryption features (CacheOnlyKeys, MinKeyRotationInterval,
+      EncryptionStatisticsInterval, EncryptionSyncInterval) enabling developers
+      to test key rotation and encryption sync processes with shorter cycles.
+    detail: These scratch org features allow testing automated processes that depend
+      on SOQL queries against encrypted data by reducing key rotation intervals
+      to as little as 60 seconds. Previously unavailable in scratch orgs, these
+      settings help debug encryption-related query behavior before deploying to
+      production.
+    source:
+      document: v49-summer20.pdf
+      page: 486
+      heading: Test More Shield Platform Encryption Functionality in Scratch Orgs
+    confidence: medium
+    id: v49-packaging-005
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: The Metadata API now validates that an Event Bus tenant secret exists
+      before allowing enableEventBusEncryption to be set, returning an error if
+      the prerequisite is missing.
+    detail: Previously, setting enableEventBusEncryption via Metadata API without a
+      corresponding Event Bus type tenant secret could silently create a
+      misconfiguration that blocked change data capture and platform events. The
+      API now enforces the dependency upfront.
+    upgradeAction: If automation or CI/CD scripts deploy encryption settings via
+      Metadata API, ensure an Event Bus tenant secret is provisioned before
+      enabling event bus encryption to avoid deployment failures.
+    source:
+      document: v49-summer20.pdf
+      page: 487
+      heading: Avoid Blocked Events When Encrypting Through Metadata API
+    confidence: high
+    id: v49-soap-002
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version (requires Event
+      Monitoring add-on)
+    summary: A new platform event ConcurLongRunApexErrEvent fires whenever an Apex
+      request is rejected because the org has hit its concurrent long-running
+      Apex limit, enabling programmatic alerting on limit-related failures.
+    source:
+      document: v49-summer20.pdf
+      page: 491
+      heading: Detect Errors When an Org Exceeds the Concurrent Long-Running Apex Limit
+    confidence: high
+    id: v49-apex-001
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: deprecated
+    impact: retirement
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version; legacy policies
+      disabled permanently in Winter '21
+    summary: The legacy Transaction Security framework using the
+      TxnSecurity.PolicyCondition Apex interface is being retired in Winter '21.
+      Existing legacy policies will be permanently disabled and unmaintainable
+      after that release.
+    detail: Apex classes implementing TxnSecurity.PolicyCondition must be migrated
+      to the enhanced framework using TxnSecurity.EventCondition before Winter
+      '21. Legacy policies remain functional until retirement but can no longer
+      be created or modified as of Summer '20.
+    upgradeAction: Identify Apex classes implementing TxnSecurity.PolicyCondition
+      and rewrite them using the TxnSecurity.EventCondition interface before
+      Winter '21 to avoid policy enforcement gaps.
+    source:
+      document: v49-summer20.pdf
+      page: 493
+      heading: Migrate Legacy Policies
+    confidence: high
+    id: v49-apex-002
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The Apex Crypto class now accepts RSA-SHA384 and RSA-SHA512 as valid
+      algorithm names in sign, signWithCertificate, signXML, and verify methods,
+      enabling stronger cryptographic signatures.
+    source:
+      document: v49-summer20.pdf
+      page: 500
+      heading: Use Stronger Hashing Algorithms with Apex Crypto Class
+    confidence: high
+    id: v49-apex-003
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+      - VisualforcePage
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: "Lightning Message Service moves from beta to GA with a breaking change
+      to the subscribe() method: the default scope shifts from APPLICATION to
+      active-area-only, meaning cross-page message delivery now requires an
+      explicit scope parameter."
+    detail: "Beta implementations that relied on the implicit APPLICATION scope will
+      stop receiving messages from inactive tabs or pages unless updated to pass
+      scope: APPLICATION explicitly. The active scope restricts delivery to the
+      currently selected navigation tab, workspace tab, subtab, or utility
+      item."
+    upgradeAction: "Audit existing LMS subscribe() calls that relied on beta
+      behavior. Add scope: APPLICATION to any subscription that must receive
+      messages from components outside the active navigation context."
+    source:
+      document: v49-summer20.pdf
+      page: 505
+      heading: Communicate Across Salesforce UI Technologies with Lightning Message
+        Service (Generally Available)
+    confidence: high
+    id: v49-lwc-002
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: LWC now supports sharing CSS styles across components via @import
+      syntax, allowing you to create a CSS-only module and import its rules into
+      other components.
+    source:
+      document: v49-summer20.pdf
+      page: 507
+      heading: Share CSS Styles Among Lightning Web Components
+    confidence: high
+    id: v49-lwc-003
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Package developers can now remove Aura and LWC components from managed
+      packages after release, enabling package refactoring. Deleted components
+      remain in subscriber orgs post-upgrade and must be manually removed by
+      subscriber admins.
+    detail: "A two-stage deletion process is recommended for global Aura components
+      or exposed LWCs: first push a version that strips all references from the
+      component to be deleted, then push a second version that actually deletes
+      it. This prevents dependency errors in subscriber orgs."
+    source:
+      document: v49-summer20.pdf
+      page: 509
+      heading: Delete Lightning Components from Managed Packages
+    confidence: high
+    id: v49-packaging-006
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: All Aura components in the ui namespace (ui:button, ui:inputText,
+      ui:menu, etc.) are deprecated and will lose official support on May 1,
+      2021. Existing code continues to function but Salesforce will no longer
+      accept support cases after that date.
+    detail: The deprecation covers approximately 35 UI components including input
+      types, buttons, menus, and output formatters. Each has a direct
+      replacement in the lightning namespace, available as both Aura components
+      and LWC. Salesforce recommends migrating to LWC where possible.
+    upgradeAction: Audit Aura bundles for ui namespace component references and
+      migrate to lightning namespace equivalents (e.g., ui:button to
+      lightning:button, ui:inputText to lightning:input). Prioritize migration
+      before May 2021 to retain support coverage.
+    source:
+      document: v49-summer20.pdf
+      page: 511
+      heading: Aura Components in the ui Namespace Are Being Deprecated
+    confidence: high
+    id: v49-aura-001
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: LWC gains new scoped modules (@salesforce/userPermission and
+      @salesforce/customPermission) enabling components to check whether the
+      current user holds standard or custom permissions at runtime.
+    source:
+      document: v49-summer20.pdf
+      page: 513
+      heading: Check User Permissions for Lightning Web Components
+    confidence: high
+    id: v49-lwc-004
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: LWC gains a new @salesforce/community scoped module for importing the
+      current community's ID and base path, enabling components to dynamically
+      reference community context without hardcoding.
+    source:
+      document: v49-summer20.pdf
+      page: 515
+      heading: Get Information About the Current Lightning Community
+    confidence: high
+    id: v49-lwc-005
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: LWC now supports a leading-hyphen syntax in HTML attributes to bind to
+      JavaScript properties that start with uppercase letters, solving a
+      previous limitation where such properties could not be set from templates.
+    source:
+      document: v49-summer20.pdf
+      page: 516
+      heading: Set an Uppercase JavaScript Property Via an HTML Attribute
+    confidence: high
+    id: v49-lwc-006
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: LWC components placed in custom tabs now rerender instead of being
+      fully destroyed and recreated when query parameters change, aligning with
+      standard LWC reactivity behavior.
+    detail: Previously, updating pageReference.state query parameters in a custom
+      tab caused the entire component to be recreated. Now the component
+      persists and reacts to the parameter changes. This requires declaring
+      currentPageReference as a tracked property before wiring
+      CurrentPageReference, otherwise parameter updates will not propagate.
+    upgradeAction: Review LWC components in custom tabs that update query
+      parameters. Add a currentPageReference class property declaration before
+      the @wire(CurrentPageReference) decorator. Test that components correctly
+      track and respond to query parameter changes without relying on full
+      recreation lifecycle hooks.
+    source:
+      document: v49-summer20.pdf
+      page: 518
+      heading: Lightning Web Components in Custom Tabs Are Reactive
+    confidence: high
+    id: v49-lwc-007
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Upgrading sfdx-lwc-jest to v0.9.0 requires updating Jest and related
+      dependencies to v25.5.4 or tests may fail to run.
+    upgradeAction: When upgrading sfdx-lwc-jest to 0.9.0, update your project's Jest
+      dependencies to 25.5.4 and verify all LWC unit tests pass before merging.
+    source:
+      document: v49-summer20.pdf
+      page: 518
+      heading: Update Jest Dependencies to v25.5.4 If You Update sfdx-lwc-jest to v0.9.0
+    confidence: high
+    id: v49-lwc-008
+  - apiVersion: "49.0"
+    introducedIn: "48.0"
+    release: Summer '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: "Content Security Policy now blocks blob: URLs from loading inside
+      iframes. Components that rendered blob content in iframes will fail to
+      display that content."
+    detail: "This security hardening was enforced starting Spring '20 (API 48.0) but
+      documented retroactively. The frame-src CSP directive rejects blob: scheme
+      sources to mitigate clickjacking vectors."
+    upgradeAction: Refactor any iframe elements that load blob URLs to instead open
+      the blob content in a new browser tab or window via a standard anchor
+      link.
+    source:
+      document: v49-summer20.pdf
+      page: 519
+      heading: Blob Schema Blocked for iframes
+    confidence: high
+    id: v49-lwc-009
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version (enforced at Winter
+      '21 upgrade)
+    summary: Guest, portal, and community users can invoke @AuraEnabled Apex methods
+      only when their profile or a permission set explicitly grants access to
+      the containing Apex class. Previously accessible methods become
+      inaccessible without this configuration.
+    detail: This release update was postponed from Spring '20 to Winter '21. Once
+      enforced, any Aura component, LWC, or flow calling an @AuraEnabled method
+      on behalf of a guest or external user will fail unless the user's profile
+      or permission set includes the Apex class. For managed package
+      controllers, subscriber orgs must use permission sets rather than profiles
+      to grant access.
+    upgradeAction: Before Winter '21 enforcement, audit all @AuraEnabled classes
+      used by guest/portal/community users. Grant explicit Apex class access via
+      profiles or permission sets. Use the Guest User Access Report managed
+      package to identify gaps. Test in sandbox after enabling the release
+      update.
+    source:
+      document: v49-summer20.pdf
+      page: 520
+      heading: Restrict Access to @AuraEnabled Apex Methods for Guest and Portal Users
+        Based on User Profile (Update, Postponed)
+    confidence: high
+    id: v49-sharing-002
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version (enforced at org
+      upgrade to Winter '21)
+    summary: 'Passing function expression definitions via the {"exprType":
+      "FUNCTION"} pattern to $A.createComponent() or $A.createComponents() will
+      throw an error rather than executing unpredictably, blocking a dynamic
+      code-injection vector.'
+    detail: This release update was originally scheduled for Summer '20 but
+      postponed to Winter '21 enforcement. When active, any attribute value
+      containing the function-expression key triggers a runtime error instead of
+      being interpreted as executable Aura logic.
+    upgradeAction: Search Aura code for $A.createComponent calls that dynamically
+      construct attribute objects and remove any use of exprType:FUNCTION
+      patterns before the Winter '21 org upgrade.
+    source:
+      document: v49-summer20.pdf
+      page: 521
+      heading: Prevent Creation of Function Expressions in Dynamically Created Aura
+        Components (Update, Postponed)
+    confidence: high
+    id: v49-aura-002
+  - apiVersion: "49.0"
+    introducedIn: "47.0"
+    release: Summer '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version (enforcement postponed
+      to Winter '21)
+    summary: Authenticated users calling @AuraEnabled Apex methods will be blocked
+      unless their profile or a permission set explicitly grants access to the
+      Apex class. This closes an implicit access path that previously allowed
+      any authenticated user to invoke these methods.
+    detail: This release update was introduced in Winter '20 (API 47.0) and
+      enforcement was postponed from Summer '20 to Winter '21. Once enforced,
+      all Aura and LWC components invoking @AuraEnabled controllers require
+      explicit class-level security configuration. For managed package
+      controllers, subscriber orgs must use permission sets rather than profiles
+      to grant access.
+    upgradeAction: Audit all @AuraEnabled Apex classes using the AuraEnabled Scanner
+      tool. Ensure each class is explicitly granted to the appropriate profiles
+      or permission sets before enforcement activates in Winter '21.
+    source:
+      document: v49-summer20.pdf
+      page: 521
+      heading: Restrict Access to @AuraEnabled Apex Methods for Authenticated Users
+        Based on User Profile (Update, Postponed)
+    confidence: high
+    id: v49-sharing-003
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version (enforced at org
+      upgrade to Spring '21)
+    summary: Lightning components that reference Salesforce-provided components
+      requiring specific permissions will fail with access errors if the user
+      lacks the required permission, once the release update is enforced.
+    detail: This release update enforces permission checks on component
+      dependencies. If a custom Aura or LWC component extends, uses, or
+      implements a Salesforce-provided component that requires an org or user
+      permission, the runtime will now verify the user has that permission.
+      Previously these dependency permission checks were not enforced. Only a
+      limited set of Salesforce components require permissions, so most orgs see
+      no impact.
+    upgradeAction: Test custom Lightning components in a sandbox after November 29,
+      2020. Re-install packages at the same version to surface access errors. If
+      errors occur, request the required permission from Salesforce or update to
+      a newer package version.
+    source:
+      document: v49-summer20.pdf
+      page: 522
+      heading: Enable Dependency Access Checks In Lightning Components (Update,
+        Postponed)
+    confidence: high
+    id: v49-lwc-010
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version (enforcement postponed
+      to Summer '21)
+    summary: Aura components outside a managed package namespace will no longer be
+      able to invoke Apex controller methods lacking the global modifier. Server
+      actions calling non-global methods will fail once enforcement activates.
+    detail: This release update enforces proper access controls that were previously
+      unenforced. Originally scheduled for Winter '20, enforcement is now set
+      for Summer '21. Non-namespaced unlocked packages are exempt and treated
+      like unmanaged packages.
+    upgradeAction: Audit Aura components that call Apex methods from managed
+      packages. Ensure all referenced controller methods are marked global;
+      refactor any calls to public methods to use the package's supported global
+      API instead.
+    source:
+      document: v49-summer20.pdf
+      page: 524
+      heading: Disable Access to Non-global Controller Methods in Managed Packages
+        (Update, Postponed)
+    confidence: high
+    id: v49-aura-003
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version (enforced at Summer
+      '21 org upgrade)
+    summary: Lightning components can no longer read Apex properties whose getter is
+      marked private or protected. Markup expressions like
+      {!v.apexObject.counter} will fail if the backing Apex property uses a
+      private getter, aligning component behavior with standard Apex access
+      rules.
+    detail: This release update was originally scheduled for Summer '20 but
+      postponed to Summer '21. Once enforced, any Aura or LWC markup that
+      references an @AuraEnabled property with a non-public getter will stop
+      working. The fix requires changing private or protected getters to public.
+    upgradeAction: Before Summer '21 enforcement, search for @AuraEnabled properties
+      with private or protected getters and update them to use public getters.
+      Test affected components in a sandbox with the release update activated.
+    source:
+      document: v49-summer20.pdf
+      page: 525
+      heading: Enforce Access Modifiers on Apex Properties in Lightning Component
+        Markup (Update, Postponed)
+    confidence: high
+    id: v49-lwc-011
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: sharing-security
+    appliesWhen: org-wide once the associated Release Update is activated
+    summary: When activated, guest, portal, and community users can invoke
+      @AuraEnabled Apex methods only if their profile explicitly grants access
+      to the containing Apex class. Previously, profile-level restrictions were
+      not enforced for these component-invoked methods.
+    upgradeAction: Audit all @AuraEnabled classes exposed in communities/portals;
+      ensure each guest or portal user profile has explicit Apex class access
+      for required functionality, or expect runtime errors after activation.
+    source:
+      document: v49-summer20.pdf
+      page: 526
+      heading: Restrict Access to @AuraEnabled Apex Methods for Guest and Portal Users
+        Based on User Profile (Security Alert)
+    confidence: high
+    id: v49-sharing-004
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version (once security alert
+      is activated)
+    summary: After activating this security alert, @AuraEnabled Apex methods become
+      inaccessible to users whose profiles lack explicit class-level access,
+      even if the component itself loads successfully.
+    detail: Previously, authenticated users could invoke @AuraEnabled methods
+      without profile-level Apex class permissions. Once enabled, the platform
+      enforces that the calling user's profile must grant access to the Apex
+      class containing the @AuraEnabled method. This is a security hardening
+      measure delivered as an opt-in alert before becoming mandatory.
+    upgradeAction: Before activation, audit all Apex classes with @AuraEnabled
+      methods and ensure user profiles or permission sets grant Apex Class
+      Access for each class invoked by LWC or Aura components. Test with
+      restricted profiles to catch access failures early.
+    source:
+      document: v49-summer20.pdf
+      page: 527
+      heading: Restrict Access to @AuraEnabled Apex Methods for Authenticated Users
+        Based on User Profile (Security Alert)
+    confidence: high
+    id: v49-sharing-005
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Einstein OCR REST API endpoint becomes generally available, allowing
+      integrations to extract alphanumeric text, bounding boxes, and
+      table/business-card metadata from images via a single POST call.
+    source:
+      document: v49-summer20.pdf
+      page: 528
+      heading: Detect Text in an Image with Einstein OCR (Generally Available)
+    confidence: medium
+    id: v49-rest-009
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Einstein Vision train and retrain endpoints now accept an optional
+      algorithm parameter with value retail-execution for improved detection
+      accuracy in retail shelf scenarios.
+    source:
+      document: v49-summer20.pdf
+      page: 530
+      heading: Detect Products on Retail Shelves with an Optimized Algorithm
+    confidence: medium
+    id: v49-rest-010
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Einstein Intent API endpoints now accept a 'language' parameter at
+      dataset creation and an 'algorithm' parameter at training time to build
+      intent models in non-English languages.
+    source:
+      document: v49-summer20.pdf
+      page: 531
+      heading: Einstein Intent Now Supports Multiple Languages
+    confidence: medium
+    id: v49-rest-011
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Einstein Intent API now accepts a new algorithm parameter value
+      'multilingual-intent-ood' that returns an empty probabilities array when
+      input text does not match any trained labels, rather than forcing a
+      best-guess classification.
+    source:
+      document: v49-summer20.pdf
+      page: 532
+      heading: Create Einstein Intent Models That Support Out-of-Domain Text
+    confidence: high
+    id: v49-rest-012
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning Message Service reaches GA, enabling publish-subscribe
+      communication between Visualforce pages, Aura components, and LWCs across
+      the DOM, including cross-page messaging and utility bar scenarios.
+    detail: This provides a supported mechanism for hybrid applications migrating
+      from Classic to Lightning Experience to maintain communication between
+      legacy Visualforce and newer Lightning components without relying on
+      unsupported DOM manipulation or postMessage hacks.
+    source:
+      document: v49-summer20.pdf
+      page: 535
+      heading: Communicate Across Salesforce UI Technologies with the Lightning
+        Message Service (Generally Available)
+    confidence: high
+    id: v49-vf-003
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version (Release Update
+      enforced Spring '21)
+    summary: When multiple API navigation calls fire in rapid succession within a
+      Visualforce page, only the first call executes. Subsequent navigation
+      calls in the same sequence are ignored to prevent race conditions.
+    detail: This Release Update addresses issues where competing navigation API
+      calls caused unpredictable page behavior. Salesforce indicated a
+      replacement pattern would be provided; alternatively, migrating affected
+      pages to Lightning components avoids the limitation entirely.
+    upgradeAction: Audit Visualforce pages that invoke navigation APIs (e.g.,
+      sforce.one.navigateTo* methods) in quick succession or from multiple event
+      handlers. Refactor to ensure only a single navigation call fires, or
+      migrate to LWC/Aura navigation.
+    source:
+      document: v49-summer20.pdf
+      page: 536
+      heading: Prevent Consecutive API Navigation Calls in Visualforce Pages (Update)
+    confidence: high
+    id: v49-vf-004
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: The sforce.one navigation object in nested Visualforce iframes now
+      targets the parent frame instead of the top frame, breaking existing code
+      that relies on direct top-frame communication.
+    detail: Nested Visualforce pages can no longer invoke sforce.one APIs directly
+      to the Lightning container. Code must be refactored to use
+      window.parent.postMessage() to relay calls through the parent Visualforce
+      page.
+    upgradeAction: Audit Visualforce pages using sforce.one within nested iframes
+      and refactor to use postMessage-based relay through the parent frame.
+    source:
+      document: v49-summer20.pdf
+      page: 536
+      heading: Update sforce.one Object Targeting for Nested iframes
+    confidence: high
+    id: v49-vf-005
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Visualforce pages in second-generation packages can now invoke Apex
+      controllers from other packages by annotating the controller class with
+      @namespaceAccessible. Previously this cross-package call was blocked by
+      default.
+    upgradeAction: If you maintain 2GP packages where Visualforce pages need to call
+      controllers in sibling packages, add the @namespaceAccessible annotation
+      to those controller classes.
+    source:
+      document: v49-summer20.pdf
+      page: 537
+      heading: Access Controllers From Visualforce Pages in Different Packages with
+        @namespaceAccessible
+    confidence: high
+    id: v49-packaging-007
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The ApexPageInfo object now restricts query access to users who either
+      have permission to view the specific Visualforce page or hold the View
+      Setup and Configuration permission.
+    upgradeAction: Review integrations or Apex code querying ApexPageInfo and ensure
+      the running user has either page-level access or the View Setup and
+      Configuration permission; otherwise queries will fail or return fewer
+      rows.
+    source:
+      document: v49-summer20.pdf
+      page: 537
+      heading: Permission Changes for Visualforce Page Info
+    confidence: high
+    id: v49-rest-013
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: A new ignoreEditPermissionForRendering attribute on <apex:inputField>
+      lets developers render input fields for users who lack object edit
+      permission, bypassing the normal entity-level edit check at render time.
+    source:
+      document: v49-summer20.pdf
+      page: 538
+      heading: New Attribute on <apex:inputField> Overrides Entity Edit Permissions
+    confidence: high
+    id: v49-vf-006
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: Apex classes compiled at API >= 49.0
+    summary: The @JsonAccess annotation now defaults both serialization and
+      deserialization to sameNamespace instead of the previous defaults (always
+      for deserialization, sameNamespace for serialization). Classes at v49+ can
+      no longer be deserialized by code outside their namespace unless
+      explicitly annotated.
+    detail: "In v48 and earlier, any Apex code could deserialize instances of a
+      class (default: always), and serialization was restricted to the same
+      namespace (default: sameNamespace). Starting at v49, both operations
+      default to sameNamespace, meaning cross-namespace deserialization breaks
+      unless the class explicitly sets deserializable='always'."
+    upgradeAction: Before upgrading classes past v48, identify any cross-namespace
+      JSON deserialization dependencies and add explicit
+      @JsonAccess(deserializable='always') where external callers must
+      deserialize your types.
+    source:
+      document: v49-summer20.pdf
+      page: 542
+      heading: Control How to Serialize and Deserialize Apex Types
+    confidence: high
+    id: v49-apex-004
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new Real-Time Event Monitoring event type (ConcurLongRunApexErrEvent)
+      lets you programmatically detect when Apex requests fail due to the org
+      exceeding its concurrent long-running Apex limit.
+    source:
+      document: v49-summer20.pdf
+      page: 542
+      heading: Detect Errors When an Org Exceeds the Concurrent Long-Running Apex Limit
+    confidence: medium
+    id: v49-apex-005
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version; auto-enforced August 12, 2020
+    summary: A Release Update improves how Salesforce internally caches org schema
+      metadata, fixing bugs where describe results could expose undocumented
+      object types or incorrectly reuse version-specific schema details across
+      API versions.
+    detail: The enforcement date was accelerated by nearly a year (from August 2021
+      to August 2020). Summer '20 sandbox orgs have it enabled by default. While
+      documented schema behavior is unchanged, code relying on undocumented
+      describe quirks or version-specific schema caching bugs may break.
+    upgradeAction: Review Apex code using Schema.describeSObjects() or similar
+      describe methods for any reliance on undocumented object types or
+      version-specific field visibility that may have been exposed by the
+      caching bugs being fixed.
+    source:
+      document: v49-summer20.pdf
+      page: 542
+      heading: Enable Improved Caching of Org Schema (Previously Released Update)
+    confidence: medium
+    id: v49-apex-006
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version; auto-enforced August 7, 2020
+    summary: Querying AsyncApexJob or FlexQueueItem via SOAP API requires the user
+      to hold View Setup and Configuration permission once this release update
+      is enforced. Anonymous Apex that enqueues async jobs (Batch, @future,
+      Queueable, Scheduled) must also run as a user with that permission.
+    detail: Standard Apex classes and triggers running in system mode are
+      unaffected. The change targets interactive or anonymous contexts where the
+      running user's permissions govern API access.
+    upgradeAction: Verify that service accounts, integration users, and developers
+      who query these objects or execute anonymous Apex to enqueue jobs have
+      View Setup and Configuration. Update permission sets before enforcement
+      date.
+    source:
+      document: v49-summer20.pdf
+      page: 543
+      heading: Require View Setup Permission to Enqueue Async Apex Jobs (Update)
+    confidence: high
+    id: v49-soap-003
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version (enforced August 07, 2020)
+    summary: Querying Apex test metadata objects (ApexTestQueueItem, ApexTestResult,
+      ApexTestResultLimits, ApexTestRunResult, ApexTestSuite,
+      TestSuiteMembership) via API or Anonymous Apex now requires the calling
+      user to hold View Setup and Configuration permission.
+    detail: This is a Release Update with automatic enforcement. Code running in
+      system mode (Apex classes and triggers) is unaffected, but any integration
+      or script that enqueues tests or reads test results via API will fail for
+      users lacking the permission.
+    upgradeAction: Audit integrations and CI pipelines that query Apex test objects
+      or invoke runTestsAsynchronous. Ensure the integration user has View Setup
+      and Configuration, or refactor to use a permissioned service account.
+    source:
+      document: v49-summer20.pdf
+      page: 543
+      heading: Require View Setup Permission to Access Apex Test Data (Update)
+    confidence: high
+    id: v49-sharing-006
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version (sandbox environments only)
+    summary: Sandbox environments now enforce the documented concurrent API request
+      limit, correcting a bug that previously allowed more simultaneous requests
+      than intended.
+    upgradeAction: Review integration code and automation running against sandboxes
+      that may have relied on the higher-than-documented concurrency; throttle
+      or queue requests if you hit new limit errors.
+    source:
+      document: v49-summer20.pdf
+      page: 547
+      heading: Corrected Concurrent API Request Limit for Sandboxes
+    confidence: medium
+    id: v49-rest-014
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: deprecated
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Scratch org creation now fails if the definition file includes the
+      deprecated features DensityValue, ExternalSharing, or
+      ListCustomSettingCreation. ExternalSharing is now enabled by default, and
+      ListCustomSettingCreation must be configured via SchemaSettings metadata
+      instead.
+    upgradeAction: Remove DensityValue, ExternalSharing, and
+      ListCustomSettingCreation from scratch org definition files before
+      creating new scratch orgs. For list custom setting creation, migrate to
+      SchemaSettings.enableListCustomSettingCreation in Metadata API.
+    source:
+      document: v49-summer20.pdf
+      page: 549
+      heading: Create Scratch Orgs with More Features
+    confidence: high
+    id: v49-packaging-008
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Attempting to enable event encryption via the
+      PlatformEncryptionSettings Metadata API now fails with an error if no
+      Event Bus tenant secret exists, rather than silently blocking CDC and
+      platform events at runtime.
+    upgradeAction: Before deploying metadata that enables event encryption, ensure
+      an Event Bus tenant secret has been created in Setup under Key Management.
+    source:
+      document: v49-summer20.pdf
+      page: 555
+      heading: Enabling Event Encryption Through Metadata API Requires an Event Bus
+        Tenant Secret
+    confidence: high
+    id: v49-packaging-009
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Flows can now be triggered directly by platform event messages, not
+      just resumed mid-execution. This enables event-driven automation patterns
+      without requiring a flow to already be running and paused.
+    source:
+      document: v49-summer20.pdf
+      page: 558
+      heading: Use Platform Events to Trigger a Flow
+    confidence: high
+    id: v49-flow-005
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: lightning-datatable now renders boolean values as 'true'/'false'
+      strings and currency values as unformatted numbers when using text column
+      type, instead of showing empty cells as before.
+    detail: Components relying on text-typed columns to display boolean or currency
+      fields will see different output. Booleans appear as literal strings
+      rather than blanks; currency appears as raw numbers without formatting.
+      Salesforce recommends switching to the boolean or currency data types
+      respectively for proper display.
+    upgradeAction: Review any lightning-datatable instances using text-type columns
+      for boolean or currency data and migrate them to the appropriate column
+      data types to preserve expected formatting.
+    source:
+      document: v49-summer20.pdf
+      page: 558
+      heading: New and Changed Lightning Web Components
+    confidence: high
+    id: v49-lwc-012
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: The Lightning Message Service subscribe() method no longer requires the
+      subscriberOptions parameter. Without it, channel communication now
+      defaults to scoped messaging within the active navigation context rather
+      than application-wide.
+    detail: "Previously subscribe() mandated {scope: APPLICATION_SCOPE} for
+      cross-component messaging anywhere in the app. Now omitting that parameter
+      restricts message delivery to components sharing the same active tab,
+      navigation item, or utility item. Existing code passing APPLICATION_SCOPE
+      is unaffected, but new code relying on implicit defaults will behave
+      differently than before."
+    upgradeAction: "Review LMS subscribe() calls that omit subscriberOptions; if
+      app-wide messaging is intended, explicitly pass {scope:
+      APPLICATION_SCOPE}."
+    source:
+      document: v49-summer20.pdf
+      page: 561
+      heading: New and Changed Modules for Lightning Web Components
+    confidence: high
+    id: v49-lwc-013
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: lightning:datatable columns with text data type now render boolean
+      values as 'true'/'false' strings and currency values as raw numbers
+      instead of empty cells, and clip-text mode no longer preserves multi-line
+      truncation or extra whitespace.
+    detail: Text-typed columns previously showed blanks for booleans and currencies;
+      now booleans render literally and currencies appear unformatted. The Clip
+      text action collapses to a single truncated line, and Wrap text no longer
+      preserves whitespace. Existing components relying on the old blank-cell
+      behavior or multi-line clipping will display different content.
+    upgradeAction: Review lightning:datatable usage where text columns may receive
+      boolean or currency data; switch to the boolean or currency column types
+      for proper formatting. Verify UI appearance if multi-line clipped text or
+      whitespace preservation was expected.
+    source:
+      document: v49-summer20.pdf
+      page: 562
+      heading: New and Changed Aura Components
+    confidence: high
+    id: v49-aura-004
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: New UserManagement methods allow Apex code to programmatically initiate
+      and complete multi-factor verification flows for email, SMS, Salesforce
+      Authenticator, password, and TOTP methods.
+    source:
+      document: v49-summer20.pdf
+      page: 564
+      heading: System Namespace
+    confidence: high
+    id: v49-auth-003
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The Crypto class now accepts RSA-SHA384 and RSA-SHA512 algorithm values
+      for sign, signWithCertificate, signXML, and verify methods, enabling
+      stronger cryptographic operations.
+    source:
+      document: v49-summer20.pdf
+      page: 564
+      heading: System Namespace
+    confidence: high
+    id: v49-apex-007
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: api-rest
+    appliesWhen: Apex code targeting API >= 49.0
+    summary: The ManagedContentMediaNodeValue.altUrl property is removed;
+      applications must now retrieve thumbnail information from the thumbnailUrl
+      property instead.
+    upgradeAction: Search for references to
+      ConnectApi.ManagedContentMediaNodeValue.altUrl and replace them with
+      thumbnailUrl before upgrading to v49.0.
+    source:
+      document: v49-summer20.pdf
+      page: 570
+      heading: New and Changed Connect in Apex Output Classes
+    confidence: high
+    id: v49-rest-015
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Querying TaskWhoIDs, AcceptedEventInviteeIds, DeclinedEventInviteeIds,
+      UndecidedEventInviteeIds, or EventWhoIDs from within an Apex trigger now
+      returns the contact and lead IDs associated with those activities.
+    detail: Previously these multi-value relationship fields could not be queried
+      inside triggers. Now Apex trigger code can retrieve related contact and
+      lead IDs directly from Task and Event records during trigger execution.
+    upgradeAction: Review trigger code that queries Task or Event records to confirm
+      the newly available WhoId fields integrate correctly with existing logic.
+    source:
+      document: v49-summer20.pdf
+      page: 580
+      heading: New and Changed Objects
+    confidence: high
+    id: v49-apex-008
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: A new platform event ConcurLongRunApexErrEvent lets you subscribe to
+      notifications when your org hits the concurrent long-running Apex
+      execution limit, enabling programmatic error handling for this throttling
+      scenario.
+    source:
+      document: v49-summer20.pdf
+      page: 588
+      heading: New and Changed Standard Platform Events
+    confidence: high
+    id: v49-rest-016
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The /limits REST endpoint now returns 'DailyBulkApiBatches' instead of
+      'DailyBulkApiRequests' as the label for the daily Bulk API usage metric.
+    upgradeAction: Update any code that parses the /limits response looking for the
+      'DailyBulkApiRequests' key to use 'DailyBulkApiBatches' instead.
+    source:
+      document: v49-summer20.pdf
+      page: 589
+      heading: REST API
+    confidence: high
+    id: v49-rest-017
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Composite REST requests now default collateSubrequests to true, meaning
+      subrequests execute together on a single database transaction for improved
+      performance rather than executing independently.
+    upgradeAction: Review Composite API integrations that relied on independent
+      subrequest execution; explicitly set collateSubrequests to false if the
+      previous non-collated behavior is required.
+    source:
+      document: v49-summer20.pdf
+      page: 589
+      heading: REST API
+    confidence: high
+    id: v49-rest-018
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: deprecated
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; Flash renditions
+      removed in Winter '21
+    summary: The Connect REST API endpoint for file renditions stops producing Adobe
+      Flash output by default in Summer '20 and will cease returning Flash
+      renditions entirely in Winter '21. Integrations must switch to the SVG
+      preview endpoint.
+    upgradeAction: Replace calls to /connect/files/{fileId}/rendition requesting
+      Flash with calls to /connect/files/{fileId}/previews/previewFormat for SVG
+      renditions before Winter '21.
+    source:
+      document: v49-summer20.pdf
+      page: 591
+      heading: New and Changed Connect REST API Resources
+    confidence: high
+    id: v49-rest-019
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The User Interface API child-relationships endpoint now returns actual
+      values for lastModifiedById, lastModifiedDate, systemModStamp, and
+      weakEtag properties that previously always returned null.
+    upgradeAction: Review any code that parses the
+      /ui-api/records/{recordId}/child-relationships/{relationshipName} response
+      and relied on those fields being null or ignored them; they now contain
+      real data.
+    source:
+      document: v49-summer20.pdf
+      page: 624
+      heading: User Interface API
+    confidence: high
+    id: v49-rest-020
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-bulk
+    appliesWhen: org-wide regardless of component API version
+    summary: The Sforce-Locator response header in Bulk API 2.0 query jobs now
+      returns a pseudo-random string instead of a numeric value, breaking any
+      client code that attempts to predict or calculate locator values rather
+      than reading them from the response.
+    upgradeAction: Audit Bulk API 2.0 query integrations to ensure they capture the
+      Sforce-Locator header value from each response rather than assuming a
+      numeric pattern.
+    source:
+      document: v49-summer20.pdf
+      page: 626
+      heading: Bulk API and Bulk API 2.0
+    confidence: high
+    id: v49-bulk-001
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: Tooling API requests at API version >= 49.0
+    summary: The headerBackgroundImg field on EmbeddedServiceLiveAgent is no longer
+      available in Tooling API v49.0 and later; queries or deployments
+      referencing this field will fail.
+    upgradeAction: Remove references to headerBackgroundImg from any Tooling API
+      queries or metadata operations before upgrading to API version 49.0.
+    source:
+      document: v49-summer20.pdf
+      page: 627
+      heading: Tooling API New and Changed Objects
+    confidence: high
+    id: v49-rest-021
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The FilterScope enumeration now distinguishes between opportunity team
+      assignments (new SalesTeam value) and general team record assignments
+      (Team value), splitting what was previously a single Team scope.
+    upgradeAction: Review any integrations or metadata deployments that rely on the
+      FilterScope.Team enumeration value for opportunity team filtering; update
+      to use SalesTeam for opportunity team list views.
+    source:
+      document: v49-summer20.pdf
+      page: 628
+      heading: Metadata API
+    confidence: medium
+    id: v49-packaging-010
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The force:lightning:test:* commands (create, install, run) are
+      deprecated in favor of the new force:lightning:lwc:test:* equivalents.
+      These older commands will be removed in a future CLI release.
+    upgradeAction: Update CI/CD scripts and developer workflows to use
+      force:lightning:lwc:test:create, force:lightning:lwc:test:run, and
+      force:lightning:lwc:test:setup instead of the deprecated
+      force:lightning:test:* commands.
+    source:
+      document: v49-summer20.pdf
+      page: 634
+      heading: Discover New and Changed Commands
+    confidence: high
+    id: v49-packaging-011
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce CLI now sends all JSON output to stdout by default when
+      using --json, rather than splitting errors to stderr. Scripts that parse
+      errors from stderr will break.
+    upgradeAction: Update any tooling or scripts that parse JSON errors from stderr
+      to read from stdout instead, or set SFDX_JSON_TO_STDOUT=false to restore
+      the old behavior.
+    source:
+      document: v49-summer20.pdf
+      page: 634
+      heading: Discover New and Changed Commands
+    confidence: high
+    id: v49-packaging-012
+  - apiVersion: "49.0"
+    release: Summer '20
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version
+    summary: Guest and portal/community users can now be blocked from invoking
+      @AuraEnabled Apex methods unless their profile has explicit access to the
+      Apex class. This restricts previously open access to Aura and LWC
+      controller methods.
+    upgradeAction: Review all @AuraEnabled Apex classes used by guest or portal
+      users and ensure their profiles have explicit class-level access granted,
+      or expect runtime failures after enforcement.
+    source:
+      document: v49-summer20.pdf
+      page: 653
+      heading: Security Alerts
+    confidence: medium
+    id: v49-sharing-007

@@ -1,0 +1,130 @@
+# Golden questions — known-answer acceptance set for the corpus.
+# gq-001..008: pilot set, spans starting at v64 (reviewed v65–v67 corpus).
+# gq-009..010: backfill set (added 2026-06-11, after the backfill closed v31→v67) —
+#   wide spans over the v46–v55 range exercising the long enforcement/retirement
+#   chains that the scanner must reason across. 10 questions total.
+#
+# Harness contract: for each question, feed the LLM ONLY the corpus files
+# for versions in (span.from, span.to], ask the question, then grade:
+#   - every id in expectAll MUST appear in the answer's citations
+#   - for each group in expectAnyOf, AT LEAST ONE id in the group must appear
+#   - FAIL if any cited id does not exist in the loaded slices (groundedness)
+schemaVersion: "1.0.0"
+questions:
+  - id: gq-001
+    question: >-
+      An Apex class is upgraded from API version 64.0 to 67.0. Which
+      sharing/security enforcement semantics change for it?
+    span: { from: "64.0", to: "67.0" }
+    expectAll: [v67-sharing-002, v67-sharing-003]
+    expectAnyOf:
+      - [v66-sharing-002, v66-sharing-003]
+    notes: secure-by-default cluster + async sharing recalculation.
+
+  - id: gq-002
+    question: >-
+      Which SOQL/SOSL behavior changes apply to an Apex class moving from API
+      version 64.0 to 67.0?
+    span: { from: "64.0", to: "67.0" }
+    expectAll: [v66-soql-001]
+    expectAnyOf:
+      - [v67-soql-001, v67-soql-002]
+    notes: WITH SECURITY_ENFORCED removal is recorded as two entries; either citation is correct.
+
+  - id: gq-003
+    question: >-
+      What must be true of custom Apex classes used as invocable action
+      parameters after crossing from API version 64.0 to 67.0, and which
+      surfaces enforce it?
+    span: { from: "64.0", to: "67.0" }
+    expectAll: [v66-flow-005]
+    expectAnyOf:
+      - [v65-apex-001, v65-apex-002]
+      - [v67-apex-016, v67-rest-001, v67-rest-012, v66-rest-013]
+    notes: no-arg constructor family — release update origin (v65), Flow and REST enforcement variants.
+
+  - id: gq-004
+    question: >-
+      An integration authenticates with SOAP API login() on API version 58.0.
+      What is its retirement timeline and what should replace it?
+    span: { from: "64.0", to: "67.0" }
+    expectAll: [v67-soap-002]
+    expectAnyOf:
+      - [v65-soap-001, v65-soap-002, v65-auth-006, v67-soap-003]
+    notes: login() removal for v31–v64 (Summer '27) + the new Use Any API Auth permission gate.
+
+  - id: gq-005
+    question: >-
+      Which Flow runtime behavior changes affect flows upgraded from API
+      version 64.0 to 67.0?
+    span: { from: "64.0", to: "67.0" }
+    expectAll: [v65-flow-004, v66-flow-006]
+    expectAnyOf:
+      - [v65-flow-002]
+    notes: Create Records field-ID outputs, before-save writeability, flow execution permission grants.
+
+  - id: gq-006
+    question: >-
+      What REST API request/response differences should an integration expect
+      when moving from API version 64.0 to 67.0?
+    span: { from: "64.0", to: "67.0" }
+    expectAll: [v67-rest-023]
+    expectAnyOf:
+      - [v65-rest-008, v65-rest-009]
+    notes: List Object Info property split; DeployResult statuses / CreditDate immutability.
+
+  - id: gq-007
+    question: >-
+      How does Lightning Web Security change for LWC components between API
+      version 64.0 and 67.0?
+    span: { from: "64.0", to: "67.0" }
+    expectAll: [v66-lwc-005]
+    expectAnyOf:
+      - [v65-lwc-006]
+    notes: new distortions — fetchLater (v65); Promise.try + WebAssembly APIs (v66).
+
+  - id: gq-008
+    question: >-
+      Which org-wide retirements and enforcement deadlines recorded between
+      Winter '26 and Summer '26 will break existing integrations regardless of
+      their component API version?
+    span: { from: "64.0", to: "67.0" }
+    expectAll: [v67-auth-003]
+    expectAnyOf:
+      - [v65-rest-004, v65-rest-006]
+      - [v65-soap-001, v65-auth-006, v67-soap-003]
+    notes: username-password OAuth flow (Winter '27), instanced URLs, SOAP login(). v67-auth-003 carries introducedIn 66.0 — graders must accept it for spans crossing 66.
+
+  - id: gq-009
+    question: >-
+      An Apex @AuraEnabled controller omits an explicit `with sharing` /
+      `without sharing` keyword. Moving the org from API version 46.0 to 52.0,
+      what changes about its default sharing behavior, and by which release is
+      it enforced?
+    span: { from: "46.0", to: "52.0" }
+    expectAll: [v47-sharing-005, v51-sharing-001]
+    expectAnyOf:
+      - [v48-sharing-006, v48-apex-009]
+    notes: >-
+      "Use with sharing for @AuraEnabled" critical/release update — keyword-less
+      controllers default to `with sharing`. Announced v47, postponed through
+      v48, enforced Spring '21 (v51). The republished v48 entries are the
+      same change; either citation is correct. Tests reasoning across a
+      multi-version postponed enforcement chain in the backfilled range.
+
+  - id: gq-010
+    question: >-
+      An org still runs the Salesforce for Outlook desktop integration. Across
+      API versions 48.0 to 55.0, what is its retirement timeline and the final
+      date it stops functioning?
+    span: { from: "47.0", to: "55.0" }
+    expectAll: [v48-other-003, v55-other-001]
+    expectAnyOf:
+      - [v49-other-002, v50-other-001, v53-other-001, v54-other-002]
+    notes: >-
+      Retirement reschedule chain, origin v48 (announced Dec 2020), repeatedly
+      pushed (June 2023 → June 2024). All later notices carry introducedIn 48.0,
+      so span membership pulls them to spans crossing 48.0 (not their file
+      version). expectAll anchors first announcement + final cutoff; expectAnyOf
+      accepts any intermediate reschedule. Exercises the introducedIn-based span
+      membership rule over a long retirement chain.

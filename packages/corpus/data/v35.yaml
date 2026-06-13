@@ -1,0 +1,1444 @@
+apiVersion: "35.0"
+release: Winter '16
+reviewed: true
+entries:
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOQL queries on Boolean fields now distinguish between null and false
+      values, so null checks no longer inadvertently return records with
+      checkbox fields set to false.
+    upgradeAction: Review SOQL queries that filter on Boolean fields using null
+      comparisons; they may now return fewer records than before.
+    source:
+      document: v35-winter16.pdf
+      page: 10
+      heading: Release Notes Changes
+    confidence: high
+    id: v35-soql-001
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version, effective January 1, 2016
+    summary: API login calls will no longer be automatically routed to the correct
+      instance endpoint; clients must use the instance URL returned from login
+      responses.
+    upgradeAction: Update API integrations to use the instance URL from login
+      responses rather than relying on automatic endpoint routing.
+    source:
+      document: v35-winter16.pdf
+      page: 10
+      heading: Release Notes Changes
+    confidence: high
+    id: v35-rest-001
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: New REST API methods were added for Reports and Dashboards, expanding
+      programmatic access to reporting functionality.
+    source:
+      document: v35-winter16.pdf
+      page: 25
+      heading: Reports and Dashboards
+    confidence: medium
+    id: v35-rest-002
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Request and response bodies for the Reports and Dashboards REST API
+      were modified, which may affect existing integrations parsing these
+      responses.
+    upgradeAction: Review integrations consuming Reports and Dashboards REST API
+      responses and verify they handle any new or changed fields in
+      request/response bodies.
+    source:
+      document: v35-winter16.pdf
+      page: 25
+      heading: Reports and Dashboards
+    confidence: medium
+    id: v35-rest-003
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Flows now bulkify their SOQL queries internally, reducing the
+      likelihood of hitting governor limits when processing multiple records in
+      a single transaction.
+    upgradeAction: Review flows that previously failed due to SOQL limits; they may
+      now succeed. Update any workarounds or error handling built around these
+      limits.
+    source:
+      document: v35-winter16.pdf
+      page: 40
+      heading: Visual Workflow
+    confidence: medium
+    id: v35-flow-001
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Named Credentials now support Apex customization of HTTP headers and
+      bodies, enabling callouts to authenticate automatically while still
+      allowing programmatic control over request structure.
+    source:
+      document: v35-winter16.pdf
+      page: 41
+      heading: Security and Identity
+    confidence: medium
+    id: v35-auth-001
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Visualforce pages can now run inside Lightning Experience as a beta
+      feature, though with known limitations compared to Salesforce Classic
+      rendering.
+    detail: This beta enables existing Visualforce pages to appear within the
+      Lightning Experience UI shell. Production quality but documented
+      constraints apply.
+    source:
+      document: v35-winter16.pdf
+      page: 55
+      heading: Lightning Experience Features in This Release
+    confidence: medium
+    id: v35-vf-001
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide when Lightning Experience is enabled
+    summary: Visualforce pages in Lightning Experience no longer own the entire
+      browser page, requiring JavaScript code to follow new isolation rules to
+      avoid conflicts with the outer Lightning container.
+    detail: When displayed in Lightning Experience, Visualforce pages run within an
+      iframe-like context rather than controlling the full page. JavaScript that
+      manipulates window, document, or assumes full-page ownership may break or
+      behave unexpectedly.
+    upgradeAction: Review Visualforce pages containing JavaScript for assumptions
+      about page ownership, window manipulation, or direct DOM access outside
+      the page's own scope before enabling Lightning Experience for users.
+    source:
+      document: v35-winter16.pdf
+      page: 66
+      heading: What's the Fate of Existing Salesforce Customizations?
+    confidence: medium
+    id: v35-vf-002
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Visualforce components embedded in dashboards do not render in
+      Lightning Experience; they are simply unavailable in the new UI.
+    upgradeAction: Audit dashboards containing Visualforce components before
+      enabling Lightning Experience; plan to rebuild affected dashboard
+      components using native Lightning alternatives or keep users in Classic
+      for those dashboards.
+    source:
+      document: v35-winter16.pdf
+      page: 101
+      heading: "Reports and Dashboards: Lightning Experience Limitations"
+    confidence: high
+    id: v35-vf-003
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - VisualforcePage
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version — affects Lightning
+      Experience sessions only
+    summary: Session IDs obtained via $Api.Session_ID or GETSESSIONID() in Lightning
+      Experience carry restricted privileges similar to the Lightning session
+      itself, preventing their use for API calls.
+    detail: Unlike Salesforce Classic sessions, Lightning Experience sessions and
+      their derived session IDs cannot be used to make API calls. Code relying
+      on extracting a session ID in Apex or Visualforce to perform callouts or
+      API operations will fail when executed in Lightning Experience context.
+    upgradeAction: Audit any code that captures session IDs via $Api.Session_ID or
+      GETSESSIONID() and attempts API calls. For Lightning Experience users,
+      switch to Named Credentials or OAuth flows for external integrations
+      instead of session-based authentication.
+    source:
+      document: v35-winter16.pdf
+      page: 110
+      heading: "Security: Lightning Experience Limitations"
+    confidence: high
+    id: v35-auth-002
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide when Lightning Experience is enabled
+    summary: Visualforce pages in Lightning Experience run inside an iframe,
+      breaking code that manipulates window.location for navigation or makes
+      assumptions about sforce.one availability. The showHeader, showSidebar,
+      and title page attributes are also ignored.
+    detail: The sforce.one utility object now loads in Lightning Experience contexts
+      (not just Salesforce1), so code checking for its presence to detect mobile
+      may misfire. Navigation must use sforce.one methods instead of
+      window.location. Session IDs obtained via $Api.Session_ID or
+      GETSESSIONID() in Lightning contexts cannot be used for API calls due to
+      privilege restrictions.
+    upgradeAction: Audit Visualforce pages for window.location navigation (replace
+      with sforce.one methods), conditional logic checking sforce.one presence,
+      reliance on showHeader/showSidebar suppression, and any code using
+      Lightning-context session IDs for API calls.
+    source:
+      document: v35-winter16.pdf
+      page: 112
+      heading: "Programmatic Customization: Lightning Experience Limitations"
+    confidence: high
+    id: v35-vf-004
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: The OAuth UserInfo endpoint now functions correctly within Communities
+      contexts, whereas previously it returned a No_Site_Endpoint error after
+      successful OAuth authentication.
+    upgradeAction: If you implemented workarounds for the UserInfo endpoint failure
+      in Communities, you can now remove them and call the endpoint directly.
+    source:
+      document: v35-winter16.pdf
+      page: 295
+      heading: UserInfo Endpoint Supported in Communities
+    confidence: high
+    id: v35-auth-003
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: A new SharingOption field on ContentVersion enables programmatic
+      control over file sharing freeze state via Chatter REST API, SObject API,
+      and SOQL queries.
+    source:
+      document: v35-winter16.pdf
+      page: 301
+      heading: Freeze Sharing of a File
+    confidence: medium
+    id: v35-rest-004
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: ContentDistribution and ContentDocumentLink objects now support Apex
+      triggers, enabling custom file sharing logic such as blocking certain file
+      types or auto-publishing to multiple libraries.
+    source:
+      document: v35-winter16.pdf
+      page: 305
+      heading: Create Triggers to Customize File Sharing Behavior
+    confidence: high
+    id: v35-apex-001
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex triggers can now fire on CollaborationGroup (Chatter Group)
+      records, enabling programmatic control over group record operations such
+      as membership changes.
+    source:
+      document: v35-winter16.pdf
+      page: 313
+      heading: Apex Trigger Support for Chatter Group Records
+    confidence: high
+    id: v35-apex-003
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Data.com Social Profile Match API has been permanently removed. Any
+      integrations that called this API to retrieve social profile handles
+      (e.g., LinkedIn) will fail.
+    upgradeAction: Remove all code that invokes the Data.com Social Profile Match
+      API. If your application depends on social profile enrichment, implement
+      an alternative integration with a third-party service.
+    source:
+      document: v35-winter16.pdf
+      page: 329
+      heading: Retirement of Data.com Social Key
+    confidence: high
+    id: v35-rest-005
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-bulk
+    appliesWhen: org-wide regardless of component API version
+    summary: Individual import wizards for accounts, contacts, person/business
+      accounts, leads, solutions, and custom objects are being retired. They
+      remain accessible only via a legacy link in Setup until official
+      retirement, after which integrations or scripts relying on these wizards
+      must migrate to the unified Data Import Wizard.
+    detail: "The legacy wizards used synchronous database processing while the new
+      unified wizard uses asynchronous Bulk API processing. Some behavioral
+      differences exist: the new wizard cannot map Reports To field by name
+      (only by ID/email), and the account update toggle behaves differently for
+      blank fields."
+    upgradeAction: Audit any documentation, training, or automation that references
+      the individual import wizard URLs or workflows. Plan migration to the
+      unified Data Import Wizard before official retirement.
+    source:
+      document: v35-winter16.pdf
+      page: 352
+      heading: Legacy Data Import Tools
+    confidence: medium
+    id: v35-bulk-001
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex gains asynchronous DML operations (create, update, delete, upsert)
+      for external objects connected via OData or custom adapters, plus the
+      BackgroundOperation object to monitor write job progress via API or SOQL.
+    source:
+      document: v35-winter16.pdf
+      page: 354
+      heading: Modify External Data with Writable External Objects
+    confidence: high
+    id: v35-apex-004
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The 'contains' operator for multi-select picklist fields has been
+      removed from Flow conditions because it was never supported at runtime and
+      caused automatic failures.
+    upgradeAction: Review existing flows that use the 'contains' operator on
+      multi-select picklists and replace with a supported comparison approach
+      before upgrading.
+    source:
+      document: v35-winter16.pdf
+      page: 367
+      heading: Unsupported Operator Removed
+    confidence: medium
+    id: v35-flow-002
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: OAuth authorization flows cannot be completed while an admin is logged
+      in as another user. Any integration code that relied on approving OAuth
+      grants during a Login-As session will now be blocked.
+    upgradeAction: Ensure OAuth consent flows are performed by the actual end user
+      rather than an admin using Login As. Update any test automation or
+      provisioning scripts that depend on granting OAuth access while
+      impersonating users.
+    source:
+      document: v35-winter16.pdf
+      page: 374
+      heading: Improved Security When Logged In as Another User
+    confidence: high
+    id: v35-auth-004
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce now uses Twitter's oauth/authenticate endpoint instead of
+      oauth/authorize, eliminating repeated authorization prompts but
+      restricting the returned access token from accessing Twitter direct
+      messages.
+    detail: The switch from oauth/authorize to oauth/authenticate changes the OAuth
+      flow behavior. Users no longer see repeated authorization screens after
+      their first login, but the access token issued through this flow has
+      reduced permissions compared to the previous endpoint.
+    upgradeAction: Review any integrations that use the Twitter auth provider's
+      access token to call Twitter APIs. If your code accesses Twitter direct
+      messages using tokens obtained through Salesforce's Twitter auth provider,
+      this will no longer work.
+    source:
+      document: v35-winter16.pdf
+      page: 376
+      heading: Twitter Auth. Provider No Longer Prompts User for Access on Repeated
+        Logins
+    confidence: medium
+    id: v35-auth-005
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Auth provider SSO errors now render error codes and descriptions
+      directly on the page, not just in the URL. Developers can throw custom
+      exceptions from createUser/updateUser methods in Auth.RegistrationHandler
+      to display tailored error messages to users.
+    detail: The change surfaces errors more visibly to end users. If your
+      registration handler already throws exceptions with messages, those
+      messages will now appear in the UI, so review them for appropriateness and
+      localization.
+    upgradeAction: Review exception messages thrown from Auth.RegistrationHandler
+      implementations to ensure they are user-friendly and do not expose
+      sensitive details, since they now display on-screen.
+    source:
+      document: v35-winter16.pdf
+      page: 376
+      heading: Display and Customize Error Messages for Single Sign-On Using an Auth.
+        Provider
+    confidence: high
+    id: v35-auth-006
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Named credentials and external data sources now support OAuth tokens up
+      to 4,000 characters (previously 1,020) and password fields up to 1,020
+      characters, enabling integration with external systems that generate
+      larger credentials.
+    source:
+      document: v35-winter16.pdf
+      page: 377
+      heading: Store Larger OAuth Tokens and Longer Passwords
+    confidence: high
+    id: v35-auth-007
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex callouts using named credentials can now include merge fields in
+      HTTP headers and bodies, allowing developers to construct custom
+      authorization headers and embed credentials or OAuth tokens directly in
+      requests.
+    detail: New merge fields like {!$Credential.Username}, {!$Credential.Password},
+      {!$Credential.OAuthToken}, and {!$Credential.AuthorizationHeaderValue} let
+      Apex code populate request headers and bodies dynamically. Administrators
+      must enable 'Allow Merge Fields in HTTP Header/Body' on the named
+      credential, and can optionally disable the auto-generated authorization
+      header when custom construction is needed.
+    source:
+      document: v35-winter16.pdf
+      page: 384
+      heading: Customize the Headers and Bodies of Apex Callouts That Use Named
+        Credentials
+    confidence: high
+    id: v35-apex-005
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Web service callouts (WSDL-generated stubs via
+      WebServiceCallout.invoke) can now use named credentials as endpoints,
+      letting Salesforce handle authentication automatically instead of
+      requiring manual credential management in code.
+    detail: "Previously only HTTP callouts supported named credentials; now
+      SOAP/WSDL callouts can also reference them with the callout: prefix. Named
+      credentials in web service callouts work with Queueable async execution
+      but not with the Continuation class."
+    source:
+      document: v35-winter16.pdf
+      page: 386
+      heading: Simplify Development of Web Service Callouts by Using Named Credentials
+    confidence: high
+    id: v35-apex-006
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: Canvas apps now render inside two nested iframe elements instead of
+      one, which breaks any JavaScript using parent.postMessage() or other
+      frame-hierarchy-dependent messaging to communicate with Salesforce.
+    upgradeAction: Audit Canvas app JavaScript for direct iframe boundary messaging
+      (parent.postMessage or similar) and migrate to the official Canvas SDK
+      event APIs before upgrading.
+    source:
+      document: v35-winter16.pdf
+      page: 391
+      heading: Canvas Apps Wrapped in Two <iframe> Tags
+    confidence: high
+    id: v35-other-001
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Custom metadata records can now be marked as protected within managed
+      packages, restricting read access so that only Apex code within the same
+      package (or the package defining the type) can query them.
+    detail: Protected records cannot be read by subscriber org code, unmanaged
+      packages, or other managed packages that lack the type or record. Updates
+      to protected records require a package upgrade. For records protected in
+      your own org (not via managed package), access is limited to your code,
+      unmanaged packages, and the managed package defining the type.
+    upgradeAction: If your code queries custom metadata records from other managed
+      packages, verify those records are not protected; protected records will
+      return no results to external callers.
+    source:
+      document: v35-winter16.pdf
+      page: 397
+      heading: Protect Custom Metadata Records
+    confidence: high
+    id: v35-packaging-001
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: "Custom metadata fields gain a manageability attribute controlling
+      post-deployment editability: locked (immutable everywhere),
+      subscriber-editable (subscribers can modify without developer overwrites),
+      or upgradable (only developer packages can update)."
+    detail: Package developers can now control field-level mutability in subscriber
+      orgs, affecting how managed package upgrades interact with subscriber
+      customizations.
+    source:
+      document: v35-winter16.pdf
+      page: 397
+      heading: Choose Who Can Update Custom Metadata Field Values
+    confidence: high
+    id: v35-packaging-002
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version (critical update
+      auto-activation postponed to Spring '16)
+    summary: The critical update that shifts static resource serving to the
+      Visualforce domain has had its auto-activation pushed from Winter '16 to
+      Spring '16, giving orgs additional time before the domain change takes
+      effect.
+    detail: Originally introduced in Summer '15, this critical update changes where
+      static resources are served from. Code relying on specific domain patterns
+      for static resource URLs may break when the update activates.
+    upgradeAction: Review any hardcoded static resource URL references or CSP
+      policies before Spring '16 auto-activation; test with the critical update
+      manually enabled.
+    source:
+      document: v35-winter16.pdf
+      page: 399
+      heading: “Serve Static Resources from the Visualforce Domain” Critical Update
+        Postponed
+    confidence: medium
+    id: v35-vf-005
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: Visualforce pages using liveAgent:clientChatLog at API >= 35.0
+    summary: "The liveAgent:clientChatLog Visualforce component gains three optional
+      attributes: one for customizing the idle-timeout label, one for combining
+      chat messages by user, and one for toggling timestamp display."
+    source:
+      document: v35-winter16.pdf
+      page: 400
+      heading: New Attributes for liveAgent:clientChatLog
+    confidence: high
+    id: v35-vf-006
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: Visualforce pages compiled at API >= 35.0
+    summary: A new Visualforce component liveAgent:clientChatLogAlertMessage is
+      available for displaying idle time-out warnings in Live Agent chat
+      windows.
+    source:
+      document: v35-winter16.pdf
+      page: 400
+      heading: New liveAgent:clientChatLogAlertMessage Component
+    confidence: high
+    id: v35-vf-007
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version (requires admin to
+      enable in Process Automation Settings)
+    summary: New Approval.lock() and Approval.unlock() methods allow programmatic
+      control over approval-process record locks, previously only possible via
+      the UI. These calls count against DML limits and participate in
+      transaction rollback.
+    source:
+      document: v35-winter16.pdf
+      page: 402
+      heading: Set Approval Process Locks and Unlocks with Apex Code
+    confidence: high
+    id: v35-apex-007
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Platform Cache introduces a new Cache namespace in Apex with
+      session-scoped and org-scoped caching capabilities, providing an
+      alternative to storing transient data in custom objects or Visualforce
+      viewstate.
+    source:
+      document: v35-winter16.pdf
+      page: 403
+      heading: Improve Performance and Reliability with Platform Cache
+    confidence: high
+    id: v35-apex-008
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The new System.FlexQueue class provides Apex methods to
+      programmatically reorder batch jobs in the flex queue, along with
+      System.Test methods for testing flex queue behavior.
+    source:
+      document: v35-winter16.pdf
+      page: 404
+      heading: Reorder Your Batch Jobs in the Flex Queue Programmatically
+    confidence: high
+    id: v35-apex-009
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The 20-concurrent-callout-per-host limit no longer applies to callouts
+      targeting URLs within the same Salesforce org domain, enabling patterns
+      like cross-org sync or invoking Metadata API from Apex without risking
+      that specific cap.
+    detail: The 100-callout-per-transaction ceiling remains, and
+      PageReference.getContent() calls to Visualforce pages do not count toward
+      it. External host callouts still observe the original 20-simultaneous
+      limit.
+    source:
+      document: v35-winter16.pdf
+      page: 405
+      heading: Make Unlimited Concurrent Callouts to Internal Salesforce URLs
+    confidence: high
+    id: v35-apex-010
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: "PageReference.getContent() and getContentAsPdf() can now be invoked
+      from asynchronous Apex contexts (Batch, Queueable, @future, and
+      Schedulable for VF page references only), with callout-limit treatment
+      varying by URL type: VF pages bypass callout limits entirely, Salesforce
+      URLs count against per-transaction limits but not concurrent limits, and
+      external URLs count against both."
+    detail: Internal calls to getContent/getContentAsPdf are also now permitted
+      after DML (except Savepoints), removing a prior restriction. Schedulable
+      Apex remains limited to explicit Visualforce page references only.
+    source:
+      document: v35-winter16.pdf
+      page: 405
+      heading: Make Calls to PageReference.getContent() in Asynchronous Apex
+    confidence: high
+    id: v35-apex-011
+  - apiVersion: "35.0"
+    introducedIn: "34.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-testing
+    appliesWhen: Apex test classes compiled at API >= 34.0
+    summary: Test methods invoking callouts (including PageReference.getContent()
+      and getContentAsPDF()) now fail explicitly rather than being silently
+      skipped, requiring mock implementations via Test.setMock.
+    detail: Since API 34.0, getContent() and getContentAsPDF() are treated as
+      callouts. This critical update enforces that tests containing any callout
+      must use WebServiceMock, StaticResourceCalloutMock,
+      MultiStaticResourceCalloutMock, or Test.setMock to provide mock responses;
+      otherwise tests fail instead of being quietly bypassed.
+    upgradeAction: Audit test classes for callouts or PageReference content methods;
+      add appropriate mock implementations using Test.setMock before upgrading
+      past 34.0.
+    source:
+      document: v35-winter16.pdf
+      page: 406
+      heading: Receive More Consistent, Clear Results for Tests Containing Callouts
+    confidence: high
+    id: v35-apex-012
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: Apex classes and triggers compiled at API >= 35.0
+    summary: When too many batch jobs are enqueued, the system now throws
+      AsyncException instead of LimitException, allowing developers to catch and
+      handle the overflow condition in their code.
+    upgradeAction: Update any catch blocks that specifically handle batch job limit
+      scenarios to catch AsyncException rather than relying on LimitException
+      behavior. Test batch job queuing logic to ensure graceful handling of
+      queue limits.
+    source:
+      document: v35-winter16.pdf
+      page: 406
+      heading: Catch Exceptions for Excess Enqueued Batch Jobs
+    confidence: high
+    id: v35-apex-013
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: Apex classes and triggers compiled at API >= 35.0
+    summary: Comparing 15-character and 18-character ID values with the == operator
+      now correctly returns true after JSON roundtrip serialization, fixing a
+      bug where deserialized IDs failed equality checks against their original
+      short or long forms.
+    upgradeAction: Review any workarounds that compared string representations of
+      IDs after JSON deserialization; these can now use direct == comparison.
+      Test code that relied on the broken behavior returning false.
+    source:
+      document: v35-winter16.pdf
+      page: 407
+      heading: Compare ID Values After Roundtrip JSON Serialization
+    confidence: high
+    id: v35-apex-014
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: Apex classes compiled at API >= 35.0
+    summary: JSON deserialization into sObjects or custom objects no longer throws
+      exceptions for extra attributes in normal mode starting at v35.0, whereas
+      v34.0 and earlier threw runtime exceptions for unrecognized fields.
+    detail: When using JSON.deserialize or JSONParser.readValueAs (non-strict
+      methods) to parse JSON with attributes not present on the target sObject
+      or custom object, v35.0+ silently ignores the extra fields instead of
+      throwing. Strict-mode methods are unaffected and continue to throw for
+      Apex classes, but not for sObjects.
+    upgradeAction: Review code that relied on catching exceptions from extraneous
+      JSON attributes as a validation mechanism; after upgrading past v35.0,
+      those extra fields are silently dropped rather than causing failures.
+    source:
+      document: v35-winter16.pdf
+      page: 407
+      heading: Deserialize JSON String Objects with Extraneous Attributes
+    confidence: high
+    id: v35-apex-015
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: components compiled at API >= 35.0
+    summary: Map objects with non-String keys now serialize and deserialize
+      correctly, preserving original data types instead of coercing keys to
+      strings. Code relying on the previous lossy string conversion may produce
+      different results.
+    upgradeAction: Review any code that parsed JSON-serialized Maps expecting
+      string-coerced keys; the keys now retain their original types (Boolean,
+      Date, DateTime, Decimal, Double, Enum, Id, Integer, Long).
+    source:
+      document: v35-winter16.pdf
+      page: 408
+      heading: Serialize and Deserialize JSON Map Objects Reliably
+    confidence: medium
+    id: v35-apex-016
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: Apex classes and triggers compiled at API >= 35.0
+    summary: The split() methods on String and Pattern no longer produce a spurious
+      empty element at the start of the result list when the regex matches at
+      position zero (e.g., splitting on an empty string). Code upgrading past
+      v35 may receive one fewer list item than before.
+    upgradeAction: Review any Apex using split() with zero-width patterns or regexes
+      that can match at position 0; verify tests still expect the shorter output
+      list after bumping above API 34.
+    source:
+      document: v35-winter16.pdf
+      page: 408
+      heading: split() Methods Return Extra List Items in Old API Versions
+    confidence: high
+    id: v35-apex-017
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: Apex classes compiled at API >= 35.0
+    summary: User profile photo methods (deletePhoto, getPhoto, setPhoto,
+      setPhotoWithAttributes) moved from ConnectApi.ChatterUsers to
+      ConnectApi.UserProfiles class, enabling them to work regardless of Chatter
+      status.
+    upgradeAction: Update any code calling ConnectApi.ChatterUsers photo methods to
+      use ConnectApi.UserProfiles instead when targeting API version 35.0 or
+      higher.
+    source:
+      document: v35-winter16.pdf
+      page: 422
+      heading: New and Changed Chatter in Apex Classes
+    confidence: high
+    id: v35-apex-018
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning components used in tabs, Lightning pages, or standalone apps
+      stop working in Winter '16 unless My Domain is enabled for the org.
+      Organizations without a custom domain will have these customizations
+      disabled automatically.
+    detail: A critical update exists for beta participants to temporarily revert to
+      the old behavior using non-customized lightning.force.com URLs, but
+      enforcement occurs on the auto-activation date regardless of the critical
+      update setting. Lightning components in Communities or embedded via
+      Lightning Components for Visualforce are exempt.
+    upgradeAction: Enable My Domain for your org before upgrading to Winter '16.
+      After enabling, update any hardcoded references to use the new
+      https://<myDomain>.lightning.force.com URL format.
+    source:
+      document: v35-winter16.pdf
+      page: 431
+      heading: Enable My Domain To Use Lightning Components
+    confidence: high
+    id: v35-lwc-001
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The ui:outputRichText component now blocks several HTML tags (<object>,
+      <iframe>, <embed>, <form>, <button>, <input>), strips unescaped comments,
+      rejects href values without http/https prefixes, and drops the CSS
+      expression() directive in IE.
+    detail: "Components passing rich text through ui:outputRichText may have content
+      silently stripped or fail rendering if they rely on blocked tags,
+      javascript: URLs, inline comments, or IE-specific CSS expressions."
+    upgradeAction: Audit any code passing content to ui:outputRichText for blocked
+      HTML elements, non-http(s) href schemes, embedded comments, or CSS
+      expression() usage; refactor to use supported constructs.
+    source:
+      document: v35-winter16.pdf
+      page: 432
+      heading: Lightning Components
+    confidence: high
+    id: v35-aura-001
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The Lightning framework now sends multiple XHR requests concurrently
+      instead of serializing them one at a time, which may affect code that
+      assumed sequential request ordering.
+    upgradeAction: Review Aura components that depend on a specific execution order
+      of server calls; ensure callback logic handles parallel responses
+      correctly.
+    source:
+      document: v35-winter16.pdf
+      page: 436
+      heading: Improved Responsiveness with Multiple Requests
+    confidence: medium
+    id: v35-aura-002
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The JavaScript methods for managing field-level errors on Aura input
+      components have been replaced; cmp.addErrors, cmp.getErrors,
+      cmp.clearErrors, cmp.setValid, and cmp.isValid are superseded by direct
+      attribute access via cmp.set/get on v.errors.
+    upgradeAction: Search Aura components for calls to addErrors, getErrors,
+      clearErrors, setValid, and isValid on input component value attributes and
+      migrate to the new v.errors attribute pattern.
+    source:
+      document: v35-winter16.pdf
+      page: 436
+      heading: Simplified Input Component Error Handling
+    confidence: medium
+    id: v35-aura-003
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The <aura:method> tag lets parent components invoke child controller
+      methods directly, eliminating the need to wire up custom component events
+      for simple method calls.
+    source:
+      document: v35-winter16.pdf
+      page: 437
+      heading: Call Component Methods with <aura:method>
+    confidence: high
+    id: v35-aura-004
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The Aura framework now logs console warnings when code accesses
+      components, attributes, or events that lack the required access system
+      attribute. These warnings signal upcoming stricter enforcement that will
+      block such access entirely in a future release.
+    detail: Access violations occur when referencing resources outside your
+      namespace without explicit access grants, when accessing undefined
+      attributes, or when running async code without $A.getCallback() to
+      preserve execution context. The warning-to-enforcement path means code
+      working today may break later.
+    upgradeAction: Audit browser console for access check warnings. Add appropriate
+      access attributes to owned resources, remove references to inaccessible
+      resources, fix typos in attribute names, and wrap async callbacks
+      (setTimeout, Promise) with $A.getCallback().
+    source:
+      document: v35-winter16.pdf
+      page: 437
+      heading: Browser Console Warnings for Access Check Violations
+    confidence: high
+    id: v35-aura-005
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The $A.run() method is deprecated in favor of $A.getCallback() for
+      wrapping asynchronous code that accesses components outside the standard
+      rerendering lifecycle.
+    upgradeAction: Replace all $A.run() calls with $A.getCallback() when wrapping
+      async operations like setTimeout that interact with Aura components.
+    source:
+      document: v35-winter16.pdf
+      page: 438
+      heading: Use $A.getCallback() instead of $A.run()
+    confidence: high
+    id: v35-aura-006
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+      - AuraDefinitionBundle
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning components can now be embedded directly within Visualforce
+      pages using the new $Lightning.use() and $Lightning.createComponent()
+      JavaScript APIs along with the <apex:includeLightning/> tag.
+    source:
+      document: v35-winter16.pdf
+      page: 440
+      heading: Add Lightning Components to Visualforce Pages
+    confidence: high
+    id: v35-vf-008
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The User object fields AboutMe, FullPhotoURL, and SmallPhotoURL no
+      longer depend on Chatter being enabled, allowing photo operations without
+      Chatter across all API versions.
+    upgradeAction: If your integration logic assumed these fields were unavailable
+      when Chatter was disabled, update conditional checks accordingly.
+    source:
+      document: v35-winter16.pdf
+      page: 443
+      heading: Changed Objects
+    confidence: high
+    id: v35-rest-006
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The PlatformAction.ActionTargetUrl field is deprecated and replaced by
+      ActionTarget, which now handles action invocation URLs.
+    upgradeAction: Migrate any code referencing ActionTargetUrl to use the new
+      ActionTarget field instead.
+    source:
+      document: v35-winter16.pdf
+      page: 443
+      heading: Changed Objects
+    confidence: high
+    id: v35-rest-007
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOSL gains the WITH NETWORK clause, enabling searches scoped to
+      internal communities for User and FeedItem objects.
+    source:
+      document: v35-winter16.pdf
+      page: 451
+      heading: SOSL
+    confidence: high
+    id: v35-soql-002
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: REST API gains ETag-based cache validation headers (ETag, If-Match,
+      If-None-Match, If-Unmodified-Since) for SObject Rows, enabling optimistic
+      concurrency control on account records. Requests failing precondition
+      checks now return 412 or 304 status codes.
+    source:
+      document: v35-winter16.pdf
+      page: 451
+      heading: REST API
+    confidence: high
+    id: v35-rest-008
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: API calls made at version 35.0 and later
+    summary: The sendEmail() call now validates email address formats and rejects
+      addresses marked as bounced. Recipients can be specified by Salesforce ID
+      instead of email address, and a new optOutPolicy field controls behavior
+      when recipients have opted out of email.
+    detail: When using bccAddresses, ccAddresses, or toAddresses, the system now
+      performs format validation and bounce checking. The new optOutPolicy field
+      (SEND/FILTER/REJECT) determines whether emails are sent to opted-out
+      recipients when those recipients are specified by ID. The
+      documentAttachments field is deprecated in favor of entityAttachments.
+    upgradeAction: Review sendEmail() integrations for addresses that may fail
+      format validation or have bounce history. If specifying recipients by ID,
+      explicitly set optOutPolicy to match desired behavior. Replace
+      documentAttachments usage with entityAttachments.
+    source:
+      document: v35-winter16.pdf
+      page: 454
+      heading: SOAP API
+    confidence: high
+    id: v35-soap-001
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: integrations targeting API version >= 35.0
+    summary: The user photo resources at /chatter/users/{userId}/photo and
+      /connect/communities/{communityId}/chatter/users/{userId}/photo are no
+      longer available starting in API 35.0. Integrations must switch to the new
+      /connect/user-profiles/{userId}/photo endpoints instead.
+    upgradeAction: Update any code calling the deprecated photo endpoints to use
+      /connect/user-profiles/{userId}/photo or
+      /connect/communities/{communityId}/user-profiles/{userId}/photo before
+      upgrading past API 35.0.
+    source:
+      document: v35-winter16.pdf
+      page: 456
+      heading: New and Changed Chatter REST API Resources
+    confidence: high
+    id: v35-rest-009
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The aggregateName property within dashboardMetadata in the Reports and
+      Dashboards REST API is now deprecated; integrations should migrate to the
+      new aggregates property.
+    upgradeAction: Audit code consuming dashboardMetadata responses for usage of
+      aggregateName and refactor to use the aggregates property instead.
+    source:
+      document: v35-winter16.pdf
+      page: 469
+      heading: Changed Reports and Dashboards REST API Request and Response Bodies
+    confidence: high
+    id: v35-rest-010
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+      - VisualforcePage
+    behaviorArea: api-rest
+    appliesWhen: integrations using Live Agent REST API at API >= 35.0
+    summary: The ChatEnd message response now includes attached record IDs starting
+      in v35.0, enabling post-chat pages to display which records were linked
+      during the conversation.
+    source:
+      document: v35-winter16.pdf
+      page: 471
+      heading: Live Agent REST API
+    confidence: high
+    id: v35-rest-011
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Tooling API queries that retrieve Metadata or FullName fields are now
+      limited to returning a single record per request.
+    upgradeAction: Review any Tooling API integrations that query Metadata or
+      FullName fields expecting multiple records; refactor to query one record
+      at a time or use different retrieval patterns.
+    source:
+      document: v35-winter16.pdf
+      page: 472
+      heading: Tooling API
+    confidence: high
+    id: v35-rest-012
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: Tooling API requests at API version >= 35.0
+    summary: The ServiceFieldDataType object has been removed from Tooling API
+      starting in version 35.0.
+    upgradeAction: If your integration references ServiceFieldDataType, migrate to
+      alternative approaches before upgrading past API version 34.0.
+    source:
+      document: v35-winter16.pdf
+      page: 472
+      heading: Tooling API
+    confidence: high
+    id: v35-rest-013
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Aura bundles now support an apiVersion field, allowing developers to
+      pin a bundle to a specific API version. This enables component-versioned
+      behavior for Lightning components similar to Apex classes.
+    source:
+      document: v35-winter16.pdf
+      page: 477
+      heading: Metadata API
+    confidence: medium
+    id: v35-packaging-003
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: ConnectedApp metadata now supports a plugin field to specify a custom
+      Apex class extending Auth.ConnectedAppPlugin, enabling programmatic
+      customization of connected app behavior during OAuth flows.
+    source:
+      document: v35-winter16.pdf
+      page: 477
+      heading: Metadata API
+    confidence: high
+    id: v35-auth-008
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: The www.salesforce.com endpoint will no longer serve as a routing proxy
+      for API login requests; integrations must connect directly to
+      instance-specific or MyDomain login URLs.
+    upgradeAction: Audit all API integrations using www.salesforce.com as the login
+      endpoint and update them to use instance-specific login URLs (e.g.,
+      login.salesforce.com, na1.salesforce.com, or your org's MyDomain).
+    source:
+      document: v35-winter16.pdf
+      page: 481
+      heading: Retirement of Endpoint Routing for API Logins
+    confidence: medium
+    id: v35-soap-002
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: New error codes for sendEmail() and renderEmailTemplate() provide more
+      granular failure reasons including bounced addresses, opt-out violations,
+      and template rendering problems.
+    source:
+      document: v35-winter16.pdf
+      page: 481
+      heading: API Status Code Changes
+    confidence: medium
+    id: v35-soap-003
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: SingleEmailMessage now supports an optOutPolicy field to control
+      whether recipient Email Opt Out settings are enforced, and a new
+      renderEmailTemplate() SOAP call lets you render email template text
+      without invoking sendEmail().
+    source:
+      document: v35-winter16.pdf
+      page: 482
+      heading: Choose Email Message Options for Opted-Out Recipients and Template
+        Rendering
+    confidence: high
+    id: v35-soap-004
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The SignupRequest API now accepts an optional language parameter,
+      letting ISVs provision trial orgs in a specific language rather than
+      relying on locale-based defaults.
+    source:
+      document: v35-winter16.pdf
+      page: 487
+      heading: Choose the Language of Trial Organizations Created with the
+        SignupRequest API
+    confidence: medium
+    id: v35-rest-014
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning components require My Domain to be configured in the org.
+      Organizations using Lightning components without My Domain will see those
+      customizations disabled when Winter '16 activates.
+    upgradeAction: Configure My Domain in Setup before Winter '16 release to prevent
+      Lightning component customizations from being disabled.
+    source:
+      document: v35-winter16.pdf
+      page: 497
+      heading: Critical Updates
+    confidence: high
+    id: v35-auth-009
+  - apiVersion: "35.0"
+    release: Winter '16
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - VisualforcePage
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The critical update treating PageReference.getContent() and
+      getContentAsPDF() as callouts has been delayed from Winter '16 to Spring
+      '16, giving more time to refactor code that calls these methods from
+      contexts prohibiting callouts.
+    detail: When activated, these methods count against callout limits and cannot be
+      invoked from triggers or after DML in the same transaction without async
+      handling.
+    upgradeAction: Review Apex code invoking getContent() or getContentAsPDF() and
+      move to asynchronous contexts if currently called in prohibited callout
+      scenarios before Spring '16.
+    source:
+      document: v35-winter16.pdf
+      page: 497
+      heading: Critical Updates
+    confidence: high
+    id: v35-apex-019

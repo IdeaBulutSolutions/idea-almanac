@@ -1,0 +1,2593 @@
+apiVersion: "66.0"
+release: Spring '26
+reviewed: true
+entries:
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: deprecated
+    impact: retirement
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Aura components used within Salesforce Scheduler flows are being
+      retired. Organizations using Aura-based Scheduler flows must migrate to an
+      alternative before the retirement date.
+    upgradeAction: Identify any Salesforce Scheduler flows that use Aura components
+      and migrate them to LWC or other supported technologies before the
+      scheduled retirement.
+    source:
+      document: v66-spring26.pdf
+      page: 189
+      heading: Aura Components in Salesforce Scheduler Flows Are Scheduled for
+        Retirement
+    confidence: medium
+    id: v66-aura-001
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: Article Answers for Einstein Bots is being retired, requiring bots
+      using this feature to migrate to an alternative knowledge retrieval
+      method.
+    upgradeAction: Identify any Einstein Bots using Article Answers and migrate them
+      to a supported knowledge integration approach before the retirement date.
+    source:
+      document: v66-spring26.pdf
+      page: 51
+      heading: Agentforce & Einstein
+    confidence: medium
+    id: v66-other-001
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: Flows compiled at API >= 66.0
+    summary: Flows and processes built or updated to API version 66.0 incorporate
+      runtime behavior changes that may alter how existing automations execute.
+    upgradeAction: Review the detailed 'Flow and Process Run-Time Changes in API
+      Version 66.0' documentation before upgrading Flow metadata to v66, and
+      regression-test critical automations.
+    source:
+      document: v66-spring26.pdf
+      page: 383
+      heading: Flow and Process Run-Time Changes in API Version 66.0
+    confidence: medium
+    id: v66-flow-001
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide enforcement after release update activation
+    summary: Apex classes used as invocable action parameters will be required to
+      have an accessible no-argument constructor; classes lacking one will fail
+      at runtime once the release update is enforced.
+    detail: This release update enforces that any Apex class referenced as an
+      invocable action parameter must define a public or global no-arg
+      constructor. Previously, classes without such constructors could be used
+      but caused unpredictable behavior.
+    upgradeAction: Audit all Apex classes used as Flow invocable action parameters
+      and ensure each has an explicit no-argument constructor before enabling
+      this release update.
+    source:
+      document: v66-spring26.pdf
+      page: 390
+      heading: Enforcing No-Argument Constructor on Apex Classes Used for Invocable
+        Action Parameters (Release Update)
+    confidence: high
+    id: v66-apex-001
+    introducedIn: "61.0"
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: The ability to create new Reorder Portals in B2B Commerce is being
+      deprecated. Existing portals continue to function, but new implementations
+      should use alternative approaches.
+    upgradeAction: If you have automation or integrations that programmatically
+      create Reorder Portals, plan to migrate to the recommended B2B store
+      patterns before this capability is fully removed.
+    source:
+      document: v66-spring26.pdf
+      page: 70
+      heading: Commerce
+    confidence: medium
+    id: v66-other-002
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Flow
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version (Release Update enforcement)
+    summary: A Release Update modifies how sharing recalculation behaves, requiring
+      updates to Apex code and Flows that depend on the previous recalculation
+      timing or logic.
+    upgradeAction: Review Apex classes, triggers, and Flows that interact with
+      sharing recalculation. Test sharing-dependent logic after the Release
+      Update is enabled to ensure correct behavior.
+    source:
+      document: v66-spring26.pdf
+      page: 494
+      heading: Update Apex Code and Flows for Changed Sharing Recalculation Behavior
+        (Release Update)
+    confidence: medium
+    id: v66-sharing-001
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Connect API Performance Beta setting has been removed. Code that
+      relied on this beta performance optimization may experience different
+      behavior or errors.
+    upgradeAction: Review any integrations or code that depended on the Connect API
+      Performance Beta setting and remove references to it.
+    source:
+      document: v66-spring26.pdf
+      page: 93
+      heading: Experience Cloud
+    confidence: low
+    id: v66-rest-001
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: The Field Service mobile application will no longer receive support on
+      Android 11 devices. Organizations relying on Android 11 for field
+      operations should plan device upgrades.
+    upgradeAction: Inventory mobile devices running Android 11 used for Field
+      Service and plan upgrades to Android 12 or later before support ends.
+    source:
+      document: v66-spring26.pdf
+      page: 715
+      heading: Field Service Mobile App Support on Android 11 Is Deprecated
+    confidence: medium
+    id: v66-other-003
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The User Interface API now supports modifying Task and Event records
+      from Lightning Web Components, enabling programmatic updates that were
+      previously restricted.
+    upgradeAction: Review any LWC code that works with Task or Event records to
+      leverage the new UI API capabilities; test existing task/event handling
+      logic for compatibility.
+    source:
+      document: v66-spring26.pdf
+      page: 1183
+      heading: Update Tasks and Events in Lightning Web Components with the User
+        Interface API
+    confidence: medium
+    id: v66-rest-002
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce to Salesforce functionality is being removed via a Release
+      Update, eliminating the ability to share records between Salesforce orgs
+      through this legacy mechanism.
+    upgradeAction: Identify any integrations or processes relying on Salesforce to
+      Salesforce record sharing and migrate to alternative approaches such as
+      Salesforce Connect or custom APIs before the enforcement date.
+    source:
+      document: v66-spring26.pdf
+      page: 1183
+      heading: Salesforce to Salesforce Is Being Retired (Release Update)
+    confidence: high
+    id: v66-rest-003
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Legacy and instanced host names in API calls will no longer redirect;
+      requests to these endpoints will fail outright, requiring updates to
+      hardcoded URLs.
+    upgradeAction: Audit all integration code, scripts, and external systems for
+      legacy or instanced Salesforce host names and update them to use My Domain
+      or stable canonical URLs before Spring '26.
+    source:
+      document: v66-spring26.pdf
+      page: 154
+      heading: Security, Identity, and Privacy
+    confidence: high
+    id: v66-rest-004
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: New connected app creation is now disabled by default across all orgs,
+      meaning automated provisioning or setup scripts that create connected apps
+      will fail unless an admin explicitly enables this capability first.
+    upgradeAction: Review any automation or CI/CD processes that programmatically
+      create connected apps; coordinate with admins to enable connected app
+      creation before deployment or pre-create required apps manually.
+    source:
+      document: v66-spring26.pdf
+      page: 154
+      heading: Security, Identity, and Privacy
+    confidence: high
+    id: v66-auth-001
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: Legacy Chat (the older chat product) is being retired. Organizations
+      still using Legacy Chat must migrate to Messaging for In-App and Web or
+      another supported channel.
+    upgradeAction: Audit any integrations, Apex, or flows that reference Legacy Chat
+      objects or APIs; migrate to Messaging for In-App and Web before the
+      retirement date.
+    source:
+      document: v66-spring26.pdf
+      page: 159
+      heading: Service
+    confidence: medium
+    id: v66-other-004
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: Unified Knowledge is being retired. Organizations relying on Unified
+      Knowledge must transition to the generally available Salesforce Enterprise
+      Knowledge.
+    upgradeAction: Review any code or integrations dependent on Unified Knowledge
+      and migrate to Salesforce Enterprise Knowledge before retirement takes
+      effect.
+    source:
+      document: v66-spring26.pdf
+      page: 159
+      heading: Service
+    confidence: medium
+    id: v66-other-005
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; phased enforcement
+      starting March 15, 2026 (200 days), March 15, 2027 (100 days), March 15,
+      2029 (47 days)
+    summary: Industry-wide TLS certificate maximum lifespans are shrinking
+      dramatically over the next three years, requiring integrations that pin or
+      manually manage certificates to adopt automated rotation. Salesforce will
+      also discontinue proactive certificate rotation announcements for
+      production orgs.
+    detail: Public CA-signed certificates will be limited to 200-day lifespans
+      starting March 2026, dropping to 100 days in 2027 and 47 days by 2029. Any
+      integration using certificate pinning or manual certificate management
+      must move to automated rotation. The Certificate Metadata API type can
+      automate self-signed and CA-signed certificate lifecycle within
+      Salesforce.
+    upgradeAction: Audit all integrations using TLS certificates—especially those
+      with pinned certs or manual rotation processes. Implement automated
+      certificate rotation using the Certificate Metadata API or external
+      tooling before March 2026. Remove any certificate pinning logic.
+    source:
+      document: v66-spring26.pdf
+      page: 173
+      heading: Prepare for Shorter Certificate Lifespans
+    confidence: high
+    id: v66-auth-002
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; Google Chrome
+      enforcement date is March 15, 2027, but issues may occur earlier upon
+      certificate renewal
+    summary: mTLS certificates from public CAs in Chrome's trusted root list can no
+      longer serve dual purposes; organizations must migrate to separate PKI
+      hierarchies for server vs. client authentication before Chrome enforces
+      the policy.
+    detail: Chrome Root Program Policy v1.7 prohibits dual-use certificates issued
+      by public root CAs. Certificates used for mTLS client authentication must
+      now come from a dedicated hierarchy, separate from TLS server
+      certificates. This affects certificate-based authentication and API client
+      certificates enforcing mutual TLS.
+    upgradeAction: Audit current mTLS certificates; if issued by a public CA in
+      Chrome's trusted root list, procure replacement certificates from a
+      dedicated client-authentication hierarchy before March 2027 (or sooner if
+      renewing). Review the Salesforce knowledge article on PKI changes for
+      detailed migration steps.
+    source:
+      document: v66-spring26.pdf
+      page: 175
+      heading: Update Your mTLS Certificates
+    confidence: high
+    id: v66-auth-003
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: deprecated
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; SOAP login()
+      unavailable after API v64, full retirement by Winter '27
+    summary: Salesforce Data Pipelines external connectors will no longer support
+      SOAP login() authentication after API version 64. All Salesforce external
+      connections must migrate to OAuth 2.0 before Winter '27 or data sync will
+      break.
+    detail: Username/password/service-URL authentication fields are being removed
+      from Salesforce external connection settings. Organizations must configure
+      an External Client App for OAuth and update connection credentials to use
+      Client ID and Client Secret instead.
+    upgradeAction: Before Winter '27, configure an External Client App in Setup,
+      then update all Salesforce Data Pipelines external connections to use
+      OAuth authentication with the new Client ID and Client Secret fields.
+    source:
+      document: v66-spring26.pdf
+      page: 186
+      heading: Upgrade to OAuth Security for Your Salesforce External Connections
+    confidence: high
+    id: v66-auth-004
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+      - Flow
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version; retirement enforced
+      February 14, 2027
+    summary: Aura components used within Salesforce Scheduler flows will stop
+      functioning after the February 2027 retirement date. Organizations must
+      migrate these scheduling flows to LWR-based sites before that deadline.
+    upgradeAction: Identify any Salesforce Scheduler flows that rely on Aura
+      components and migrate them to LWR sites before February 14, 2027.
+    source:
+      document: v66-spring26.pdf
+      page: 189
+      heading: Aura Components in Salesforce Scheduler Flows Are Scheduled for
+        Retirement
+    confidence: high
+    id: v66-aura-002
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: The label attribute on <apex:inputField> tags is now automatically
+      HTML-escaped, which may break pages that intentionally rendered HTML
+      markup in labels.
+    upgradeAction: Review Visualforce pages using <apex:inputField> with dynamic or
+      HTML-containing label values; if legitimate HTML rendering was intended,
+      refactor to use alternative approaches.
+    source:
+      document: v66-spring26.pdf
+      page: 191
+      heading: Enforced with This Release
+    confidence: high
+    id: v66-vf-001
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: Temporary redirects from legacy Salesforce hostnames to enhanced
+      domains are removed; any integrations or bookmarks still using old
+      hostnames will fail outright instead of being redirected.
+    upgradeAction: Audit all external integrations, API clients, SSO configurations,
+      and hardcoded URLs for legacy Salesforce hostnames and update them to
+      enhanced domain URLs before this enforcement.
+    source:
+      document: v66-spring26.pdf
+      page: 191
+      heading: Enforced with This Release
+    confidence: high
+    id: v66-other-006
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The Apex Blob.toPdf() method will switch to using the Visualforce PDF
+      rendering engine, which supports additional fonts and multibyte
+      characters. PDFs generated via this method may render differently after
+      enforcement.
+    upgradeAction: Review any Apex code calling Blob.toPdf() and validate that
+      generated PDFs render correctly with the new engine, especially if using
+      special fonts or non-Latin characters.
+    source:
+      document: v66-spring26.pdf
+      page: 583
+      heading: Use Visualforce PDF Rendering Service with Apex Blob.toPdf() (Release
+        Update)
+    confidence: high
+    id: v66-apex-002
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; enforced Winter '27
+    summary: The OAuth 2.0 username-password flow will no longer function for
+      connected apps. Any integration relying on this authentication method will
+      fail after enforcement.
+    upgradeAction: Migrate all integrations currently using username-password flow
+      to either OAuth 2.0 web-server flow or client credentials flow before
+      Winter '27 enforcement.
+    source:
+      document: v66-spring26.pdf
+      page: 1209
+      heading: Retirement of OAuth 2.0 Username-Password Flow for Connected Apps
+        (Release Update)
+    confidence: high
+    id: v66-auth-006
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; enforced Winter '27
+    summary: API requests using incorrect instanced URLs will be rejected. All
+      traffic must use the org's My Domain login URL or requests will fail.
+    upgradeAction: Audit all external integrations and internal API calls to ensure
+      they target your org's correct My Domain URL rather than legacy or
+      incorrect instance URLs.
+    source:
+      document: v66-spring26.pdf
+      page: 587
+      heading: Update Instanced URLs in API Traffic (Release Update)
+    confidence: high
+    id: v66-rest-005
+    introducedIn: "65.0"
+    detail: " Provenance: republished release update first announced in Winter '26
+      (v65) with Summer '26 enforcement; this republication postpones
+      enforcement to Winter '27."
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Flow
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version (enforced Spring '27)
+    summary: Sharing recalculations after group or role membership changes will run
+      asynchronously rather than immediately, potentially breaking Apex or Flows
+      that assume share records exist right after the membership update.
+    upgradeAction: Audit Apex classes, triggers, tests, and Flows that modify group
+      membership or roles and then immediately query or assert on share records;
+      refactor to handle async recalculation via polling, queueable jobs, or
+      platform events.
+    source:
+      document: v66-spring26.pdf
+      page: 494
+      heading: Update Apex Code and Flows for Changed Sharing Recalculation Behavior
+        (Release Update)
+    confidence: high
+    id: v66-sharing-002
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version (enforced Spring '27)
+    summary: The Salesforce-to-Salesforce feature will be fully retired, removing
+      the ability to share records between orgs via connection objects and
+      PartnerNetworkConnection APIs.
+    upgradeAction: Migrate any integrations using Salesforce-to-Salesforce
+      connection objects or PartnerNetworkConnection to Partner Cloud, Data
+      Cloud One, MuleSoft Anypoint, or MuleSoft for Flow before enforcement.
+    source:
+      document: v66-spring26.pdf
+      page: 1183
+      heading: Salesforce to Salesforce Is Being Retired (Release Update)
+    confidence: high
+    id: v66-rest-006
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version, enforced Summer '27
+    summary: The SOAP API login() method will stop working for API versions 31.0
+      through 64.0 starting Summer '27. Integrations using this authentication
+      method on those versions must migrate to a newer API version or
+      alternative auth flow.
+    upgradeAction: Audit all integrations calling SOAP API login() and verify they
+      use API version 65.0 or higher, or migrate to OAuth-based authentication
+      before Summer '27 enforcement.
+    source:
+      document: v66-spring26.pdf
+      page: 193
+      heading: Scheduled to Be Enforced in Summer '27
+    confidence: high
+    id: v66-soap-001
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; new connected app
+      creation blocked from early January 2026
+    summary: Creating new connected apps is no longer possible as of Spring '26.
+      Developers must use the External Client App framework instead for any new
+      integrations requiring OAuth scopes like chatbot_api, sfap_api, or api.
+    detail: Existing connected apps continue to function and remain editable, but
+      the platform now enforces External Client Apps as the sole path for new
+      app registrations. Migration tooling is available in App Manager to
+      convert existing connected apps, after which the original becomes
+      read-only.
+    upgradeAction: Audit any automation or deployment scripts that programmatically
+      create connected apps; update them to provision External Client Apps
+      instead. Verify that existing connected apps used by agents are migrated
+      before any redeployment that would recreate them.
+    source:
+      document: v66-spring26.pdf
+      page: 215
+      heading: Migrate Your Agents' Connected Apps to the External Client App Framework
+    confidence: high
+    id: v66-auth-007
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; reroute enforced
+      February 26, 2026
+    summary: Claude 3 Haiku model calls through Amazon Bedrock will automatically
+      redirect to Claude Haiku 4.5 starting late February 2026, potentially
+      altering prompt responses and application behavior.
+    upgradeAction: Test all prompts and integrations using Claude 3 Haiku in Prompt
+      Builder and Einstein Studio against Claude Haiku 4.5 before the reroute
+      date to identify response differences.
+    source:
+      document: v66-spring26.pdf
+      page: 251
+      heading: Prepare for Claude 3 Haiku Reroute Date
+    confidence: high
+    id: v66-rest-007
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; requests fail
+      starting week of April 23, 2026
+    summary: The Gemini 3 Pro beta model is being removed from the Models API. Any
+      integrations calling this model will begin returning errors after the
+      retirement date.
+    upgradeAction: Identify all Prompt Builder templates, Einstein Studio
+      configurations, and Models API calls referencing Gemini 3 Pro (Beta) and
+      migrate them to Gemini 3.1 Pro (Beta) before April 23, 2026.
+    source:
+      document: v66-spring26.pdf
+      page: 252
+      heading: Gemini 3 Pro (Beta) Is Retiring
+    confidence: medium
+    id: v66-rest-008
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version; enforced March 2026
+    summary: Tableau Semantics numeric functions (ASIN, ACOS, LOG, LN, COT, POWER)
+      now throw query errors on invalid input instead of returning null, and
+      regex functions migrate from ICU to RE2 engine—breaking backreferences,
+      lookahead/lookbehind, and possessive quantifiers while also changing
+      empty-string match behavior.
+    detail: The RE2 regex engine drops support for backreferences,
+      lookahead/lookbehind assertions, and possessive quantifiers. Empty
+      patterns now match at every position rather than returning no match.
+      DATEPARSE also switches from null to query error on invalid date strings.
+    upgradeAction: Audit all Tableau Semantics calculated fields using the affected
+      numeric functions for edge-case inputs that could be invalid, and review
+      regex patterns for unsupported ICU-specific syntax (backreferences,
+      lookahead/lookbehind, possessive quantifiers) before March 2026
+      enforcement.
+    source:
+      document: v66-spring26.pdf
+      page: 283
+      heading: Use New Behaviors in More Tableau Semantics Functions (Release Update)
+    confidence: medium
+    id: v66-other-007
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; SOAP login() API
+      removed after API v64, enforcement at Winter '27
+    summary: CRM Analytics Salesforce external connectors will no longer support
+      SOAP login() authentication after API v64. All existing connections must
+      migrate to OAuth 2.0 using External Client Apps before Winter '27 or data
+      sync will fail.
+    upgradeAction: Identify all CRM Analytics external connections using
+      username/password authentication, create External Client Apps with OAuth
+      credentials, and reconfigure each connection to use OAuth before the
+      Winter '27 release.
+    source:
+      document: v66-spring26.pdf
+      page: 186
+      heading: Upgrade to OAuth Security for Your Salesforce External Connections
+    confidence: high
+    id: v66-auth-008
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Flow
+      - ApexClass
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: On-demand flows can now incorporate custom Apex logic for
+      personalization and offer API-based triggering with priority control, plus
+      individuals can be programmatically removed from running flows via
+      external API calls.
+    source:
+      document: v66-spring26.pdf
+      page: 368
+      heading: Flow Marketing Cloud Updates
+    confidence: medium
+    id: v66-flow-002
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+      - Flow
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: A new REST API endpoint allows external systems to programmatically
+      remove individuals from running flows, enabling coordination of flow exits
+      with external order completion or status changes.
+    detail: The endpoint supports exit from segment-triggered, automation
+      event-triggered, and on-demand flows. Requires configuring API-triggerable
+      exit rules within the flow.
+    source:
+      document: v66-spring26.pdf
+      page: 377
+      heading: Remove Individuals from Flows Externally via API
+    confidence: medium
+    id: v66-rest-009
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Flow tests can now use isolated test data via Apex Test Setup
+      integration, enabling record-triggered and autolaunched flows to run with
+      predictable, environment-independent data rather than org data.
+    detail: This mirrors how Apex tests create their own data at runtime. Tests
+      become portable across sandbox and production since they no longer depend
+      on specific record IDs or mutable org data.
+    source:
+      document: v66-spring26.pdf
+      page: 380
+      heading: Flow Testing and Debugging
+    confidence: medium
+    id: v66-flow-003
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Flow tests for record-triggered and autolaunched flows can now
+      reference Apex test setup methods to provision isolated, rollback-safe
+      test data instead of relying on org records.
+    detail: The integration lets you point a flow test at an existing Apex
+      @testSetup class; the platform provisions those records at test time,
+      matches them by fields you choose rather than IDs, and rolls back after
+      the run. This bridges Apex's isolated-data testing model into the
+      declarative flow testing UI.
+    source:
+      document: v66-spring26.pdf
+      page: 381
+      heading: Test Record-Triggered and Autolaunched Flows with Isolated Test Data
+    confidence: medium
+    id: v66-flow-004
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+      - ApexClass
+    behaviorArea: flow-runtime
+    appliesWhen: flows and processes configured to run on API >= 66.0
+    summary: Flows now enforce stricter visibility rules for Apex class constructors
+      used as invocable action parameters. Public no-arg constructors in managed
+      packages become visible only to code within the same package, causing
+      errors when flows reference inaccessible invocableVariable classes.
+    upgradeAction: Before upgrading flows to v66+, audit any Apex actions that use
+      invocableVariable classes from managed packages and verify the referenced
+      constructors remain accessible from your namespace.
+    source:
+      document: v66-spring26.pdf
+      page: 383
+      heading: Flow and Process Run-Time Changes in API Version 66.0
+    confidence: high
+    id: v66-flow-005
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: flows and processes configured to run on API >= 66.0
+    summary: Before-save record-triggered flows now properly enforce field
+      writeability, rejecting updates to non-insertable fields that were
+      previously silently accepted.
+    upgradeAction: Review before-save record-triggered flows for field assignments
+      targeting system-controlled or non-insertable fields; remove or guard
+      those assignments before upgrading to v66+.
+    source:
+      document: v66-spring26.pdf
+      page: 383
+      heading: Flow and Process Run-Time Changes in API Version 66.0
+    confidence: high
+    id: v66-flow-006
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Custom Aura and LWC components can now programmatically navigate users
+      to screen or autolaunched flows using a new Standard Flow PageReference
+      type with lightning:navigation or lightning/navigation.
+    source:
+      document: v66-spring26.pdf
+      page: 389
+      heading: Navigate to Flows in Lightning Experience from Custom Lightning
+        Components
+    confidence: high
+    id: v66-lwc-001
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: Apex classes compiled at API >= 66.0, OR org-wide if the release
+      update is enabled
+    summary: Apex classes serving as invocable action parameters must now expose a
+      visible no-argument constructor—public for unpackaged code, global for
+      managed packages called externally. Managed-package classes with merely
+      public constructors become invisible to callers outside the package.
+    detail: "The enforcement has two paths: enabling the release update applies the
+      rule org-wide immediately, while leaving it disabled defers enforcement to
+      a component-versioned gate at API 66.0. Salesforce originally planned
+      mandatory enforcement in Summer '26 but withdrew that deadline in Spring
+      '26, making the update optional going forward."
+    upgradeAction: Before upgrading past 65.0 or enabling the release update, audit
+      Apex classes annotated with @InvocableVariable. Ensure each has an
+      explicit public (or global, if packaged) no-argument constructor. Test
+      flows invoking Apex actions to catch constructor-visibility errors.
+    source:
+      document: v66-spring26.pdf
+      page: 390
+      heading: Enforcing No-Argument Constructor on Apex Classes Used for Invocable
+        Action Parameters (Release Update)
+    confidence: high
+    id: v66-apex-003
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: flow-runtime
+    appliesWhen: org-wide regardless of component API version (enforced Summer '26)
+    summary: Apex batch action results in Flows will return in submission order
+      rather than grouping errors first, which may break downstream logic that
+      depends on the current error-first ordering.
+    upgradeAction: Review any Flow logic or Apex code that processes batch action
+      results and assumes errors appear before successes; update to handle
+      results in request-submission order.
+    source:
+      document: v66-spring26.pdf
+      page: 390
+      heading: Sort Apex Batch Action Results by Request Order (Release Update)
+    confidence: high
+    id: v66-flow-007
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: B2C Commerce Account Manager now supports OAuth authorization code
+      grant with PKCE for public API clients, enabling secure token exchange for
+      apps that cannot store client secrets (SPAs, mobile, desktop).
+    source:
+      document: v66-spring26.pdf
+      page: 441
+      heading: Account Manager 3.7
+    confidence: medium
+    id: v66-auth-009
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - VisualforcePage
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide once enabled via Release Update; Apex and Visualforce must
+      be at API >= 45.0 to reflect ICU formats in customizations
+    summary: When this Release Update is enabled, date, time, currency, and numeric
+      formatting across the org switches from Oracle JDK locale rules to ICU
+      standards. Apex and Visualforce components on API 45.0+ will render
+      locale-sensitive values differently.
+    detail: The change affects any code that formats or parses locale-dependent
+      strings. Output strings for dates, currencies, and numbers may differ in
+      separators, ordering, or symbols. Components below API 45.0 are excluded
+      from ICU formatting in customizations.
+    upgradeAction: Before enabling, audit Apex and Visualforce that formats or
+      parses dates, numbers, or currencies. Update assertions in tests that
+      compare formatted strings. Ensure all relevant components are on API
+      45.0+.
+    source:
+      document: v66-spring26.pdf
+      page: 487
+      heading: Enable ICU Locale Formats (Release Update)
+    confidence: high
+    id: v66-apex-004
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version; affects new
+      configurations starting Summer '26 deployment (May 15, 2026 for Developer
+      Edition)
+    summary: Salesforce is removing the ability to create new branded login pages
+      for Trialforce Source Orgs starting Summer '26, as part of retiring the
+      .cloudforce.com hostname. Existing branded login configurations remain
+      functional.
+    detail: ISV partners who distribute AppExchange solutions via Trialforce must
+      complete any new branded login page setup before the Summer '26 rollout.
+      The underlying .cloudforce.com domain serving these pages is being
+      retired.
+    upgradeAction: If you maintain a Trialforce Source Org and need a branded login
+      page, configure it before May 15, 2026. Monitor future release notes for
+      the full retirement timeline of existing branded login pages.
+    source:
+      document: v66-spring26.pdf
+      page: 489
+      heading: Configure New Trialforce Login Pages Before Summer '26
+    confidence: medium
+    id: v66-packaging-001
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Flow
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version; enforced Spring '27
+    summary: Sharing recalculations following group or role membership changes now
+      execute asynchronously for performance reasons. Apex and Flows that expect
+      share records to exist immediately after modifying groups or roles will
+      fail once enforcement begins.
+    detail: Previously, updating group membership or role hierarchies triggered
+      synchronous sharing recalculation, so subsequent queries or assertions
+      could rely on share records being current. The new async model means share
+      records may not reflect changes until background processing completes.
+    upgradeAction: Audit Apex classes, triggers, tests, and Flows that modify group
+      membership or roles and then immediately query or assert on share records.
+      Refactor to handle eventual consistency or use platform events to wait for
+      recalculation completion before proceeding.
+    source:
+      document: v66-spring26.pdf
+      page: 494
+      heading: Update Apex Code and Flows for Changed Sharing Recalculation Behavior
+        (Release Update)
+    confidence: high
+    id: v66-sharing-003
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: LWC components with apiVersion >= 66.0
+    summary: LWC templates can now embed complex JavaScript expressions directly in
+      HTML markup, reducing boilerplate in component JavaScript files. This
+      opt-in capability activates when a component targets API 66.0 or higher.
+    source:
+      document: v66-spring26.pdf
+      page: 561
+      heading: Use Complex Template Expressions in Your Lightning Web Components (Beta)
+    confidence: low
+    id: v66-lwc-002
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: LWC framework now skips rehydration for DOM nodes that are
+      disconnected, preventing lifecycle hooks such as renderedCallback from
+      executing on detached components. Code relying on the old behavior where
+      detached nodes could still trigger reactive updates may break.
+    upgradeAction: Audit LWC components that depend on lifecycle methods firing for
+      nodes no longer in the DOM tree; refactor any logic that assumed
+      rehydration would occur on disconnected elements.
+    source:
+      document: v66-spring26.pdf
+      page: 567
+      heading: Check For Errors From the Disconnected DOM Node Rehydration Fix
+    confidence: high
+    id: v66-lwc-003
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: removed
+    impact: retirement
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce has discontinued the general availability path for LWS
+      Trusted Mode, reverting it to beta-only status after briefly releasing it
+      in Winter '26. Organizations relying on Trusted Mode for third-party
+      script compatibility lose that capability.
+    detail: LWS Trusted Mode allowed relaxed security constraints for third-party
+      scripts in LWC components. Salesforce pulled GA enablement due to security
+      concerns, restricting it to a controlled beta requiring direct Salesforce
+      engagement.
+    upgradeAction: If your org enabled LWS Trusted Mode or planned to use it for
+      third-party library compatibility, contact Salesforce to discuss beta
+      access or refactor components to work within standard LWS constraints.
+    source:
+      document: v66-spring26.pdf
+      page: 570
+      heading: LWS Trusted Mode Enablement Is Discontinued
+    confidence: high
+    id: v66-lwc-004
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version (when LWS is enabled)
+    summary: Lightning Web Security adds new distortions affecting Promise.try and
+      several WebAssembly APIs, which may alter how these browser APIs behave
+      inside LWC components.
+    detail: "Newly distorted: Promise.try, plus three WebAssembly APIs —
+      instantiate, instantiateStreaming, and the Instance.prototype.exports
+      getter. Components touching WebAssembly or Promise.try may behave
+      differently under LWS; matching ESLint rules ship alongside."
+    upgradeAction: Review any LWC code using WebAssembly instantiation or
+      Promise.try; test in an LWS-enabled environment and consult the LWS
+      Distortion Viewer for specific behavioral modifications.
+    source:
+      document: v66-spring26.pdf
+      page: 570
+      heading: API Distortion Changes in Lightning Web Security
+    confidence: high
+    id: v66-lwc-005
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: A new metadata type LightningTypeBundle lets developers define
+      object-based custom Lightning types using JSON Schema directly in
+      metadata, without requiring an Apex class backing.
+    detail: Properties are declared in the bundle's schema.json (no Apex class via
+      the lightning:type keyword). Offers an alternative to Apex-backed
+      Lightning types usable from Experience Builder, Prompt Builder, and
+      similar tools.
+    source:
+      document: v66-spring26.pdf
+      page: 574
+      heading: Define Object-Based Custom Lightning Types with JSON Schemas
+    confidence: medium
+    id: v66-packaging-002
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce now auto-escapes the label attribute of <apex:inputField>
+      tags to block XSS attacks. If you manually escaped labels already, they
+      will be double-escaped and render incorrectly.
+    upgradeAction: Search Visualforce pages for <apex:inputField> elements where you
+      manually escaped the label attribute; remove redundant escaping before
+      enforcement to avoid garbled output.
+    source:
+      document: v66-spring26.pdf
+      page: 578
+      heading: Escape the Label Attribute of <apex:inputField> Elements to Prevent
+        Cross-Site Scripting in Visualforce Pages (Release Update)
+    confidence: high
+    id: v66-vf-002
+    introducedIn: "56.0"
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: components compiled at API >= 66.0
+    summary: Apex cursors for SOQL results are now GA, introducing standard cursors
+      (for queueable-based large dataset processing as an alternative to batch
+      Apex) and pagination cursors (for UI pagination). Both support
+      bidirectional traversal and come with new Limits methods and AuraEnabled
+      serialization support.
+    source:
+      document: v66-spring26.pdf
+      page: 581
+      heading: Use Apex Cursors for Expanded SOQL Query Result Support (Generally
+        Available)
+    confidence: high
+    id: v66-apex-005
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new ConnectApi method lets Apex retrieve all picklist values filtered
+      by record type in a single call, eliminating the need for HTTP callouts to
+      the UI API.
+    detail: The ConnectApi.RecordUi.getPicklistValuesByRecordType method accepts an
+      object API name and record type ID, returning a PicklistValuesCollection
+      that includes dependent picklist hierarchies. This is particularly useful
+      for cascading picklists where you previously had to make REST calls to
+      /ui-api/object-info.
+    source:
+      document: v66-spring26.pdf
+      page: 582
+      heading: Extract Picklist Values Based on Record Type
+    confidence: high
+    id: v66-apex-006
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version (Release Update
+      enforced Summer '26)
+    summary: The Apex Blob.toPdf() method switches to the Visualforce PDF rendering
+      engine, which uses serif as the default font instead of sans-serif and
+      supports additional fonts including multibyte characters.
+    detail: Because the rendering engine changes, PDFs generated without explicit
+      font styling may exhibit different line lengths, line breaks, and page
+      breaks compared to output from the legacy service.
+    upgradeAction: Before Summer '26 enforcement, enable the release update in a
+      sandbox and visually compare Blob.toPdf() output against production
+      baselines; add explicit CSS font-family declarations to any PDF strings
+      that rely on the previous sans-serif default.
+    source:
+      document: v66-spring26.pdf
+      page: 583
+      heading: Use Visualforce PDF Rendering Service with Apex Blob.toPdf() (Release
+        Update)
+    confidence: high
+    id: v66-apex-007
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Flow
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version (release update enforcement)
+    summary: A release update modifies how sharing recalculation operates,
+      potentially affecting Apex code and Flows that depend on prior sharing
+      behavior timing or outcomes.
+    detail: Salesforce provides a release update to help identify and remediate Apex
+      and Flow logic affected by the new sharing recalculation behavior. Review
+      the release update in Setup to understand enforcement timelines.
+    upgradeAction: Run the 'Update Apex Code and Flows for Changed Sharing
+      Recalculation Behavior' release update in Setup to identify affected code,
+      then test sharing-dependent logic before enforcement.
+    source:
+      document: v66-spring26.pdf
+      page: 584
+      heading: Review Apex Code for Changed Sharing Recalculation Behavior
+    confidence: medium
+    id: v66-sharing-004
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: Apex classes compiled at API >= 66.0
+    summary: System.purgeOldAsyncJobs() gains a new overload accepting a maximum
+      record count, letting you delete completed async jobs incrementally rather
+      than all at once.
+    source:
+      document: v66-spring26.pdf
+      page: 584
+      heading: Specify the Number of Async Jobs to Delete
+    confidence: high
+    id: v66-apex-008
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: soql-sosl
+    appliesWhen: Apex classes compiled at API >= 66.0
+    summary: SOQL queries using WITH USER_MODE now execute successfully when running
+      as the Automated Process User, whereas in earlier API versions these
+      queries would fail unless explicitly switched to system mode.
+    upgradeAction: Review any workarounds or error handling you implemented for
+      USER_MODE queries failing under Automated Process User context; these may
+      no longer be necessary after upgrading to v66.
+    source:
+      document: v66-spring26.pdf
+      page: 585
+      heading: Run SOQL Queries in User Mode as the Automated Process User
+    confidence: high
+    id: v66-soql-001
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Named Query API reaches GA, allowing developers to expose predefined
+      SOQL queries as REST endpoints that external clients can invoke without
+      writing Apex or Flows.
+    detail: This feature provides a declarative way to define reusable SOQL queries
+      and surface them through the REST API, offering a lighter-weight
+      alternative to custom Apex REST resources for read-only data retrieval
+      scenarios.
+    source:
+      document: v66-spring26.pdf
+      page: 587
+      heading: Expose Custom SOQL in REST API Calls Using Named Query API (General
+        Availability)
+    confidence: high
+    id: v66-rest-010
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; enforced on rolling
+      basis after Winter '27 deployment
+    summary: Salesforce will block API requests using hard-coded instanced URLs that
+      don't match the org's actual instance; all API traffic must use the org's
+      My Domain login URL instead.
+    detail: The platform is retiring support for routing API calls via incorrect
+      instance hostnames. After enforcement, any integration still referencing
+      old or wrong instanced URLs will fail. A known issue causes SOAP logins
+      through Visualforce to error until mid-June 2026.
+    upgradeAction: Audit all external integrations and scripts for hard-coded
+      instanced URLs (e.g., na1.salesforce.com) and replace them with your org's
+      My Domain URL. Test after June 18 2026 by enabling 'Block API traffic that
+      uses an incorrect instanced URL' in Setup.
+    source:
+      document: v66-spring26.pdf
+      page: 587
+      heading: Update Instanced URLs in API Traffic (Release Update)
+    confidence: high
+    id: v66-rest-011
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Position and Tip fields on EventBusSubscriber are deprecated in
+      favor of LastProcessed and LastPublished, which use string types to
+      accommodate replay IDs that exceed integer limits.
+    detail: Platform event subscribers querying EventBusSubscriber for checkpoint
+      positions must migrate to the new string-typed fields before Position and
+      Tip are removed, otherwise large replay IDs will overflow.
+    upgradeAction: Replace any SOQL or API calls referencing
+      EventBusSubscriber.Position or EventBusSubscriber.Tip with LastProcessed
+      and LastPublished respectively; update any integer parsing logic to handle
+      string replay IDs.
+    source:
+      document: v66-spring26.pdf
+      page: 588
+      heading: EventBusSubscriber Object's Position and Tip Fields Are Being Deprecated
+    confidence: high
+    id: v66-rest-012
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version, enforced February 23, 2026
+    summary: Outbound messages will no longer transmit session IDs. The
+      IncludeSessionId API flag becomes non-functional and the sessionID payload
+      element will be empty.
+    upgradeAction: Migrate any integrations consuming session IDs from outbound
+      messages to OAuth-based authentication before the February 2026
+      enforcement date.
+    source:
+      document: v66-spring26.pdf
+      page: 588
+      heading: Sending Session IDs in Outbound Messages Is Being Removed
+    confidence: high
+    id: v66-auth-010
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce now enforces per-zip and 24-hour rate limits on deploying
+      and retrieving AIAuthoringBundle, AnalyticsDashboard, AnalyticsWorkspace,
+      and AnalyticsVisualization metadata types, which may cause previously
+      successful CI/CD pipelines to fail.
+    upgradeAction: Audit deployment scripts and CI pipelines that handle these four
+      metadata types; split large packages into smaller batches and add
+      retry/backoff logic to stay within the new daily quotas.
+    source:
+      document: v66-spring26.pdf
+      page: 589
+      heading: Metadata Deployments and Retrievals Have New Limits
+    confidence: medium
+    id: v66-packaging-003
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; enforced in Summer '27
+    summary: The SOAP API login() method will stop working for API versions
+      31.0–64.0 starting Summer '27. Integrations using this authentication
+      method must migrate to external client apps (OAuth flows) before the
+      cutoff.
+    detail: Any application that authenticates via the SOAP API login() call on
+      versions 31.0 through 64.0 will begin receiving errors once the retirement
+      takes effect. This does not affect login() on API version 65.0 and later,
+      nor does it affect OAuth-based authentication.
+    upgradeAction: Audit integrations for SOAP login() usage on affected versions.
+      Migrate authentication to external client apps (OAuth 2.0 flows). Use the
+      test-run toggle in Release Updates to validate before enforcement.
+    source:
+      document: v66-spring26.pdf
+      page: 589
+      heading: SOAP API login() Call in SOAP API Versions 31.0 Through 64.0 Is Being
+        Retired (Release Update)
+    confidence: high
+    id: v66-auth-011
+    introducedIn: "65.0"
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: REST API calls at API version >= 66.0 (unless the 'Enforcing
+      No-Argument Constructor' release update is already enabled)
+    summary: REST API invocable action calls now verify that custom Apex input
+      classes have an accessible no-argument constructor; calls fail if the
+      constructor is private or otherwise inaccessible.
+    upgradeAction: Before upgrading integrations to API 66.0, audit Apex classes
+      used as invocable action parameters and ensure their no-arg constructors
+      are public or global.
+    source:
+      document: v66-spring26.pdf
+      page: 590
+      heading: Calls to Invocable Actions Are Validated for Constructor Visibility
+        Requirements in API Version 66.0 and Later
+    confidence: high
+    id: v66-rest-013
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Agentforce DX introduces AiAuthoringBundle as a new metadata type for
+      representing agents built with Agent Script, deployable via Salesforce CLI
+      commands.
+    detail: The new AiAuthoringBundle metadata type enables source-driven
+      development of hybrid reasoning agents. CLI commands (agent
+      generate/validate/publish/preview authoring-bundle) allow programmatic
+      lifecycle management, making agents deployable through standard DevOps
+      pipelines.
+    source:
+      document: v66-spring26.pdf
+      page: 603
+      heading: Build Enterprise-Ready Agents with Agentforce DX and Agent Script
+        (Generally Available)
+    confidence: medium
+    id: v66-packaging-004
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: A new RunRelevantTests option for sf project deploy/validate/delete
+      commands lets Salesforce automatically select which Apex tests to execute
+      based on dependency analysis of the deployment payload, potentially
+      reducing deployment times.
+    source:
+      document: v66-spring26.pdf
+      page: 607
+      heading: Improve Deploy Performance by Running Only Relevant Apex Tests
+    confidence: high
+    id: v66-apex-009
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: A new lightning/accApi module is available for LWC developers to
+      programmatically control Agentforce Conversation Client panels, offering
+      open(), close(), and execute() methods to integrate conversational AI into
+      custom components.
+    source:
+      document: v66-spring26.pdf
+      page: 614
+      heading: Embed Agentforce Employee Agent Experiences Across Salesforce and
+        External Web Apps
+    confidence: medium
+    id: v66-lwc-006
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version; effective at end of
+      existing subscription term
+    summary: Salesforce Functions is being discontinued. Organizations currently
+      using Functions must migrate to an alternative compute solution before
+      their subscription expires or lose that capability entirely.
+    upgradeAction: Inventory all deployed Salesforce Functions, plan migration to
+      Heroku, AWS Lambda, or another compute platform, and complete migration
+      before your current order term ends.
+    source:
+      document: v66-spring26.pdf
+      page: 617
+      heading: Salesforce Functions Is Being Retired
+    confidence: high
+    id: v66-other-008
+    introducedIn: "61.0"
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; enforcement deadline
+      May 11, 2026
+    summary: AppExchange partner connected apps and external client apps used by
+      more than two production orgs must now enable PKCE and refresh token
+      rotation. Non-compliant apps risk delisting or suspension.
+    detail: Salesforce is mandating Proof Key for Code Exchange and refresh token
+      rotation for partner OAuth integrations to mitigate authorization code
+      interception and token theft attacks. This affects the OAuth flow
+      implementation in client code, not just connected app metadata settings.
+    upgradeAction: Before May 2026, update connected app definitions to enable PKCE
+      and RTR, then modify client-side OAuth code to generate code
+      verifiers/challenges and handle rotating refresh tokens.
+    source:
+      document: v66-spring26.pdf
+      page: 619
+      heading: Secure Your Connected App and External Client App Solutions
+    confidence: high
+    id: v66-auth-012
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; enforcement deadline
+      May 11, 2026
+    summary: Partner-distributed Connected Apps and External Client Apps used in
+      more than two production orgs must enable refresh token IP allowlisting
+      and enforce a 30-day idle refresh token expiration, then self-attest to
+      lock these settings permanently.
+    detail: "Salesforce mandates two OAuth hardening controls for partner apps: (1)
+      restrict refresh token usage to pre-defined IP ranges via an allowlist,
+      and (2) cap idle refresh token lifetime at 30 days. After enabling both
+      and self-attesting, the controls become immutable. Apps failing to comply
+      by the deadline risk token exchange failures for end-user orgs."
+    upgradeAction: Audit all partner-distributed CAs/ECAs for refresh token
+      handling. Configure IP allowlists covering all legitimate client
+      locations, enable the 30-day idle TTL policy, update any long-lived
+      offline integrations to re-authenticate before tokens expire, then
+      complete the self-attestation before May 2026.
+    source:
+      document: v66-spring26.pdf
+      page: 620
+      heading: Review and Comply with Connected App and ECA Security Requirements
+    confidence: high
+    id: v66-auth-013
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The lightning:combobox component now properly integrates with form
+      validation, allowing browsers to focus it automatically when invalid
+      values are submitted.
+    detail: Previously, combobox might not receive focus during form validation
+      failures. Now it participates correctly in the standard HTML validation
+      flow, which could surface validation errors that were silently ignored
+      before.
+    upgradeAction: Test forms containing lightning:combobox to ensure validation
+      behavior matches expectations, especially if you relied on the component
+      being skipped during validation.
+    source:
+      document: v66-spring26.pdf
+      page: 629
+      heading: Changed Aura Components
+    confidence: medium
+    id: v66-aura-003
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: Two new Apex classes (PaginationCursor and CursorFetchResult) allow
+      developers to paginate through large SOQL result sets programmatically,
+      including tracking deleted records and fetching pages on demand.
+    source:
+      document: v66-spring26.pdf
+      page: 633
+      heading: New Classes
+    confidence: high
+    id: v66-soql-002
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: components compiled at API >= 66.0
+    summary: The Salesforce Maps GetDistanceMatrix() method now returns only four
+      traffic window indexes instead of eight, consolidating start and end times
+      into fewer windows.
+    detail: Code that parses the traffic_windows property expecting eight indexes
+      will break or miss data. The change reduces payload size but alters the
+      response structure.
+    upgradeAction: Update any code parsing GetDistanceMatrix responses to handle
+      four traffic window indexes instead of eight; verify traffic_windows
+      property access logic still works correctly.
+    source:
+      document: v66-spring26.pdf
+      page: 634
+      heading: New or Changed Methods in Existing Classes
+    confidence: high
+    id: v66-rest-014
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version; migration rollout for
+      orgs created before Summer '24
+    summary: ConnectApi method calls are moving from per-user/namespace/hour rate
+      limits to the org-wide 24-hour Salesforce Platform API limit. Only
+      Chatter-dependent methods retain the old per-user throttling.
+    detail: Orgs created Summer '24 or later already use the new limit model.
+      Existing orgs are being migrated. This can affect high-volume integrations
+      that previously stayed under per-user limits by distributing calls across
+      users.
+    upgradeAction: Review ConnectApi usage patterns in integrations that relied on
+      per-user rate distribution; consolidate monitoring to track org-wide API
+      consumption instead.
+    source:
+      document: v66-spring26.pdf
+      page: 636
+      heading: "ConnectApi (Connect in Apex): New and Changed Classes and Enums"
+    confidence: high
+    id: v66-apex-010
+    introducedIn: "61.0"
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: ISVs can now query whether subscriber orgs have blocked push upgrades
+      via new fields on PackageSubscriber, and subscribers can block upgrades
+      using the new PushUpgradeCustomization object.
+    source:
+      document: v66-spring26.pdf
+      page: 85
+      heading: Development
+    confidence: medium
+    id: v66-packaging-005
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API requests at version >= 66.0
+    summary: The ApexLimitEvent object, deprecated since v46.0, is now fully removed
+      and unavailable when querying EventLogFile at API version 66.0 or higher.
+    upgradeAction: Before upgrading integrations past API 66.0, remove any code that
+      queries or processes ApexLimitEvent records from EventLogFile; migrate to
+      alternative monitoring approaches if you relied on this event type.
+    source:
+      document: v66-spring26.pdf
+      page: 643
+      heading: Event Monitoring
+    confidence: low
+    id: v66-rest-015
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Reading the RedirectWhitelistUrl object now requires the Customize
+      Application permission, whereas previously that permission was only needed
+      for editing. Integrations or tools that query this object without the
+      permission will start failing.
+    upgradeAction: Review any integrations or admin tools that read
+      RedirectWhitelistUrl and ensure the integration user has the Customize
+      Application permission, or expect read access to be denied.
+    source:
+      document: v66-spring26.pdf
+      page: 646
+      heading: Security and Identity
+    confidence: high
+    id: v66-rest-016
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; orgs created before
+      Summer '24 will be migrated to the new limit model
+    summary: Connect REST API rate limiting is shifting from
+      per-user/per-app/per-hour quotas to the standard Salesforce Platform API
+      per-org/per-24-hour model. Only Chatter-dependent requests will continue
+      using the legacy per-user rate limit.
+    detail: Orgs created in Summer '24 or later already use the platform-wide limit.
+      Existing orgs will be migrated, which may affect applications that
+      previously operated within user-level quotas but could now compete for a
+      shared org-wide pool.
+    upgradeAction: Review Connect REST API call volumes across all integrations in
+      your org. Applications that relied on isolated per-user limits may now
+      contend with other integrations for the shared org quota; implement
+      backoff/retry logic and monitor for 429 responses.
+    source:
+      document: v66-spring26.pdf
+      page: 648
+      heading: Connect REST API
+    confidence: medium
+    id: v66-rest-017
+    introducedIn: "61.0"
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; migrations rolling
+      without notification
+    summary: Connect REST API calls are transitioning from per-user/per-app/per-hour
+      rate limits to the org-wide 24-hour Salesforce Platform API limit. Only
+      Chatter-dependent requests retain the old per-user throttling model.
+    detail: Orgs created Summer '24 onward already use the platform limit. Existing
+      orgs are being migrated silently on a rolling basis. This shifts capacity
+      planning from user-level to org-level aggregation.
+    upgradeAction: Review integrations making heavy Connect REST calls; model total
+      org-wide daily API consumption rather than per-user hourly bursts, and
+      ensure Chatter-dependent calls are accounted for separately.
+    source:
+      document: v66-spring26.pdf
+      page: 648
+      heading: Connect REST API Rate Limit Changes
+    confidence: high
+    id: v66-rest-018
+    introducedIn: "61.0"
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Commerce Subscription Renew Connect REST endpoint now accepts
+      multiple subscription IDs in a single request, enabling bulk renewal
+      operations. This capability requires contacting Salesforce Support to
+      activate bulk renewal permissions.
+    upgradeAction: If you integrate with the Commerce subscription renewal API,
+      verify your code handles the expanded subscriptionIds parameter correctly
+      and confirm whether you need bulk renewal permissions enabled.
+    source:
+      document: v66-spring26.pdf
+      page: 70
+      heading: Commerce
+    confidence: medium
+    id: v66-rest-019
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Managed Content Document Connect REST response no longer includes
+      the 'version' property; integrations must now use 'contentVersion' and
+      'variantVersion' instead.
+    upgradeAction: Update any code parsing the Managed Content Document response to
+      stop expecting 'version' and switch to 'contentVersion' and
+      'variantVersion' fields.
+    source:
+      document: v66-spring26.pdf
+      page: 656
+      heading: Salesforce CMS
+    confidence: high
+    id: v66-rest-020
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The enableDevOpsCenter field has been deleted from DevHubSettings
+      metadata. Deployments or scripts referencing this field will fail.
+    upgradeAction: Replace any references to enableDevOpsCenter with
+      enableDevOpsCenterGA in your metadata files, deployment scripts, and
+      automation tooling.
+    source:
+      document: v66-spring26.pdf
+      page: 85
+      heading: Development
+    confidence: high
+    id: v66-packaging-006
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Reading RedirectWhitelistUrl metadata now requires the Customize
+      Application permission, not just editing it. Integrations or tooling that
+      retrieve this metadata type without that permission will start failing.
+    upgradeAction: Verify that any integration users or connected apps retrieving
+      RedirectWhitelistUrl metadata have the Customize Application permission
+      assigned.
+    source:
+      document: v66-spring26.pdf
+      page: 664
+      heading: Security and Identity
+    confidence: high
+    id: v66-rest-021
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: The enableConsumerSecretApiAccess field on ExternalClientAppSettings is
+      deprecated; OAuth consumer secrets for external client apps can no longer
+      be retrieved via Metadata API and must be obtained through the UI instead.
+    upgradeAction: Update any CI/CD or automation that programmatically retrieves
+      OAuth consumer secrets to use manual UI retrieval or secure secret storage
+      instead.
+    source:
+      document: v66-spring26.pdf
+      page: 664
+      heading: Security and Identity
+    confidence: high
+    id: v66-auth-014
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: "GraphQL mutations are now GA with a modified response structure:
+      RecordUpdatePayload returns a Record field containing requested fields
+      instead of the previous beta's success boolean."
+    detail: The RecordUpdatePayload type has been restructured for general
+      availability. Code that relied on the beta's success field must be updated
+      to handle the new Record field pattern. Additionally, mutations can now be
+      invoked from LWC via the executeMutation method in lightning/graphql.
+    upgradeAction: Update any GraphQL mutation consumers that checked the success
+      field to instead read from the Record field in responses. Review LWC
+      components for opportunities to use the new executeMutation wire adapter
+      method.
+    source:
+      document: v66-spring26.pdf
+      page: 669
+      heading: GraphQL API
+    confidence: high
+    id: v66-rest-022
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Custom property type bundles for LWC in Experience Builder now use
+      LightningTypeBundle instead of ExperiencePropertyTypeBundle, with a new
+      file structure placing editor.json in an experienceBuilder folder. Beta
+      participants must migrate to the new bundle type.
+    detail: The GA release introduces LightningTypeBundle as the metadata type for
+      custom property types, replacing the beta ExperiencePropertyTypeBundle.
+      The new bundle supports updates whereas the previous one did not. Editor
+      configuration files must now reside within an experienceBuilder
+      subdirectory.
+    upgradeAction: If you created custom property types during beta using
+      ExperiencePropertyTypeBundle, replace them with LightningTypeBundle and
+      redeploy affected components before upgrading.
+    source:
+      document: v66-spring26.pdf
+      page: 683
+      heading: Create Custom Property Types and Editors for Lightning Web Components
+        in Aura and LWR Sites (Generally Available)
+    confidence: medium
+    id: v66-lwc-007
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: LWR sites now render system timestamps (like record creation dates)
+      using the viewing user's locale and time zone rather than the org's
+      default time zone, which may cause displayed dates to shift for users in
+      different time zones.
+    upgradeAction: Review any LWR site code or tests that assume org-default time
+      zone formatting for system date fields; verify displays and assertions
+      still work correctly across user locales.
+    source:
+      document: v66-spring26.pdf
+      page: 685
+      heading: LWR Sites Use the User's Date and Time by Default
+    confidence: high
+    id: v66-lwc-008
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+      - AuraDefinitionBundle
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: Automatic redirects from legacy force.com site URLs cease entirely in
+      this release. Any integration, external link, or internal reference still
+      pointing to the old URL format will fail rather than redirect.
+    upgradeAction: Audit all hardcoded force.com URLs in integrations, knowledge
+      articles, external links, and marketing assets; replace them with the
+      current site domain before this release goes live.
+    source:
+      document: v66-spring26.pdf
+      page: 688
+      heading: Finish Updating Your Legacy Force.com Site URLs
+    confidence: high
+    id: v66-other-009
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version; effective Summer '26
+    summary: Billing and Usage Assistant will no longer function in Communications
+      orgs starting Summer '26. Organizations relying on this feature must
+      migrate to alternative solutions before the deprecation takes effect.
+    upgradeAction: Identify any integrations or automations depending on Billing and
+      Usage Assistant and plan migration to replacement functionality before
+      Summer '26.
+    source:
+      document: v66-spring26.pdf
+      page: 753
+      heading: Communications
+    confidence: medium
+    id: v66-other-010
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: TMF Forum APIs can now be extended via Apex lifecycle hooks and GraphQL
+      queries. Industry APIs are also directly callable through Connect REST or
+      Apex REST endpoints without requiring MuleSoft gateway routing.
+    source:
+      document: v66-spring26.pdf
+      page: 753
+      heading: Communications
+    confidence: high
+    id: v66-rest-023
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: deprecation
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; MuleSoft gateway
+      deprecation takes effect Winter '27
+    summary: Communications TMF APIs gain Apex lifecycle hooks and GraphQL query
+      extensibility, plus direct invocation via Connect/Apex REST endpoints. The
+      MuleSoft gateway routing option is deprecated and will be removed in
+      Winter '27.
+    detail: Organizations using TMF APIs through the MuleSoft gateway must migrate
+      to the new direct-access pattern before Winter '27. The new approach
+      allows customization through Apex hooks while preserving TMF compliance.
+    upgradeAction: Audit any integrations routing TMF API calls through MuleSoft
+      gateway and plan migration to direct Connect/Apex REST invocation before
+      Winter '27 enforcement.
+    source:
+      document: v66-spring26.pdf
+      page: 766
+      heading: Communications TM Forum API
+    confidence: high
+    id: v66-rest-024
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API requests to Trade Promotion Management endpoints at v66.0 and later
+    summary: Delete Promotion and Delete Tactic APIs now reject ID values that
+      contain non-numeric characters, and date fields in request payloads are
+      validated more strictly, returning HTTP 400 for malformed dates.
+    upgradeAction: Audit integrations calling TPM delete endpoints to ensure IDs are
+      purely numeric strings, and verify all date values conform to expected
+      formats before upgrading to v66.
+    source:
+      document: v66-spring26.pdf
+      page: 781
+      heading: Changed APIs in Trade Promotion Management
+    confidence: high
+    id: v66-rest-025
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Integration User licenses now have default CRUD and View All
+      permissions on Financial Account Management objects, allowing direct API
+      data movement without separate Financial Services licenses.
+    source:
+      document: v66-spring26.pdf
+      page: 797
+      heading: Financial Services
+    confidence: medium
+    id: v66-rest-026
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API requests using version 66.0 and later
+    summary: The sameCarrier property on the Insurance Policy Renew Input request
+      body is deprecated starting in API v66.0; integrations should migrate away
+      from this field.
+    upgradeAction: Audit code that sets sameCarrier on insurance policy renewal
+      requests and plan migration to the replacement approach before the
+      property is removed.
+    source:
+      document: v66-spring26.pdf
+      page: 851
+      heading: Insurance Brokerage
+    confidence: high
+    id: v66-rest-027
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: Connect API calls using API version 66.0 and later
+    summary: The sameCarrier property on InsurancePolicyBulkRenewInputRepresentation
+      and InsurancePolicyRenewInputRepresentation Connect API input classes is
+      deprecated starting with v66.0.
+    upgradeAction: Review Apex code or integrations that set the sameCarrier
+      property on insurance policy renewal inputs and migrate to the replacement
+      approach before this property is removed in a future release.
+    source:
+      document: v66-spring26.pdf
+      page: 855
+      heading: Insurance Brokerage
+    confidence: high
+    id: v66-rest-028
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Flow
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Invocable Apex actions and autolaunched flows can now be exposed as
+      tools on custom MCP servers through API Catalog, allowing AI agents to
+      invoke your custom business logic via the Model Context Protocol.
+    source:
+      document: v66-spring26.pdf
+      page: 1015
+      heading: Map Your Custom Flows and Apex Actions to MCP Server Tools
+    confidence: medium
+    id: v66-rest-029
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexTrigger
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Approval entities in Advanced Approvals now support custom field
+      modifications via Apex triggers and custom actions, enabling automation
+      scenarios like auto-assigning priority or calculating values during
+      approval workflows.
+    source:
+      document: v66-spring26.pdf
+      page: 1068
+      heading: Tailor Your Approval Process with Custom Business Data
+    confidence: medium
+    id: v66-apex-011
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The User Interface API now supports modifying Task and Event records
+      from Lightning Web Components, expanding the set of standard objects
+      accessible via this API surface.
+    source:
+      document: v66-spring26.pdf
+      page: 1122
+      heading: April 2026
+    confidence: low
+    id: v66-rest-030
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; Microsoft retires EWS
+      October 2026
+    summary: Einstein Activity Capture integrations using Microsoft 365 must migrate
+      from Exchange Web Services authentication to Microsoft Graph before
+      October 2026, when Microsoft discontinues EWS entirely.
+    detail: Organizations with User-Level OAuth configurations will require users to
+      reauthenticate their Microsoft 365 accounts after migration. Azure admins
+      must grant Microsoft Graph consent before the upgrade tool can complete
+      the transition.
+    upgradeAction: Ensure Azure admin has granted Microsoft Graph consent, run the
+      provided upgrade tool, and have users with User-Level OAuth reconnect
+      their Microsoft 365 accounts after migration.
+    source:
+      document: v66-spring26.pdf
+      page: 1167
+      heading: Upgrade Microsoft 365 Authentication in Einstein Activity Capture to
+        Microsoft Graph
+    confidence: medium
+    id: v66-auth-016
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Six unified activity objects (UnifiedEmail, UnifiedEmailParticipant,
+      UnifiedMeeting, UnifiedMeetingParticipant, UnifiedTask,
+      UnifiedTaskParticipant) are scheduled for retirement alongside Activity
+      360 Reporting tools. Any SOQL queries, API integrations, or automation
+      referencing these objects will break.
+    detail: Einstein Activity Capture now stores email data as standard Task and
+      EmailMessage records instead of the Unified* objects. Integrations must
+      migrate to querying the standard objects.
+    upgradeAction: Search codebase for references to UnifiedEmail,
+      UnifiedEmailParticipant, UnifiedMeeting, UnifiedMeetingParticipant,
+      UnifiedTask, and UnifiedTaskParticipant in SOQL queries, Apex classes, and
+      API calls. Rewrite to use Task and EmailMessage objects after enabling
+      Sync Email as Salesforce Activity.
+    source:
+      document: v66-spring26.pdf
+      page: 1175
+      heading: Prepare for Activity 360 Reporting, Activity Metrics, and Activities
+        Analytics Dashboard Retirement
+    confidence: medium
+    id: v66-rest-031
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; EWS retirement date
+      is October 1, 2026
+    summary: Lightning Sync integrations using Exchange Web Services (EWS) with
+      OAuth 2.0 will stop syncing email and calendar data when Microsoft retires
+      EWS. Orgs must migrate to Microsoft Graph API or switch to Einstein
+      Activity Capture.
+    upgradeAction: Identify Lightning Sync configurations using EWS OAuth 2.0
+      connections to Office 365 or Exchange Service Accounts; plan migration to
+      Microsoft Graph API integration (currently beta) or Einstein Activity
+      Capture before October 2026.
+    source:
+      document: v66-spring26.pdf
+      page: 1176
+      heading: Prepare Lightning Sync for Microsoft Exchange Web Services (EWS)
+        Retirement
+    confidence: high
+    id: v66-auth-017
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: User Interface API now supports Task and Event objects, enabling LWC
+      developers to build activity components that automatically inherit org
+      layouts, security, and metadata without manual configuration.
+    source:
+      document: v66-spring26.pdf
+      page: 1183
+      heading: Update Tasks and Events in Lightning Web Components with the User
+        Interface API
+    confidence: high
+    id: v66-lwc-009
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: New connected app creation is now blocked by default in all orgs;
+      developers must contact Salesforce Support to enable it or migrate to
+      external client apps for new integrations.
+    detail: Existing connected apps and packaged connected apps deployed to new orgs
+      continue working. The admin preference that previously allowed connected
+      app creation has been removed from External Client App Settings.
+    upgradeAction: Audit pending integration projects that planned to create new
+      connected apps. Either request Support to re-enable creation or redesign
+      new integrations to use external client apps instead.
+    source:
+      document: v66-spring26.pdf
+      page: 1199
+      heading: Creation of New Connected Apps Is Disabled by Default
+    confidence: high
+    id: v66-auth-018
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Canvas apps can now be built using the external client app framework
+      instead of connected apps, with full metadata API support and 2GP
+      packaging compatibility. Canvas apps created this way must be installed in
+      an org before use.
+    detail: External client apps offer improved package installation performance and
+      can be deployed via SFDX projects. Existing connected-app-based Canvas
+      integrations remain functional.
+    source:
+      document: v66-spring26.pdf
+      page: 1200
+      heading: Configure Canvas Plugin for External Client App
+    confidence: medium
+    id: v66-auth-019
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; enforced Summer '26
+      for production instances
+    summary: Salesforce is retiring the legacy single-configuration SAML framework.
+      Orgs still using it must migrate to the multiple-configuration SAML
+      framework before Summer '26 enforcement, or their SAML SSO will stop
+      working entirely.
+    detail: "The migration changes several integration touchpoints: the Salesforce
+      login URL changes, SAML responses must include an audience attribute,
+      Salesforce generates a new self-signed certificate for signing requests,
+      and unparseable SAML responses no longer appear in login history."
+    upgradeAction: Migrate to the multiple-configuration SAML framework before
+      Summer '26. Coordinate with your identity provider to ensure SAML
+      responses include the audience attribute, update any hardcoded login URLs
+      in your integrations, and test thoroughly in a sandbox first.
+    source:
+      document: v66-spring26.pdf
+      page: 1205
+      heading: Migrate to a Multiple-Configuration SAML Framework (Release Update)
+    confidence: high
+    id: v66-auth-020
+    introducedIn: "60.0"
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; enforced Summer '26
+    summary: Salesforce is retiring its managed X (Twitter) OAuth app. Any SSO
+      authentication provider still configured with blank consumer key/secret
+      will stop working entirely at enforcement.
+    detail: Authentication providers created before Spring '24 that rely on
+      Salesforce's built-in X app credentials will break. You must register your
+      own X developer app and populate its consumer key and secret in the auth
+      provider configuration.
+    upgradeAction: Before Summer '26, identify any X authentication providers with
+      empty consumer key/secret fields, create a custom X app, and update those
+      providers with the new credentials. Test SSO login flows after the change.
+    source:
+      document: v66-spring26.pdf
+      page: 1206
+      heading: Salesforce-Managed X (Formerly Twitter) Authentication Provider
+        Retirement (Release Update)
+    confidence: high
+    id: v66-auth-021
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: LinkedIn Auth Providers created at or after Spring '26, except
+      those using the Salesforce-managed LinkedIn app
+    summary: Newly created LinkedIn authentication providers now call LinkedIn API
+      v2 instead of v1, which may return different user profile fields or
+      require updated scopes. Pre-existing providers and those using the
+      Salesforce-managed LinkedIn app remain on v1.
+    upgradeAction: When creating new LinkedIn auth providers in Spring '26+, verify
+      that your integration handles v2 response fields and scopes; test SSO
+      flows before go-live.
+    source:
+      document: v66-spring26.pdf
+      page: 1207
+      heading: New LinkedIn Authentication Providers Use LinkedIn API v2
+    confidence: high
+    id: v66-auth-022
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: retired
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version, starting Summer '26
+    summary: SAML SSO configurations using Triple DES encryption will cease to
+      function entirely in Summer '26. Any integration relying on Triple DES for
+      SAML assertion encryption—whether Salesforce acts as IdP or SP—must
+      migrate to AES-128 or AES-256 before the release.
+    upgradeAction: "Audit all SAML SSO configurations: for IdP setups check the
+      connected app's Block Encryption Algorithm setting; for SP setups
+      coordinate with your external IdP to switch algorithms and regenerate
+      decryption certificates. Test SSO flows after migrating to AES."
+    source:
+      document: v66-spring26.pdf
+      page: 1207
+      heading: Triple DES for SAML Single Sign-On Stops Working in Summer '26
+    confidence: high
+    id: v66-auth-023
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version (scratch orgs only)
+    summary: External client apps can now be created directly in scratch orgs
+      without first packaging them on a Dev Hub org, simplifying the OAuth
+      client development workflow for CI/CD pipelines.
+    source:
+      document: v66-spring26.pdf
+      page: 1208
+      heading: Create an External Client App in a Scratch Org
+    confidence: high
+    id: v66-auth-024
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide when admin enables 'Enforce Refresh Token IP Allowlist' setting
+    summary: When the new IP allowlist enforcement is enabled, OAuth refresh token
+      exchanges from IP addresses outside the configured ranges will be
+      rejected, causing existing integrations to fail if they call from unlisted
+      IPs.
+    upgradeAction: Before enabling this setting, audit all external integrations and
+      connected apps to ensure their outbound IPs are added to the allowlist;
+      otherwise refresh token flows will break.
+    source:
+      document: v66-spring26.pdf
+      page: 1213
+      heading: Allow OAuth Refresh Tokens Only in Certain IP Ranges
+    confidence: high
+    id: v66-auth-025
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Refresh tokens for external client apps and connected apps now expire
+      after 30 days of inactivity, even if the configured policy was 'valid
+      until revoked' or set to a longer period. Each token use resets the 30-day
+      window.
+    detail: The 'Refresh token is valid until revoked' policy is effectively
+      eliminated—those apps silently shift to 30-day idle expiry. Apps
+      configured with longer validity periods (e.g., 1 year) will still honor
+      that maximum lifespan, but idle tokens die at 30 days regardless. Metadata
+      is not auto-updated, creating a mismatch between stored settings and
+      actual behavior.
+    upgradeAction: Audit all connected apps and external client apps relying on
+      long-lived or never-expiring refresh tokens. Update OAuth flows to handle
+      token refresh more frequently, ensure background integrations perform
+      token refresh within 30-day windows, and reconcile app metadata to reflect
+      the new idle TTL behavior.
+    source:
+      document: v66-spring26.pdf
+      page: 1214
+      heading: Limit the Idle Refresh Token TTL (Time-to-Live) to 30 Days
+    confidence: high
+    id: v66-auth-026
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version; enforcement begins
+      June 2026 starting with report exports
+    summary: Salesforce will require users to complete step-up authentication
+      (identity verification) before performing sensitive actions like report
+      exports, even for SSO users who must register a Salesforce-native
+      verification method.
+    detail: Starting June 2026, certain sensitive operations trigger an additional
+      identity check. Users without a registered Salesforce MFA method, verified
+      phone, or verified email will be blocked from these actions. SSO
+      credentials alone are insufficient—users must have a Salesforce-side
+      verification method configured.
+    upgradeAction: Audit user populations to ensure all users have at least one
+      Salesforce verification method registered (MFA, phone, or email). Update
+      integrations or automated processes that export reports to account for
+      potential user-facing verification prompts, and communicate the new
+      requirement to end users before June 2026.
+    source:
+      document: v66-spring26.pdf
+      page: 1217
+      heading: Prepare for Step-Up Authentication with an In-App Prompt
+    confidence: high
+    id: v66-auth-027
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: Apex classes compiled at API >= 66.0
+    summary: New Apex methods allow programmatic updates and deletions of named
+      credentials, external credentials, and external auth identity providers.
+      Updating endpoint URLs via Apex disables the credential for callouts until
+      an admin re-enables it.
+    detail: "Six new methods are available: updateNamedCredential,
+      deleteNamedCredential, updateExternalCredential, deleteExternalCredential,
+      updateExternalAuthIdentityProvider, and
+      deleteExternalAuthIdentityProvider. When any URL field is modified
+      programmatically, the Enabled for Callouts flag is automatically turned
+      off as a security measure."
+    source:
+      document: v66-spring26.pdf
+      page: 1218
+      heading: Extend Your Custom Apps with the Ability to Update and Delete Named
+        Credentials from Apex
+    confidence: high
+    id: v66-apex-012
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: managed packages at API >= 66.0; enforcement rolling out org-wide
+      starting February 2026
+    summary: Named credentials bundled in managed packages become immutable by
+      default—subscribers can no longer modify them post-install, and any
+      programmatic endpoint change via Apex or Metadata API automatically
+      disables callouts until an admin re-enables them.
+    detail: ISVs must explicitly opt in to allow subscriber editing of specific
+      credentials. If package code or automation alters the endpoint URL at
+      runtime, Salesforce blocks callouts on that credential until a customer
+      admin reviews and manually restores callout capability.
+    upgradeAction: Review managed packages that expose named credentials to
+      subscribers or update credential endpoints programmatically; add explicit
+      subscriber-edit flags where needed and build admin notification flows for
+      any dynamic endpoint changes.
+    source:
+      document: v66-spring26.pdf
+      page: 1219
+      heading: Enhanced Security for Named Credentials in Managed Packages
+    confidence: high
+    id: v66-auth-028
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Two new REST API endpoints allow programmatic retrieval of Data Detect
+      policy configurations and triggering of scans, enabling automation of
+      sensitive data discovery workflows.
+    source:
+      document: v66-spring26.pdf
+      page: 1228
+      heading: Access and Run Data Detect Scans and Results with REST APIs
+    confidence: medium
+    id: v66-rest-032
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: deprecated
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version; retirement date
+      February 28, 2028
+    summary: Open CTI enters maintenance mode and will be fully retired on February
+      28, 2028. It is already unavailable for new Agentforce Service orgs.
+    detail: Salesforce has deprecated Open CTI effective immediately. Organizations
+      using Open CTI for telephony integrations must migrate to Service Cloud
+      Voice (now Salesforce Voice) before the retirement date to maintain
+      telephony functionality.
+    upgradeAction: Inventory all Open CTI implementations and plan migration to
+      Salesforce Voice with Telephony Providers before February 2028. Test
+      replacement integrations in sandbox environments.
+    source:
+      document: v66-spring26.pdf
+      page: 1245
+      heading: Salesforce Voice with Telephony Providers
+    confidence: high
+    id: v66-other-011
+  - apiVersion: "66.0"
+    release: Spring '26
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Event-driven settings fields in ConversationChannelDefinition and
+      CustomMsgChannel metadata objects are removed in API 66.0; integrations
+      must migrate to the replacement fields introduced in API 65.0.
+    detail: The old fields were deprecated in Winter '26 (v65.0) with new fields
+      provided as replacements. In Spring '26 (v66.0) the deprecated fields no
+      longer exist, so any Bring Your Own Channel integration still referencing
+      them will fail.
+    upgradeAction: Before upgrading to API 66.0, update all references to the
+      deprecated ConversationChannelDefinition and CustomMsgChannel fields to
+      use the Winter '26 replacement fields, then verify the integration
+      functions correctly.
+    source:
+      document: v66-spring26.pdf
+      page: 1269
+      heading: Bring Your Own Channel
+    confidence: high
+    id: v66-rest-033

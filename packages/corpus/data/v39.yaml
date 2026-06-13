@@ -1,0 +1,1109 @@
+apiVersion: "39.0"
+release: Spring '17
+reviewed: true
+entries:
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Chained Queueable Apex jobs can now perform HTTP callouts, removing a
+      previous platform restriction that blocked external web service calls from
+      enqueued jobs spawned by other Queueable executions.
+    source:
+      document: v39-spring17.pdf
+      page: 9
+      heading: You Asked for It!
+    confidence: high
+    id: v39-apex-001
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce changed the order of URL parameters in Visualforce URLs,
+      which can break Visualforce page overrides that rely on specific parameter
+      ordering.
+    upgradeAction: Review Visualforce overrides that parse or depend on URL
+      parameter order and update them to handle parameters in any order.
+    source:
+      document: v39-spring17.pdf
+      page: 12
+      heading: Release Notes Changes
+    confidence: high
+    id: v39-vf-001
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide in sandboxes and Developer Edition orgs when LockerService
+      critical update is active (temporary for Spring '17, fully enforced Summer
+      '17)
+    summary: Activating the LockerService critical update disables the
+      ui:inputRichText and forceChatter:feed components in Lightning Experience,
+      Salesforce1, and standalone apps. Developers must migrate to the
+      LockerService-compliant lightning:inputRichText component.
+    detail: This is a temporary limitation in sandboxes and DE orgs during Spring
+      '17 testing. Production orgs are unaffected until Summer '17 enforcement.
+      Lightning Out and Visualforce-hosted Lightning components are also
+      unaffected.
+    upgradeAction: Replace any usage of ui:inputRichText with
+      lightning:inputRichText before Summer '17 when LockerService becomes
+      mandatory for all orgs.
+    source:
+      document: v39-spring17.pdf
+      page: 73
+      heading: Rich-Text Editors Disabled When LockerService Critical Update Is Active
+    confidence: high
+    id: v39-lwc-001
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning App Builder now supports Apex-backed dynamic picklists for
+      component configuration. You can create an Apex class that supplies
+      picklist values for component properties exposed in the App Builder.
+    source:
+      document: v39-spring17.pdf
+      page: 87
+      heading: Lightning App Builder
+    confidence: medium
+    id: v39-apex-002
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Developer Console now allows creating Apex exception classes (names
+      ending in 'Exception') that extend System.Exception, removing a previous
+      restriction that blocked such class names.
+    source:
+      document: v39-spring17.pdf
+      page: 90
+      heading: Development
+    confidence: high
+    id: v39-apex-003
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide after enabling Lightning Knowledge (irreversible)
+    summary: Enabling Lightning Knowledge permanently removes the 'ArticleType'
+      field from SOQL queries and API access, breaking any custom Apex or
+      integrations that reference this field.
+    upgradeAction: Before enabling Lightning Knowledge, search your codebase for
+      SOQL queries or API calls referencing the ArticleType field and refactor
+      them to use Knowledge record types instead.
+    source:
+      document: v39-spring17.pdf
+      page: 93
+      heading: "Customer Service Features: Lightning Experience Considerations"
+    confidence: high
+    id: v39-soql-001
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Chatter REST API gains new endpoints for managing Social Customer
+      Service configuration, account authorization, and social post ingestion.
+      Two methods (readTermsOfService, acceptTermsOfService) are also callable
+      from Apex.
+    source:
+      document: v39-spring17.pdf
+      page: 206
+      heading: Social Customer Service API Support
+    confidence: medium
+    id: v39-rest-001
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Wave dashboards can now be embedded in external websites and apps by
+      configuring a CSP whitelist in Setup, enabling Lightning Out or
+      Visualforce embedding to render outside Salesforce-hosted domains.
+    source:
+      document: v39-spring17.pdf
+      page: 248
+      heading: Embed Wave in Any Web Page or Web-Based App
+    confidence: medium
+    id: v39-vf-003
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The new ltng:allowGuestAccess interface lets Lightning apps run for
+      unauthenticated community visitors, but critically bypasses
+      object/field-level security configured for the guest user
+      profile—developers must manually enforce CRUD and FLS in Apex controllers.
+    detail: Adding this interface exposes the app across all communities in the org
+      without granular control. Because the framework does not automatically
+      respect CRUD/FLS, any data access in the app's Apex controllers is wide
+      open unless explicitly secured.
+    upgradeAction: Audit all Apex controllers used by guest-accessible apps and add
+      explicit CRUD/FLS checks; review which communities expose the app URL.
+    source:
+      document: v39-spring17.pdf
+      page: 316
+      heading: Access Lightning Apps in Public Communities
+    confidence: high
+    id: v39-aura-002
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The Sfc namespace with ContentDownloadHandlerFactory,
+      ContentDownloadHandler, and ContentDownloadContext is now GA, enabling
+      Apex callbacks to intercept and control file downloads for IRM, antivirus
+      scanning, or profile-based blocking.
+    detail: This feature was piloted in Summer '16 and reaches GA in Spring '17 with
+      expanded support for multi-file downloads, content packs, and content
+      distributions via a new List<ID> signature.
+    source:
+      document: v39-spring17.pdf
+      page: 341
+      heading: Use Apex to Customize File Downloads
+    confidence: high
+    id: v39-apex-004
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version (when users upgrade to
+      Salesforce1 for iOS 12.0+)
+    summary: Salesforce1 for iOS switches from UIWebView to WKWebView, which may
+      break custom Visualforce pages that contained workarounds for UIWebView
+      quirks such as scrolling or tap handling issues.
+    upgradeAction: Review and test custom Visualforce pages embedded in Salesforce1
+      for iOS to identify and remove any UIWebView-specific workarounds that may
+      malfunction under WKWebView.
+    source:
+      document: v39-spring17.pdf
+      page: 355
+      heading: New and Improved Web View Available in Salesforce1 for iOS
+    confidence: medium
+    id: v39-vf-004
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning component properties can now be backed by Apex-driven
+      picklists via a new VisualEditor.DynamicPickList abstract class, enabling
+      runtime-populated design-time attribute choices.
+    source:
+      document: v39-spring17.pdf
+      page: 379
+      heading: Build Dynamic Picklists for Lightning Page Components with Apex
+    confidence: high
+    id: v39-apex-005
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Picklist value labels and API names are now independent; changing a
+      label no longer alters the API name used by Apex, integrations, and data
+      operations.
+    detail: Previously, modifying a picklist label would also change its API name,
+      potentially breaking Apex code, validation rules, formulas, and
+      integrations referencing the old API name. Now API names remain stable
+      unless explicitly edited. Admins can lock API name editing via Picklist
+      Settings.
+    upgradeAction: Review any code or integrations that assumed label changes would
+      propagate to API names. Confirm existing API name references remain valid
+      after label edits.
+    source:
+      document: v39-spring17.pdf
+      page: 402
+      heading: Value Labels Are No Longer Tied to API Names
+    confidence: high
+    id: v39-packaging-001
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Standard and global value sets can now be queried and managed via the
+      Tooling API through the new StandardValueSet object, providing
+      programmatic access to standard picklist field values.
+    source:
+      document: v39-spring17.pdf
+      page: 402
+      heading: Access Picklists with the Tooling API
+    confidence: medium
+    id: v39-rest-002
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: The OAuth 2.0 Asset Token flow becomes GA, enabling JWT-based
+      authentication for IoT devices. A new Asset Token Event object replaces
+      the pilot's Asset Token object for event data storage.
+    detail: This flow lets connected devices obtain signed JWTs that identify them
+      to backend services and link device data to Salesforce CRM records.
+      Implementations using the pilot Asset Token object must migrate to the new
+      Asset Token Event object introduced in API version 39.0.
+    source:
+      document: v39-spring17.pdf
+      page: 413
+      heading: OAuth 2.0 Asset Token Flow for Securing Connected Devices (Generally
+        Available)
+    confidence: medium
+    id: v39-auth-001
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Custom authentication providers now require the AuthProviderPluginClass
+      abstract class instead of the AuthProviderPlugin interface for new
+      implementations or to access new capabilities like custom error handling
+      and refresh token support via named credentials.
+    detail: The original AuthProviderPlugin interface continues to work, but new
+      features (custom exception handling with redirects, refresh tokens through
+      named credentials) are only available through the replacement
+      AuthProviderPluginClass abstract class.
+    upgradeAction: If extending custom auth provider functionality, migrate from
+      AuthProviderPlugin interface to AuthProviderPluginClass abstract class.
+      Existing implementations remain functional but cannot leverage new
+      error-handling or refresh-token features.
+    source:
+      document: v39-spring17.pdf
+      page: 418
+      heading: Customize Your Custom Authentication Provider
+    confidence: high
+    id: v39-auth-002
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: deprecated
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version; UI Tracking stops
+      receiving data in Summer '17 and is fully removed in Winter '18
+    summary: "The UI Tracking event type in Event Monitoring is being phased out: it
+      coexists with new Lightning Experience event types in Spring '17, stops
+      populating in Summer '17, and disappears entirely in Winter '18."
+    detail: Integrations pulling event log files via the REST API must migrate to
+      the replacement Lightning Experience event types before Summer '17 to
+      avoid data gaps.
+    upgradeAction: Update any custom integrations or database pipelines that query
+      the UI Tracking event type to use the new Lightning Experience event types
+      before Summer '17.
+    source:
+      document: v39-spring17.pdf
+      page: 425
+      heading: Prepare Your Org for UI Tracking Event Type Retirement
+    confidence: high
+    id: v39-rest-003
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning components now fail to load entirely when referencing events
+      they lack permission to access, whereas previously only client-side checks
+      ran and produced partially working components.
+    detail: Server-side access validation has been added for event references.
+      Components that previously functioned partially despite access violations
+      will now fail completely at load time. Debug mode surfaces a popup error
+      for server-side failures.
+    upgradeAction: Review all component event references to ensure the access system
+      attribute grants appropriate visibility. Test component loading in debug
+      mode to catch any newly-surfaced access failures before deploying.
+    source:
+      document: v39-spring17.pdf
+      page: 431
+      heading: Server-Side Access Checks for Events
+    confidence: high
+    id: v39-aura-003
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version (auto-activated Summer '17)
+    summary: LockerService enforces namespace isolation and restricts Lightning
+      components to supported APIs only, blocking access to internal framework
+      methods and DOM outside the component's namespace.
+    detail: This critical update was optional in Spring '17 but becomes mandatory in
+      Summer '17. It affects Lightning Experience, Salesforce1, template-based
+      Communities, and standalone apps. Lightning Out enforces LockerService
+      except for CSP restrictions. Components relying on undocumented framework
+      internals or cross-namespace DOM access will break.
+    upgradeAction: Before Summer '17, activate LockerService in sandbox and test all
+      custom Lightning components for failures caused by blocked DOM access or
+      calls to non-public framework APIs.
+    source:
+      document: v39-spring17.pdf
+      page: 432
+      heading: New Lightning LockerService Informational Setup Page
+    confidence: high
+    id: v39-lwc-002
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+      - LWC
+    behaviorArea: lwc
+    appliesWhen: org-wide when LockerService critical update is activated (enforced
+      for all orgs in Summer '17)
+    summary: LockerService now blocks unsafe-inline and unsafe-eval in CSP for
+      script-src, meaning any Lightning component code using eval() or inline
+      JavaScript execution will fail.
+    detail: Third-party libraries relying on these patterns must be updated to
+      compliant versions. During Spring '17, this enforcement applies only in
+      sandboxes and Developer Edition orgs, but becomes mandatory for all orgs
+      in Summer '17.
+    upgradeAction: Audit Lightning components and third-party libraries for eval()
+      calls and inline script execution; replace with CSP-compliant alternatives
+      before Summer '17 enforcement.
+    source:
+      document: v39-spring17.pdf
+      page: 433
+      heading: LockerService Has Stricter Content Security Policy
+    confidence: high
+    id: v39-lwc-003
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning components can now make XHR calls and load resources from
+      external servers by registering them as CSP Trusted Sites, which adds the
+      URL to multiple CSP header directives (connect-src, frame-src, img-src,
+      etc.).
+    detail: JavaScript files cannot be loaded directly from third-party sites even
+      when trusted; they must be uploaded as static resources. This mechanism is
+      separate from Remote Sites, which govern Visualforce and Apex callouts.
+    source:
+      document: v39-spring17.pdf
+      page: 434
+      heading: Create CSP Trusted Sites to Access Third-Party APIs
+    confidence: high
+    id: v39-lwc-004
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: new
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+      - VisualforcePage
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version (requires Communities enabled)
+    summary: The ltng:allowGuestAccess interface enables Lightning Out apps to be
+      served to unauthenticated users, but bypasses object-level and field-level
+      security checks configured on the guest user profile—developers must
+      manually enforce CRUD and FLS in Apex controllers or risk exposing org
+      data publicly.
+    detail: When a Lightning app implements this interface, it becomes accessible
+      through every community endpoint in the org with no way to restrict by
+      community. The framework does not automatically enforce CRUD/FLS for guest
+      access contexts, so any Apex controller returning records must explicitly
+      check permissions.
+    upgradeAction: Audit all Apex controllers used by guest-accessible Lightning
+      apps for explicit CRUD and FLS enforcement before deploying; treat any
+      component reachable via ltng:allowGuestAccess as public-facing.
+    source:
+      document: v39-spring17.pdf
+      page: 437
+      heading: Share Lightning Apps with Non-Authenticated Users
+    confidence: high
+    id: v39-sharing-001
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: The instanceof operator now works correctly in Lightning component
+      JavaScript when LockerService is enabled, removing a previous framework
+      limitation that made type checking unreliable.
+    source:
+      document: v39-spring17.pdf
+      page: 442
+      heading: Removed LockerService Restriction on instanceof in JavaScript
+    confidence: high
+    id: v39-lwc-005
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The useAppcache attribute on <aura:application> tags is deprecated
+      following browser vendors' deprecation of the AppCache API. Standalone
+      Aura apps using this attribute may encounter cross-browser issues.
+    upgradeAction: Remove the useAppcache attribute from any <aura:application> tags
+      in your .app resources to prevent browser compatibility problems.
+    source:
+      document: v39-spring17.pdf
+      page: 442
+      heading: Deprecated useAppcache Attribute in <aura:application>
+    confidence: high
+    id: v39-aura-004
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Aura components gain a Component.getName() method that returns the
+      component's name, usable in controllers, helpers, and renderers.
+    source:
+      document: v39-spring17.pdf
+      page: 445
+      heading: New JavaScript API Methods
+    confidence: high
+    id: v39-aura-005
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: The new <apex:slds> tag lets Visualforce pages include Lightning Design
+      System stylesheets directly without uploading SLDS as a static resource,
+      simplifying markup and avoiding static resource quota consumption.
+    source:
+      document: v39-spring17.pdf
+      page: 446
+      heading: Use the Lightning Design System in Visualforce Pages
+    confidence: high
+    id: v39-vf-005
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: A new $Asset global variable lets Visualforce pages reference Lightning
+      Design System images and sprites directly when using the apex:slds
+      component, replacing the need for $Resource references for SLDS assets.
+    source:
+      document: v39-spring17.pdf
+      page: 446
+      heading: Reference Lightning Design System Assets with the $Asset Global Variable
+    confidence: high
+    id: v39-vf-006
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version (auto-activated June 11, 2017)
+    summary: Enabling CSRF protection on GET requests for Visualforce pages breaks
+      direct URL navigation and plain HTML anchor links; pages must be linked
+      via URLFOR(), $Page global, apex:outputLink, or PageReference returns from
+      Apex controllers.
+    detail: Once the critical update activates and you opt a page into GET-request
+      CSRF checks, any navigation that does not carry a CSRF token fails. Apex
+      controller methods returning bare URL strings for redirects also break;
+      they must return PageReference objects so the framework appends the token
+      automatically.
+    upgradeAction: Before the enforcement date, audit Visualforce pages with
+      'Require CSRF Protection on GET requests' enabled. Replace plain <a
+      href="/apex/…"> links with apex:outputLink or $Page references, and
+      convert Apex redirect methods from String returns to PageReference
+      returns.
+    source:
+      document: v39-spring17.pdf
+      page: 447
+      heading: Allow CSRF Protection on GET Requests to Visualforce Pages (Critical
+        Update)
+    confidence: high
+    id: v39-vf-007
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+      - ApexClass
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce reordered URL parameters in Visualforce page URLs, causing
+      action overrides to fail if the retURL parameter value is not properly
+      encoded.
+    detail: When Visualforce pages override standard actions (create, save, edit,
+      delete), the platform now places URL parameters like retURL and record ID
+      in a different order. Code that constructs these URLs without encoding the
+      retURL value will trigger validation errors.
+    upgradeAction: Audit Visualforce pages and Apex controllers that build URLs with
+      retURL parameters. Wrap retURL values with URLENCODE() in Visualforce
+      markup or EncodingUtil.urlEncode() in Apex.
+    source:
+      document: v39-spring17.pdf
+      page: 448
+      heading: New Order of Visualforce URL Parameters Affects Overrides
+    confidence: high
+    id: v39-vf-008
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: The Stub API for building mocking frameworks in Apex tests is now GA,
+      allowing runtime generation of stub objects via System.StubProvider and
+      System.Test.createStub(). The GA version removes the pilot's zero-arg
+      constructor requirement and adds exception mocking support.
+    source:
+      document: v39-spring17.pdf
+      page: 450
+      heading: Apex Stub API Is Now Generally Available
+    confidence: high
+    id: v39-apex-006
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: Test classes with multiple @testSetup methods now fail to compile.
+      Earlier versions allowed this due to a bug that has been corrected.
+    upgradeAction: Audit test classes for multiple @testSetup methods and
+      consolidate them into a single method before upgrading.
+    source:
+      document: v39-spring17.pdf
+      page: 451
+      heading: Only One Test Setup Method per Class is Allowed
+    confidence: high
+    id: v39-apex-007
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: components compiled at API >= 39.0
+    summary: The instanceOf operator now correctly evaluates to true when checking
+      if a class extending a type from a managed package is an instance of that
+      base type. Previously this returned false incorrectly.
+    upgradeAction: Review any code that uses instanceOf checks against managed
+      package types, especially where subclassing is involved. Logic that worked
+      around the previous bug may now behave differently.
+    source:
+      document: v39-spring17.pdf
+      page: 451
+      heading: Goodbye to instanceOf Keyword Bugs
+    confidence: medium
+    id: v39-apex-008
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Chained queueable jobs can now perform HTTP callouts without throwing
+      exceptions, removing a previous platform restriction that blocked callouts
+      after the first job in a chain.
+    source:
+      document: v39-spring17.pdf
+      page: 451
+      heading: Make Web Service Callouts from Chained Queueable Jobs
+    confidence: high
+    id: v39-apex-009
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: "New Auth namespace classes enable custom authentication providers to
+      programmatically refresh OAuth tokens: AuthProviderPluginClass provides a
+      refresh() method, and OAuthRefreshResult stores the resulting access
+      token, refresh token, or error."
+    source:
+      document: v39-spring17.pdf
+      page: 451
+      heading: New Apex Classes
+    confidence: high
+    id: v39-auth-003
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: The Auth.AuthProviderPlugin interface is deprecated in favor of a new
+      abstract class replacement for custom authentication provider
+      implementations.
+    upgradeAction: Migrate any custom auth provider implementations from
+      Auth.AuthProviderPlugin interface to the replacement abstract class before
+      the interface is removed in a future release.
+    source:
+      document: v39-spring17.pdf
+      page: 453
+      heading: Changed Apex Interface
+    confidence: high
+    id: v39-auth-004
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The originalItemId property on ConnectApi.FeedItemInput is removed;
+      code using it must migrate to capabilities.feedEntityShare.feedEntityId
+      instead.
+    upgradeAction: Search for usages of ConnectApi.FeedItemInput.originalItemId and
+      replace them with the feedEntityShare capability pattern before upgrading.
+    source:
+      document: v39-spring17.pdf
+      page: 459
+      heading: New and Changed Chatter in Apex Input Classes
+    confidence: high
+    id: v39-rest-004
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API calls at version >= 39.0
+    summary: "Error reporting location for Event object changes: when
+      DurationInMinutes is null, validation errors now surface on EndDateTime
+      instead of DurationInMinutes."
+    detail: In API versions 38.0 and earlier, errors related to duration/end time
+      always appeared on DurationInMinutes. Starting in 39.0, if
+      DurationInMinutes has no value, errors appear on EndDateTime instead.
+    upgradeAction: Update error-handling code that checks for validation errors on
+      Event records to look for errors on EndDateTime when DurationInMinutes is
+      not provided.
+    source:
+      document: v39-spring17.pdf
+      page: 473
+      heading: Changed Objects
+    confidence: low
+    id: v39-rest-005
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: EmailTemplate.EntityType field is deprecated in favor of
+      RelatedEntityType; existing integrations should migrate to the new field.
+    upgradeAction: Replace references to EmailTemplate.EntityType with
+      RelatedEntityType in API queries and metadata operations.
+    source:
+      document: v39-spring17.pdf
+      page: 473
+      heading: Changed Objects
+    confidence: high
+    id: v39-rest-006
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The FlexiPage REST API resource was deprecated in v39.0 and
+      simultaneously removed from all prior API versions, breaking any
+      integrations that called this endpoint regardless of which API version
+      they targeted.
+    upgradeAction: Identify any code calling the /vXX.X/flexiPage REST endpoint and
+      migrate to the Tooling API or Metadata API for FlexiPage retrieval.
+    source:
+      document: v39-spring17.pdf
+      page: 477
+      heading: Make Several Requests at Once with the Composite Resource (Generally
+        Available)
+    confidence: high
+    id: v39-rest-007
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Composite REST resource becomes generally available, allowing up to
+      25 subrequests (10 max queries) in a single call with the ability to
+      reference earlier subrequest results in later ones.
+    source:
+      document: v39-spring17.pdf
+      page: 477
+      heading: Make Several Requests at Once with the Composite Resource (Generally
+        Available)
+    confidence: high
+    id: v39-rest-008
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Search Suggested Records REST endpoint now accepts object-specific
+      where clauses that override a global where clause, enabling more granular
+      filtering per sObject type in a single request.
+    source:
+      document: v39-spring17.pdf
+      page: 479
+      heading: "Changed Resource: Search Suggested Records"
+    confidence: high
+    id: v39-rest-009
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The FlexiPage REST API resource was deprecated at v39.0 and
+      retroactively removed from all earlier API versions, breaking any
+      integration that relied on it regardless of which API version the caller
+      requests.
+    upgradeAction: Identify any code calling the FlexiPage REST resource and migrate
+      to an alternative approach such as the Tooling API or Metadata API for
+      FlexiPage retrieval.
+    source:
+      document: v39-spring17.pdf
+      page: 479
+      heading: "Removed Resource: FlexiPage"
+    confidence: high
+    id: v39-rest-010
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The originalFeedItemId property on FeedItemInput is removed;
+      integrations must now use capabilities.feedEntityShare.feedEntityId to
+      share feed entities.
+    upgradeAction: Search integration code for uses of originalFeedItemId in Chatter
+      REST API calls and migrate to the
+      capabilities.feedEntityShare.feedEntityId property.
+    source:
+      document: v39-spring17.pdf
+      page: 484
+      heading: New and Changed Chatter REST API Request Bodies
+    confidence: high
+    id: v39-rest-011
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-bulk
+    appliesWhen: org-wide regardless of component API version
+    summary: Bulk API gains queryAll operation support, enabling retrieval of
+      soft-deleted and archived records (merged/deleted records, archived Tasks
+      and Events), plus SOQL relationship query support.
+    source:
+      document: v39-spring17.pdf
+      page: 496
+      heading: Bulk API Now Supports More Complex Queries
+    confidence: high
+    id: v39-bulk-001
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The transform methods in Databinding.ObjectMapper are now deprecated
+      and scheduled for removal in a future release.
+    upgradeAction: Identify any Apex code using Databinding.ObjectMapper transform
+      methods and migrate to alternative serialization approaches before the
+      methods are removed.
+    source:
+      document: v39-spring17.pdf
+      page: 498
+      heading: Easily Subscribe to Streaming API in Java with EMP Connector
+    confidence: medium
+    id: v39-rest-012
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: api-rest
+    appliesWhen: Tooling API requests at API >= 39.0
+    summary: The SobjectType field on FlexiPage is deprecated starting in v39.0; use
+      EntityDefinitionId instead to identify which object a Lightning Page is
+      associated with.
+    upgradeAction: Update integrations and scripts that read or write
+      FlexiPage.SobjectType to use EntityDefinitionId before the field is
+      eventually removed.
+    source:
+      document: v39-spring17.pdf
+      page: 500
+      heading: Tooling API New and Changed Objects
+    confidence: high
+    id: v39-rest-013
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: deprecated
+    impact: deprecation
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: components compiled at API >= 39.0
+    summary: The FlexiPage.pageTemplate field is deprecated starting in API version
+      39.0; use the template field instead when working with Lightning Page
+      metadata.
+    upgradeAction: Update any metadata deployments or tooling that references
+      FlexiPage.pageTemplate to use the template field instead.
+    source:
+      document: v39-spring17.pdf
+      page: 501
+      heading: Metadata API
+    confidence: high
+    id: v39-packaging-002
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: The Open CTI onNavigationChange method exhibits different behavior when
+      invoked within Lightning console apps compared to standard Lightning apps.
+    detail: Implementations relying on onNavigationChange in console contexts may
+      need adjustment due to the behavioral difference.
+    upgradeAction: Review Open CTI integrations that use onNavigationChange and test
+      behavior specifically in Lightning console apps to ensure navigation event
+      handling works as expected.
+    source:
+      document: v39-spring17.pdf
+      page: 507
+      heading: Open CTI API
+    confidence: medium
+    id: v39-other-001
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Custom metadata type relationship fields can now reference field
+      definitions in addition to entity definitions, with the entity definition
+      relationship acting as a controlling field. The Metadata API gains a new
+      MetadataRelationshipControllingField element to support this.
+    source:
+      document: v39-spring17.pdf
+      page: 510
+      heading: Metadata Relationships Now Support Field Definition Relationships
+    confidence: high
+    id: v39-packaging-003
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: SOQL queries on custom metadata types that include long text area
+      fields now count against Apex governor limits, whereas previously they may
+      have been exempt from certain limit calculations.
+    upgradeAction: Review any code querying custom metadata with long text area
+      fields and verify heap and query row limits are not exceeded, especially
+      in batch or trigger contexts.
+    source:
+      document: v39-spring17.pdf
+      page: 512
+      heading: queryMore() Supported in Custom Metadata Types
+    confidence: medium
+    id: v39-apex-010
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: Trace flags on the same entity can no longer have overlapping active
+      time windows, even when one window is fully nested inside another.
+      Previously nested windows were permitted.
+    upgradeAction: Review any automated scripts or tooling that programmatically
+      creates trace flags to ensure they do not attempt to set overlapping
+      windows on the same traced entity.
+    source:
+      document: v39-spring17.pdf
+      page: 513
+      heading: Debug Your Managed Packages in Subscriber Orgs
+    confidence: high
+    id: v39-apex-011
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Push upgrades that add or modify RemoteSiteSetting records now deploy
+      them as inactive, requiring subscriber admins to manually activate.
+      Previously these were auto-activated, so packages relying on immediate
+      remote site availability after push upgrade will break.
+    upgradeAction: Update documentation and post-install instructions to inform
+      subscriber admins they must manually activate new or changed remote sites
+      after receiving a push upgrade.
+    source:
+      document: v39-spring17.pdf
+      page: 515
+      heading: Package Push Upgrades Deactivate New or Modified Remote Sites by Default
+    confidence: high
+    id: v39-packaging-004
+  - apiVersion: "39.0"
+    introducedIn: "38.0"
+    release: Spring '17
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: ISVs can now programmatically cancel pending package push requests by
+      PATCHing the PackagePushRequest sObject status to Canceled via REST API,
+      rather than relying solely on the UI.
+    source:
+      document: v39-spring17.pdf
+      page: 516
+      heading: Abort a Package Push Request Using an API
+    confidence: high
+    id: v39-rest-014
+  - apiVersion: "39.0"
+    release: Spring '17
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version (auto-activates after
+      opt-in period ends)
+    summary: Enabling CSRF protection for GET requests on Visualforce pages can
+      invalidate existing links and bookmarks that lack valid CSRF tokens.
+    upgradeAction: Audit all external links, bookmarks, and integrations that access
+      Visualforce pages via GET requests; update them to use valid session
+      tokens or exempt specific pages before auto-activation.
+    source:
+      document: v39-spring17.pdf
+      page: 518
+      heading: Critical Updates
+    confidence: high
+    id: v39-vf-009

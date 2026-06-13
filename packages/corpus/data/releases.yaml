@@ -1,0 +1,52 @@
+# Version <-> release mapping. Generated from the formula:
+#   Summer 'YY -> API version 31 + 3*(YY - 14); Winter is named for the FOLLOWING calendar year.
+# Anchors: v31 = Summer '14, v67 = Summer '26 (current).
+#
+# NOTE: the spec's §3.1 table mis-listed v58 as "Winter '24"; the formula gives
+# v58 = Summer '23 and v59 = Winter '24, matching the spec's own footnote.
+# verified 2026-06-11 against the PDFs' own title pages (pipeline/work/v{NN}/pages/0001.json):
+#   v58 title page reads "Salesforce, Summer '23"; v59 reads "Salesforce, Winter '24".
+#   Cross-check: v58 sections reference "API version 58.0", v59 sections "API version 59".
+# v29/v30 added 2026-06-11: already-retired versions kept in the corpus because real
+# codebases still carry components pinned to them (scanner tier: retired).
+verified: true
+releases:
+  - { apiVersion: "29.0", release: "Winter '14" }
+  - { apiVersion: "30.0", release: "Spring '14" }
+  - { apiVersion: "31.0", release: "Summer '14" }
+  - { apiVersion: "32.0", release: "Winter '15" }
+  - { apiVersion: "33.0", release: "Spring '15" }
+  - { apiVersion: "34.0", release: "Summer '15" }
+  - { apiVersion: "35.0", release: "Winter '16" }
+  - { apiVersion: "36.0", release: "Spring '16" }
+  - { apiVersion: "37.0", release: "Summer '16" }
+  - { apiVersion: "38.0", release: "Winter '17" }
+  - { apiVersion: "39.0", release: "Spring '17" }
+  - { apiVersion: "40.0", release: "Summer '17" }
+  - { apiVersion: "41.0", release: "Winter '18" }
+  - { apiVersion: "42.0", release: "Spring '18" }
+  - { apiVersion: "43.0", release: "Summer '18" }
+  - { apiVersion: "44.0", release: "Winter '19" }
+  - { apiVersion: "45.0", release: "Spring '19" }
+  - { apiVersion: "46.0", release: "Summer '19" }
+  - { apiVersion: "47.0", release: "Winter '20" }
+  - { apiVersion: "48.0", release: "Spring '20" }
+  - { apiVersion: "49.0", release: "Summer '20" }
+  - { apiVersion: "50.0", release: "Winter '21" }
+  - { apiVersion: "51.0", release: "Spring '21" }
+  - { apiVersion: "52.0", release: "Summer '21" }
+  - { apiVersion: "53.0", release: "Winter '22" }
+  - { apiVersion: "54.0", release: "Spring '22" }
+  - { apiVersion: "55.0", release: "Summer '22" }
+  - { apiVersion: "56.0", release: "Winter '23" }
+  - { apiVersion: "57.0", release: "Spring '23" }
+  - { apiVersion: "58.0", release: "Summer '23" }
+  - { apiVersion: "59.0", release: "Winter '24" }
+  - { apiVersion: "60.0", release: "Spring '24" }
+  - { apiVersion: "61.0", release: "Summer '24" }
+  - { apiVersion: "62.0", release: "Winter '25" }
+  - { apiVersion: "63.0", release: "Spring '25" }
+  - { apiVersion: "64.0", release: "Summer '25" }
+  - { apiVersion: "65.0", release: "Winter '26" }
+  - { apiVersion: "66.0", release: "Spring '26" }
+  - { apiVersion: "67.0", release: "Summer '26" }

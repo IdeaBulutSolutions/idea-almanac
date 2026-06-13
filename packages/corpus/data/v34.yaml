@@ -1,0 +1,1280 @@
+apiVersion: "34.0"
+release: Summer '15
+reviewed: true
+entries:
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: sharing-security
+    appliesWhen: Apex classes compiled at API >= 34.0 using the 'with sharing' keyword
+    summary: Apex classes declared with 'with sharing' now have more restricted data
+      access than in prior versions, affecting which records the running user
+      can view or modify.
+    upgradeAction: Review Apex classes using 'with sharing' to ensure they still
+      function correctly under the tighter access rules; test with users who
+      have limited sharing access.
+    source:
+      document: v34-summer15.pdf
+      page: 11
+      heading: Release Notes Changes
+    confidence: medium
+    id: v34-sharing-001
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version; enforcement date
+      August 15, 2015
+    summary: The Data Residency Option (DRO) feature is being discontinued, and
+      support for both new and existing DRO installations ends after the
+      retirement date.
+    upgradeAction: Migrate any workflows or integrations dependent on DRO before
+      August 15, 2015; evaluate alternative data residency strategies.
+    source:
+      document: v34-summer15.pdf
+      page: 11
+      heading: Release Notes Changes
+    confidence: high
+    id: v34-other-001
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Wave Analytics dashboards can now be embedded directly into Visualforce
+      pages, enabling developers to integrate analytics visualizations within
+      custom Salesforce UI.
+    source:
+      document: v34-summer15.pdf
+      page: 17
+      heading: Analytics
+    confidence: medium
+    id: v34-vf-001
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new Apex method is introduced for programmatically creating Community
+      user records, expanding the options for automating community user
+      provisioning.
+    source:
+      document: v34-summer15.pdf
+      page: 23
+      heading: Communities
+    confidence: medium
+    id: v34-apex-001
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning Connect gains an Apex Connector Framework, enabling
+      developers to write custom Apex adapters that fetch external data from any
+      source and expose it as external objects.
+    source:
+      document: v34-summer15.pdf
+      page: 34
+      heading: Lightning Connect
+    confidence: medium
+    id: v34-rest-001
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: retired
+    impact: retirement
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: other
+    appliesWhen: org-wide regardless of component API version
+    summary: The Data Residency Option (DRO) feature is being retired, which may
+      affect integrations or code that depended on DRO-specific data locality
+      guarantees.
+    upgradeAction: Review any integrations or compliance workflows that relied on
+      DRO functionality and migrate to alternative data residency solutions
+      before the retirement date.
+    source:
+      document: v34-summer15.pdf
+      page: 37
+      heading: Security and Identity
+    confidence: low
+    id: v34-other-002
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: Apex classes using 'with sharing' keyword in orgs after Summer '15
+    summary: Apex classes declared with the 'with sharing' keyword now have more
+      restricted access than before, enforcing sharing rules more strictly.
+    upgradeAction: Review Apex classes using 'with sharing' to ensure they still
+      have the necessary record access after the tightened enforcement.
+    source:
+      document: v34-summer15.pdf
+      page: 39
+      heading: Visualforce
+    confidence: low
+    id: v34-apex-002
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: PageReference getContent() and getContentAsPDF() methods are now
+      treated as callouts, meaning they count against callout limits and cannot
+      be invoked in contexts where callouts are prohibited.
+    upgradeAction: Audit code using getContent() or getContentAsPDF() to ensure it
+      runs in contexts allowing callouts and does not exceed callout limits.
+    source:
+      document: v34-summer15.pdf
+      page: 39
+      heading: Visualforce
+    confidence: high
+    id: v34-apex-003
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version (Critical Update enforcement)
+    summary: Static resources are now served from the dedicated Visualforce domain
+      rather than the main Salesforce domain, which may break code that assumes
+      same-origin access between VF pages and static resources.
+    upgradeAction: Review any JavaScript in static resources that relies on
+      same-origin access to Visualforce pages or Salesforce APIs; update CORS
+      configurations if needed.
+    source:
+      document: v34-summer15.pdf
+      page: 42
+      heading: Critical Updates
+    confidence: medium
+    id: v34-vf-002
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: A new showQuickActionVfHeader attribute on <apex:page> lets developers
+      suppress the default action header and Cancel/Save buttons when a
+      Visualforce page renders as a Salesforce1 custom action.
+    source:
+      document: v34-summer15.pdf
+      page: 95
+      heading: Hide the Action Header for Visualforce Custom Actions
+    confidence: high
+    id: v34-vf-003
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: A new Site.createExternalUser() method provides an alternative to
+      Site.createPortalUser() for programmatically provisioning community users,
+      offering better exception handling and clearer error messages.
+    source:
+      document: v34-summer15.pdf
+      page: 126
+      heading: New Apex Method for Creating Community Users
+    confidence: high
+    id: v34-apex-005
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Visualforce email templates in Communities can now reference the
+      $Network global merge field to access community-specific properties like
+      name and URL, enabling branded community emails.
+    source:
+      document: v34-summer15.pdf
+      page: 126
+      heading: Merge Fields in Visualforce Email Templates for Communities
+    confidence: medium
+    id: v34-vf-004
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: API requests at version >= 34.0
+    summary: ForecastingItem, ForecastingAdjustment, and ForecastingOwnerAdjustment
+      objects gain a ForecastingItemCategory field that distinguishes individual
+      forecast category rollups from cumulative rollups, with specific pairing
+      rules when inserting adjustments.
+    detail: When inserting manager or owner adjustments, ForecastCategoryName and
+      ForecastingItemCategory must form valid pairs. For cumulative rollups,
+      ForecastCategoryName must be null while ForecastingItemCategory uses
+      cumulative values like BestCaseForecast or CommitForecast.
+    source:
+      document: v34-summer15.pdf
+      page: 140
+      heading: API Changes for Cumulative Forecast Rollups
+    confidence: low
+    id: v34-soap-001
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: SOAP API gains new data types for duplicate management, complementing
+      the existing Apex classes and methods, allowing integrations to detect and
+      handle duplicates programmatically.
+    source:
+      document: v34-summer15.pdf
+      page: 146
+      heading: Implement Duplicate Management for Your Custom Applications
+    confidence: medium
+    id: v34-soap-002
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Case emails are now visible to external community users by default when
+      they have case access. Developers can control this visibility by writing
+      an Apex trigger on EmailMessage to set the IsExternallyVisible field to
+      false.
+    detail: The IsExternallyVisible field on EmailMessage defaults to true, exposing
+      case emails to external users. To preserve previous behavior where
+      external users could not see case emails, create a before-insert trigger
+      that sets this field to false.
+    upgradeAction: Review whether existing case email workflows should remain hidden
+      from external community users. If so, implement an Apex trigger on
+      EmailMessage to set IsExternallyVisible to false on insert.
+    source:
+      document: v34-summer15.pdf
+      page: 190
+      heading: External Users Now See Case Emails in the Feed
+    confidence: medium
+    id: v34-apex-006
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Social Persona objects created from Summer '15 onward include a new
+      field indicating the originating social network. Custom Apex code that
+      processes Social Personas may need updates to leverage this field, though
+      older personas lack it.
+    upgradeAction: Review any custom Apex that handles Social Persona records and
+      update it to account for the new social network source field, with
+      null-safety for pre-Summer '15 personas.
+    source:
+      document: v34-summer15.pdf
+      page: 195
+      heading: Other Changes for Social Customer Service
+    confidence: medium
+    id: v34-apex-007
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Organization Sync Log now supports Apex triggers, enabling automated
+      notifications or workflow actions when sync failures occur.
+    source:
+      document: v34-summer15.pdf
+      page: 197
+      heading: Organization Sync Enhancements
+    confidence: medium
+    id: v34-apex-008
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+      - ApexClass
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Reporting REST API gains capabilities to delete dashboards and to
+      save, clone, and delete reports. Corresponding Apex classes also expose
+      additional report properties for programmatic access.
+    source:
+      document: v34-summer15.pdf
+      page: 212
+      heading: Salesforce1 Reporting
+    confidence: medium
+    id: v34-rest-002
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Flow
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Change Sets now use the FlowDefinition metadata type instead of the
+      legacy Flow component for deploying flows, requiring updates to any
+      scripts or tooling that reference the old component name.
+    upgradeAction: Update any deployment scripts, CI pipelines, or package.xml files
+      that reference the Flow component to use FlowDefinition instead.
+    source:
+      document: v34-summer15.pdf
+      page: 214
+      heading: Change Sets
+    confidence: medium
+    id: v34-packaging-001
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-testing
+    appliesWhen: deployments using Metadata API client at version 34.0 or later
+    summary: Production deployments no longer execute tests by default unless the
+      package contains Apex classes or triggers. Previously (API 33.0 and
+      earlier), tests ran whenever components requiring tests were present, such
+      as custom objects.
+    detail: "The runAllTests deployment option is replaced by testLevel, which
+      offers granular control: RunAllTestsInOrg, RunLocalTests,
+      RunSpecifiedTests, or NoTestRun. When using RunSpecifiedTests, each
+      deployed Apex component must individually achieve 75% coverage from the
+      specified tests, regardless of org-wide coverage."
+    upgradeAction: Review CI/CD pipelines using Metadata API or Migration Tool at
+      v34+. If you relied on implicit test execution for non-Apex deployments,
+      explicitly set testLevel to ensure tests run. When using
+      RunSpecifiedTests, verify each class/trigger in the package meets 75%
+      coverage individually.
+    source:
+      document: v34-summer15.pdf
+      page: 215
+      heading: Choose Which Tests to Run in a Deployment
+    confidence: high
+    id: v34-apex-009
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: Sandbox deployments now support the testLevel parameter (including
+      RunLocalTests), allowing developers to exclude managed package tests
+      during deployment—matching production test behavior options.
+    detail: The previous runAllTests deployment option is replaced by testLevel.
+      When RunLocalTests is specified, only local org tests execute regardless
+      of package contents, whereas production default behavior only runs tests
+      when Apex is in the package.
+    source:
+      document: v34-summer15.pdf
+      page: 217
+      heading: Run Local Tests in a Sandbox Deployment
+    confidence: high
+    id: v34-apex-010
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: "The Ant-based Migration Tool gains three capabilities: deploying a
+      previously validated package without re-running tests, canceling in-flight
+      or queued deployments, and authenticating via session ID instead of
+      username/password."
+    source:
+      document: v34-summer15.pdf
+      page: 217
+      heading: Force.com Migration Tool Enhancements
+    confidence: medium
+    id: v34-packaging-002
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: HTML Area home page components now strip JavaScript, CSS, iframes, and
+      other advanced markup both on save and at runtime. Any existing
+      unsupported code is permanently lost when the component is edited.
+    detail: This enforcement was announced in Summer '14. Organizations relying on
+      scripts or custom styling in HTML Area components must migrate that
+      functionality to Visualforce Area components to preserve it.
+    upgradeAction: Audit HTML Area home page components for JavaScript, CSS, or
+      iframe usage before editing them. Migrate any advanced markup to
+      Visualforce Area components to avoid permanent data loss.
+    source:
+      document: v34-summer15.pdf
+      page: 221
+      heading: End of Support for JavaScript, iFrames, CSS, and Other Advanced Markup
+        in HTML Area Home Page Components
+    confidence: high
+    id: v34-vf-005
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: The Apex Connector Framework introduces DataSource.Connection and
+      DataSource.Provider base classes, enabling developers to build custom
+      Lightning Connect adapters that retrieve data from arbitrary external
+      systems and expose it as external objects.
+    source:
+      document: v34-summer15.pdf
+      page: 224
+      heading: Access Any Data Anywhere with the Lightning Connector Apex Framework
+    confidence: high
+    id: v34-apex-011
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Custom Lightning Connect adapters built with the Apex Connector
+      Framework can now declare QUERY_PAGINATION_SERVER_DRIVEN capability to let
+      the external system control paging instead of using client-driven
+      $top/$skip parameters.
+    detail: To enable server-driven paging in a custom adapter, implement the
+      QUERY_PAGINATION_SERVER_DRIVEN capability in the DataSource.Provider
+      getCapabilities method and generate query tokens for fetching subsequent
+      result batches.
+    source:
+      document: v34-summer15.pdf
+      page: 230
+      heading: Enable Server-Driven Paging for an External Data Source
+    confidence: medium
+    id: v34-apex-012
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Event Monitoring gains CPU time and database request time metrics plus
+      a new QUEUED_EXECUTION_EVENT log type for tracking batch Apex and other
+      queued jobs.
+    source:
+      document: v34-summer15.pdf
+      page: 246
+      heading: Updates to the Event Monitoring Feature
+    confidence: medium
+    id: v34-rest-003
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: A new <wave:dashboard> Visualforce component allows embedding Analytics
+      Cloud dashboards in pages, with support for runtime filtering, link
+      behavior control, and title visibility options.
+    source:
+      document: v34-summer15.pdf
+      page: 253
+      heading: Add an Analytics Cloud Dashboard to a Visualforce Page
+    confidence: high
+    id: v34-vf-006
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: A new <apex:mapInfoWindow> component can be nested inside
+      <apex:mapMarker> to display custom content when users interact with map
+      markers.
+    source:
+      document: v34-summer15.pdf
+      page: 254
+      heading: Enrich Visualforce Maps with Info Windows
+    confidence: high
+    id: v34-vf-007
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: Visualforce pages compiled at API >= 34.0
+    summary: A new Visualforce component lets visitors cancel pending Live Agent
+      chat requests before an agent accepts, with customizable button text.
+    source:
+      document: v34-summer15.pdf
+      page: 256
+      heading: New <liveAgent:clientChatCancelButton> Component
+    confidence: high
+    id: v34-vf-008
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: Visualforce pages using liveAgent:clientChatAlertMessage at API >= 34.0
+    summary: The liveAgent:clientChatAlertMessage Visualforce component gains a
+      chatBlockedLabel attribute for customizing the message shown to customers
+      blocked by IP address.
+    source:
+      document: v34-summer15.pdf
+      page: 256
+      heading: New Attribute for <liveAgent:clientChatAlertMessage>
+    confidence: high
+    id: v34-vf-009
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version
+    summary: Visualforce remote action responses now HTML-encode single straight
+      quotation marks (') in addition to previously encoded characters like
+      angle brackets, which may affect JavaScript code that parses or
+      manipulates these response strings.
+    upgradeAction: Review JavaScript handlers for remote action responses that
+      expect unencoded single quotes in string values; test string parsing and
+      display logic after the upgrade.
+    source:
+      document: v34-summer15.pdf
+      page: 257
+      heading: Remote Action Response Encoding Includes Single Straight Quotation Marks
+    confidence: high
+    id: v34-vf-010
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: behavior-change
+    affectedMetadataTypes:
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version, when admin enables
+      the new session setting
+    summary: 'A new org-wide session setting allows clickjack protection
+      (X-Frame-Options: SAMEORIGIN header) to be added to Visualforce pages even
+      when showHeader="false" is set. Enabling this breaks any page that embeds
+      Visualforce in an iframe from a non-Visualforce domain.'
+    detail: Previously, setting showHeader="false" on a Visualforce page suppressed
+      the X-Frame-Options header, disabling clickjack protection. The new
+      setting re-enables that header independently. Once enabled, Visualforce
+      pages can only be framed by pages served from the Visualforce domain,
+      breaking custom console components, embedded dashboards, and other
+      iframe-based integrations.
+    upgradeAction: Before enabling this setting in production, audit all uses of
+      Visualforce pages in iframes (console components, dashboards, external
+      sites) and test in sandbox. Either refactor away from iframes or accept
+      the security trade-off of leaving the setting disabled.
+    source:
+      document: v34-summer15.pdf
+      page: 257
+      heading: Enable Clickjack Protection for Visualforce Pages Even When Headers Are
+        Disabled
+    confidence: high
+    id: v34-vf-011
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: sharing-security
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex classes declared with 'with sharing' now respect org-wide sharing
+      rules on the User object, losing their previous unfiltered access when
+      User sharing is set to private.
+    detail: This affects custom Visualforce controllers and extensions that query
+      User records while relying on implicit full access. The Visualforce
+      standard controller is also subject to this enforcement, though Salesforce
+      notes this aligns with documented behavior.
+    upgradeAction: Audit Visualforce controllers using 'with sharing' that query
+      User records. If your org has private User sharing defaults, test that
+      pages still render correctly and queries return expected results for
+      non-admin users.
+    source:
+      document: v34-summer15.pdf
+      page: 258
+      heading: Reduced Access for Apex Classes Using with sharing Keyword
+    confidence: high
+    id: v34-sharing-002
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - VisualforcePage
+      - VisualforceComponent
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version (critical update activation)
+    summary: Static resources (images, JavaScript, CSS) now load from the
+      Visualforce domain rather than the Salesforce domain, which breaks any
+      hardcoded absolute URLs pointing to the old origin.
+    upgradeAction: Audit Visualforce pages for hardcoded static resource URLs and
+      replace them with $Resource global variable references using URLFOR();
+      test in sandbox before enabling the critical update in production.
+    source:
+      document: v34-summer15.pdf
+      page: 258
+      heading: Serve Static Resources from the Visualforce Domain
+    confidence: high
+    id: v34-vf-012
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - VisualforcePage
+    behaviorArea: visualforce
+    appliesWhen: org-wide regardless of component API version (Critical Update
+      activation required)
+    summary: When the critical update is enabled, PageReference.getContent() and
+      PageReference.getContentAsPDF() are treated as callouts. This means they
+      count against callout limits and follow callout transaction semantics.
+    upgradeAction: Review Apex code invoking getContent() or getContentAsPDF() to
+      ensure it does not exceed callout limits. Test in sandbox before enabling
+      the critical update in production, especially for code making multiple
+      calls to these methods within a single transaction.
+    source:
+      document: v34-summer15.pdf
+      page: 258
+      heading: PageReference getContent() and getContentAsPDF() Methods Behave as
+        Callouts
+    confidence: high
+    id: v34-vf-013
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: Apex code coverage now counts each line of a multiline statement
+      separately rather than treating the entire statement as one line, which
+      can raise or lower reported coverage percentages depending on which lines
+      execute.
+    detail: When a single Apex statement spans multiple lines, each line containing
+      an expression is now an independent coverage unit. Covered multiline
+      statements may show higher percentages; partially-executed conditional
+      expressions spread across lines may show lower percentages. Compiler
+      optimizations (e.g., concatenated string literals) can also affect which
+      lines are counted.
+    upgradeAction: Re-run test suites after the Summer '15 release and verify that
+      org-wide or package coverage thresholds are still met; refactor tests or
+      adjust deployment gates if coverage dropped below required minimums.
+    source:
+      document: v34-summer15.pdf
+      page: 259
+      heading: New Code Coverage Calculation for Multiline Statements
+    confidence: high
+    id: v34-apex-013
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Map and Set iteration now yields a consistent, repeatable element order
+      across executions, whereas previously the order was arbitrary and could
+      vary between runs.
+    detail: Code that inadvertently depended on iteration order may have failed
+      intermittently before this change. After Summer '15, the same insertion
+      sequence produces the same iteration sequence every time, making such code
+      behave consistently.
+    upgradeAction: Review tests that relied on arbitrary iteration order for
+      negative testing; they may now pass unexpectedly. No breaking changes
+      expected, but verify any logic that assumed randomness.
+    source:
+      document: v34-summer15.pdf
+      page: 261
+      heading: Iteration Order for Maps and Sets Is Now Predictable
+    confidence: high
+    id: v34-apex-014
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOQL and SOSL queries in Apex now support bind variables for location
+      and distance values, enabling dynamic geolocation queries using Apex
+      variables of type Location and Double in DISTANCE and GEOLOCATION
+      functions.
+    source:
+      document: v34-summer15.pdf
+      page: 262
+      heading: Location and Distance Variables Allowed in SOQL and SOSL Queries in Apex
+    confidence: high
+    id: v34-soql-001
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: sharing-security
+    appliesWhen: Apex classes compiled at API >= 34.0
+    summary: Apex classes declared with 'with sharing' now respect org-wide sharing
+      defaults on the User object. Previously, User was exempt from sharing
+      enforcement, but at v34+ queries against User in a 'with sharing' context
+      will filter records if the org has set User OWD to private.
+    upgradeAction: Review any 'with sharing' Apex that queries User records. If the
+      org's User OWD is private, these queries may return fewer rows after
+      upgrading past v34. Add 'without sharing' helper methods or adjust logic
+      if full User visibility is required.
+    source:
+      document: v34-summer15.pdf
+      page: 263
+      heading: Reduced Access for Apex Classes Using with sharing Keyword
+    confidence: high
+    id: v34-sharing-003
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The ui:input component no longer accepts custom body content; any
+      component extending ui:input that previously injected child elements into
+      the body will break.
+    detail: Components like ui:inputCheckbox that extend ui:input can no longer have
+      their body overridden. Additionally, ui:outputEmail now renders within a
+      <span> root element instead of its previous structure, which may affect
+      CSS selectors or DOM traversal logic.
+    upgradeAction: Audit Aura components that pass body content to ui:input-based
+      components and refactor to use supported attributes. Check CSS or
+      JavaScript that targets ui:outputEmail DOM structure and update selectors
+      for the new <span> wrapper.
+    source:
+      document: v34-summer15.pdf
+      page: 273
+      heading: Lightning Components
+    confidence: high
+    id: v34-aura-001
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning components can now reference custom labels via the $Label
+      global value provider, enabling i18n support in Aura markup and JavaScript
+      without workarounds.
+    source:
+      document: v34-summer15.pdf
+      page: 275
+      heading: Use Custom Labels in Lightning Components
+    confidence: high
+    id: v34-aura-002
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning components gain an empty() expression function that checks
+      whether a value is undefined, null, an empty string, or an empty
+      collection (Array, List, Map, Set). Objects without properties are
+      considered non-empty.
+    source:
+      document: v34-summer15.pdf
+      page: 275
+      heading: New empty() Expression Function
+    confidence: high
+    id: v34-aura-003
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Lightning component design resources now support a datasource attribute
+      that renders string fields as picklists or multi-select picklists in
+      Lightning App Builder configuration panels.
+    source:
+      document: v34-summer15.pdf
+      page: 275
+      heading: Create Picklists for Lightning App Builder Components
+    confidence: medium
+    id: v34-aura-004
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: breaking
+    affectedMetadataTypes:
+      - LWC
+      - AuraDefinitionBundle
+    behaviorArea: lwc
+    appliesWhen: org-wide regardless of component API version
+    summary: Design files for Lightning App Builder components no longer accept the
+      type field and now only permit int, string, or boolean attribute types.
+      Components using other types or defining types in the design file will
+      fail validation.
+    upgradeAction: Move all attribute type declarations from design files to the
+      component definition file. Remove any attributes using types other than
+      int, string, or boolean from design files, or convert them to supported
+      types.
+    source:
+      document: v34-summer15.pdf
+      page: 276
+      heading: Changes to Design Files for Lightning App Builder Components
+    confidence: high
+    id: v34-lwc-001
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: The platform now validates more dependency references in Lightning
+      components at save time, including explicit <aura:dependency> tags,
+      inheritance hierarchies, and custom field references. Previously allowed
+      saves may now fail with compilation errors if they break referential
+      integrity.
+    upgradeAction: Review Lightning components that use <aura:dependency>, extend
+      other components, or reference custom fields. Ensure all referenced items
+      exist and are correctly named before saving, as previously tolerated
+      broken references may now block deployment.
+    source:
+      document: v34-summer15.pdf
+      page: 276
+      heading: Referential Integrity Validation Expanded
+    confidence: medium
+    id: v34-aura-005
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - AuraDefinitionBundle
+    behaviorArea: aura
+    appliesWhen: org-wide regardless of component API version
+    summary: Aura applications can now specify additional static resources (JS, CSS,
+      images) for AppCache via the new additionalAppCacheURLs attribute on
+      aura:application, extending offline caching beyond the default set.
+    source:
+      document: v34-summer15.pdf
+      page: 276
+      heading: Cache Additional Web Resources Using AppCache
+    confidence: high
+    id: v34-aura-006
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Custom Metadata Types (__mdt) become available as a new object type,
+      enabling packagable, deployable configuration records that can be queried
+      in Apex without counting against SOQL limits for setup objects.
+    source:
+      document: v34-summer15.pdf
+      page: 278
+      heading: New Objects
+    confidence: high
+    id: v34-packaging-003
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: API calls at version 34.0 and later
+    summary: DML operations attempted during maintenance windows now return
+      INSERT_DELETE_UPDATE_NOT_ALLOWED_DURING_MAINTENANCE instead of
+      INVALID_READ_ONLY_USER_DML, providing a more precise error code for
+      maintenance-related write failures.
+    detail: The legacy INVALID_READ_ONLY_USER_DML code remains available for
+      backward compatibility, so existing error handling still works but may
+      misidentify the root cause.
+    upgradeAction: Update API error handling logic to recognize the new
+      INSERT_DELETE_UPDATE_NOT_ALLOWED_DURING_MAINTENANCE code alongside the old
+      one if your integration distinguishes maintenance windows from other
+      read-only scenarios.
+    source:
+      document: v34-summer15.pdf
+      page: 285
+      heading: API Status Code Changes
+    confidence: high
+    id: v34-rest-004
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: soql-sosl
+    appliesWhen: org-wide regardless of component API version
+    summary: SOSL queries can now target ContentDocument and ContentNote objects,
+      enabling text searches against files and notes via the API.
+    source:
+      document: v34-summer15.pdf
+      page: 285
+      heading: SOSL
+    confidence: high
+    id: v34-soql-002
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Two new composite REST resources allow batching multiple independent
+      subrequests into one HTTP call and creating nested parent-child record
+      trees in a single request, reducing round trips for integrations.
+    source:
+      document: v34-summer15.pdf
+      page: 285
+      heading: REST API
+    confidence: high
+    id: v34-rest-005
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+    behaviorArea: apex-testing
+    appliesWhen: org-wide regardless of component API version
+    summary: The SymbolTable in Tooling API now returns all relevant modifiers
+      including implicit ones (e.g., global for webservice methods, private by
+      default). The visibility field that incorrectly combined PROTECTED with
+      PRIVATE has been removed.
+    detail: Code that parses SymbolTable responses may receive additional modifier
+      values not previously returned. The testMethod modifier now uses camelCase
+      capitalization. The visibility field is no longer available since
+      modifiers now contain all visibility combinations.
+    upgradeAction: Update any code that parses Tooling API SymbolTable responses to
+      handle the expanded set of modifiers and remove dependencies on the
+      deprecated visibility field.
+    source:
+      document: v34-summer15.pdf
+      page: 296
+      heading: Tooling API
+    confidence: high
+    id: v34-apex-015
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: Custom fields on the User object are no longer retrievable via Tooling
+      API. This corrects unintended exposure in prior releases.
+    upgradeAction: If your integrations query custom User fields through Tooling
+      API, migrate those queries to the standard REST or SOAP API instead.
+    source:
+      document: v34-summer15.pdf
+      page: 296
+      heading: Tooling API
+    confidence: high
+    id: v34-rest-006
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: SOAP API gains JunctionIdList, a new field type enabling direct
+      manipulation of many-to-many relationships without touching junction
+      object records. Queries and updates on JunctionIdList fields translate to
+      operations on the underlying junction records.
+    source:
+      document: v34-summer15.pdf
+      page: 300
+      heading: SOAP API
+    confidence: high
+    id: v34-soap-003
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: Metadata API calls made at API >= 34.0
+    summary: createMetadata(), updateMetadata(), and upsertMetadata() now default to
+      partial-success semantics, persisting records that pass even when others
+      fail. Previously all records were rolled back on any single failure.
+    detail: A new AllOrNoneHeader is available to restore the old all-or-nothing
+      behavior when needed. deleteMetadata() already allowed partial saves in
+      all versions.
+    upgradeAction: Review integrations that assume transactional rollback on these
+      calls. Add AllOrNoneHeader with value true if atomic behavior is required.
+    source:
+      document: v34-summer15.pdf
+      page: 301
+      heading: Metadata API Calls
+    confidence: high
+    id: v34-packaging-004
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The runAllTests boolean option in DeployOptions has been removed and
+      replaced by the testLevel field, which provides finer control over which
+      tests execute during deployment.
+    upgradeAction: Update any deployment scripts or tooling that set runAllTests to
+      use the new testLevel parameter instead (RunSpecifiedTests, RunLocalTests,
+      RunAllTestsInOrg).
+    source:
+      document: v34-summer15.pdf
+      page: 302
+      heading: Metadata Types and Fields
+    confidence: high
+    id: v34-packaging-005
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: removed
+    impact: breaking
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: The XOrgHub and XOrgHubSharedObject metadata types have been removed as
+      the Cross-Organization Data Sharing pilot is no longer available.
+    upgradeAction: Remove any references to XOrgHub or XOrgHubSharedObject from your
+      metadata deployments and package.xml files.
+    source:
+      document: v34-summer15.pdf
+      page: 302
+      heading: Metadata Types and Fields
+    confidence: high
+    id: v34-packaging-006
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The Salesforce Console Integration Toolkit gains new JavaScript methods
+      for Omni-Channel work item management (accept, close, decline, query) and
+      agent presence control (login, logout, status retrieval), plus a sidebar
+      focus method.
+    source:
+      document: v34-summer15.pdf
+      page: 309
+      heading: Salesforce Console API (Integration Toolkit)
+    confidence: medium
+    id: v34-rest-007
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-soap
+    appliesWhen: org-wide regardless of component API version
+    summary: ISV partners with security-reviewed apps can now obtain an API token to
+      make Metadata API SOAP calls against Professional Edition orgs that
+      otherwise lack API access, by appending the token to the CallOptions
+      header.
+    source:
+      document: v34-summer15.pdf
+      page: 310
+      heading: Request Metadata API Access in Professional Edition
+    confidence: high
+    id: v34-soap-004
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Any
+    behaviorArea: packaging-metadata
+    appliesWhen: org-wide regardless of component API version
+    summary: Custom metadata types become GA, enabling developers to define
+      packageable, deployable configuration metadata that can be queried via
+      SOQL without counting against governor limits.
+    detail: Unlike custom settings or custom objects, custom metadata type records
+      are treated as metadata rather than data, making them packageable and
+      deployable through change sets and managed packages. SOQL queries against
+      custom metadata types do not count toward query limits.
+    source:
+      document: v34-summer15.pdf
+      page: 313
+      heading: Configure Apps with Custom Metadata Types (Generally Available)
+    confidence: high
+    id: v34-packaging-007
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: authentication
+    appliesWhen: org-wide regardless of component API version
+    summary: Google and LinkedIn authentication providers now allow administrators
+      to customize the Authorize Endpoint URL, Token Endpoint URL, and (for
+      Google) User Info Endpoint URL, enabling integration with custom OAuth
+      endpoints or adding query parameters such as access_type=offline for
+      refresh tokens.
+    source:
+      document: v34-summer15.pdf
+      page: 321
+      heading: Edit Endpoints for Google and LinkedIn Authentication Providers
+    confidence: medium
+    id: v34-auth-001
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - ApexTrigger
+      - Integration
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide regardless of component API version
+    summary: Salesforce HTTPS callouts from Apex, workflow outbound messaging, and
+      delegated authentication now attempt TLS 1.2, TLS 1.1, and SNI during
+      negotiation. Endpoints that cannot handle these newer protocols may fail
+      to connect even though TLS 1.0 remains supported.
+    detail: Remote servers running older software may reject connections when TLS
+      1.2 or SNI appear in the handshake. Instances NA21, CS32, and CS33 enforce
+      TLS 1.2 only with no fallback.
+    upgradeAction: Test all external HTTPS callout endpoints in a sandbox to confirm
+      they negotiate successfully with TLS 1.2 and SNI before your production
+      instance is upgraded.
+    source:
+      document: v34-summer15.pdf
+      page: 321
+      heading: Test and Use Advanced Networking Protocols
+    confidence: high
+    id: v34-apex-016
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: new
+    impact: additive
+    affectedMetadataTypes:
+      - Integration
+    behaviorArea: api-rest
+    appliesWhen: org-wide regardless of component API version
+    summary: The SCIM 1.1 REST API response now includes delegated approver
+      information (ID and display name) under the enterprise extension URN,
+      enabling integrations to programmatically retrieve approval workflow
+      delegation data.
+    source:
+      document: v34-summer15.pdf
+      page: 325
+      heading: Get a Delegated Approver Using SCIM (System for Cross-Domain Identity
+        Management)
+    confidence: medium
+    id: v34-rest-008
+  - apiVersion: "34.0"
+    release: Summer '15
+    changeType: changed
+    impact: behavior-change
+    affectedMetadataTypes:
+      - ApexClass
+      - VisualforcePage
+    behaviorArea: apex-runtime
+    appliesWhen: org-wide after critical update activation (auto-activation date applies)
+    summary: PageReference.getContent() and getContentAsPDF() now count as callouts,
+      affecting transaction limits and requiring callout permissions; they also
+      change how the calling page's transaction state is handled.
+    upgradeAction: Review Apex code invoking these methods to ensure callout limits
+      are not exceeded and that @future or Queueable patterns are used if
+      needed; verify no mixed DML issues arise from the altered transaction
+      semantics.
+    source:
+      document: v34-summer15.pdf
+      page: 326
+      heading: Critical Updates
+    confidence: high
+    id: v34-apex-017

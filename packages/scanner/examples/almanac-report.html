@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Almanac — API version debt report</title>
+<style>
+  body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; color: #1c1c1e; background: #fafaf9; }
+  main { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; }
+  .banner { background: #b3261e; color: #fff; padding: 16px 20px; border-radius: 8px; font-size: 1.1rem; font-weight: 600; margin: 16px 0 24px; }
+  .banner.clean { background: #16a34a; }
+  .tiles { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
+  .tile { background: #fff; border: 1px solid #e5e5e3; border-radius: 8px; padding: 12px 18px; min-width: 96px; }
+  .tile .num { font-size: 1.6rem; font-weight: 700; }
+  .tile .lbl { font-size: 0.75rem; color: #6b6b6b; text-transform: uppercase; letter-spacing: 0.04em; }
+  table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e5e5e3; border-radius: 8px; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid #ececea; font-size: 0.9rem; }
+  th { background: #f4f4f2; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: #555; }
+  td.loc { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.8rem; }
+  .sev { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 7px; }
+  .muted { color: #777; }
+  h1 { font-size: 1.4rem; margin-bottom: 0; }
+  h2 { font-size: 1.05rem; margin-top: 32px; }
+  .meta { color: #777; font-size: 0.8rem; }
+  details { background: #fff; border: 1px solid #e5e5e3; border-radius: 8px; margin: 10px 0; }
+  details > summary { cursor: pointer; padding: 10px 14px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; user-select: none; }
+  details > summary:hover { background: #f4f4f2; border-radius: 8px; }
+  details[open] > summary { border-bottom: 1px solid #ececea; }
+  details > table { border: none; }
+  summary .count { color: #555; font-size: 0.85rem; }
+  summary .tier { color: #8a3b00; font-size: 0.85rem; font-weight: 600; }
+  summary .types { color: #888; font-size: 0.78rem; margin-left: auto; }
+  footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #e5e5e3; color: #777; font-size: 0.85rem; }
+  footer a { color: #4f46e5; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Almanac — API version debt report</h1>
+  <p class="meta">Mode: repo · Target: /sessions/zealous-jolly-wright/mnt/idea-almanac/packages/scanner/test/fixtures/sample-sfdx-repo · Current API version: 67.0 · Generated: 2026-06-11T21:58:27.797Z</p>
+  <div class="banner">⚠ 1 item — Already failing - retired Summer '25 (REST 410 / SOAP 500 / Bulk 400) (Jun 2025) · 1 item — Retires Summer '28 (deprecated Summer '27) (Jun 2028)</div>
+  
+  <div class="tiles">
+    <div class="tile"><div class="num">27</div><div class="lbl">debt score (0 = clean)</div></div>
+    <div class="tile"><div class="num">10</div><div class="lbl">components</div></div>
+    <div class="tile"><div class="num">0</div><div class="lbl">integrations</div></div>
+    <div class="tile"><div class="num">1</div><div class="lbl">retired</div></div>
+    <div class="tile"><div class="num">1</div><div class="lbl">breaks-2028</div></div>
+    <div class="tile"><div class="num">7</div><div class="lbl">stale</div></div>
+    <div class="tile"><div class="num">1</div><div class="lbl">current</div></div>
+  </div>
+  <h2>By metadata type</h2>
+  <table>
+    <thead><tr><th>Type</th><th>Components</th><th>Oldest API version</th><th>Worst tier</th></tr></thead>
+    <tbody><tr>
+      <td>ApexClass</td>
+      <td>3</td>
+      <td>28.0</td>
+      <td><span class="sev" style="background:#b3261e"></span>retired (Jun 2025)</td>
+    </tr>
+<tr>
+      <td>Manifest</td>
+      <td>2</td>
+      <td>45.0</td>
+      <td><span class="sev" style="background:#52525b"></span>stale</td>
+    </tr>
+<tr>
+      <td>Aura</td>
+      <td>1</td>
+      <td>45.0</td>
+      <td><span class="sev" style="background:#52525b"></span>stale</td>
+    </tr>
+<tr>
+      <td>ApexTrigger</td>
+      <td>1</td>
+      <td>52.0</td>
+      <td><span class="sev" style="background:#52525b"></span>stale</td>
+    </tr>
+<tr>
+      <td>LWC</td>
+      <td>1</td>
+      <td>55.0</td>
+      <td><span class="sev" style="background:#52525b"></span>stale</td>
+    </tr>
+<tr>
+      <td>ProjectDefault</td>
+      <td>1</td>
+      <td>55.0</td>
+      <td><span class="sev" style="background:#52525b"></span>stale</td>
+    </tr>
+<tr>
+      <td>Flow</td>
+      <td>1</td>
+      <td>61.0</td>
+      <td><span class="sev" style="background:#52525b"></span>stale</td>
+    </tr></tbody>
+  </table>
+  <h2>Components by API version <span class="muted" style="font-weight:400;font-size:0.8rem">(oldest first — dated groups expanded, click to toggle)</span></h2>
+  <details open>
+    <summary><span class="sev" style="background:#b3261e"></span><strong>API 28.0</strong>
+      <span class="count">1 component</span>
+      <span class="tier">retired · retires Jun 2025</span>
+      <span class="types">ApexClass ×1</span>
+    </summary>
+    <table>
+      <thead><tr><th>Tier</th><th>Date</th><th>Type</th><th>Location</th></tr></thead>
+      <tbody>
+<tr>
+      <td><span class="sev" style="background:#b3261e"></span>retired</td>
+      <td>Jun 2025</td>
+      <td>ApexClass</td>
+      <td class="loc">force-app/main/default/classes/AncientHelper.cls-meta.xml</td>
+    </tr>
+      </tbody>
+    </table>
+  </details>
+<details open>
+    <summary><span class="sev" style="background:#b45309"></span><strong>API 35.0</strong>
+      <span class="count">1 component</span>
+      <span class="tier">breaks-2028 · retires Jun 2028</span>
+      <span class="types">ApexClass ×1</span>
+    </summary>
+    <table>
+      <thead><tr><th>Tier</th><th>Date</th><th>Type</th><th>Location</th></tr></thead>
+      <tbody>
+<tr>
+      <td><span class="sev" style="background:#b45309"></span>breaks-2028</td>
+      <td>Jun 2028</td>
+      <td>ApexClass</td>
+      <td class="loc">force-app/main/default/classes/LegacyService.cls-meta.xml</td>
+    </tr>
+      </tbody>
+    </table>
+  </details>
+<details>
+    <summary><span class="sev" style="background:#52525b"></span><strong>API 45.0</strong>
+      <span class="count">2 components</span>
+      <span class="tier">stale</span>
+      <span class="types">Aura ×1 · Manifest ×1</span>
+    </summary>
+    <table>
+      <thead><tr><th>Tier</th><th>Date</th><th>Type</th><th>Location</th></tr></thead>
+      <tbody>
+<tr>
+      <td><span class="sev" style="background:#52525b"></span>stale</td>
+      <td>—</td>
+      <td>Aura</td>
+      <td class="loc">force-app/main/default/aura/legacyPanel/legacyPanel.cmp-meta.xml</td>
+    </tr>
+<tr>
+      <td><span class="sev" style="background:#52525b"></span>stale</td>
+      <td>—</td>
+      <td>Manifest</td>
+      <td class="loc">manifest/package.xml</td>
+    </tr>
+      </tbody>
+    </table>
+  </details>
+<details>
+    <summary><span class="sev" style="background:#52525b"></span><strong>API 52.0</strong>
+      <span class="count">1 component</span>
+      <span class="tier">stale</span>
+      <span class="types">ApexTrigger ×1</span>
+    </summary>
+    <table>
+      <thead><tr><th>Tier</th><th>Date</th><th>Type</th><th>Location</th></tr></thead>
+      <tbody>
+<tr>
+      <td><span class="sev" style="background:#52525b"></span>stale</td>
+      <td>—</td>
+      <td>ApexTrigger</td>
+      <td class="loc">force-app/main/default/triggers/AccountTrigger.trigger-meta.xml</td>
+    </tr>
+      </tbody>
+    </table>
+  </details>
+<details>
+    <summary><span class="sev" style="background:#52525b"></span><strong>API 55.0</strong>
+      <span class="count">2 components</span>
+      <span class="tier">stale</span>
+      <span class="types">LWC ×1 · ProjectDefault ×1</span>
+    </summary>
+    <table>
+      <thead><tr><th>Tier</th><th>Date</th><th>Type</th><th>Location</th></tr></thead>
+      <tbody>
+<tr>
+      <td><span class="sev" style="background:#52525b"></span>stale</td>
+      <td>—</td>
+      <td>LWC</td>
+      <td class="loc">force-app/main/default/lwc/orderList/orderList.js-meta.xml <em>(inherited)</em></td>
+    </tr>
+<tr>
+      <td><span class="sev" style="background:#52525b"></span>stale</td>
+      <td>—</td>
+      <td>ProjectDefault</td>
+      <td class="loc">sfdx-project.json</td>
+    </tr>
+      </tbody>
+    </table>
+  </details>
+<details>
+    <summary><span class="sev" style="background:#52525b"></span><strong>API 60.0</strong>
+      <span class="count">1 component</span>
+      <span class="tier">stale</span>
+      <span class="types">Manifest ×1</span>
+    </summary>
+    <table>
+      <thead><tr><th>Tier</th><th>Date</th><th>Type</th><th>Location</th></tr></thead>
+      <tbody>
+<tr>
+      <td><span class="sev" style="background:#52525b"></span>stale</td>
+      <td>—</td>
+      <td>Manifest</td>
+      <td class="loc">manifest/deploy/package.xml</td>
+    </tr>
+      </tbody>
+    </table>
+  </details>
+<details>
+    <summary><span class="sev" style="background:#52525b"></span><strong>API 61.0</strong>
+      <span class="count">1 component</span>
+      <span class="tier">stale</span>
+      <span class="types">Flow ×1</span>
+    </summary>
+    <table>
+      <thead><tr><th>Tier</th><th>Date</th><th>Type</th><th>Location</th></tr></thead>
+      <tbody>
+<tr>
+      <td><span class="sev" style="background:#52525b"></span>stale</td>
+      <td>—</td>
+      <td>Flow</td>
+      <td class="loc">force-app/main/default/flows/Order_Fulfillment.flow-meta.xml</td>
+    </tr>
+      </tbody>
+    </table>
+  </details>
+<details>
+    <summary><span class="sev" style="background:#16a34a"></span><strong>API 67.0</strong>
+      <span class="count">1 component</span>
+      <span class="tier">current</span>
+      <span class="types">ApexClass ×1</span>
+    </summary>
+    <table>
+      <thead><tr><th>Tier</th><th>Date</th><th>Type</th><th>Location</th></tr></thead>
+      <tbody>
+<tr>
+      <td><span class="sev" style="background:#16a34a"></span>current</td>
+      <td>—</td>
+      <td>ApexClass</td>
+      <td class="loc">force-app/main/default/classes/ModernController.cls-meta.xml</td>
+    </tr>
+      </tbody>
+    </table>
+  </details>
+  <h2>Integrations</h2>
+  <p class="muted">No integration findings (repo mode does not inspect API usage logs).</p>
+  <h2>Warnings</h2><ul><li><code>malformed-xml</code> Could not parse XML — <code>force-app/main/default/pages/Broken.page-meta.xml</code></li></ul>
+  <footer>
+    Generated by <strong>Almanac</strong> (idea-almanac 0.1.0).
+    Need help fixing what this found? <a href="https://ideabulut.com">Idea Bulut Solutions</a> does API-version remediation.
+    For an AI-assisted upgrade impact review, see the <code>upgrade-impact-review</code> prompt shipped with the scanner.
+  </footer>
+</main>
+</body>
+</html>
