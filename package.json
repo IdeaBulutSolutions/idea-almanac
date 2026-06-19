@@ -1,6 +1,6 @@
 {
   "name": "almanac",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "private": true,
   "description": "Almanac — a seasonal record of every Salesforce release, and the scanner that reads your org against it.",
   "license": "Apache-2.0",

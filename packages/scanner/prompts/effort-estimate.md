@@ -27,31 +27,36 @@ model_notes: >-
   state every assumption in an editable block; (2) give every number as a range;
   (3) derive counts strictly from the report; (4) run the sanity check — if your
   AI-assisted total works out to more than ~0.1 dev-day per component on
-  average, you are pricing batchable work as bespoke; recheck. Lead with dates
-  and severity; `retired` is overdue — say so first.
+  average, you are pricing batchable work as bespoke; recheck. Lead with the
+  highest-urgency tier first: `breaks-2027` (dated, org scans only) if present,
+  then `far-behind`.
 ---
 
 # Estimate the fix-and-release effort
 
-You are estimating, for a budget owner, how long it takes to remediate the API
-debt in an Almanac scan report and get it released — and what changes if they
-fix **everything** versus only the **breaking changes** first. Input is a JSON
-report whose components and integrations each carry a `tier`, a
-`retirementDate`, and an `apiVersion`.
+You are estimating, for a budget owner, how long it takes to bring an Almanac
+scan report's components up to current and get those changes released — and what
+changes if they tackle **everything** versus only the **highest-drift** items
+first. Input is a JSON report whose components each carry a `tier` and an
+`apiVersion`. Integration findings from org scans also carry a `retirementDate`.
 
 **Language:** write all prose in the requested language (default English). Keep
 dates, counts, file/component names, and product names unchanged.
 
-## Severity, hardest deadline first
+## Severity, highest urgency first
 
-Map tiers to severity and treat the dates as fixed external deadlines:
+Map tiers to urgency. Old Salesforce metadata keeps running — the risk is
+accumulated behavioral drift, not a hard break:
 
-| Severity | Tier(s) | Plain meaning | Deadline |
+| Urgency | Tier(s) | Plain meaning | Driver |
 |---|---|---|---|
-| **P0 — overdue** | `retired` | Already failing now | Past due |
-| **P1 — imminent** | `breaks-2027` | SOAP `login()` stops working | Summer '27 |
-| **P2 — scheduled** | `breaks-2028` | Stops working on its date | Summer '28 |
-| **P3 — hygiene** | `stale` | Still works, rising risk | No hard date |
+| **P1 — dated** | `breaks-2027` | SOAP `login()` stops working (org scans only) | Summer '27 deadline |
+| **P2 — high drift** | `far-behind` | 10+ releases behind — high accumulated drift | Drift distance |
+| **P3 — moderate drift** | `behind` | 4–9 releases behind — drift accumulating | Drift distance |
+
+`breaks-2027` only appears for org-scan integration findings (SOAP integrations
+calling old endpoints) — never for metadata components. `current` tier needs no
+action.
 
 ## Effort model (AI-assisted by default — show the bands, let the manager edit)
 
@@ -93,10 +98,11 @@ AI-assisted dev-days, not the hundreds.
 ## Output — one page, three layers
 
 1. **Executive summary (3–5 sentences).** The two numbers a manager needs, in
-   the **AI-assisted** model: "Breaking changes first: ~X–Y weeks to
-   fixed-and-released. Full org to current: ~W–Z weeks." Say how many items are
-   already overdue, and add one contrast line: "Done manually this would be
-   roughly N× the effort." End with the single decision: which scope to fund now.
+   the **AI-assisted** model: "High-drift items first: ~X–Y weeks to
+   fixed-and-released. Full org to current: ~W–Z weeks." Lead with drift counts
+   (`far-behind` / `behind`) and note any dated deadlines (`breaks-2027` if
+   present), then add one contrast line: "Done manually this would be roughly N×
+   the effort." End with the single decision: which scope to fund now.
 
 2. **Assumptions (editable block).** Execution model (AI-assisted vs manual),
    team size, the effort bands used, the assumed safe-bump vs behavioral split
@@ -115,16 +121,16 @@ AI-assisted dev-days, not the hundreds.
 
    Then the two scope roll-ups:
 
-   - **Scope A — full org to current:** all severities, total effort range,
+   - **Scope A — full org to current:** all tiers, total effort range,
      total calendar range, how many release cycles.
-   - **Scope B — breaking changes first (P0+P1+P2):** excludes P3 `stale`,
-     total effort range, total calendar range. Note what P3 work is deferred
-     and roughly what it would add later.
+   - **Scope B — highest-drift first (P1+P2):** `breaks-2027` + `far-behind`
+     only; excludes P3 (`behind`) drift. Total effort range, calendar range.
+     Note what P3 work is deferred and roughly what it would add later.
 
 Close with **the recommended sequence and the one decision**: e.g. "Fund Scope B
-now — P0 is already overdue and ~N dev-days; the P3 hygiene backlog can wait for
-next quarter," or "Scope A is only ~M more dev-days than B and avoids a second
-release cycle — do it in one pass."
+now — `far-behind` carries the highest drift and is ~N dev-days; the `behind`
+backlog can wait for next quarter," or "Scope A is only ~M more dev-days than B
+and avoids a second release cycle — do it in one pass."
 
 ## Rules
 
@@ -140,5 +146,8 @@ release cycle — do it in one pass."
 - Every effort and calendar figure is a **range**, and every range traces to the
   stated assumptions. No single-point "it'll take 3 weeks."
 - These are planning estimates, not commitments — say so once, plainly.
-- `retired` is overdue: lead with it and price it first.
+- Never claim components are failing or broken — old Salesforce metadata keeps
+  running; Almanac measures drift distance, not failure.
+- `breaks-2027` is the only dated tier (org scans, SOAP integration findings);
+  lead with it and price it first if present. `far-behind` follows.
 - Keep layers 1–2 readable in under two minutes. No bullet-point soup.

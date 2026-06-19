@@ -50,6 +50,8 @@ export interface ToolingRecord {
   LogFile?: string;
   LogDate?: string;
   EventType?: string;
+  // Organization fields (production guard)
+  IsSandbox?: boolean;
 }
 
 export interface OrgConnection {
@@ -147,6 +149,7 @@ export async function scanOrg(
 
   const items: InventoryItem[] = [];
   const warnings: ScanWarning[] = [];
+  let managedExcluded = 0;
 
   for (const src of COMPONENT_SOURCES) {
     let records: ToolingRecord[];
@@ -175,6 +178,11 @@ export async function scanOrg(
             message: `${src.object} query returned an empty record — skipped`,
             location: src.object,
           });
+          continue;
+        }
+        // Skip managed/namespaced components — not upgradeable in this org.
+        if (rec.NamespacePrefix != null) {
+          managedExcluded++;
           continue;
         }
         const name = String(rec[src.nameField] ?? rec.Name ?? rec.Id ?? '(unknown)');
@@ -206,11 +214,39 @@ export async function scanOrg(
     }
   }
 
+  if (managedExcluded > 0) {
+    warnings.push({
+      code: 'managed-excluded',
+      message: `${managedExcluded} managed/namespaced component${managedExcluded === 1 ? '' : 's'} excluded — upgrade these in the package, not here.`,
+    });
+  }
+
   // Integration findings: who is calling the org's API, at which
   // versions, plus SOAP login() usage — from ApiTotalUsage event logs.
   const integrations = await gatherIntegrations(conn, deps, warnings);
 
-  return { items, integrations, warnings };
+  // Query Organization.IsSandbox so the handoff can block persisting deploys
+  // to production. Non-fatal — the scan proceeds even if the org denies this.
+  let isSandbox: boolean | undefined;
+  try {
+    const orgUrl =
+      `${conn.instanceUrl}/services/data/v${conn.apiVersion}/query/?q=` +
+      encodeURIComponent('SELECT IsSandbox FROM Organization LIMIT 1');
+    const orgPage = await deps.fetchPage(orgUrl, conn.accessToken);
+    const rec = orgPage.records[0];
+    if (rec && typeof rec.IsSandbox === 'boolean') {
+      isSandbox = rec.IsSandbox;
+    }
+  } catch {
+    warnings.push({
+      code: 'org-info-unavailable',
+      message:
+        'Could not read Organization.IsSandbox — production guard unavailable. ' +
+        'Confirm the connected org is non-production before running any deploy.',
+    });
+  }
+
+  return { items, integrations, warnings, resolvedApiVersion: conn.apiVersion, isSandbox };
 }
 
 // ---------------------------------------------------------------------------
@@ -441,7 +477,7 @@ async function runQuery(
   fetchPage: OrgScanDeps['fetchPage'],
 ): Promise<ToolingRecord[]> {
   const soql =
-    `SELECT Id, ${src.nameField}, ApiVersion FROM ${src.object}` +
+    `SELECT Id, ${src.nameField}, ApiVersion, NamespacePrefix FROM ${src.object}` +
     (src.where ? ` WHERE ${src.where}` : '');
   const queryPath = src.api === 'tooling' ? 'tooling/query' : 'query';
   let url =

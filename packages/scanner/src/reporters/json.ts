@@ -4,10 +4,13 @@
  * all outputs show identical dates.
  */
 import type { Inventory } from '../core/inventory.js';
-import { assignTier, nonBreakingFloor, type Schedule, type TierResult } from '../core/tiering.js';
-import { debtScore, debtScoreBreakdown, type DebtScoreBreakdown } from '../core/score.js';
+import { assignTier, recommendedFloor, type Schedule, type TierResult } from '../core/tiering.js';
+import { stalenessScore, stalenessBreakdown, REVIEW_ONLY_WEIGHT_FACTOR, type StalenessBreakdown } from '../core/score.js';
 
-export const REPORT_SCHEMA_VERSION = '1.2.0';
+/** Flow, LWC, Aura — review-only types count at REVIEW_ONLY_WEIGHT_FACTOR in the score. */
+const REVIEW_ONLY_COMPONENT_TYPES = new Set(['Flow', 'LWC', 'Aura']);
+
+export const REPORT_SCHEMA_VERSION = '1.4.0';
 
 export interface ReportComponent {
   id: string;
@@ -46,12 +49,13 @@ export interface Report {
   generatedAt: string;
   scanner: { name: string; version: string };
   mode: 'repo' | 'org';
-  target: { path?: string; org?: string };
+  /** `isSandbox` is present only on org scans; absent on repo scans and when the org denied the query. */
+  target: { path?: string; org?: string; isSandbox?: boolean };
   schedule: { currentApiVersion: string; source: string };
-  /** Lowest API version that clears all dated (stops-working) tiers — the nearest non-breaking target. */
-  nonBreakingFloor: string;
-  debtScore: number;
-  debtScoreBreakdown: DebtScoreBreakdown;
+  /** Lowest API version in the `current` tier — the recommended upgrade target. */
+  recommendedFloor: string;
+  stalenessScore: number;
+  stalenessBreakdown: StalenessBreakdown;
   headlines: Headline[];
   summary: {
     totalComponents: number;
@@ -83,7 +87,10 @@ export function buildReport(
 
   const components: ReportComponent[] = inventory.items.map((item) => {
     const t = assignTier(item, schedule);
-    tiered.push(t);
+    const effectiveWeight = REVIEW_ONLY_COMPONENT_TYPES.has(item.type)
+      ? t.weight * REVIEW_ONLY_WEIGHT_FACTOR
+      : t.weight;
+    tiered.push({ ...t, weight: effectiveWeight });
     return {
       id: item.id,
       type: item.type,
@@ -93,7 +100,10 @@ export function buildReport(
       location: item.location,
       tier: t.tier,
       ...(t.label !== undefined && { tierLabel: t.label }),
-      ...(t.date !== undefined && { retirementDate: t.date }),
+      // Metadata items never carry retirementDate — dated retirement applies only to
+      // org-scan integration findings. This is enforced here regardless of
+      // what the schedule rule returns, so future schedule edits can't accidentally
+      // leak dates onto metadata components.
       ...(t.severity !== undefined && { severity: t.severity }),
     };
   });
@@ -155,11 +165,14 @@ export function buildReport(
     generatedAt: (opts.now ?? new Date()).toISOString(),
     scanner: { name: 'idea-almanac', version: opts.scannerVersion },
     mode: opts.mode,
-    target: opts.target,
+    target: {
+      ...opts.target,
+      ...(inventory.isSandbox !== undefined && { isSandbox: inventory.isSandbox }),
+    },
     schedule: { currentApiVersion: schedule.currentApiVersion, source: opts.scheduleSource },
-    nonBreakingFloor: nonBreakingFloor(schedule),
-    debtScore: debtScore(tiered),
-    debtScoreBreakdown: debtScoreBreakdown(tiered),
+    recommendedFloor: recommendedFloor(schedule),
+    stalenessScore: stalenessScore(tiered),
+    stalenessBreakdown: stalenessBreakdown(tiered),
     headlines,
     summary: {
       totalComponents: components.length,

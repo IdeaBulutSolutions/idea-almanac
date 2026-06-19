@@ -10,7 +10,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createInterface } from 'node:readline';
 import { scanRepo } from './adapters/repo.js';
 import { scanOrg, OrgUnavailableError } from './adapters/org.js';
-import { loadSchedule } from './core/tiering.js';
+import { loadSchedule, scheduleFreshness } from './core/tiering.js';
 import { buildReport, renderJson, type Report } from './reporters/json.js';
 import { renderHtml } from './reporters/html.js';
 import { renderMarkdown } from './reporters/md.js';
@@ -22,7 +22,7 @@ import {
 } from './analysis/impact-narrative.js';
 import { configuredProvider, defaultRunModel, isProviderConfigured } from './analysis/llm.js';
 
-const HELP = `almanac — Salesforce API version debt scanner (repo scans: zero network calls)
+const HELP = `almanac — Salesforce API version maintenance scanner (repo scans: zero network calls)
 
 Usage:
   almanac scan [path]              scan an sfdx repo (default: current directory)
@@ -40,11 +40,12 @@ Scan options:
                       impact   + upgrade-impact (almanac-impact.md + bundle)
                       manager  + manager explanation + effort estimate
                       full     + agent upgrade guide
+                      roast    + cheeky org roast (standalone — no impact step)
                     AI steps use ALMANAC_LLM_PROVIDER if set, else write a
                     paste-ready bundle. Honors --target/--corpus/--llm/--no-llm/
                     --lang/--out/--bundle.
   --fail-on <tier>  exit 1 if any item lands in this tier (CI gate),
-                    e.g. retired | breaks-2027 | breaks-2028 | stale
+                    e.g. far-behind | behind | breaks-2027
   --schedule <file> override the built-in retirement-schedule.json
   -h, --help        this help
 
@@ -456,7 +457,7 @@ async function runReportPrompt(opts: {
 }
 
 /** Modes that chain extra steps onto `scan`. `scan` (or no mode) = report only. */
-const MODES = ['scan', 'impact', 'full-impact', 'manager', 'full'] as const;
+const MODES = ['scan', 'impact', 'full-impact', 'manager', 'full', 'roast'] as const;
 
 export async function run(argv: string[], cwd: string = process.cwd()): Promise<number> {
   // parseArgs is strict: an unknown flag throws. Catch it — a typo'd flag must
@@ -504,7 +505,7 @@ export async function run(argv: string[], cwd: string = process.cwd()): Promise<
 
   // Validate --mode up front so a typo fails before we scan an org.
   if (values.mode !== undefined && !MODES.includes(values.mode as (typeof MODES)[number])) {
-    process.stderr.write(`Unknown --mode "${values.mode}". Supported: scan, impact, manager, full\n`);
+    process.stderr.write(`Unknown --mode "${values.mode}". Supported: scan, impact, manager, full, roast\n`);
     return 2;
   }
 
@@ -526,7 +527,11 @@ export async function run(argv: string[], cwd: string = process.cwd()): Promise<
       }
       throw err;
     }
-    report = buildReport(inventory, schedule, {
+    // Tier against the org's own current version (sandbox-preview safety).
+    const effectiveSchedule = inventory.resolvedApiVersion
+      ? { ...schedule, currentApiVersion: inventory.resolvedApiVersion }
+      : schedule;
+    report = buildReport(inventory, effectiveSchedule, {
       mode: 'org',
       target: { org: values.org || '(default org)' },
       scheduleSource,
@@ -544,6 +549,15 @@ export async function run(argv: string[], cwd: string = process.cwd()): Promise<
       scheduleSource,
       scannerVersion: scannerVersion(),
     });
+  }
+
+  // Staleness guard: if the built-in schedule's currentApiVersion looks out of
+  // date, every drift distance is understated. Warn loudly and record it in the
+  // report — but never fail; the numbers are still directionally useful.
+  const freshness = scheduleFreshness(schedule);
+  if (freshness) {
+    report.warnings = [{ code: 'schedule-stale', message: freshness.message }, ...report.warnings];
+    process.stderr.write(`⚠ ${freshness.message}\n`);
   }
 
   const jsonPath = resolve(cwd, values.json ?? 'almanac-report.json');
@@ -567,47 +581,61 @@ export async function run(argv: string[], cwd: string = process.cwd()): Promise<
     const reportJson = readFileSync(jsonPath, 'utf8');
     const useLlm = values.llm === true || (values['no-llm'] !== true && isProviderConfigured());
 
-    const modelCalls = useLlm ? (mode === 'manager' ? 3 : mode === 'full' ? 4 : 1) : 0;
-    if (modelCalls > 0) {
+    // Roast is standalone — no impact step, no chaining.
+    if (mode === 'roast') {
       progress(
-        `--mode ${mode} with --llm: ${modelCalls} model call(s) ahead via ${configuredProvider()}. ` +
-          `They run quietly and can take a few minutes each on a large org — please keep the ` +
-          `process running until it finishes.`,
+        useLlm
+          ? `--mode roast: 1 model call via ${configuredProvider()}. Running quietly…`
+          : `--mode roast: writing paste-ready bundle. Add --llm with ALMANAC_LLM_PROVIDER set for the real thing.`,
       );
-    } else if (mode !== 'scan') {
-      progress(
-        `--mode ${mode}: writing paste-ready bundles (no model calls). ` +
-          `Add --llm with ALMANAC_LLM_PROVIDER set for finished docs.`,
-      );
-    }
-
-    // Every non-scan mode runs the upgrade-impact step first.
-    const impactCode = await runImpact(values, cwd, jsonPath, reportLabel);
-    if (impactCode !== 0) return impactCode;
-    const impactPath = resolve(cwd, values.out ?? 'almanac-impact.md');
-    const impactExtras = existsSync(impactPath)
-      ? [{ label: 'Upgrade-impact findings (almanac-impact.md)', md: readFileSync(impactPath, 'utf8') }]
-      : [];
-
-    if (mode === 'manager' || mode === 'full') {
-      const m = await runReportPrompt({
-        cwd, promptFileName: 'explain-to-my-manager.md', title: 'Manager explanation',
-        outBase: 'almanac-manager', reportJson, extras: [], lang: values.lang, useLlm,
+      const r = await runReportPrompt({
+        cwd, promptFileName: 'roast-my-org.md', title: 'Org roast',
+        outBase: 'almanac-roast', reportJson, extras: [], lang: values.lang, useLlm,
       });
-      if (m !== 0) return m;
-      const e = await runReportPrompt({
-        cwd, promptFileName: 'effort-estimate.md', title: 'Effort estimate',
-        outBase: 'almanac-estimate', reportJson, extras: impactExtras, lang: values.lang, useLlm,
-      });
-      if (e !== 0) return e;
-    }
+      if (r !== 0) return r;
+    } else {
+      const modelCalls = useLlm ? (mode === 'manager' ? 3 : mode === 'full' ? 4 : 1) : 0;
+      if (modelCalls > 0) {
+        progress(
+          `--mode ${mode} with --llm: ${modelCalls} model call(s) ahead via ${configuredProvider()}. ` +
+            `They run quietly and can take a few minutes each on a large org — please keep the ` +
+            `process running until it finishes.`,
+        );
+      } else {
+        progress(
+          `--mode ${mode}: writing paste-ready bundles (no model calls). ` +
+            `Add --llm with ALMANAC_LLM_PROVIDER set for finished docs.`,
+        );
+      }
 
-    if (mode === 'full') {
-      const g = await runReportPrompt({
-        cwd, promptFileName: 'upgrade-guide.md', title: 'Agent upgrade guide',
-        outBase: 'almanac-upgrade-guide', reportJson, extras: impactExtras, lang: values.lang, useLlm,
-      });
-      if (g !== 0) return g;
+      // Every non-scan, non-roast mode runs the upgrade-impact step first.
+      const impactCode = await runImpact(values, cwd, jsonPath, reportLabel);
+      if (impactCode !== 0) return impactCode;
+      const impactPath = resolve(cwd, values.out ?? 'almanac-impact.md');
+      const impactExtras = existsSync(impactPath)
+        ? [{ label: 'Upgrade-impact findings (almanac-impact.md)', md: readFileSync(impactPath, 'utf8') }]
+        : [];
+
+      if (mode === 'manager' || mode === 'full') {
+        const m = await runReportPrompt({
+          cwd, promptFileName: 'explain-to-my-manager.md', title: 'Manager explanation',
+          outBase: 'almanac-manager', reportJson, extras: [], lang: values.lang, useLlm,
+        });
+        if (m !== 0) return m;
+        const e = await runReportPrompt({
+          cwd, promptFileName: 'effort-estimate.md', title: 'Effort estimate',
+          outBase: 'almanac-estimate', reportJson, extras: impactExtras, lang: values.lang, useLlm,
+        });
+        if (e !== 0) return e;
+      }
+
+      if (mode === 'full') {
+        const g = await runReportPrompt({
+          cwd, promptFileName: 'upgrade-guide.md', title: 'Agent upgrade guide',
+          outBase: 'almanac-upgrade-guide', reportJson, extras: impactExtras, lang: values.lang, useLlm,
+        });
+        if (g !== 0) return g;
+      }
     }
   }
 
@@ -626,7 +654,7 @@ function printSummary(report: Report, jsonPath: string, htmlPath: string): void 
   const out: string[] = [];
   out.push('');
   if (report.headlines.length === 0) {
-    out.push('✅ No dated API version debt found.');
+    out.push('✅ No dated API retirement items.');
   } else {
     for (const h of report.headlines) {
       out.push(`⚠ ${h.message} (${h.date})`);
@@ -634,7 +662,7 @@ function printSummary(report: Report, jsonPath: string, htmlPath: string): void 
   }
   out.push('');
   out.push(
-    `Debt score: ${report.debtScore} (0 = clean) · ${report.summary.totalComponents} components · ${report.summary.totalIntegrations} integrations`,
+    `Staleness score: ${report.stalenessScore} (0 = clean) · ${report.summary.totalComponents} components · ${report.summary.totalIntegrations} integrations`,
   );
   const byTier = Object.entries(report.summary.byTier)
     .map(([tier, count]) => `${tier}: ${count}`)

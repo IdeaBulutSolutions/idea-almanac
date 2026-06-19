@@ -108,7 +108,10 @@ function contiguousRanges(sorted: number[]): [number, number][] {
 // Span query
 // ---------------------------------------------------------------------------
 
-/** Report component type → corpus affectedMetadataTypes value. */
+/** Component types handled as review-only — no characterization-test procedure available. */
+export const REVIEW_ONLY_TYPES: ReadonlySet<string> = new Set(['Flow', 'LWC', 'Aura']);
+
+/** Map a report component type → corpus affectedMetadataTypes value. */
 const TYPE_MAP: Record<string, string> = {
   ApexClass: 'ApexClass',
   ApexTrigger: 'ApexTrigger',
@@ -242,7 +245,7 @@ export function computeImpact(report: Report, corpus: Corpus, target: number): I
     const compVer = Number.parseFloat(apiVersion!);
     const metadataType = TYPE_MAP[type]!;
     // span (compVer, target] fully covered only when corpus has every version
-    // from floor(compVer)+1 up — report partial coverage honestly.
+    // from floor(compVer)+1 up — report partial coverage accurately.
     if (Math.floor(compVer) + 1 < lowestCovered) {
       uncovered.push({
         type,
@@ -302,6 +305,14 @@ export function renderImpactMarkdown(result: ImpactResult, reportPath: string): 
   out.push(`Source report: \`${reportPath}\`. Every finding cites corpus entry ids;`);
   out.push('see `upgradeAction` per entry for what to test.');
   out.push('');
+  out.push('> **How to read this.** Almanac selected these corpus entries by component');
+  out.push('> **type and version span only** — it did **not** read or analyze your');
+  out.push('> component source. Each entry below is a *candidate* change for that type');
+  out.push('> across that span, not a confirmed hit.');
+  out.push('> **Check whether any of these changes actually touch each component — you have the source; the tool does not analyze it.**');
+  out.push('> An entry that does not apply is simply not relevant; absence of a match');
+  out.push('> here is not a guarantee of safety.');
+  out.push('');
 
   if (result.warnings.length > 0) {
     out.push('## Coverage warnings');
@@ -330,6 +341,19 @@ export function renderImpactMarkdown(result: ImpactResult, reportPath: string): 
     out.push(
       `Components: ${listed.map((c) => `\`${c}\``).join(', ')}${g.components.length > listed.length ? ` … +${g.components.length - listed.length} more` : ''}`,
     );
+    out.push('');
+    out.push(
+      `_Candidates for ${g.type} between API ${g.apiVersion} and ${result.target.toFixed(1)} — Almanac did not read this source. Confirm each against the actual code before acting._`,
+    );
+    if (REVIEW_ONLY_TYPES.has(g.type)) {
+      out.push(
+        `_**Review-only:** verify these corpus changes manually in a scratch/sandbox org. The characterization-test (Gate 1 + Gate 2) procedure does not apply to ${g.type} — there is no Apex test class to validate against._`,
+      );
+    } else {
+      out.push(
+        `_**Full procedure:** after confirming corpus candidates against the source, apply Gate 1 + Gate 2 validation (upgrade-guide.md §4b)._`,
+      );
+    }
     out.push('');
     // Low-confidence entries render in a separate trailing block so weak
     // provenance never visually blends into the firm findings.

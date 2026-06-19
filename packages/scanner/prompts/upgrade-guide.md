@@ -10,9 +10,10 @@ purpose: >-
 inputs:
   - almanac-report.json (from `almanac scan`)
   - almanac-impact.md (from `almanac impact`) — the grounded, corpus-cited list
-    of what behavior changes across the span. Each corpus entry carries an
-    `impact` of `additive`, `behavior-change`, `breaking`, `retirement`, or
-    `deprecation` — use it to classify (see step 3).
+    of what behavior changes across the span, selected by component type and
+    version only (candidates, NOT matched to your code — see step 3). Each corpus
+    entry carries an `impact` of `additive`, `behavior-change`, `breaking`,
+    `retirement`, or `deprecation` — use it to classify (see step 3).
   - "the metadata source tree itself (repo mode) or the org's component
     definitions — the agent must open the actual files, not reason from the
     report alone."
@@ -39,11 +40,11 @@ model_notes: >-
 
 You are upgrading a Salesforce codebase to a newer API version. You have three
 inputs and you must use all three for every component: the **scan report**
-(`almanac-report.json` — what version each component is on, its tier and date),
+(`almanac-report.json` — what version each component is on and its drift tier),
 the **impact findings** (`almanac-impact.md` — what behavior changes across the
 span, each citing a corpus entry id), and the **actual metadata source** in the
-repo. A report tells you *what* and *when*; the source tells you *whether a bump
-is safe in context*.
+repo. A report tells you *how far each component has drifted*; the source tells
+you *whether a bump is safe in context*.
 
 **Language:** write all prose in the requested language (default English). Keep
 component names, ids, versions, dates, and code identifiers unchanged.
@@ -64,10 +65,12 @@ Work in four passes. Do not skip ahead.
 
 ### 1. Build the work list (from the report)
 
-From `almanac-report.json`, list every component that needs a bump, hardest
-deadline first: `retired` (already failing) → `breaks-2027` → `breaks-2028` →
-`stale`. For each, note its `name`, `type`, current `apiVersion`, and
-`location`. This is *what* must move.
+From `almanac-report.json`, list every component that needs a bump, highest
+urgency first. For repo scans, order by drift distance: `far-behind` (10+ releases
+behind) → `behind` (4–9 releases behind). For org scans, `breaks-2027` integration
+findings (dated SOAP retirement, Summer 2027) take priority over the distance tiers.
+For each component, note its `name`, `type`, current `apiVersion`, and `location`.
+This is *what* must move.
 
 ### 2. Map dependencies (from the source)
 
@@ -88,6 +91,13 @@ flag as behavior-changing. Where an edge exists, both endpoints must be assessed
 together.
 
 ### 3. Classify each component against the impact findings
+
+`almanac-impact.md` lists corpus entries selected by **component type and
+version span only** — Almanac did **not** read or analyze your source, so each
+listed change is a *candidate*, not a confirmed hit. You have the source; the
+tool does not analyze it. Check whether each entry actually touches the
+component before acting on it; an entry that doesn't apply is simply not
+relevant, and the absence of a listed change is not a guarantee of safety.
 
 Cross-reference every component (and every dependency edge) with
 `almanac-impact.md`. Each corpus entry there carries an `impact` value — use it
@@ -169,6 +179,93 @@ is three options; offer whichever apply, per component or as a global policy:
 State, for each affected component: which options apply, your recommendation,
 and what each costs. Let the user choose. Record the choice in the plan.
 
+### 4b. Golden-master validation for Apex (run before committing the bump)
+
+Gate every Apex version bump with a characterization (golden-master) test that
+confirms existing behavior is preserved. **All six steps below are check-only —
+the generated test never persists to the org, nothing is committed, and no
+write/deploy permission to persist is required.**
+
+Two gates must both pass — a passing compile is not safety:
+
+> **Gate 1 — Compile/resolve check** (`sf project deploy validate` without
+> `--test-level`): proves the bumped class compiles and all referenced methods
+> still resolve at the new API version. Catches the rare missing-method or
+> signature mismatch introduced between versions. A green Gate 1 does **not**
+> mean behavior is preserved.
+>
+> **Gate 2 — Behavior check** (same validate command + `--test-level
+> RunSpecifiedTests --tests <GoldenMasterTest>`): proves the class's observable
+> outputs are unchanged under the new version. This is the real safety signal —
+> API version changes can silently shift runtime behavior (sharing defaults,
+> formula evaluation, Flow invocation semantics) without changing the method
+> signatures Gate 1 checks. A passing Gate 2 is the minimum evidence that the
+> bump is safe to proceed with.
+
+Both gates are required before any Apex bump proceeds.
+
+1. **Generate a characterization test** for the class at its current `apiVersion`.
+   The test must assert the observable outputs of every public / `@AuraEnabled` /
+   `@InvocableMethod` method, covering every call path that crosses a
+   corpus-flagged change boundary. Name it `<ClassName>_GoldenMaster_Test` —
+   clearly ephemeral so reviewers know it is not a permanent addition.
+
+2. **Baseline — Gate 1 then Gate 2** at the current `apiVersion`:
+
+   Gate 1 (compile/resolve):
+   ```
+   sf project deploy validate \
+     --source-dir <path-to-class-and-test>
+   ```
+   Gate 2 (behavior — run immediately after Gate 1 passes):
+   ```
+   sf project deploy validate \
+     --source-dir <path-to-class-and-test> \
+     --test-level RunSpecifiedTests \
+     --tests <ClassName>_GoldenMaster_Test
+   ```
+   Both **must pass** before you touch the version. A failure here is a
+   pre-existing gap in test coverage or a bug in the generated test — diagnose
+   and fix it before proceeding. Record the baseline Gate 2 test output for the
+   diff in step 5.
+
+3. **Bump the `apiVersion`** in the component's `-meta.xml` file (local edit
+   only — not deployed yet).
+
+4. **Gate 1 then Gate 2 again** with the bumped version:
+
+   Gate 1 (compile/resolve at new `apiVersion`):
+   ```
+   sf project deploy validate \
+     --source-dir <path-to-class-and-test>
+   ```
+   Gate 2 (behavior at new `apiVersion`):
+   ```
+   sf project deploy validate \
+     --source-dir <path-to-class-and-test> \
+     --test-level RunSpecifiedTests \
+     --tests <ClassName>_GoldenMaster_Test
+   ```
+
+5. **Diff the results** between step 2 and step 4 — test outcome, assertion
+   failures, and any platform-reported differences. Surface every behavioral
+   divergence to the user. A newly failing assertion is a regression; resolve it
+   via step 4a before the bump can proceed. A fully passing run proves behavior
+   is preserved across the bump.
+
+6. **Keep or discard** the generated test — ask the user explicitly; do not
+   decide unilaterally:
+   - **Keep** — add `<ClassName>_GoldenMaster_Test` to the test suite so future
+     bumps and refactors are gated by the same characterization. Recommended when
+     the class has no dedicated tests covering the flagged paths.
+   - **Discard** — delete the generated test file; it served its validation
+     purpose. Appropriate when the suite already covers the relevant paths or the
+     team does not want generated tests in the permanent suite.
+
+   Do not add the test to the repo, do not commit any file from this step, and
+   do not deploy persistently — stage and report "ready to commit" after the
+   user's choice.
+
 ### 5. After applying a change: the metadata round-trip (human-run, never production)
 
 Raising a component's apiVersion can make the platform **rewrite the metadata
@@ -177,6 +274,30 @@ new apiVersion changes which subtypes/elements and tags the `.flow-meta.xml`
 contains. If you only edit the version locally, your source no longer matches
 what the org would generate, and the next deploy produces spurious diffs or
 fails.
+
+> ⛔ **Production guard (check first):** Before writing any command that
+> deploys or retrieves from a live org, check `target.isSandbox` in
+> `almanac-report.json`.
+>
+> - **`isSandbox: false`** — the connected org is **production**.
+>
+>   **Validate-only is allowed and encouraged.** Running Gate 1 and Gate 2
+>   (`sf project deploy validate`) against production is safe — it cannot
+>   write to the org — and provides earlier signal than sandbox-only checks.
+>
+>   **Persisting deploys are blocked by default.** If the user explicitly
+>   requests a persisting deploy to production despite the block, do not
+>   use `--force` or accept an alias string. Require the user to supply the
+>   org's real Username: run `sf org display --json` and read
+>   `result.username` (e.g. `admin@mycompany.com`). Confirm that value
+>   matches `target.org` in the report, then ask the user to type it back
+>   before proceeding. Only act if the typed name matches exactly. This
+>   confirms deliberate intent — alias strings cannot satisfy the check.
+>
+> - **`isSandbox: true`** — sandbox confirmed; proceed.
+> - **field absent** — the scan could not determine org type (repo scan, or the
+>   query was denied). Treat as unknown and ask the user to confirm before
+>   proceeding with any live-org step.
 
 > ⛔ **Hard rule: you never run this. Never deploy or retrieve automatically,
 > never touch a production org, never make any live change to any org.** The
@@ -191,6 +312,18 @@ So for any component whose bump you've deemed safe (especially Flows), give the
 user these steps to run **themselves, in a non-production org**:
 
 1. **Deploy** the changed metadata to a scratch/sandbox/dev org.
+
+   > **Quick-deploy option (optional):** If Gate 2 passed against this same
+   > org within Salesforce's retention window (10 minutes on Developer Edition,
+   > up to 96 hours on orgs with full test runs), the user can deploy using
+   > the cached validation instead of a fresh deploy:
+   > ```
+   > sf project deploy quick --job-id <job-id-from-gate-2>
+   > ```
+   > This skips re-running the test suite, which saves time on large orgs.
+   > Mention this option; do not require it — a standard `sf project deploy
+   > start` is always valid and does not depend on a cached run.
+
 2. **Retrieve it back** at the `sourceApiVersion` declared in
    `sfdx-project.json`, so the org re-serializes the metadata with the tags it
    actually uses at that version.
@@ -202,7 +335,36 @@ Flag clearly when no non-production org is available, and stop rather than
 committing a hand-edited Flow the org would rewrite. Don't commit on the user's
 behalf — stage and report.
 
-## Rules
+### 6. Modernization suggestions (always a separate, opt-in step)
+
+After the version bump is committed and all gates pass, you may offer
+modernization suggestions — but only as a **separate section** with its own
+commit. Never fold modernization into the bump diff: a mixed diff makes it
+impossible to bisect a regression back to its cause.
+
+Present suggestions in two tagged groups:
+
+**`[version-gated]`** — only offer when the target API version supports the
+feature. Verify the introducing version before making the suggestion; if
+unconfirmed, say so and do not suggest it.
+
+- **`?.` safe-navigation operator** `[version-gated — API 50.0 (Winter '21)]`.
+  Replaces null-guard chains (`if (obj != null && obj.field != null) ...`) with
+  `obj?.field`. Only suggest when the target API version is ≥ 50.0.
+
+**`[version-independent]`** — best practices that apply regardless of API
+version; safe to suggest once the bump is done.
+
+- **Non-SOQL custom-setting reads** `[version-independent]`. Replace
+  `[SELECT ... FROM MySettings__c LIMIT 1]` patterns with the platform cache
+  methods: `MySettings__c.getInstance()`, `MySettings__c.getValues(key)`, or
+  `MySettings__c.getOrgDefaults()`. These avoid a SOQL query and are always
+  available regardless of API version.
+
+Ask the user before acting on any suggestion. Each accepted suggestion is its
+own commit with a clear label ("modernization: replace null-guards with ?.").
+Never mix modernization commits with version-bump commits.
+
 
 - Use all three inputs for every component; never bump from the report alone.
 - Cite corpus entry ids from `almanac-impact.md`; never invent ids, versions, or
@@ -221,6 +383,10 @@ behalf — stage and report.
 - When option (C) enforces sharing, derive the class's required object/field
   access from its source and deliver it as a least-privilege permission set or
   an access list in the report — never grant broader access than the code uses.
+- For every Apex bump, run the golden-master validation (step 4b) before
+  committing — Gate 1 (compile/resolve) then Gate 2 (behavior) at both the
+  current and bumped version; validate-only deploys; nothing persisted;
+  keep-or-discard offered. A passing Gate 1 is not safety; Gate 2 is required.
 - Every step ends in a test. No step is done until its test passes.
 - Repo scans make zero network calls — don't introduce one. Don't commit on the
   user's behalf; stage and report "ready to commit."

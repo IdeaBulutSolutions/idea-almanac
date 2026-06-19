@@ -24,6 +24,12 @@ export interface ScheduleRule {
 export interface Schedule {
   description?: string;
   currentApiVersion: string;
+  /**
+   * "YYYY-MM" — the month `currentApiVersion` was last verified as current.
+   * Powers the staleness guard (`scheduleFreshness`). Optional: a custom
+   * `--schedule` without it simply skips the guard.
+   */
+  currentApiVersionAsOf?: string;
   rules: ScheduleRule[];
 }
 
@@ -81,20 +87,54 @@ export function assignTier(
   return { tier: 'unknown', weight: 0 };
 }
 
+/** Months Salesforce GAs a release (~Feb/Jun/Oct) → a monotonic release counter. */
+function releaseOrdinal(year: number, month: number): number {
+  const passed = month >= 10 ? 3 : month >= 6 ? 2 : month >= 2 ? 1 : 0;
+  return year * 3 + passed;
+}
+
 /**
- * The lowest API version a component can sit on without landing in a *dated*
- * (stops-working) tier — i.e. the nearest non-breaking version. Computed from
- * the schedule, not hardcoded: step versions upward and return the first whose
- * assigned tier carries no retirement `date` (soapLogin = false, since that
- * only applies to integrations). With the built-in schedule this is 41.0
- * (≤30 = retired, 31–40 = breaks-2028, 41+ = stale/current). It clears the
- * dated breakage; it does not make a component current.
+ * Staleness guard for the built-in schedule. Salesforce ships ~3 API versions a
+ * year (Spring ≈ Feb, Summer ≈ Jun, Winter ≈ Oct), each +1. Given when
+ * `currentApiVersion` was last verified (`currentApiVersionAsOf`, "YYYY-MM"),
+ * estimate how many releases have shipped since. A non-zero result means the
+ * constant is probably behind and every "distance from current" number here is
+ * understated — the one value that silently poisons the whole report if left to
+ * rot. Advisory only; returns null when there's nothing to warn about or the
+ * schedule carries no asOf date.
  */
-export function nonBreakingFloor(schedule: Schedule): string {
+export function scheduleFreshness(
+  schedule: Schedule,
+  now: Date = new Date(),
+): { releasesBehind: number; message: string } | null {
+  const asOf = schedule.currentApiVersionAsOf?.trim();
+  const m = asOf ? /^(\d{4})-(\d{2})$/.exec(asOf) : null;
+  if (!m) return null;
+  const releasesBehind =
+    releaseOrdinal(now.getUTCFullYear(), now.getUTCMonth() + 1) -
+    releaseOrdinal(Number(m[1]), Number(m[2]));
+  if (releasesBehind < 1) return null;
+  const expected = (Number.parseFloat(schedule.currentApiVersion) + releasesBehind).toFixed(1);
+  return {
+    releasesBehind,
+    message:
+      `Schedule currentApiVersion is ${schedule.currentApiVersion}, last verified ${asOf}. ` +
+      `Salesforce has shipped ~${releasesBehind} release${releasesBehind === 1 ? '' : 's'} since ` +
+      `(current is likely ~${expected}), so the drift distances here may be understated. ` +
+      `Update idea-almanac, or pass --schedule with a current schedule, before relying on these numbers.`,
+  };
+}
+
+/**
+ * The recommended upgrade target: the lowest API version in the `current` tier.
+ * Computed from the schedule, not hardcoded. With currentApiVersion=67 and a
+ * current threshold of >= currentApiVersion - 3, this returns 64.0.
+ */
+export function recommendedFloor(schedule: Schedule): string {
   const current = Math.floor(Number.parseFloat(schedule.currentApiVersion));
   for (let v = 1; v <= current; v++) {
     const t = assignTier({ apiVersion: `${v}.0`, soapLogin: false }, schedule);
-    if (t.tier !== 'unknown' && t.date === undefined) return `${v}.0`;
+    if (t.tier === 'current') return `${v}.0`;
   }
   return schedule.currentApiVersion;
 }

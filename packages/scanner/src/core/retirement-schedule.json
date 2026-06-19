@@ -1,15 +1,8 @@
 {
-  "description": "Dates and tiers live here, never in code. First matching rule wins, top to bottom. `weight` feeds the debt score; `currentApiVersion` is bumped 3x/year.",
+  "description": "Tier rules for Salesforce API-version maintenance. Dates and tiers live here, never in code. First matching rule wins, top to bottom. `weight` feeds the staleness score; `currentApiVersion` is bumped 3x/year.\n\nOrg-integration dated rules come FIRST (before gradient rules) so they win for integration findings. They are keyed on `soapLogin = true`, which is only set for org-scan integration findings of type 'soap-login' — never for any metadata item (repo or org). json.ts enforces this: metadata components never receive a retirementDate regardless of schedule rule output.\n\nRepo/org metadata gradient (no dates): 'current' (within 3 releases of current, weight 0) · 'behind' (4–9 releases back, weight 0.3) · 'far-behind' (more than 9 releases back, weight 0.6) · 'unknown' (no apiVersion detected). Drift is a hygiene and risk signal — old metadata keeps running, pinned to its version's behavior. 'Behind' = version drift distance from current. Never state or imply that staying on an old metadata version blocks access to new objects, fields, or methods — it generally does not.\n\nThresholds (3 and 9 releases): defaults — 3 ≈ 1 year, 9 ≈ 3 years of Salesforce releases.",
   "currentApiVersion": "67.0",
+  "currentApiVersionAsOf": "2026-06",
   "rules": [
-    {
-      "tier": "retired",
-      "match": "apiVersion <= 30.0",
-      "date": "2025-06",
-      "label": "Already failing - retired Summer '25 (REST 410 / SOAP 500 / Bulk 400)",
-      "severity": "critical",
-      "weight": 1.0
-    },
     {
       "tier": "breaks-2027",
       "match": "soapLogin && apiVersion <= 64.0",
@@ -19,19 +12,18 @@
       "weight": 0.9
     },
     {
-      "tier": "breaks-2028",
-      "match": "apiVersion >= 31.0 && apiVersion <= 40.0",
-      "date": "2028-06",
-      "label": "Retires Summer '28 (deprecated Summer '27)",
-      "severity": "high",
-      "weight": 0.7
+      "tier": "far-behind",
+      "match": "apiVersion < currentApiVersion - 9",
+      "label": "Far behind — more than 9 releases from current",
+      "severity": "critical",
+      "weight": 0.6
     },
     {
-      "tier": "stale",
+      "tier": "behind",
       "match": "apiVersion < currentApiVersion - 3",
-      "label": "Drifting (>1 year behind)",
+      "label": "Behind — 4 to 9 releases from current",
       "severity": "info",
-      "weight": 0.15
+      "weight": 0.3
     },
     {
       "tier": "current",

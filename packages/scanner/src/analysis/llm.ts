@@ -27,7 +27,9 @@ const TIMEOUT_MS = Number.parseInt(process.env.ALMANAC_LLM_TIMEOUT_MS ?? '', 10)
 
 export function configuredProvider(): string | null {
   if (process.env.ALMANAC_LLM_PROVIDER) return process.env.ALMANAC_LLM_PROVIDER;
-  if (process.env.ANTHROPIC_API_KEY) return 'anthropic';
+  // ANTHROPIC_API_KEY alone does NOT auto-select the remote provider — the user
+  // must opt in explicitly with ALMANAC_LLM_PROVIDER=anthropic, so a key set for
+  // other tools never silently egresses org content.
   return null;
 }
 
@@ -94,7 +96,14 @@ export function defaultRunModel(): RunModel {
       if (!cmd) throw new Error('provider "cmd" needs ALMANAC_LLM_CMD set');
       return (prompt) => runCli('bash', ['-c', cmd], prompt);
     }
-    case 'anthropic':
+    case 'anthropic': {
+      // Warn before any org-derived content leaves the machine.
+      process.stderr.write(
+        '\n⚠  Almanac: ALMANAC_LLM_PROVIDER=anthropic sends org-derived content to\n' +
+          '   a remote Anthropic API endpoint (https://api.anthropic.com).\n' +
+          '   For air-gapped or privacy-sensitive orgs, use a local provider instead:\n' +
+          '   ALMANAC_LLM_PROVIDER=claude-cli (or copilot | cursor | cmd).\n\n',
+      );
       return (prompt) => {
         const key = process.env.ANTHROPIC_API_KEY;
         if (!key) throw new Error('ANTHROPIC_API_KEY not set');
@@ -122,6 +131,7 @@ export function defaultRunModel(): RunModel {
         const parsed = JSON.parse(res) as { content?: { text?: string }[] };
         return parsed.content?.map((c) => c.text ?? '').join('') ?? '';
       };
+    }
     default:
       throw new Error(
         `unknown ALMANAC_LLM_PROVIDER "${provider}" (have: claude-cli, copilot, cursor, anthropic, cmd)`,

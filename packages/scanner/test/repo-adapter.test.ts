@@ -68,3 +68,23 @@ describe('repo adapter', () => {
     expect(inventory.integrations).toEqual([]);
   });
 });
+
+describe('C1 — managed/namespaced component exclusion (repo)', () => {
+  it('excludes the namespaced fixture class from the inventory', () => {
+    const ids = inventory.items.map((i) => i.id);
+    expect(ids).not.toContain(
+      'force-app/main/default/classes/MyNs__ManagedHelper.cls-meta.xml',
+    );
+  });
+
+  it('emits a managed-excluded warning with the correct count', () => {
+    expect(inventory.warnings).toContainEqual({
+      code: 'managed-excluded',
+      message: '1 managed/namespaced component excluded — upgrade these in the package, not here.',
+    });
+  });
+
+  it('does not count the excluded component in the 10 included items', () => {
+    expect(inventory.items).toHaveLength(10);
+  });
+});

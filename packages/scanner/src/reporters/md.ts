@@ -12,11 +12,11 @@ function fmtDate(yyyyMm: string): string {
 
 export function renderMarkdown(report: Report): string {
   const lines: string[] = [];
-  lines.push('## Almanac — API version debt report');
+  lines.push('## Almanac — API version maintenance report');
   lines.push('');
 
   if (report.headlines.length === 0) {
-    lines.push('✅ **No dated API version debt found.**');
+    lines.push('✅ **No dated API retirement items.**');
   } else {
     for (const h of report.headlines) {
       lines.push(`> ⚠ **${h.message}** (${fmtDate(h.date)})`);
@@ -24,17 +24,15 @@ export function renderMarkdown(report: Report): string {
   }
   lines.push('');
   lines.push(
-    `**Debt score: ${report.debtScore}** (0 = clean) · ${report.summary.totalComponents} components · ${report.summary.totalIntegrations} integrations · mode: ${report.mode}`,
+    `**Staleness score: ${report.stalenessScore}** (0 = clean) · ${report.summary.totalComponents} components · ${report.summary.totalIntegrations} integrations · mode: ${report.mode}`,
   );
   lines.push('');
 
-  lines.push('| Tier | Date | API version | Type | Location |');
-  lines.push('|---|---|---|---|---|');
+  lines.push('| Tier | API version | Type | Location |');
+  lines.push('|---|---|---|---|');
   for (const c of report.components) {
     const version = `${c.apiVersion ?? '?'}${c.versionSource === 'inherited' ? ' _(inherited)_' : ''}`;
-    lines.push(
-      `| ${c.tier} | ${c.retirementDate ? fmtDate(c.retirementDate) : '—'} | ${version} | ${c.type} | \`${c.location}\` |`,
-    );
+    lines.push(`| ${c.tier} | ${version} | ${c.type} | \`${c.location}\` |`);
   }
   lines.push('');
 

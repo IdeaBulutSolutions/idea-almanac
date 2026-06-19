@@ -316,3 +316,94 @@ describe('integration findings', () => {
     expect(inv.warnings.some((w) => w.code === 'integration-visibility-unavailable')).toBe(true);
   });
 });
+
+// ---------------------------------------------------------------------------
+// C2 — org-derived current API version
+// ---------------------------------------------------------------------------
+
+describe('C2 — org-derived current API version', () => {
+  it('sets resolvedApiVersion from the connection apiVersion', async () => {
+    const inv = await scanOrg(undefined, depsFrom(EMPTY));
+    // CONN.apiVersion is "60.0" — the adapter must surface it on the inventory.
+    expect(inv.resolvedApiVersion).toBe('60.0');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// F1 — IsSandbox guard: Organization.IsSandbox propagates to inventory
+// ---------------------------------------------------------------------------
+
+describe('F1 — IsSandbox production guard', () => {
+  it('sets isSandbox: true when Organization query returns IsSandbox = true', async () => {
+    const inv = await scanOrg(undefined, depsFrom({
+      ...EMPTY,
+      Organization: [{ done: true, records: [{ IsSandbox: true }] }],
+    }));
+    expect(inv.isSandbox).toBe(true);
+  });
+
+  it('sets isSandbox: false when Organization query returns IsSandbox = false (production)', async () => {
+    const inv = await scanOrg(undefined, depsFrom({
+      ...EMPTY,
+      Organization: [{ done: true, records: [{ IsSandbox: false }] }],
+    }));
+    expect(inv.isSandbox).toBe(false);
+  });
+
+  it('leaves isSandbox undefined and emits org-info-unavailable when query throws', async () => {
+    const inv = await scanOrg(
+      undefined,
+      depsFrom(EMPTY, { failObjects: new Set(['Organization']) }),
+    );
+    expect(inv.isSandbox).toBeUndefined();
+    expect(inv.warnings.some((w) => w.code === 'org-info-unavailable')).toBe(true);
+  });
+
+  it('uses the Data API (not Tooling) for the Organization query', async () => {
+    const calls: string[] = [];
+    await scanOrg(
+      undefined,
+      depsFrom(
+        { ...EMPTY, Organization: [{ done: true, records: [{ IsSandbox: true }] }] },
+        { calls },
+      ),
+    );
+    const orgUrl = calls.find((u) => /FROM Organization/.test(decodeURIComponent(u)))!;
+    expect(orgUrl).toBeDefined();
+    expect(orgUrl).toContain('/services/data/v');
+    expect(orgUrl).not.toContain('/tooling/query/');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// C1 — managed/namespaced component exclusion
+// ---------------------------------------------------------------------------
+
+describe('C1 — managed/namespaced component exclusion (org)', () => {
+  it('excludes records with a non-null NamespacePrefix and emits a warning', async () => {
+    const inv = await scanOrg(undefined, depsFrom({
+      ...EMPTY,
+      ApexClass: [{
+        done: true,
+        records: [
+          { Id: '01p1', Name: 'LocalClass', ApiVersion: 58.0, NamespacePrefix: null },
+          { Id: '01p2', Name: 'ManagedClass', ApiVersion: 50.0, NamespacePrefix: 'myns' },
+        ],
+      }],
+    }));
+    expect(inv.items.map((i) => i.name)).toEqual(['LocalClass']);
+    expect(inv.warnings).toContainEqual(
+      expect.objectContaining({
+        code: 'managed-excluded',
+        message: '1 managed/namespaced component excluded — upgrade these in the package, not here.',
+      }),
+    );
+  });
+
+  it('includes NamespacePrefix in the SOQL SELECT for non-Flow objects', async () => {
+    const calls: string[] = [];
+    await scanOrg(undefined, depsFrom(EMPTY, { calls }));
+    const apexUrl = calls.find((u) => /FROM ApexClass/.test(decodeURIComponent(u)))!;
+    expect(decodeURIComponent(apexUrl)).toContain('NamespacePrefix');
+  });
+});

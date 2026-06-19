@@ -47,4 +47,16 @@ export interface Inventory {
   items: InventoryItem[];
   integrations: IntegrationFinding[];
   warnings: ScanWarning[];
+  /**
+   * Org scans only: the API version reported by the org's sf session.
+   * Tiering uses this as `currentApiVersion` instead of the schedule constant,
+   * so a sandbox on a preview release tiers against the preview, not the GA constant.
+   */
+  resolvedApiVersion?: string;
+  /**
+   * Org scans only: `Organization.IsSandbox` queried during the scan.
+   * `false` means the connected org is production — persisting deploys are blocked.
+   * Absent when the org did not return this field or the query was denied.
+   */
+  isSandbox?: boolean;
 }

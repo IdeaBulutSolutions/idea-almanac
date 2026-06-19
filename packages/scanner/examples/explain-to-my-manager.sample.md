@@ -4,44 +4,52 @@ run against examples/almanac-report.json. Regenerate by feeding that report to
 the prompt.
 -->
 
-# Salesforce upgrade risk — plain-English summary
+# Salesforce API version maintenance — plain-English summary
 
-**One thing in our codebase has already stopped working, one more will stop in
-mid-2028, and seven others are aging and will need attention.** This is about
-the version of Salesforce our code is built against — Salesforce retires old
-versions on a published schedule, and code left on a retired version simply
-fails.
+**Ten components in this project are behind the current Salesforce API version.
+Seven are far behind — meaning dozens of platform behavior changes have
+accumulated since they were last updated — and two more are moderately behind.
+No dated retirement deadlines apply (this was a code scan; a live-org scan would
+also show any external integrations calling old API versions).**
 
-## What's at risk, and when
+## What's here
 
-- **Already failing (since June 2025):** 1 piece of custom code (a background
-  helper). It is running on a version Salesforce has already switched off, so it
-  is effectively broken today.
-- **Stops working June 2028:** 1 piece of custom business logic. It still runs
-  now but is on a version Salesforce will retire then (with warnings starting in
-  2027).
-- **Aging, still working (no hard deadline yet):** 7 items — a custom screen
-  component, an automated background process, a couple of deployment manifests,
-  our project's default version setting, and a data trigger. None are urgent, but
-  each is more than a year behind and the gap keeps growing.
+All 10 components are still running today. Salesforce does not break metadata
+when it releases a new API version — each component stays pinned to the behavior
+of the version it was written for. What Almanac is measuring is **drift**: how
+many platform changes have accumulated since each component was last bumped, and
+therefore how much risk has built up if those components ever need to be changed
+or diagnosed.
 
-One file also couldn't be read by the scan and should be checked by hand.
+## The drift picture
+
+- **7 components — far behind (10+ releases behind current).**
+  The most significant gap. The oldest, `AncientHelper.cls`, is 39 releases
+  behind; `LegacyService.cls` is 32 behind. Each one spans a long list of
+  platform changes — sharing rule enforcement, API restructuring, field-picklist
+  changes — that a developer touching the code would need to reason through.
+- **2 components — behind (4–9 releases behind).**
+  Accumulating drift but not yet a large gap.
+- **1 component — current.**
+  No action needed.
+- **2 warnings (scan only):** one file could not be read (malformed) and should
+  be checked by hand. The other is an informational note.
 
 ## Rough effort to fix
 
-- **Safe version bumps (low risk, mostly mechanical):** the 7 aging items.
-  These are routine and can be done in normal maintenance.
-- **Behavioral review (needs a developer to test first):** the already-failing
-  helper and the 2028 item. Both are big version jumps, so a developer should
-  test them before changing — that's where the real work is.
-- **Integration re-pointing (other systems calling us):** none surfaced in this
-  scan. (This was a code scan; a scan of the live org would also show outside
-  systems still calling old API versions, if any.)
+- **Safe version bumps (low risk, mostly mechanical):** most of the 9 components
+  that need a bump fall here. These are routine; an AI agent can apply them in
+  batch, and a developer reviews.
+- **Behavioral review (needs a developer to test first):** any component that
+  spans a corpus-flagged behavior change. The two oldest (`AncientHelper.cls`
+  and `LegacyService.cls`) carry the most accumulated changes and will need
+  explicit testing before the bump is considered safe.
+- **Integration re-pointing:** none surfaced in this scan (code scan only; a
+  live-org scan would surface these if they exist).
 
 ## The decision we need
 
-**Schedule a short developer review now** for the one already-failing item, and
-fold the June-2028 item into that same review so we're well ahead of the
-deadline. The aging items can ride along in regular maintenance. A technical
-upgrade-impact review (see the `upgrade-impact-review` prompt) turns this into a
-concrete, test-by-test plan when we're ready.
+**Schedule a maintenance pass** — prioritise `AncientHelper.cls` and
+`LegacyService.cls` (far-behind, 30+ releases each) as the highest-effort items,
+then batch the remaining seven. An upgrade-impact review (the `upgrade-guide`
+prompt) turns this into a concrete, test-by-test plan when the team is ready.

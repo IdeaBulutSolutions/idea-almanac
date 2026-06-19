@@ -22,6 +22,35 @@ describe('LLM provider selection (env-based)', () => {
     expect(isProviderConfigured()).toBe(false);
   });
 
+  it('ANTHROPIC_API_KEY alone does not auto-select the remote anthropic provider', () => {
+    for (const k of ENV_KEYS) delete process.env[k];
+    process.env.ANTHROPIC_API_KEY = 'sk-ant-fake';
+    // Key must not silently opt the user into a remote provider — explicit
+    // ALMANAC_LLM_PROVIDER=anthropic is required.
+    expect(configuredProvider()).toBeNull();
+    expect(isProviderConfigured()).toBe(false);
+  });
+
+  it('anthropic provider prints an egress warning to stderr when runner is built', () => {
+    process.env.ALMANAC_LLM_PROVIDER = 'anthropic';
+    process.env.ANTHROPIC_API_KEY = 'sk-ant-fake';
+    const chunks: string[] = [];
+    const orig = process.stderr.write.bind(process.stderr);
+    // @ts-expect-error — patching write for test observability
+    process.stderr.write = (chunk: string | Uint8Array) => {
+      chunks.push(typeof chunk === 'string' ? chunk : chunk.toString());
+      return true;
+    };
+    try {
+      defaultRunModel(); // warning fires here, before any prompt is sent
+    } finally {
+      process.stderr.write = orig;
+    }
+    const warn = chunks.join('');
+    expect(warn).toContain('api.anthropic.com');
+    expect(warn).toContain('claude-cli');
+  });
+
   it('supports copilot as a first-class provider (pre-launch requirement)', () => {
     process.env.ALMANAC_LLM_PROVIDER = 'copilot';
     expect(configuredProvider()).toBe('copilot');

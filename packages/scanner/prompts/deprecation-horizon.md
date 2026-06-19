@@ -62,7 +62,7 @@ Close with a single planning line: "Next thing to schedule: <item> by <date>."
 ## Rules
 
 - Only `deprecation` and `retirement` entries; cite every id; never invent
-  dates. "No fixed date" is a valid, honest answer.
+  dates. "No fixed date" is a valid, accurate answer.
 - Date-ordered. A horizon with no dates is just a list — lead with the calendar.
 - This is a planning calendar, not a remediation plan. No code changes here;
   point to the `upgrade-guide` / `upgrade-impact-review` prompts for the how.

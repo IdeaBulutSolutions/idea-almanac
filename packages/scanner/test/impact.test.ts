@@ -123,6 +123,26 @@ describe('impact layer — deterministic core', () => {
     expect(md).toContain('Flow @ 66.0 ×1');
   });
 
+  it('handoff lists type/version corpus candidates and states the tool did not match them to code (E1)', () => {
+    // v40 Apex class; corpus carries an Apex entry introduced in 41.0.
+    const v41apex = entry({
+      id: 'v41-apex-001',
+      apiVersion: '41.0',
+      release: "Winter '18",
+      summary: 'API 41 changes how this Apex runtime behavior is evaluated at compile.',
+    });
+    const corpus = corpusOf({ 41: [v41apex] });
+    const result = computeImpact(report([component({ apiVersion: '40.0' })]), corpus, 67);
+    // the v41 Apex entry is selected into the component's group
+    expect(result.groups[0]!.entries.map((x) => x.id)).toEqual(['v41-apex-001']);
+
+    const md = renderImpactMarkdown(result, 'almanac-report.json');
+    expect(md).toContain('v41-apex-001');
+    // and the handoff states plainly the tool did not analyze the source
+    expect(md).toContain('the tool does not analyze it');
+    expect(md).toContain('Almanac did not read this source');
+  });
+
   it('collapses republication chains to the freshest entry, citing superseded ids', () => {
     const origin = entry({
       id: 'v60-auth-005',
@@ -187,5 +207,45 @@ describe('impact layer — deterministic core', () => {
       'behavior-change',
       'deprecation',
     ]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// E5: Flow / LWC / Aura receive review-only handoff; Apex gets full procedure
+// ---------------------------------------------------------------------------
+
+describe('E5 — review-only handoff for Flow/LWC/Aura vs full procedure for Apex', () => {
+  const flowEntry = entry({
+    id: 'v67-flow-001',
+    affectedMetadataTypes: ['Flow'],
+    summary: 'A platform change that affects how flows behave in a sandbox environment.',
+  });
+  const apexEntry = entry({
+    id: 'v67-apex-e5',
+    affectedMetadataTypes: ['ApexClass'],
+    summary: 'A compilation change that requires explicit access modifiers on methods.',
+  });
+  const corpus = corpusOf({ 67: [flowEntry, apexEntry] });
+
+  it('Flow group gets review-only note — no full-procedure instruction', () => {
+    const result = computeImpact(
+      report([component({ type: 'Flow', apiVersion: '66.0', id: 'flow1' })]),
+      corpus,
+      67,
+    );
+    const md = renderImpactMarkdown(result, 'r.json');
+    expect(md).toContain('Review-only');
+    expect(md).not.toContain('Full procedure');
+  });
+
+  it('ApexClass group gets full-procedure note — not review-only', () => {
+    const result = computeImpact(
+      report([component({ type: 'ApexClass', apiVersion: '66.0' })]),
+      corpus,
+      67,
+    );
+    const md = renderImpactMarkdown(result, 'r.json');
+    expect(md).toContain('Full procedure');
+    expect(md).not.toContain('Review-only');
   });
 });

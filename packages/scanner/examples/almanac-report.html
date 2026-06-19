@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Almanac — API version debt report</title>
+<title>Almanac — API version maintenance report</title>
 <style>
   body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; color: #1c1c1e; background: #fafaf9; }
   main { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; }
@@ -28,27 +28,67 @@
   details[open] > summary { border-bottom: 1px solid #ececea; }
   details > table { border: none; }
   summary .count { color: #555; font-size: 0.85rem; }
-  summary .tier { color: #8a3b00; font-size: 0.85rem; font-weight: 600; }
+  summary .tier { color: #555; font-size: 0.85rem; font-weight: 600; }
   summary .types { color: #888; font-size: 0.78rem; margin-left: auto; }
+  .score-why { margin: -8px 0 28px; }
+  .score-why .band { color: #fff; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 999px; }
+  .score-body { padding: 4px 14px 14px; }
+  .score-body table { margin-top: 8px; }
+  .score-body tr.total td { font-weight: 700; border-top: 2px solid #ececea; }
+  .floor-hint { background: #eef2ff; border: 1px solid #c7d2fe; color: #1e293b; padding: 12px 16px; border-radius: 8px; margin: 0 0 20px; font-size: 0.92rem; line-height: 1.45; }
   footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #e5e5e3; color: #777; font-size: 0.85rem; }
   footer a { color: #4f46e5; }
 </style>
 </head>
 <body>
 <main>
-  <h1>Almanac — API version debt report</h1>
-  <p class="meta">Mode: repo · Target: /sessions/zealous-jolly-wright/mnt/idea-almanac/packages/scanner/test/fixtures/sample-sfdx-repo · Current API version: 67.0 · Generated: 2026-06-11T21:58:27.797Z</p>
-  <div class="banner">⚠ 1 item — Already failing - retired Summer '25 (REST 410 / SOAP 500 / Bulk 400) (Jun 2025) · 1 item — Retires Summer '28 (deprecated Summer '27) (Jun 2028)</div>
+  <h1>Almanac — API version maintenance report</h1>
+  <p class="meta">Mode: repo · Target: /home/user/idea-almanac-private/packages/scanner/test/fixtures/sample-sfdx-repo · Current API version: 67.0 · Generated: 2026-06-14T16:27:57.272Z</p>
+  <div class="banner clean">✅ No dated API retirement items.</div>
+  
   
   <div class="tiles">
-    <div class="tile"><div class="num">27</div><div class="lbl">debt score (0 = clean)</div></div>
+    <div class="tile"><div class="num">41</div><div class="lbl">staleness score (0 = clean)</div></div>
     <div class="tile"><div class="num">10</div><div class="lbl">components</div></div>
     <div class="tile"><div class="num">0</div><div class="lbl">integrations</div></div>
-    <div class="tile"><div class="num">1</div><div class="lbl">retired</div></div>
-    <div class="tile"><div class="num">1</div><div class="lbl">breaks-2028</div></div>
-    <div class="tile"><div class="num">7</div><div class="lbl">stale</div></div>
+    <div class="tile"><div class="num">7</div><div class="lbl">far-behind</div></div>
+    <div class="tile"><div class="num">2</div><div class="lbl">behind</div></div>
     <div class="tile"><div class="num">1</div><div class="lbl">current</div></div>
   </div>
+  <details class="score-why" open>
+    <summary>Staleness score <strong>41</strong>
+      <span class="band" style="background:#b45309">high</span>
+      <span class="count">— how this is calculated</span>
+    </summary>
+    <div class="score-body">
+      <p>Significant version drift across many components. Upgrade effort will be substantial.</p>
+      <p class="meta">Score = <code>round(100 × Σ tier_weight / total_items)</code>. Weighted sum 4.05 over 10 items → 41.</p>
+      <table>
+        <thead><tr><th>Tier</th><th>Items</th><th>Weight</th><th>Contribution</th></tr></thead>
+        <tbody><tr>
+      <td>Far behind — more than 9 releases from current</td>
+      <td>7</td>
+      <td>0.6</td>
+      <td>3.6</td>
+    </tr>
+<tr>
+      <td>Behind — 4 to 9 releases from current</td>
+      <td>2</td>
+      <td>0.15</td>
+      <td>0.45</td>
+    </tr>
+<tr>
+      <td>current</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+        <tr class="total"><td>Total</td><td>10</td><td></td><td>4.05</td></tr>
+        </tbody>
+      </table>
+      <p class="meta">Bands: 0 clean · 1–10 low · 11–30 moderate · 31–60 high · 61+ severe. The score is a weighted average of version drift — use it to track progress and prioritize upgrade passes.</p>
+    </div>
+  </details>
   <h2>By metadata type</h2>
   <table>
     <thead><tr><th>Type</th><th>Components</th><th>Oldest API version</th><th>Worst tier</th></tr></thead>
@@ -56,143 +96,150 @@
       <td>ApexClass</td>
       <td>3</td>
       <td>28.0</td>
-      <td><span class="sev" style="background:#b3261e"></span>retired (Jun 2025)</td>
+      <td><span class="sev" style="background:#b3261e"></span>far-behind</td>
     </tr>
 <tr>
       <td>Manifest</td>
       <td>2</td>
       <td>45.0</td>
-      <td><span class="sev" style="background:#52525b"></span>stale</td>
+      <td><span class="sev" style="background:#b3261e"></span>far-behind</td>
     </tr>
 <tr>
       <td>Aura</td>
       <td>1</td>
       <td>45.0</td>
-      <td><span class="sev" style="background:#52525b"></span>stale</td>
+      <td><span class="sev" style="background:#b3261e"></span>far-behind</td>
     </tr>
 <tr>
       <td>ApexTrigger</td>
       <td>1</td>
       <td>52.0</td>
-      <td><span class="sev" style="background:#52525b"></span>stale</td>
+      <td><span class="sev" style="background:#b3261e"></span>far-behind</td>
     </tr>
 <tr>
       <td>LWC</td>
       <td>1</td>
       <td>55.0</td>
-      <td><span class="sev" style="background:#52525b"></span>stale</td>
+      <td><span class="sev" style="background:#b3261e"></span>far-behind</td>
     </tr>
 <tr>
       <td>ProjectDefault</td>
       <td>1</td>
       <td>55.0</td>
-      <td><span class="sev" style="background:#52525b"></span>stale</td>
+      <td><span class="sev" style="background:#b3261e"></span>far-behind</td>
     </tr>
 <tr>
       <td>Flow</td>
       <td>1</td>
       <td>61.0</td>
-      <td><span class="sev" style="background:#52525b"></span>stale</td>
+      <td><span class="sev" style="background:#52525b"></span>behind</td>
     </tr></tbody>
   </table>
-  <h2>Components by API version <span class="muted" style="font-weight:400;font-size:0.8rem">(oldest first — dated groups expanded, click to toggle)</span></h2>
-  <details open>
+  <h2>Components by API version <span class="muted" style="font-weight:400;font-size:0.8rem">(oldest first — click to expand)</span></h2>
+  <details>
     <summary><span class="sev" style="background:#b3261e"></span><strong>API 28.0</strong>
       <span class="count">1 component</span>
-      <span class="tier">retired · retires Jun 2025</span>
+      <span class="tier">far-behind</span>
       <span class="types">ApexClass ×1</span>
     </summary>
     <table>
-      <thead><tr><th>Tier</th><th>Date</th><th>Type</th><th>Location</th></tr></thead>
+      <thead><tr><th>Tier</th><th>Type</th><th>Name</th><th>Location</th></tr></thead>
       <tbody>
 <tr>
-      <td><span class="sev" style="background:#b3261e"></span>retired</td>
-      <td>Jun 2025</td>
+      <td><span class="sev" style="background:#b3261e"></span>far-behind</td>
+      
       <td>ApexClass</td>
+      <td>AncientHelper</td>
       <td class="loc">force-app/main/default/classes/AncientHelper.cls-meta.xml</td>
     </tr>
       </tbody>
     </table>
   </details>
-<details open>
-    <summary><span class="sev" style="background:#b45309"></span><strong>API 35.0</strong>
+<details>
+    <summary><span class="sev" style="background:#b3261e"></span><strong>API 35.0</strong>
       <span class="count">1 component</span>
-      <span class="tier">breaks-2028 · retires Jun 2028</span>
+      <span class="tier">far-behind</span>
       <span class="types">ApexClass ×1</span>
     </summary>
     <table>
-      <thead><tr><th>Tier</th><th>Date</th><th>Type</th><th>Location</th></tr></thead>
+      <thead><tr><th>Tier</th><th>Type</th><th>Name</th><th>Location</th></tr></thead>
       <tbody>
 <tr>
-      <td><span class="sev" style="background:#b45309"></span>breaks-2028</td>
-      <td>Jun 2028</td>
+      <td><span class="sev" style="background:#b3261e"></span>far-behind</td>
+      
       <td>ApexClass</td>
+      <td>LegacyService</td>
       <td class="loc">force-app/main/default/classes/LegacyService.cls-meta.xml</td>
     </tr>
       </tbody>
     </table>
   </details>
 <details>
-    <summary><span class="sev" style="background:#52525b"></span><strong>API 45.0</strong>
+    <summary><span class="sev" style="background:#b3261e"></span><strong>API 45.0</strong>
       <span class="count">2 components</span>
-      <span class="tier">stale</span>
+      <span class="tier">far-behind</span>
       <span class="types">Aura ×1 · Manifest ×1</span>
     </summary>
     <table>
-      <thead><tr><th>Tier</th><th>Date</th><th>Type</th><th>Location</th></tr></thead>
+      <thead><tr><th>Tier</th><th>Type</th><th>Name</th><th>Location</th></tr></thead>
       <tbody>
 <tr>
-      <td><span class="sev" style="background:#52525b"></span>stale</td>
-      <td>—</td>
+      <td><span class="sev" style="background:#b3261e"></span>far-behind</td>
+      
       <td>Aura</td>
+      <td>legacyPanel</td>
       <td class="loc">force-app/main/default/aura/legacyPanel/legacyPanel.cmp-meta.xml</td>
     </tr>
 <tr>
-      <td><span class="sev" style="background:#52525b"></span>stale</td>
-      <td>—</td>
+      <td><span class="sev" style="background:#b3261e"></span>far-behind</td>
+      
       <td>Manifest</td>
+      <td>package.xml</td>
       <td class="loc">manifest/package.xml</td>
     </tr>
       </tbody>
     </table>
   </details>
 <details>
-    <summary><span class="sev" style="background:#52525b"></span><strong>API 52.0</strong>
+    <summary><span class="sev" style="background:#b3261e"></span><strong>API 52.0</strong>
       <span class="count">1 component</span>
-      <span class="tier">stale</span>
+      <span class="tier">far-behind</span>
       <span class="types">ApexTrigger ×1</span>
     </summary>
     <table>
-      <thead><tr><th>Tier</th><th>Date</th><th>Type</th><th>Location</th></tr></thead>
+      <thead><tr><th>Tier</th><th>Type</th><th>Name</th><th>Location</th></tr></thead>
       <tbody>
 <tr>
-      <td><span class="sev" style="background:#52525b"></span>stale</td>
-      <td>—</td>
+      <td><span class="sev" style="background:#b3261e"></span>far-behind</td>
+      
       <td>ApexTrigger</td>
+      <td>AccountTrigger</td>
       <td class="loc">force-app/main/default/triggers/AccountTrigger.trigger-meta.xml</td>
     </tr>
       </tbody>
     </table>
   </details>
 <details>
-    <summary><span class="sev" style="background:#52525b"></span><strong>API 55.0</strong>
+    <summary><span class="sev" style="background:#b3261e"></span><strong>API 55.0</strong>
       <span class="count">2 components</span>
-      <span class="tier">stale</span>
+      <span class="tier">far-behind</span>
       <span class="types">LWC ×1 · ProjectDefault ×1</span>
     </summary>
     <table>
-      <thead><tr><th>Tier</th><th>Date</th><th>Type</th><th>Location</th></tr></thead>
+      <thead><tr><th>Tier</th><th>Type</th><th>Name</th><th>Location</th></tr></thead>
       <tbody>
 <tr>
-      <td><span class="sev" style="background:#52525b"></span>stale</td>
-      <td>—</td>
+      <td><span class="sev" style="background:#b3261e"></span>far-behind</td>
+      
       <td>LWC</td>
+      <td>orderList</td>
       <td class="loc">force-app/main/default/lwc/orderList/orderList.js-meta.xml <em>(inherited)</em></td>
     </tr>
 <tr>
-      <td><span class="sev" style="background:#52525b"></span>stale</td>
-      <td>—</td>
+      <td><span class="sev" style="background:#b3261e"></span>far-behind</td>
+      
       <td>ProjectDefault</td>
+      <td>sfdx-project.json</td>
       <td class="loc">sfdx-project.json</td>
     </tr>
       </tbody>
@@ -201,16 +248,17 @@
 <details>
     <summary><span class="sev" style="background:#52525b"></span><strong>API 60.0</strong>
       <span class="count">1 component</span>
-      <span class="tier">stale</span>
+      <span class="tier">behind</span>
       <span class="types">Manifest ×1</span>
     </summary>
     <table>
-      <thead><tr><th>Tier</th><th>Date</th><th>Type</th><th>Location</th></tr></thead>
+      <thead><tr><th>Tier</th><th>Type</th><th>Name</th><th>Location</th></tr></thead>
       <tbody>
 <tr>
-      <td><span class="sev" style="background:#52525b"></span>stale</td>
-      <td>—</td>
+      <td><span class="sev" style="background:#52525b"></span>behind</td>
+      
       <td>Manifest</td>
+      <td>package.xml</td>
       <td class="loc">manifest/deploy/package.xml</td>
     </tr>
       </tbody>
@@ -219,16 +267,17 @@
 <details>
     <summary><span class="sev" style="background:#52525b"></span><strong>API 61.0</strong>
       <span class="count">1 component</span>
-      <span class="tier">stale</span>
+      <span class="tier">behind</span>
       <span class="types">Flow ×1</span>
     </summary>
     <table>
-      <thead><tr><th>Tier</th><th>Date</th><th>Type</th><th>Location</th></tr></thead>
+      <thead><tr><th>Tier</th><th>Type</th><th>Name</th><th>Location</th></tr></thead>
       <tbody>
 <tr>
-      <td><span class="sev" style="background:#52525b"></span>stale</td>
-      <td>—</td>
+      <td><span class="sev" style="background:#52525b"></span>behind</td>
+      
       <td>Flow</td>
+      <td>Order_Fulfillment</td>
       <td class="loc">force-app/main/default/flows/Order_Fulfillment.flow-meta.xml</td>
     </tr>
       </tbody>
@@ -241,12 +290,13 @@
       <span class="types">ApexClass ×1</span>
     </summary>
     <table>
-      <thead><tr><th>Tier</th><th>Date</th><th>Type</th><th>Location</th></tr></thead>
+      <thead><tr><th>Tier</th><th>Type</th><th>Name</th><th>Location</th></tr></thead>
       <tbody>
 <tr>
       <td><span class="sev" style="background:#16a34a"></span>current</td>
-      <td>—</td>
+      
       <td>ApexClass</td>
+      <td>ModernController</td>
       <td class="loc">force-app/main/default/classes/ModernController.cls-meta.xml</td>
     </tr>
       </tbody>
@@ -254,9 +304,10 @@
   </details>
   <h2>Integrations</h2>
   <p class="muted">No integration findings (repo mode does not inspect API usage logs).</p>
-  <h2>Warnings</h2><ul><li><code>malformed-xml</code> Could not parse XML — <code>force-app/main/default/pages/Broken.page-meta.xml</code></li></ul>
+  <h2>Warnings</h2><ul><li><code>malformed-xml</code> Could not parse XML — <code>force-app/main/default/pages/Broken.page-meta.xml</code></li>
+<li><code>managed-excluded</code> 1 managed/namespaced component excluded — upgrade these in the package, not here.</li></ul>
   <footer>
-    Generated by <strong>Almanac</strong> (idea-almanac 0.1.0).
+    Generated by <strong>Almanac</strong> (idea-almanac 0.2.1).
     Need help fixing what this found? <a href="https://ideabulut.com">Idea Bulut Solutions</a> does API-version remediation.
     For an AI-assisted upgrade impact review, see the <code>upgrade-impact-review</code> prompt shipped with the scanner.
   </footer>

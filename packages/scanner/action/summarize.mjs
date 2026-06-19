@@ -4,27 +4,27 @@
  * through env-provided files, so it runs identically in CI and in a local test.
  *
  * Usage: node summarize.mjs <report.json> [report.md]
- *   - appends `debt-score`, `retired-count`, `report-path`, `badge` to
+ *   - appends `staleness-score`, `far-behind-count`, `report-path`, `badge` to
  *     $GITHUB_OUTPUT (when set)
  *   - appends the markdown report + badge to $GITHUB_STEP_SUMMARY (when set)
  *   - always prints the badge snippet to stdout
  */
 import { readFileSync, appendFileSync } from 'node:fs';
 
-export function buildBadge(retiredCount, debtScore) {
-  // Static shields.io badge: "API debt: N retired" (dynamic endpoint = Phase 5).
+export function buildBadge(farBehindCount, stalenessScore) {
+  // Static shields.io badge: "Almanac: N far-behind" (dynamic endpoint = Phase 5).
   const enc = (s) => encodeURIComponent(s).replace(/-/g, '--');
-  const message = `${retiredCount} retired`;
-  const color = retiredCount > 0 ? 'red' : debtScore > 30 ? 'orange' : debtScore > 0 ? 'yellow' : 'brightgreen';
-  const url = `https://img.shields.io/badge/${enc('API debt')}-${enc(message)}-${color}`;
-  return `![Almanac API debt](${url})`;
+  const message = `${farBehindCount} far-behind`;
+  const color = farBehindCount > 0 ? 'red' : stalenessScore > 30 ? 'orange' : stalenessScore > 0 ? 'yellow' : 'brightgreen';
+  const url = `https://img.shields.io/badge/${enc('Almanac')}-${enc(message)}-${color}`;
+  return `![Almanac](${url})`;
 }
 
 export function summarize(reportPath) {
   const report = JSON.parse(readFileSync(reportPath, 'utf8'));
-  const retiredCount = report.summary?.byTier?.retired ?? 0;
-  const debtScore = report.debtScore ?? 0;
-  return { retiredCount, debtScore, badge: buildBadge(retiredCount, debtScore) };
+  const farBehindCount = report.summary?.byTier?.['far-behind'] ?? 0;
+  const stalenessScore = report.stalenessScore ?? 0;
+  return { farBehindCount, stalenessScore, badge: buildBadge(farBehindCount, stalenessScore) };
 }
 
 // Run only when invoked directly (not when imported by the test).
@@ -35,13 +35,13 @@ if (process.argv[1] && import.meta.url === `file://${process.argv[1]}`) {
     console.error('summarize.mjs: missing <report.json> argument');
     process.exit(2);
   }
-  const { retiredCount, debtScore, badge } = summarize(reportPath);
+  const { farBehindCount, stalenessScore, badge } = summarize(reportPath);
 
   if (process.env.GITHUB_OUTPUT) {
     appendFileSync(
       process.env.GITHUB_OUTPUT,
-      `debt-score=${debtScore}\n` +
-        `retired-count=${retiredCount}\n` +
+      `staleness-score=${stalenessScore}\n` +
+        `far-behind-count=${farBehindCount}\n` +
         `report-path=${reportPath}\n` +
         `badge=${badge}\n`,
     );
@@ -59,6 +59,6 @@ if (process.argv[1] && import.meta.url === `file://${process.argv[1]}`) {
     appendFileSync(process.env.GITHUB_STEP_SUMMARY, body);
   }
 
-  console.log(`debt-score=${debtScore} retired-count=${retiredCount}`);
+  console.log(`staleness-score=${stalenessScore} far-behind-count=${farBehindCount}`);
   console.log(`Badge snippet for your README:\n${badge}`);
 }

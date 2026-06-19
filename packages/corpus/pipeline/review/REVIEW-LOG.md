@@ -1,6 +1,6 @@
 # Almanac corpus — review log
 
-Pilot protocol (v60→v67): **100% of entries reviewed by Tugce.** Backfill
+Pilot protocol (v60→v67): **100% of entries reviewed by Idea Bulut Solutions.** Backfill
 (v31→v59): all `impact: breaking|retirement` + all `confidence: low|medium`
 + a 10% random sample, per version.
 
@@ -10,45 +10,45 @@ checked, corrections are applied to `entries.yaml`, the file is copied to
 
 | Version | Release | Entries (draft → promoted) | Reviewer | Date | Sign-off |
 |---|---|---|---|---|---|
-| v67 | Summer '26 | 111 → 108 | Tugce (AI-assisted) | 2026-06-10 | ✅ promoted to `data/v67.yaml` |
-| v66 | Spring '26 | 118 → 117 → 116¹ | Tugce (AI-assisted) | 2026-06-10 | ✅ promoted to `data/v66.yaml` |
-| v65 | Winter '26 | 98 → 98 → 97¹ | Tugce (AI-assisted) | 2026-06-10 | ✅ promoted to `data/v65.yaml` |
-| v64 | Summer '25 | 91 → 88 | Tugce (AI-assisted) | 2026-06-10 | ✅ promoted to `data/v64.yaml` |
-| v63 | Spring '25 | 109 → 106 | Tugce (AI-assisted) | 2026-06-10 | ✅ promoted to `data/v63.yaml` |
-| v62 | Winter '25 | 81 → 81 | Tugce (AI-assisted) | 2026-06-10 | ✅ promoted to `data/v62.yaml` |
-| v61 | Summer '24 | 99 → 99 | Tugce (AI-assisted) | 2026-06-10 | ✅ promoted to `data/v61.yaml` |
-| v60 | Spring '24 | 116 → 116 | Tugce (AI-assisted) | 2026-06-10 | ✅ promoted to `data/v60.yaml` |
-| v59 | Winter '24 | 81 → 81 | Tugce (AI-assisted, backfill protocol) | 2026-06-10 | ✅ promoted to `data/v59.yaml` |
-| v58 | Summer '23 | 87 → 87 | Tugce (AI-assisted, backfill protocol) | 2026-06-10 | ✅ promoted to `data/v58.yaml` |
-| v57 | Spring '23 | 90 → 90 | Tugce (AI-assisted, backfill protocol) | 2026-06-10 | ✅ promoted to `data/v57.yaml` |
-| v56 | Winter '23 | 88 → 87 | Tugce (AI-assisted, backfill protocol) | 2026-06-10 | ✅ promoted to `data/v56.yaml` |
-| v55 | Summer '22 | 72 → 72 | Tugce (AI-assisted, backfill protocol) | 2026-06-10 | ✅ promoted to `data/v55.yaml` |
-| v54 | Spring '22 | 53 → 52 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v54.yaml` |
-| v53 | Winter '22 | 71 → 70 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v53.yaml` |
-| v52 | Summer '21 | 69 → 69 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v52.yaml` |
-| v51 | Spring '21 | 73 → 72 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v51.yaml` |
-| v50 | Winter '21 | 92 → 90 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v50.yaml` |
-| v49 | Summer '20 | 89 → 87 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v49.yaml` |
-| v48 | Spring '20 | 96 → 96 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v48.yaml` |
-| v47 | Winter '20 | 78 → 77 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v47.yaml` |
-| v46 | Summer '19 | 74 → 74 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v46.yaml` |
-| v45 | Spring '19 | 74 → 74 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v45.yaml` |
-| v44 | Winter '19 | 54 → 54 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v44.yaml` |
-| v43 | Summer '18 | 82 → 82 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v43.yaml` |
-| v42 | Spring '18 | 56 → 56 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v42.yaml` |
-| v41 | Winter '18 | 85 → 85 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v41.yaml` |
-| v40 | Summer '17 | 84 → 84 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v40.yaml` |
-| v39 | Spring '17 | 56 → 54 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v39.yaml` |
-| v38 | Winter '17 | 53 → 53 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v38.yaml` |
-| v37 | Summer '16 | 69 → 69 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v37.yaml` |
-| v36 | Spring '16 | 68 → 68 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v36.yaml` |
-| v35 | Winter '16 | 70 → 69 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v35.yaml` |
-| v34 | Summer '15 | 64 → 63 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v34.yaml` |
-| v33 | Spring '15 | 73 → 72 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v33.yaml` |
-| v32 | Winter '15 | 61 → 61 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v32.yaml` |
-| v31 | Summer '14 | 56 → 55 | Tugce (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v31.yaml` (corpus floor) |
-| v30 | Spring '14 | 61 → 55 | Tugce (AI-assisted, backfill protocol) | 2026-06-13 | ✅ promoted to `data/v30.yaml` |
-| v29 | Winter '14 | 60 → 54 | Tugce (AI-assisted, backfill protocol) | 2026-06-13 | ✅ promoted to `data/v29.yaml` (new corpus floor) |
+| v67 | Summer '26 | 111 → 108 | Idea Bulut Solutions (AI-assisted) | 2026-06-10 | ✅ promoted to `data/v67.yaml` |
+| v66 | Spring '26 | 118 → 117 → 116¹ | Idea Bulut Solutions (AI-assisted) | 2026-06-10 | ✅ promoted to `data/v66.yaml` |
+| v65 | Winter '26 | 98 → 98 → 97¹ | Idea Bulut Solutions (AI-assisted) | 2026-06-10 | ✅ promoted to `data/v65.yaml` |
+| v64 | Summer '25 | 91 → 88 | Idea Bulut Solutions (AI-assisted) | 2026-06-10 | ✅ promoted to `data/v64.yaml` |
+| v63 | Spring '25 | 109 → 106 | Idea Bulut Solutions (AI-assisted) | 2026-06-10 | ✅ promoted to `data/v63.yaml` |
+| v62 | Winter '25 | 81 → 81 | Idea Bulut Solutions (AI-assisted) | 2026-06-10 | ✅ promoted to `data/v62.yaml` |
+| v61 | Summer '24 | 99 → 99 | Idea Bulut Solutions (AI-assisted) | 2026-06-10 | ✅ promoted to `data/v61.yaml` |
+| v60 | Spring '24 | 116 → 116 | Idea Bulut Solutions (AI-assisted) | 2026-06-10 | ✅ promoted to `data/v60.yaml` |
+| v59 | Winter '24 | 81 → 81 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-10 | ✅ promoted to `data/v59.yaml` |
+| v58 | Summer '23 | 87 → 87 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-10 | ✅ promoted to `data/v58.yaml` |
+| v57 | Spring '23 | 90 → 90 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-10 | ✅ promoted to `data/v57.yaml` |
+| v56 | Winter '23 | 88 → 87 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-10 | ✅ promoted to `data/v56.yaml` |
+| v55 | Summer '22 | 72 → 72 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-10 | ✅ promoted to `data/v55.yaml` |
+| v54 | Spring '22 | 53 → 52 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v54.yaml` |
+| v53 | Winter '22 | 71 → 70 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v53.yaml` |
+| v52 | Summer '21 | 69 → 69 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v52.yaml` |
+| v51 | Spring '21 | 73 → 72 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v51.yaml` |
+| v50 | Winter '21 | 92 → 90 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v50.yaml` |
+| v49 | Summer '20 | 89 → 87 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v49.yaml` |
+| v48 | Spring '20 | 96 → 96 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v48.yaml` |
+| v47 | Winter '20 | 78 → 77 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v47.yaml` |
+| v46 | Summer '19 | 74 → 74 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v46.yaml` |
+| v45 | Spring '19 | 74 → 74 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v45.yaml` |
+| v44 | Winter '19 | 54 → 54 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v44.yaml` |
+| v43 | Summer '18 | 82 → 82 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v43.yaml` |
+| v42 | Spring '18 | 56 → 56 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v42.yaml` |
+| v41 | Winter '18 | 85 → 85 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v41.yaml` |
+| v40 | Summer '17 | 84 → 84 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v40.yaml` |
+| v39 | Spring '17 | 56 → 54 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v39.yaml` |
+| v38 | Winter '17 | 53 → 53 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v38.yaml` |
+| v37 | Summer '16 | 69 → 69 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v37.yaml` |
+| v36 | Spring '16 | 68 → 68 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v36.yaml` |
+| v35 | Winter '16 | 70 → 69 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v35.yaml` |
+| v34 | Summer '15 | 64 → 63 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v34.yaml` |
+| v33 | Spring '15 | 73 → 72 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v33.yaml` |
+| v32 | Winter '15 | 61 → 61 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v32.yaml` |
+| v31 | Summer '14 | 56 → 55 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-11 | ✅ promoted to `data/v31.yaml` (corpus floor) |
+| v30 | Spring '14 | 61 → 55 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-13 | ✅ promoted to `data/v30.yaml` |
+| v29 | Winter '14 | 60 → 54 | Idea Bulut Solutions (AI-assisted, backfill protocol) | 2026-06-13 | ✅ promoted to `data/v29.yaml` (new corpus floor) |
 
 ## v31–v39 review outcomes (2026-06-11, backfill protocol) — completes the backfill
 
@@ -129,7 +129,7 @@ checked, corrections are applied to `entries.yaml`, the file is copied to
 
 ## v60–v64 review outcomes (2026-06-10, assisted review) — closes the pilot
 
-- **Dedup policy decision (Tugce): KEEP ALL republications**, each with
+- **Dedup policy decision (Idea Bulut Solutions): KEEP ALL republications**, each with
   `introducedIn` pointing at the origin. Consequence: the impact layer must
   group/dedupe same-origin entries when rendering.
 - ~37 chain `introducedIn` assignments across 13 republication chains.

@@ -1,20 +1,27 @@
 # Almanac
 
-**Find the Salesforce API versions in your org that are about to stop working — before they do.**
+**Find which Salesforce API versions in your project or org have drifted from current — then follow a safe, structured path to upgrade.**
 
 [![npm](https://img.shields.io/npm/v/idea-almanac)](https://www.npmjs.com/package/idea-almanac)
 [![CI](https://github.com/IdeaBulutSolutions/idea-almanac/actions/workflows/ci.yml/badge.svg)](https://github.com/IdeaBulutSolutions/idea-almanac/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 
-Salesforce retires old API versions on a schedule. Anything still pinned to a
-retired version doesn't fail gently — it breaks with `410 GONE`. Almanac is two
-things in one repo:
+Salesforce API versions accumulate silently. Components pinned to old versions
+keep running — Salesforce does not break saved Apex or metadata on retirement —
+but they accumulate **drift**: each missed release is behavior the platform
+changed without your code being tested against it. Almanac is two things in one
+repo:
 
-- a **scanner** that lists every API version in your Salesforce project or live
-  org and puts a retirement date next to each one, and
+- a **scanner** that reads every API version in your Salesforce project or live
+  org and shows how far each component has drifted from current, and
 - a **corpus** — a plain-language record of every Salesforce release since
   Winter '14 (v29 → v67, ~3,000 change entries written in our own words) — that
-  tells you what actually changes when you upgrade.
+  tells you what actually changed across every release you skipped.
+
+Beyond the scan, Almanac ships two things built for the upgrade itself: a
+reviewed, **citable corpus** of what behavior changed across the releases you
+skipped, and an **AI upgrade handoff** that turns that corpus into a safe,
+test-gated procedure an agent can follow.
 
 > 🔒 **Privacy.** Scanning your project folder makes **zero network calls** —
 > enforced by a test ([`no-network.test.ts`](packages/scanner/test/no-network.test.ts)).
@@ -36,24 +43,25 @@ rebuild the corpus or run the MCP server.)
 
 **See it before you run it:**
 [`packages/scanner/examples/`](packages/scanner/examples/) holds a real scan of
-a deliberately old sample project — a class already failing, another retiring in
-2028, and the impact report of what changes on upgrade.
+a deliberately old sample project (API 28 → 67) — tier names, staleness score,
+and the upgrade-impact report of what accumulated while the code stayed pinned.
+No org needed.
 
 ## What it reports
 
 Every Apex class/trigger, Flow, LWC, Aura component, Visualforce page,
 `package.xml`, and your `sfdx-project.json` default — each with its API version
-and a **dated tier**:
+and a **version-distance tier**:
 
-| Tier | Meaning |
+| Tier | What it means |
 |---|---|
-| `retired` | API ≤ 30.0 — already failing since June 2025 (REST 410 / SOAP 500 / Bulk 400) |
-| `breaks-2027` | SOAP `login()` on API ≤ 64.0 — retires Summer '27 |
-| `breaks-2028` | API 31.0–40.0 — retires Summer '28 |
-| `stale` | More than a year behind the current version |
-| `current` | Fine |
+| `current` | Within 3 releases of current — fine |
+| `behind` | 4–9 releases behind — drift accumulating |
+| `far-behind` | 10+ releases behind — high behavioral drift |
 
-Plus a debt score (0 = clean). Dates and tiers live in one data file
+Plus a **staleness score** (0 = clean, 100 = everything maximally behind). Org
+scans also surface `breaks-2027` findings for SOAP integrations still calling at
+API ≤ 64. Tiers and thresholds live in one data file
 ([`retirement-schedule.json`](packages/scanner/src/core/retirement-schedule.json))
 — override it with `--schedule`.
 
@@ -63,9 +71,9 @@ Plus a debt score (0 = clean). Dates and tiers live in one data file
 almanac scan [path]              scan an sfdx repo (default: cwd)
 almanac scan --org <alias>       scan a live org via your existing sf CLI session
   --json <file> --html <file> --md <file>
-  --fail-on retired|breaks-2027|breaks-2028|stale
+  --fail-on far-behind|behind|breaks-2027
   --schedule <file>
-almanac impact --report <file>   what changes behavior on upgrade (corpus-backed)
+almanac impact --report <file>   what changed on upgrade, corpus-backed
   --no-llm | --llm  --lang <language>  --corpus <dir>
 almanac --version
 ```
@@ -80,7 +88,7 @@ versions, from `ApiTotalUsage` event logs (no paid Event Monitoring required).
 **CI gate:**
 
 ```bash
-npx idea-almanac scan --fail-on retired   # exit 1 if anything is already broken
+npx idea-almanac scan --fail-on far-behind   # exit 1 if any component is 10+ releases behind
 ```
 
 **Upgrade impact:** `almanac impact` pairs your scan report with the corpus and
@@ -107,11 +115,11 @@ jobs:
       - uses: IdeaBulutSolutions/idea-almanac/packages/scanner/action@v1
         with:
           path: force-app        # your sfdx source
-          fail-on: retired       # optional CI gate
+          fail-on: far-behind    # optional CI gate
           comment-pr: true       # optional: post the report on the PR
 ```
 
-Outputs: `debt-score`, `retired-count`, `report-path`, `badge`.
+Outputs: `staleness-score`, `far-behind-count`, `report-path`, `badge`.
 
 ## Ask the corpus directly (MCP)
 
@@ -121,7 +129,7 @@ The corpus runs as a zero-dependency, read-only, stdio MCP server:
 cd packages/corpus && npm run mcp
 ```
 
-Point Claude Desktop/Code (or any MCP client) at it and ask *"what breaks
+Point Claude Desktop/Code (or any MCP client) at it and ask *"what changed
 between v48 and v67 for Apex?"* Tools: `list_versions`, `get_changes`,
 `changes_between`, `search_corpus`.
 

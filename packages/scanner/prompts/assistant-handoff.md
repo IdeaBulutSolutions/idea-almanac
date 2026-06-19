@@ -40,7 +40,10 @@ records what each version changes. Here's where things live and what to run.
 2. Scan: `node packages/scanner/dist/cli.js scan <sfdx-path>` (or `--org <alias>`)
    → writes `almanac-report.json` + `.html`.
 3. Impact: `node packages/scanner/dist/cli.js impact --report almanac-report.json`
-   → grounded markdown of what changes behavior across the span.
+   → grounded markdown of what changes behavior across the span. These entries
+   are selected by component **type and version span only** — Almanac does not
+   read or analyze component source. Treat each as a candidate to check against
+   the actual code, not a confirmed match.
 4. For narrative/business/security output, feed the report (and corpus slices)
    to the matching prompt in `prompts/`.
 

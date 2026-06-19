@@ -12,25 +12,34 @@ without pointing it at your own org.
 | [`almanac-report.md`](almanac-report.md) | The scan, rendered for reading on GitHub |
 | [`almanac-report.html`](almanac-report.html) | The same report, self-contained HTML (what `open almanac-report.html` shows) |
 | [`almanac-report.json`](almanac-report.json) | The machine-readable report (schema-validated; what `impact` and CI consume) |
-| [`almanac-impact.md`](almanac-impact.md) | Corpus-backed upgrade impact for the same report — what actually changes behavior, with citations and test actions |
+| [`almanac-impact.md`](almanac-impact.md) | Corpus-backed upgrade impact — what behavior actually changes across each component's span, with citations |
 
 ## What it surfaces
 
 ```
-⚠ 1 item — Already failing - retired Summer '25 (REST 410 / SOAP 500 / Bulk 400) (2025-06)
-⚠ 1 item — Retires Summer '28 (deprecated Summer '27) (Jun 2028)
+✅ No dated API retirement items.
 
-Debt score: 27 (0 = clean) · 10 components · 0 integrations
-retired: 1 · breaks-2028: 1 · stale: 7 · current: 1
+Staleness score: 41 (0 = clean) · 10 components · 0 integrations
+far-behind: 7 · behind: 2 · current: 1
+Warnings: 2 (see report)
 ```
 
-`AncientHelper.cls` is pinned at API **28.0** — already failing since June 2025
-(REST `410 GONE`) — and the impact report shows it walking into a wall of breaking
-changes from v29 onward (ConnectApi feed-element migration, sharing enforcement
-on `User`, picklist metadata restructuring, …), each with a corpus citation and
-a concrete test action. `LegacyService.cls` at 35.0 retires Summer '28. One file
-(`Broken.page`) is malformed and surfaces as a warning rather than crashing the
-scan.
+Everything in this repo **keeps running** — old Salesforce API versions are
+pinned per component and don't stop working when a version is retired. What
+Almanac flags is **drift**: how far each component's pinned version is from
+current, and therefore how many platform behavior changes have accumulated
+since it was last bumped.
+
+`AncientHelper.cls` is pinned at API **28.0** — 39 releases behind current.
+It compiles and runs today, but the upgrade impact report shows it walking
+into a wall of accumulated behavior changes from v29 onward (ConnectApi
+feed-element migration, sharing enforcement on `User`, picklist metadata
+restructuring, …), each with a corpus citation and a concrete test action.
+`LegacyService.cls` at 35.0 is 32 releases behind. One file (`Broken.page`)
+is malformed and surfaces as a warning rather than crashing the scan.
+
+The staleness score (41/100) reflects the weighted average of how far behind
+the components are — 0 = all current, 100 = everything maximally behind.
 
 ## Regenerate it yourself
 
@@ -45,10 +54,9 @@ node dist/cli.js scan test/fixtures/sample-sfdx-repo \
 
 # the corpus-backed upgrade impact
 node dist/cli.js impact --report examples/almanac-report.json \
-  --out examples/almanac-impact.md
+  --out examples/almanac-impact.md \
+  --no-llm -y
 ```
 
 Repo scans make zero network calls, so this is fully deterministic — the only
-inputs are the fixture and the built-in retirement schedule. The committed
-`almanac-impact.md` elides the long "org-wide changes" union for length; the
-command above writes the unabridged version.
+inputs are the fixture and the built-in retirement schedule.

@@ -1,10 +1,11 @@
 /**
  * Human report: ONE self-contained HTML file. Inline CSS only —
- * no CDN, no JS, no external resources. Dates are the headline.
+ * no CDN, no JS, no external resources.
  *
  * Components are grouped into native <details> sections per API version
  * (collapsible without JavaScript); a per-metadata-type overview sits above.
- * Dangerous groups (anything with a retirement date) render expanded.
+ * Retirement dates appear only on integration findings (never on metadata
+ * components — that invariant is enforced upstream in json.ts).
  */
 import type { Report, ReportComponent } from './json.js';
 
@@ -130,9 +131,9 @@ const BAND_COLOR: Record<string, string> = {
   severe: '#b3261e',
 };
 
-/** Explain the debt score: what the number means, whether it's good/bad, and the math behind it. */
+/** Explain the staleness score: what the number means, whether it's good/bad, and the math behind it. */
 function scoreExplanation(report: Report): string {
-  const b = report.debtScoreBreakdown;
+  const b = report.stalenessBreakdown;
   if (!b) return '';
   const color = BAND_COLOR[b.band] ?? '#52525b';
   const rows = b.contributions
@@ -146,50 +147,50 @@ function scoreExplanation(report: Report): string {
     )
     .join('\n');
   return `<details class="score-why" open>
-    <summary>Debt score <strong>${report.debtScore}</strong>
+    <summary>Staleness score <strong>${report.stalenessScore}</strong>
       <span class="band" style="background:${color}">${esc(b.band)}</span>
       <span class="count">— how this is calculated</span>
     </summary>
     <div class="score-body">
       <p>${esc(b.interpretation)}</p>
-      <p class="meta">Score = <code>${esc(b.formula)}</code>. Weighted sum ${b.weightedSum} over ${b.totalItems} item${b.totalItems === 1 ? '' : 's'} → ${report.debtScore}.</p>
+      <p class="meta">Score = <code>${esc(b.formula)}</code>. Weighted sum ${b.weightedSum} over ${b.totalItems} item${b.totalItems === 1 ? '' : 's'} → ${report.stalenessScore}.</p>
       <table>
         <thead><tr><th>Tier</th><th>Items</th><th>Weight</th><th>Contribution</th></tr></thead>
         <tbody>${rows}
         <tr class="total"><td>Total</td><td>${b.totalItems}</td><td></td><td>${b.weightedSum}</td></tr>
         </tbody>
       </table>
-      <p class="meta">Bands: 0 clean · 1–10 low · 11–30 moderate · 31–60 high · 61+ severe. The score is a weighted average of how far behind things are — <strong>secondary to the retirement dates above</strong>, which are the real signal.</p>
+      <p class="meta">Bands: 0 clean · 1–10 low · 11–30 moderate · 31–60 high · 61+ severe. The score is a weighted average of version drift — use it to track progress and prioritize upgrade passes.</p>
     </div>
   </details>`;
 }
 
-/** "Nearest non-breaking version" hint — the quickest move that clears the dated tiers. */
+/** Recommended floor hint — shown only when there are dated integration findings below the floor. */
 function floorHint(report: Report): string {
-  const floor = report.nonBreakingFloor;
+  const floor = report.recommendedFloor;
   if (!floor) return '';
   const floorNum = Number.parseFloat(floor);
   const atRisk = report.components.filter(
     (c) => c.retirementDate !== undefined && c.apiVersion !== null && Number.parseFloat(c.apiVersion) < floorNum,
   );
   if (atRisk.length === 0) return '';
-  return `<div class="floor-hint">💡 <strong>Nearest non-breaking version: API ${esc(floor)}.</strong>
+  return `<div class=”floor-hint”>💡 <strong>Recommended floor: API ${esc(floor)}.</strong>
     ${atRisk.length} component${atRisk.length === 1 ? '' : 's'} sit below it in a dated retirement tier —
-    moving ${atRisk.length === 1 ? 'it' : 'them'} to at least API ${esc(floor)} clears the dated breakage.
-    (That lands ${atRisk.length === 1 ? 'it' : 'them'} in “stale”, not current API ${esc(report.schedule.currentApiVersion)} — but nothing stops working.)</div>`;
+    moving ${atRisk.length === 1 ? 'it' : 'them'} to at least API ${esc(floor)} removes the dated retirement risk.
+    (That lands ${atRisk.length === 1 ? 'it' : 'them'} in the “behind” tier, not yet fully current — but the dated risk is gone.)</div>`;
 }
 
 export function renderHtml(report: Report): string {
   const banner =
     report.headlines.length === 0
-      ? `<div class="banner clean">✅ No dated API version debt found.</div>`
+      ? `<div class="banner clean">✅ No dated API retirement items.</div>`
       : `<div class="banner">⚠ ${report.headlines
           .map((h) => `${esc(h.message)} (${fmtDate(h.date)})`)
           .join(' · ')}</div>`;
 
   const tiles = `
   <div class="tiles">
-    <div class="tile"><div class="num">${report.debtScore}</div><div class="lbl">debt score (0 = clean)</div></div>
+    <div class="tile"><div class="num">${report.stalenessScore}</div><div class="lbl">staleness score (0 = clean)</div></div>
     <div class="tile"><div class="num">${report.summary.totalComponents}</div><div class="lbl">components</div></div>
     <div class="tile"><div class="num">${report.summary.totalIntegrations}</div><div class="lbl">integrations</div></div>
     ${Object.entries(report.summary.byTier)
@@ -235,7 +236,7 @@ export function renderHtml(report: Report): string {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Almanac — API version debt report</title>
+<title>Almanac — API version maintenance report</title>
 <style>
   body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; color: #1c1c1e; background: #fafaf9; }
   main { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; }
@@ -260,7 +261,7 @@ export function renderHtml(report: Report): string {
   details[open] > summary { border-bottom: 1px solid #ececea; }
   details > table { border: none; }
   summary .count { color: #555; font-size: 0.85rem; }
-  summary .tier { color: #8a3b00; font-size: 0.85rem; font-weight: 600; }
+  summary .tier { color: #555; font-size: 0.85rem; font-weight: 600; }
   summary .types { color: #888; font-size: 0.78rem; margin-left: auto; }
   .score-why { margin: -8px 0 28px; }
   .score-why .band { color: #fff; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 999px; }
@@ -274,7 +275,7 @@ export function renderHtml(report: Report): string {
 </head>
 <body>
 <main>
-  <h1>Almanac — API version debt report</h1>
+  <h1>Almanac — API version maintenance report</h1>
   <p class="meta">Mode: ${esc(report.mode)} · Target: ${esc(report.target.path ?? report.target.org ?? '')} · Current API version: ${esc(report.schedule.currentApiVersion)} · Generated: ${esc(report.generatedAt)}</p>
   ${banner}
   ${floorHint(report)}
@@ -282,7 +283,7 @@ export function renderHtml(report: Report): string {
   ${scoreSection}
   <h2>By metadata type</h2>
   ${byTypeOverview(report.components)}
-  <h2>Components by API version <span class="muted" style="font-weight:400;font-size:0.8rem">(oldest first — dated groups expanded, click to toggle)</span></h2>
+  <h2>Components by API version <span class="muted" style="font-weight:400;font-size:0.8rem">(oldest first — click to expand)</span></h2>
   ${byVersionSections(report.components)}
   <h2>Integrations</h2>
   ${integrationSection}

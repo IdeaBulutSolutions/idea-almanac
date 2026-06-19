@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2.0",
+  "schemaVersion": "1.4.0",
   "generatedAt": "2026-01-01T00:00:00.000Z",
   "scanner": {
     "name": "idea-almanac",
@@ -13,36 +13,29 @@
     "currentApiVersion": "67.0",
     "source": "built-in retirement-schedule.json"
   },
-  "nonBreakingFloor": "41.0",
-  "debtScore": 27,
-  "debtScoreBreakdown": {
+  "recommendedFloor": "64.0",
+  "stalenessScore": 41,
+  "stalenessBreakdown": {
     "formula": "round(100 × Σ tier_weight / total_items)",
     "totalItems": 10,
-    "weightedSum": 2.75,
-    "score": 27,
-    "band": "moderate",
-    "interpretation": "A meaningful share of the org is behind. Plan remediation before the dated items come due.",
+    "weightedSum": 4.05,
+    "score": 41,
+    "band": "high",
+    "interpretation": "Significant version drift across many components. Upgrade effort will be substantial.",
     "contributions": [
       {
-        "tier": "retired",
-        "label": "Already failing - retired Summer '25 (REST 410 / SOAP 500 / Bulk 400)",
-        "count": 1,
-        "weight": 1,
-        "contribution": 1
-      },
-      {
-        "tier": "breaks-2028",
-        "label": "Retires Summer '28 (deprecated Summer '27)",
-        "count": 1,
-        "weight": 0.7,
-        "contribution": 0.7
-      },
-      {
-        "tier": "stale",
-        "label": "Drifting (>1 year behind)",
+        "tier": "far-behind",
+        "label": "Far behind — more than 9 releases from current",
         "count": 7,
+        "weight": 0.6,
+        "contribution": 3.6
+      },
+      {
+        "tier": "behind",
+        "label": "Behind — 4 to 9 releases from current",
+        "count": 2,
         "weight": 0.15,
-        "contribution": 1.05
+        "contribution": 0.45
       },
       {
         "tier": "current",
@@ -52,25 +45,13 @@
       }
     ]
   },
-  "headlines": [
-    {
-      "date": "2025-06",
-      "count": 1,
-      "message": "1 item — Already failing - retired Summer '25 (REST 410 / SOAP 500 / Bulk 400)"
-    },
-    {
-      "date": "2028-06",
-      "count": 1,
-      "message": "1 item — Retires Summer '28 (deprecated Summer '27)"
-    }
-  ],
+  "headlines": [],
   "summary": {
     "totalComponents": 10,
     "totalIntegrations": 0,
     "byTier": {
-      "retired": 1,
-      "breaks-2028": 1,
-      "stale": 7,
+      "far-behind": 7,
+      "behind": 2,
       "current": 1
     }
   },
@@ -82,9 +63,8 @@
       "apiVersion": "28.0",
       "versionSource": "explicit",
       "location": "force-app/main/default/classes/AncientHelper.cls-meta.xml",
-      "tier": "retired",
-      "tierLabel": "Already failing - retired Summer '25 (REST 410 / SOAP 500 / Bulk 400)",
-      "retirementDate": "2025-06",
+      "tier": "far-behind",
+      "tierLabel": "Far behind — more than 9 releases from current",
       "severity": "critical"
     },
     {
@@ -94,10 +74,9 @@
       "apiVersion": "35.0",
       "versionSource": "explicit",
       "location": "force-app/main/default/classes/LegacyService.cls-meta.xml",
-      "tier": "breaks-2028",
-      "tierLabel": "Retires Summer '28 (deprecated Summer '27)",
-      "retirementDate": "2028-06",
-      "severity": "high"
+      "tier": "far-behind",
+      "tierLabel": "Far behind — more than 9 releases from current",
+      "severity": "critical"
     },
     {
       "id": "force-app/main/default/aura/legacyPanel/legacyPanel.cmp-meta.xml",
@@ -106,9 +85,9 @@
       "apiVersion": "45.0",
       "versionSource": "explicit",
       "location": "force-app/main/default/aura/legacyPanel/legacyPanel.cmp-meta.xml",
-      "tier": "stale",
-      "tierLabel": "Drifting (>1 year behind)",
-      "severity": "info"
+      "tier": "far-behind",
+      "tierLabel": "Far behind — more than 9 releases from current",
+      "severity": "critical"
     },
     {
       "id": "manifest/package.xml",
@@ -117,9 +96,9 @@
       "apiVersion": "45.0",
       "versionSource": "explicit",
       "location": "manifest/package.xml",
-      "tier": "stale",
-      "tierLabel": "Drifting (>1 year behind)",
-      "severity": "info"
+      "tier": "far-behind",
+      "tierLabel": "Far behind — more than 9 releases from current",
+      "severity": "critical"
     },
     {
       "id": "force-app/main/default/triggers/AccountTrigger.trigger-meta.xml",
@@ -128,9 +107,9 @@
       "apiVersion": "52.0",
       "versionSource": "explicit",
       "location": "force-app/main/default/triggers/AccountTrigger.trigger-meta.xml",
-      "tier": "stale",
-      "tierLabel": "Drifting (>1 year behind)",
-      "severity": "info"
+      "tier": "far-behind",
+      "tierLabel": "Far behind — more than 9 releases from current",
+      "severity": "critical"
     },
     {
       "id": "force-app/main/default/lwc/orderList/orderList.js-meta.xml",
@@ -139,9 +118,9 @@
       "apiVersion": "55.0",
       "versionSource": "inherited",
       "location": "force-app/main/default/lwc/orderList/orderList.js-meta.xml",
-      "tier": "stale",
-      "tierLabel": "Drifting (>1 year behind)",
-      "severity": "info"
+      "tier": "far-behind",
+      "tierLabel": "Far behind — more than 9 releases from current",
+      "severity": "critical"
     },
     {
       "id": "sfdx-project.json",
@@ -150,9 +129,9 @@
       "apiVersion": "55.0",
       "versionSource": "explicit",
       "location": "sfdx-project.json",
-      "tier": "stale",
-      "tierLabel": "Drifting (>1 year behind)",
-      "severity": "info"
+      "tier": "far-behind",
+      "tierLabel": "Far behind — more than 9 releases from current",
+      "severity": "critical"
     },
     {
       "id": "manifest/deploy/package.xml",
@@ -161,8 +140,8 @@
       "apiVersion": "60.0",
       "versionSource": "explicit",
       "location": "manifest/deploy/package.xml",
-      "tier": "stale",
-      "tierLabel": "Drifting (>1 year behind)",
+      "tier": "behind",
+      "tierLabel": "Behind — 4 to 9 releases from current",
       "severity": "info"
     },
     {
@@ -172,8 +151,8 @@
       "apiVersion": "61.0",
       "versionSource": "explicit",
       "location": "force-app/main/default/flows/Order_Fulfillment.flow-meta.xml",
-      "tier": "stale",
-      "tierLabel": "Drifting (>1 year behind)",
+      "tier": "behind",
+      "tierLabel": "Behind — 4 to 9 releases from current",
       "severity": "info"
     },
     {
@@ -192,6 +171,10 @@
       "code": "malformed-xml",
       "message": "Could not parse XML",
       "location": "force-app/main/default/pages/Broken.page-meta.xml"
+    },
+    {
+      "code": "managed-excluded",
+      "message": "1 managed/namespaced component excluded — upgrade these in the package, not here."
     }
   ]
 }

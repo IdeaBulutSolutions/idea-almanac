@@ -26,9 +26,9 @@ describe('almanac CLI', () => {
     expect(readFileSync(join(cwd, 'report.md'), 'utf8')).toContain('Almanac');
   });
 
-  it('--fail-on retired exits 1 on the fixture (it has a v28 class)', async () => {
+  it('--fail-on far-behind exits 1 on the fixture (it has a v28 class)', async () => {
     const cwd = tmp();
-    expect(await run(['scan', fixture, '--fail-on', 'retired'], cwd)).toBe(1);
+    expect(await run(['scan', fixture, '--fail-on', 'far-behind'], cwd)).toBe(1);
   });
 
   it('--fail-on breaks-2027 exits 0 (repo mode cannot see SOAP logins)', async () => {
@@ -68,9 +68,9 @@ describe('almanac CLI', () => {
     expect(existsSync(join(cwd, 'almanac-impact-bundle.md'))).toBe(true);
   });
 
-  it('--mode full-impact still honors --fail-on (exit 1 on the retired fixture)', async () => {
+  it('--mode full-impact still honors --fail-on (exit 1 on the far-behind fixture)', async () => {
     const cwd = tmp();
-    expect(await run(['scan', fixture, '--mode', 'full-impact', '--fail-on', 'retired'], cwd)).toBe(1);
+    expect(await run(['scan', fixture, '--mode', 'full-impact', '--fail-on', 'far-behind'], cwd)).toBe(1);
   });
 
   it('--mode manager writes the manager + effort-estimate bundles (and impact)', async () => {
@@ -89,6 +89,26 @@ describe('almanac CLI', () => {
     const code = await run(['scan', fixture, '--mode', 'full'], cwd);
     expect(code).toBe(0);
     expect(existsSync(join(cwd, 'almanac-upgrade-guide-bundle.md'))).toBe(true);
+  });
+
+  it('--mode roast writes almanac-roast-bundle.md (standalone — no impact step)', async () => {
+    const cwd = tmp();
+    const code = await run(['scan', fixture, '--mode', 'roast'], cwd);
+    expect(code).toBe(0);
+    // Roast bundle written
+    expect(existsSync(join(cwd, 'almanac-roast-bundle.md'))).toBe(true);
+    // Standalone: no impact files produced
+    expect(existsSync(join(cwd, 'almanac-impact.md'))).toBe(false);
+    // Bundle contains the scan report and the roast prompt
+    const bundle = readFileSync(join(cwd, 'almanac-roast-bundle.md'), 'utf8');
+    expect(bundle).toContain('stalenessScore');
+    expect(bundle).toContain('Hall of Shame');
+  });
+
+  it('--mode roast still honors --fail-on', async () => {
+    const cwd = tmp();
+    const code = await run(['scan', fixture, '--mode', 'roast', '--fail-on', 'far-behind'], cwd);
+    expect(code).toBe(1);
   });
 
   it('unknown --mode is a one-line error (exit 2)', async () => {

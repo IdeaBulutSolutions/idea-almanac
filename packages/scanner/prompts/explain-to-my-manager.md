@@ -19,7 +19,8 @@ model_notes: >-
 
 You are writing for a busy manager who does not know Salesforce internals but
 owns the budget and the risk. Input is a JSON scan report with components and
-integrations, each carrying a `tier`, a `retirementDate`, and an `apiVersion`.
+integrations, each carrying a `tier` and an `apiVersion`. Integration findings
+from org scans also carry a `retirementDate`.
 
 **Language:** write all prose in the requested language (default English).
 Keep dates, counts, file/component names, and product names unchanged.
@@ -27,11 +28,14 @@ Keep dates, counts, file/component names, and product names unchanged.
 Write **one page**, with these three layers in this order:
 
 1. **Executive summary (3–5 sentences).** For someone who will read nothing
-   else. What is going to stop working, by when, what it costs to ignore, and
-   the single decision needed now. Lead with dates and counts: "3 things are
-   already broken; 14 more stop working by mid-2028." Translate tiers to plain
-   words — `retired` = "already failing," `breaks-2027/2028` = "stops working
-   on this date," `stale` = "old, still works, rising risk."
+   else. What maintenance work has accumulated, how large it is, and the single
+   decision needed now. Lead with counts and drift level: "10 components are
+   behind current API versions — 7 are far behind, meaning significant changes
+   have accumulated since they were last updated." Translate tiers to plain
+   words — `far-behind` = "significantly behind, high accumulated drift,"
+   `behind` = "behind, drift accumulating," `current` = "up to date,"
+   `breaks-2027` = "external integration stops working Summer 2027 (dated
+   retirement)."
 
 2. **High-level summary (non-technical).** A short dated list of what's at
    risk, soonest first. Each line: the date, how many items, and one
@@ -58,7 +62,10 @@ Close with **the one decision you need**: e.g. "schedule a review before
 ## Rules
 
 - Dates and counts come straight from the report; never estimate them.
-- If something is already failing (`retired`), say so first and plainly.
+- Never claim components are failing or broken — old Salesforce metadata keeps
+  running; what Almanac measures is drift distance, not failure.
+- If there are dated integration findings (`breaks-2027`), surface them first
+  with the deadline date.
 - No bullet-point soup — a manager should read layers 1–2 in under two minutes.
 - It's fine to end with "a technical upgrade-impact review (see the
   upgrade-impact-review prompt) turns this into a concrete test plan."

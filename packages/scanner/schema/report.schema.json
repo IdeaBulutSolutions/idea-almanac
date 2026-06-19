@@ -2,8 +2,8 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://github.com/IdeaBulutSolutions/idea-almanac/packages/scanner/schema/report.schema.json",
   "title": "Almanac scan report",
-  "description": "Output of `almanac scan`. Frozen contract — schema changes require a version bump and a changelog entry. Tier names are data (retirement-schedule.json), so `tier` is a free string here; the invariant that every non-current item carries retirementDate+tierLabel is enforced by tests.",
-  "version": "1.2.0",
+  "description": "Output of `almanac scan`. Frozen contract — schema changes require a version bump and a changelog entry. Tier names are data (retirement-schedule.json), so `tier` is a free string here. Metadata components (items) never carry retirementDate — that field is only populated for integration findings (org-scan, soap-login type). Both tierLabel and retirementDate are optional.",
+  "version": "1.4.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -13,9 +13,9 @@
     "mode",
     "target",
     "schedule",
-    "nonBreakingFloor",
-    "debtScore",
-    "debtScoreBreakdown",
+    "recommendedFloor",
+    "stalenessScore",
+    "stalenessBreakdown",
     "headlines",
     "summary",
     "components",
@@ -41,7 +41,11 @@
       "minProperties": 1,
       "properties": {
         "path": { "type": "string" },
-        "org": { "type": "string" }
+        "org": { "type": "string" },
+        "isSandbox": {
+          "type": "boolean",
+          "description": "Org scans only. false = production org; persisting deploys are blocked."
+        }
       }
     },
     "schedule": {
@@ -53,17 +57,18 @@
         "source": { "type": "string", "description": "Path or identifier of the retirement-schedule file used." }
       }
     },
-    "nonBreakingFloor": {
+    "recommendedFloor": {
       "type": "string",
       "pattern": "^[0-9]+\\.0$",
-      "description": "Lowest API version that clears all dated (stops-working) tiers — the nearest non-breaking target."
+      "description": "Lowest API version in the current tier — the recommended upgrade target."
     },
-    "debtScore": { "type": "number", "minimum": 0, "maximum": 100 },
-    "debtScoreBreakdown": {
+    "stalenessScore": { "type": "number", "minimum": 0, "maximum": 100 },
+    "stalenessBreakdown": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Why the debt score is what it is: formula, per-tier contributions, and a plain-language band.",
+      "description": "Why the staleness score is what it is: formula, per-tier contributions, and a plain-language band.",
       "required": ["formula", "totalItems", "weightedSum", "score", "band", "interpretation", "contributions"],
+
       "properties": {
         "formula": { "type": "string" },
         "totalItems": { "type": "integer", "minimum": 0 },

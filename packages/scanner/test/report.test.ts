@@ -6,6 +6,7 @@ import { Ajv } from 'ajv';
 import { scanRepo } from '../src/adapters/repo.js';
 import { loadSchedule } from '../src/core/tiering.js';
 import { buildReport, type Report } from '../src/reporters/json.js';
+import type { Inventory } from '../src/core/inventory.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const fixture = join(here, 'fixtures', 'sample-sfdx-repo');
@@ -35,44 +36,41 @@ describe('report assembly + schema', () => {
     expect(ok).toBe(true);
   });
 
-  it('every non-current, non-unknown item carries a tierLabel; dated tiers carry retirementDate', () => {
+  it('every non-current, non-unknown item carries a tierLabel; repo scan components carry no retirementDate', () => {
     for (const c of report.components) {
       if (c.tier === 'current' || c.tier === 'unknown') continue;
       expect(c.tierLabel, c.id).toBeDefined();
-      if (c.tier === 'retired' || c.tier.startsWith('breaks-')) {
-        expect(c.retirementDate, c.id).toBeDefined();
-      }
+      // Repo scan: no component should carry a retirementDate (dated tiers are org-integration only).
+      expect(c.retirementDate, c.id).toBeUndefined();
     }
   });
 
-  it('headlines are date-led, soonest first, counts matching tiers', () => {
-    expect(report.headlines).toEqual([
-      { date: '2025-06', count: 1, message: "1 item — Already failing - retired Summer '25 (REST 410 / SOAP 500 / Bulk 400)" },
-      { date: '2028-06', count: 1, message: '1 item — Retires Summer \'28 (deprecated Summer \'27)' },
-    ]);
+  it('repo scan produces no dated headlines', () => {
+    expect(report.headlines).toEqual([]);
   });
 
   it('components are ranked by tier urgency then ascending version', () => {
     const tiers = report.components.map((c) => c.tier);
-    const firstStale = tiers.indexOf('stale');
-    expect(tiers[0]).toBe('retired');
-    expect(tiers[1]).toBe('breaks-2028');
-    expect(firstStale).toBe(2);
-    const staleVersions = report.components
-      .filter((c) => c.tier === 'stale')
+    const firstBehind = tiers.indexOf('behind');
+    expect(tiers[0]).toBe('far-behind');
+    expect(tiers[6]).toBe('far-behind');
+    expect(firstBehind).toBe(7);
+    const behindVersions = report.components
+      .filter((c) => c.tier === 'behind')
       .map((c) => Number.parseFloat(c.apiVersion ?? '0'));
-    expect([...staleVersions].sort((a, b) => a - b)).toEqual(staleVersions);
+    expect([...behindVersions].sort((a, b) => a - b)).toEqual(behindVersions);
   });
 
-  it('reports the nearest non-breaking version (floor) from the built-in schedule', () => {
-    // ≤30 retired, 31–40 breaks-2028, 41+ stale/current → 41.0 is the first non-dated tier.
-    expect(report.nonBreakingFloor).toBe('41.0');
+  it('recommendedFloor is 64.0 — minimum version in the current tier', () => {
+    // current tier: apiVersion >= currentApiVersion - 3 = 67 - 3 = 64
+    expect(report.recommendedFloor).toBe('64.0');
   });
 
-  it('debt score matches the documented formula on the fixture', () => {
-    // 1×retired(1.0) + 1×breaks-2028(0.7) + 7×stale(0.15) + 1×current(0) over 10 items
-    // = 2.75/10 ≈ 27.5 — IEEE 754 puts the sum a hair under (2.7499…), so round() gives 27.
-    expect(report.debtScore).toBe(27);
+  it('staleness score matches the documented formula on the fixture', () => {
+    // Review-only types (Flow, LWC, Aura) weight at 0.5× their tier weight.
+    // 5×far-behind(0.6) + 2×far-behind(0.3)[Aura,LWC] + 1×behind(0.3) + 1×behind(0.15)[Flow] + 1×current(0)
+    // = (3.0 + 0.6 + 0.3 + 0.15 + 0) / 10 = 0.405 → round(100 × 0.405) = 41
+    expect(report.stalenessScore).toBe(41);
   });
 
   it('matches the committed snapshot (UPDATE_SNAPSHOT=1 to regenerate)', () => {
@@ -81,5 +79,67 @@ describe('report assembly + schema', () => {
     }
     const expected = JSON.parse(readFileSync(snapshotPath, 'utf8'));
     expect(report).toEqual(expected);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// A2: dated retirement confined to org-scan integration findings
+// ---------------------------------------------------------------------------
+
+describe('A2 — dated retirement: integration findings vs metadata items', () => {
+  const schedule = loadSchedule();
+
+  const mockOrgInventory: Inventory = {
+    items: [
+      // Org-scan metadata item at v28 — should get far-behind with NO retirementDate
+      {
+        id: 'ApexClass:OldHelper',
+        type: 'ApexClass',
+        name: 'OldHelper',
+        apiVersion: '28.0',
+        versionSource: 'explicit',
+        location: 'ApexClass:OldHelper',
+      },
+    ],
+    integrations: [
+      // SOAP-login integration finding at v21 — should get breaks-2027 WITH retirementDate
+      { type: 'soap-login', clientName: 'Data Loader', apiFamily: 'SOAP', apiVersion: '21.0', requestCount: 8 },
+      // api-usage integration finding at v28 — gets gradient tier, no date
+      { type: 'api-usage', clientName: 'MuleSoft', apiFamily: 'REST', apiVersion: '28.0', requestCount: 100 },
+    ],
+    warnings: [],
+  };
+
+  const orgReport = buildReport(mockOrgInventory, schedule, {
+    mode: 'org',
+    target: { org: 'mock-org' },
+    scheduleSource: 'built-in retirement-schedule.json',
+    scannerVersion: '0.0.0-test',
+    now: new Date('2026-01-01T00:00:00.000Z'),
+  });
+
+  it('org-scan metadata items never carry retirementDate', () => {
+    for (const c of orgReport.components) {
+      expect(c.retirementDate, `component ${c.id}`).toBeUndefined();
+    }
+  });
+
+  it('SOAP-login integration finding gets the dated breaks-2027 tier', () => {
+    const soapFinding = orgReport.integrations.find((i) => i.type === 'soap-login');
+    expect(soapFinding?.tier).toBe('breaks-2027');
+    expect(soapFinding?.retirementDate).toBe('2027-06');
+    expect(soapFinding?.tierLabel).toBe("SOAP login() retires Summer '27");
+  });
+
+  it('api-usage integration finding gets gradient tier with no retirementDate', () => {
+    const apiFinding = orgReport.integrations.find((i) => i.type === 'api-usage');
+    expect(apiFinding?.tier).toBe('far-behind');
+    expect(apiFinding?.retirementDate).toBeUndefined();
+  });
+
+  it('org scan with SOAP-login finding produces dated headlines', () => {
+    expect(orgReport.headlines).toHaveLength(1);
+    expect(orgReport.headlines[0]?.date).toBe('2027-06');
+    expect(orgReport.headlines[0]?.message).toContain('SOAP login()');
   });
 });

@@ -30,4 +30,4 @@ The corpus can run as a small, read-only [MCP](https://modelcontextprotocol.io) 
 npm run mcp
 ```
 
-Point Claude Desktop/Code (or any MCP client) at it and ask things like *"what breaks between v48 and v67 for Apex?"*. Available tools: `list_versions`, `get_changes`, `changes_between`, `search_corpus`.
+Point Claude Desktop/Code (or any MCP client) at it and ask things like *"what changed between v48 and v67 for Apex?"*. Available tools: `list_versions`, `get_changes`, `changes_between`, `search_corpus`.

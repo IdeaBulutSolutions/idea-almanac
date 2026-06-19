@@ -1,8 +1,13 @@
 # idea-almanac
 
-**Find the Salesforce API versions in your code or org that are about to stop working — before they break.**
+**Find which Salesforce API versions in your project or org have drifted from current — and get a safe, structured upgrade path.**
 
-Salesforce retires old API versions on a schedule. When that happens, anything still pinned to a retired version can suddenly fail. Almanac scans your project (or a live org), finds everything that's on an old version, and tells you **what will stop working and when** — in plain dates.
+Salesforce API versions accumulate silently. Components pinned to old versions keep running — Salesforce does not break saved Apex or metadata on retirement — but they accumulate **drift**: each missed release is behavior the platform changed without your code being tested against it. Almanac scans your project (or a live org), finds everything that has drifted from current, and hands you a **safe, structured path to upgrade**.
+
+Beyond the scan, Almanac ships two things built for the upgrade itself: a
+reviewed, **citable corpus** of what behavior changed across the releases you
+skipped, and an **AI upgrade handoff** that turns that corpus into a safe,
+test-gated procedure an agent can follow.
 
 It does this two ways:
 
@@ -19,7 +24,7 @@ open almanac-report.html    # 3. open the report and read the dates
 
 That's it. No install, no account, no config.
 
-**Want to see a report first?** The [`examples/` folder](https://github.com/IdeaBulutSolutions/idea-almanac/tree/main/packages/scanner/examples) has a real scan of a deliberately old sample project (API 28 → 67): one class already broken, another retiring in 2028, plus an [upgrade-impact report](https://github.com/IdeaBulutSolutions/idea-almanac/blob/main/packages/scanner/examples/almanac-impact.md) of what changes when you upgrade. No org needed.
+**Want to see a report first?** The [`examples/` folder](https://github.com/IdeaBulutSolutions/idea-almanac/tree/main/packages/scanner/examples) has a real scan of a deliberately old sample project (API 28 → 67) — tier names, staleness score, and an [upgrade-impact report](https://github.com/IdeaBulutSolutions/idea-almanac/blob/main/packages/scanner/examples/almanac-impact.md) of what accumulated while the code stayed pinned. No org needed.
 
 ## Do I need to download anything else? No.
 
@@ -37,13 +42,6 @@ Everything Almanac needs is **inside the npm package** — including its built-i
 npm install -g idea-almanac@latest      # now you can just type `almanac`
 almanac --version
 ```
-
-> **Seeing `npm error code ENOVERSIONS / No versions available`?** Your npm has a "cooldown" setting (`min-release-age`) that hides brand-new package versions. Turn it off for this one package only:
->
-> ```bash
-> npm install -g idea-almanac@latest --min-release-age 0
-> npm_config_min_release_age=0 npx idea-almanac@latest scan
-> ```
 
 ### Scan one project
 
@@ -115,7 +113,7 @@ open ~/almanac-results
 ### Use it as a CI check
 
 ```bash
-npx idea-almanac@latest scan --fail-on retired    # exits with an error if anything is already broken
+npx idea-almanac@latest scan --fail-on far-behind   # exits with an error if any component is 10+ releases behind
 ```
 
 ### A summary for your manager, in Spanish
@@ -184,7 +182,7 @@ So the agent gets a small, focused brief instead of everything.
 | [prompt library](prompts/) | ready-made prompts (upgrade review, manager summary, security audit) | feed with the report |
 | [`upgrade-guide.md`](prompts/upgrade-guide.md) | walks an agent through the actual upgrade — reads the report, the impact, **and your real metadata**, follows links between components (a Flow that calls an LWC that calls Apex), and writes an ordered, testable plan | `--mode full` |
 | [`assistant-handoff.md`](prompts/assistant-handoff.md) | a one-page orientation for an agent working inside the source repo | read first |
-| [corpus MCP server](https://github.com/IdeaBulutSolutions/idea-almanac/blob/main/packages/corpus/mcp/server.ts) | lets an agent ask the corpus "what breaks between v48 and v67?" live | `npm run mcp` in `packages/corpus` |
+| [corpus MCP server](https://github.com/IdeaBulutSolutions/idea-almanac/blob/main/packages/corpus/mcp/server.ts) | lets an agent ask the corpus "what changed between v48 and v67?" live | `npm run mcp` in `packages/corpus` |
 
 ## What's in the report
 
@@ -192,17 +190,15 @@ Almanac checks every Apex class and trigger, Flow, LWC, Aura component, Visualfo
 
 | Tier | What it means |
 |---|---|
-| `retired` | API 30 or older — already failing since June 2025 |
-| `breaks-2027` | uses SOAP `login()` on API 64 or older — stops working Summer 2027 |
-| `breaks-2028` | API 31–40 — stops working Summer 2028 |
-| `stale` | more than a year behind the current version — still works, but aging |
-| `current` | fine |
+| `current` | Within 3 releases of current — fine |
+| `behind` | 4–9 releases behind — drift accumulating |
+| `far-behind` | 10+ releases behind — high behavioral drift |
 
-These dates aren't hardcoded — they live in one file, [`retirement-schedule.json`](https://github.com/IdeaBulutSolutions/idea-almanac/blob/main/packages/scanner/src/core/retirement-schedule.json), and you can swap it with `--schedule`.
+Org scans also surface `breaks-2027` for SOAP integrations still calling the API at version 64 or older (retires Summer 2027). These dates aren't hardcoded — they live in one file, [`retirement-schedule.json`](https://github.com/IdeaBulutSolutions/idea-almanac/blob/main/packages/scanner/src/core/retirement-schedule.json), and you can swap it with `--schedule`.
 
-The report also gives a **nearest non-breaking version** (`nonBreakingFloor`): the lowest API version that clears every *dated* tier. Anything below it is in a stops-working tier; bumping it up to at least that version removes the dated risk (it becomes `stale`, not fully `current`) — the quickest way to reduce risk. The HTML report shows this as a hint.
+The report also gives a **recommended floor** (`recommendedFloor`): the lowest API version in the `current` tier — the recommended upgrade target. The HTML report surfaces this as a hint when any dated integration findings fall below it.
 
-**Debt score.** A single 0–100 number (0 = clean). It's a weighted average of how far behind things are — useful as a headline, but the *dates* are what really matter. The HTML report shows exactly how the score was calculated.
+**Staleness score.** A single 0–100 number (0 = clean). It's a weighted average of how far behind each component is — useful as a headline metric. The HTML report shows exactly how the score was calculated.
 
 ## All the options
 
@@ -246,14 +242,23 @@ Org scans also list **integrations** — which outside systems call your org's A
 For any `--llm` step, set one environment variable:
 
 ```
-ALMANAC_LLM_PROVIDER = claude-cli | copilot | cursor | anthropic | cmd
+ALMANAC_LLM_PROVIDER = claude-cli | copilot | cursor | cmd | anthropic
 ```
 
-- `claude-cli` — the `claude` CLI (`claude -p`)
+**Local providers (recommended — no content leaves your machine):**
+
+- `claude-cli` — the `claude` CLI (`claude -p`). Default choice; runs locally through your existing Claude login.
 - `copilot` — the GitHub Copilot CLI
 - `cursor` — the Cursor CLI (`cursor-agent -p`)
-- `anthropic` — the Anthropic API (needs `ANTHROPIC_API_KEY`)
 - `cmd` — any command you choose, via `ALMANAC_LLM_CMD`
+
+**Remote provider:**
+
+- `anthropic` — the Anthropic API (needs `ANTHROPIC_API_KEY`). Almanac prints a
+  data-egress warning before sending any content. For air-gapped or
+  privacy-sensitive orgs, use a local provider instead. Note: having
+  `ANTHROPIC_API_KEY` set does **not** automatically select this provider —
+  you must set `ALMANAC_LLM_PROVIDER=anthropic` explicitly.
 
 Each AI call is capped by `ALMANAC_LLM_TIMEOUT_MS` (default 10 minutes) so a stuck CLI can never hang Almanac. No provider set? Almanac just writes the paste-ready bundle instead.
 
@@ -273,15 +278,15 @@ jobs:
       - uses: IdeaBulutSolutions/idea-almanac/packages/scanner/action@v1
         with:
           path: force-app        # your Salesforce source folder
-          fail-on: retired        # optional: fail the build on already-broken items
+          fail-on: far-behind     # optional: fail the build on high-drift components
           comment-pr: true        # optional: post the report as a PR comment
 ```
 
-Inputs: `path`, `org`, `fail-on`, `comment-pr`, `command`. Outputs: `debt-score`, `retired-count`, `report-path`, `badge`. The Action also prints a shields.io badge snippet you can paste into your README.
+Inputs: `path`, `org`, `fail-on`, `comment-pr`, `command`. Outputs: `staleness-score`, `far-behind-count`, `report-path`, `badge`. The Action also prints a shields.io badge snippet you can paste into your README.
 
 ## How Almanac fits together
 
-The **scanner** (this package) tells you **what** will break and **when**. The [Almanac corpus](https://github.com/IdeaBulutSolutions/idea-almanac/tree/main/packages/corpus) — Salesforce's release-note changes, written in plain language — tells you **what changes** when you bump each version. The [prompt library](prompts/) turns a report plus the corpus into a test plan, a manager summary, or a security review.
+The **scanner** (this package) tells you **how far each component has drifted** from current and surfaces the accumulated behavior changes along the upgrade path. The [Almanac corpus](https://github.com/IdeaBulutSolutions/idea-almanac/tree/main/packages/corpus) — Salesforce's release-note changes, written in plain language — grounds every impact citation in a real entry. The [prompt library](prompts/) turns a report plus the corpus into a test plan, a manager summary, or a security review.
 
 ---
 

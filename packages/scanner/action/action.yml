@@ -1,5 +1,5 @@
-name: 'Almanac API debt scan'
-description: 'Scan a Salesforce repo (or org) for dated API version debt, surface a badge, and optionally comment on the PR.'
+name: 'Almanac API version maintenance scan'
+description: 'Scan a Salesforce repo (or org) for API version drift, surface a maintenance badge, and optionally comment on the PR.'
 author: 'Idea Bulut Solutions'
 branding:
   icon: 'calendar'
@@ -15,7 +15,7 @@ inputs:
     required: false
     default: ''
   fail-on:
-    description: 'Fail the job if any finding lands in this tier: retired | breaks-2027 | breaks-2028 | stale. Empty = never fail.'
+    description: 'Fail the job if any finding lands in this tier: far-behind | behind | breaks-2027. Empty = never fail.'
     required: false
     default: ''
   comment-pr:
@@ -28,12 +28,12 @@ inputs:
     default: 'npx --yes idea-almanac@latest'
 
 outputs:
-  debt-score:
-    description: 'Overall debt score (0 = clean).'
-    value: ${{ steps.scan.outputs.debt-score }}
-  retired-count:
-    description: 'Number of findings already in the retired tier.'
-    value: ${{ steps.scan.outputs.retired-count }}
+  staleness-score:
+    description: 'Overall staleness score (0 = clean, 100 = all far-behind).'
+    value: ${{ steps.scan.outputs.staleness-score }}
+  far-behind-count:
+    description: 'Number of components in the far-behind tier (highest drift risk).'
+    value: ${{ steps.scan.outputs.far-behind-count }}
   report-path:
     description: 'Absolute path to the JSON report.'
     value: ${{ steps.scan.outputs.report-path }}
@@ -83,9 +83,9 @@ runs:
         set -euo pipefail
         md="${RUNNER_TEMP:-/tmp}/almanac-report.md"
         # Upsert a single comment (find a prior Almanac comment, edit it; else create).
-        body="$(cat "$md")"$'\n\n'"<!-- almanac-api-debt -->"
+        body="$(cat "$md")"$'\n\n'"<!-- almanac -->"
         existing="$(gh pr view "$PR_NUMBER" --json comments \
-          --jq '.comments[] | select(.body | contains("<!-- almanac-api-debt -->")) | .url' | tail -n1 || true)"
+          --jq '.comments[] | select(.body | contains("<!-- almanac -->")) | .url' | tail -n1 || true)"
         if [ -n "$existing" ]; then
           gh pr comment "$PR_NUMBER" --edit-last --body "$body" || gh pr comment "$PR_NUMBER" --body "$body"
         else

@@ -24,6 +24,7 @@ export function scanRepo(rootPath: string): Inventory {
   const items: InventoryItem[] = [];
   const warnings: ScanWarning[] = [];
   const ignore = loadGitignore(root);
+  let managedExcluded = 0;
 
   const files: string[] = [];
   walk(root, root, ignore, files);
@@ -86,6 +87,11 @@ export function scanRepo(rootPath: string): Inventory {
     const type = classify(rel);
     if (type === null) continue;
 
+    if (isNamespaced(rel)) {
+      managedExcluded++;
+      continue;
+    }
+
     const apiVersion = readXmlVersion(file, rel, 'apiVersion', warnings);
     if (apiVersion === undefined) continue; // malformed — warning already recorded
 
@@ -120,6 +126,13 @@ export function scanRepo(rootPath: string): Inventory {
     }
 
     items.push({ id: rel, type, apiVersion, versionSource: 'explicit', location: rel });
+  }
+
+  if (managedExcluded > 0) {
+    warnings.push({
+      code: 'managed-excluded',
+      message: `${managedExcluded} managed/namespaced component${managedExcluded === 1 ? '' : 's'} excluded — upgrade these in the package, not here.`,
+    });
   }
 
   // Derive the metadata API name from each item's path (location == rel here),
@@ -161,6 +174,15 @@ export function classify(rel: string): ComponentType | null {
   if (p.endsWith('.page-meta.xml')) return 'VisualforcePage';
   if (p.endsWith('.component-meta.xml')) return 'VisualforceComponent';
   return null;
+}
+
+/**
+ * A namespaced path has at least one segment containing `__` where the
+ * double-underscore is not at the start of the segment (e.g. `MyNs__Class`
+ * or `myns__folder`). These are managed-package components — not editable here.
+ */
+function isNamespaced(rel: string): boolean {
+  return rel.split('/').some((seg) => seg.indexOf('__') > 0);
 }
 
 /**
